@@ -1,14 +1,18 @@
 <script setup>
-import PresentationSection from '@/components/PresentationSection.vue'
-import TheMap from '@/components/TheMap.vue'
 </script>
 
 <template>
-  <PresentationSection />
-  <!-- TODO : Mettre en place la section MapSection qui contient map + table
-   des prestataires (avec filtre) -->
-  <TheMap />
+  <div :id="presentation">
+    <div :class="'image-container'">
+      <img src="@/assets/images/main_bg.jpg.avif" :alt="'Image of the carcassonne castle'" />
+      <div :class="'overlay'"></div>
+      <h1>Carcassonne autrefois</h1>
+      <p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>
+      <a href="#map" :class="'p-button p-component'"> Voir la carte </a>
+    </div>
+  </div>
 </template>
+
 
 <style scoped>
 a {
