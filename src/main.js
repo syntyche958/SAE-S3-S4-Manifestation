@@ -14,6 +14,9 @@ app.use(createPinia())
 app.use(PrimeVue, {
   theme: {
     preset: Aura,
+    options: {
+      darkModeSelector: false,
+    },
   },
 })
 app.use(router)
