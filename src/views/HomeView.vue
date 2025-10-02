@@ -21,6 +21,7 @@ a {
 }
 
 .image-container {
+  user-select: none;
   position: relative;
   width: 100%;
   height: 80vh;
