@@ -1,13 +1,9 @@
 <template>
-  <div>OUIAS</div>
-
   <Card style="min-width: 0; width: auto; height: auto; display: inline-block;">
-    <!-- <template #title>Simple Card</template> -->
     <template #content>
       <div id="map"></div>
     </template>
   </Card>
-
 </template>
 
 <script setup>
