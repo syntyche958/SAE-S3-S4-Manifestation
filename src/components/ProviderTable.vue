@@ -5,12 +5,14 @@
 
     <!-- Header -->
     <template #header>
-      <div class="flex justify-between">
-        <Button type="button" icon="pi pi-filter-slash" label="Clear" @click="clearFilter()" />
-        <span class="p-input-icon-left">
-          <i class="pi pi-search" />
-          <InputText v-model="filters['global'].value" placeholder="Search..." />
-        </span>
+      <div :style="{ 'display': 'flex', 'justify-content': 'space-between' }">
+        <Button type="button" icon="pi pi-filter-slash" label="Clear" variant="outlined" @click="clearFilter()" />
+        <IconField>
+          <InputIcon>
+            <i class="pi pi-search" />
+          </InputIcon>
+          <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+        </IconField>
       </div>
     </template>
 
@@ -33,7 +35,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import { InputText, Button, DataTable, Column } from 'primevue';
+import { InputText, Button, DataTable, Column, IconField, InputIcon } from 'primevue';
 
 var data = [{ id: 1, name: '(AAC) Associtaion des Archers de Carcassonne' }, { id: 2, name: 'Troupe de troubadours' }]
 
