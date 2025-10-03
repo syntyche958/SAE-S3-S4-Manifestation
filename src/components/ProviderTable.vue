@@ -1,35 +1,35 @@
 <template>
-  <div class="card"></div>
-  <DataTable v-model:filters="filters" :value="providers" paginator :rows="2" dataKey="id" filterDisplay="menu"
-    :loading="loading" :globalFilterFields="['name']">
+  <div class="card" :style="{ 'flex-grow': 1 }">
+    <DataTable v-model:filters="filters" :value="providers" paginator :rows="2" dataKey="id" filterDisplay="menu"
+      :loading="loading" :globalFilterFields="['name']">
 
-    <!-- Header -->
-    <template #header>
-      <div :style="{ 'display': 'flex', 'justify-content': 'space-between' }">
-        <Button type="button" icon="pi pi-filter-slash" label="Clear" variant="outlined" @click="clearFilter()" />
-        <IconField>
-          <InputIcon>
-            <i class="pi pi-search" />
-          </InputIcon>
-          <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
-        </IconField>
-      </div>
-    </template>
-
-    <template #empty>No providers found.</template>
-    <template #loading>Loading data. Please wait...</template>
-
-    <!-- Column name -->
-    <Column field="name" header="Name" style="min-width: 12rem">
-      <template #body="{ data }">
-        {{ data.name }}
+      <!-- Header -->
+      <template #header>
+        <div :style="{ 'display': 'flex', 'justify-content': 'space-between' }">
+          <Button type="button" icon="pi pi-filter-slash" label="Clear" variant="outlined" @click="clearFilter()" />
+          <IconField>
+            <InputIcon>
+              <i class="pi pi-search" />
+            </InputIcon>
+            <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+          </IconField>
+        </div>
       </template>
-      <template #filter="{ filterModel }">
-        <InputText v-model="filterModel.value" placeholder="Search by name" />
-      </template>
-    </Column>
-  </DataTable>
 
+      <template #empty>No providers found.</template>
+      <template #loading>Loading data. Please wait...</template>
+
+      <!-- Column name -->
+      <Column field="name" header="Name" style="min-width: 12rem">
+        <template #body="{ data }">
+          {{ data.name }}
+        </template>
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" placeholder="Search by name" />
+        </template>
+      </Column>
+    </DataTable>
+  </div>
 </template>
 
 <script setup>

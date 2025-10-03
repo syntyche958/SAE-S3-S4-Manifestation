@@ -1,13 +1,9 @@
 <script setup>
+import MapAndProviderSection from '@/components/MapAndProviderSection.vue';
 import PresentationSection from '@/components/PresentationSection.vue'
-import ProviderTable from '@/components/ProviderTable.vue';
-import TheMap from '@/components/TheMap.vue'
 </script>
 
 <template>
   <PresentationSection />
-  <!-- TODO : Mettre en place la section MapSection qui contient map + table
-   des prestataires (avec filtre) -->
-  <TheMap />
-  <ProviderTable />
+  <MapAndProviderSection />
 </template>
