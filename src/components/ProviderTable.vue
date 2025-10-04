@@ -1,6 +1,6 @@
 <template>
   <div class="card" :style="{ 'flex-grow': 1 }">
-    <DataTable v-model:filters="filters" :value="providers" paginator :rows="2" dataKey="id" filterDisplay="menu"
+    <DataTable v-model:filters="filters" :value="providers" paginator :rows="10" dataKey="id" filterDisplay="menu"
       :loading="loading" :globalFilterFields="['name']">
 
       <!-- Header -->
