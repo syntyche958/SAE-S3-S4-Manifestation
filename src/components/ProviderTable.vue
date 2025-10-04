@@ -36,6 +36,7 @@
 import { onMounted, ref } from 'vue';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import { InputText, Button, DataTable, Column, IconField, InputIcon } from 'primevue';
+import providerService from '@/services/provider.service';
 
 var data = [{ id: 1, name: '(AAC) Associtaion des Archers de Carcassonne' }, { id: 2, name: 'Troupe de troubadours' }]
 
