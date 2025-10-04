@@ -20,12 +20,19 @@
       <template #loading>Loading data. Please wait...</template>
 
       <!-- Column name -->
-      <Column field="name" header="Name" style="min-width: 12rem">
+      <Column field="name" header="Name" sortable style="min-width: 12rem">
         <template #body="{ data }">
           {{ data.name }}
         </template>
         <template #filter="{ filterModel }">
           <InputText v-model="filterModel.value" placeholder="Search by name" />
+        </template>
+      </Column>
+
+      <!-- Column « go to page »  -->
+      <Column field="id" header="" style="min-width: 12rem">
+        <template #body="{ data }">
+          <Button type="button" label="Go to page" @click="goToPage(data.id)" />
         </template>
       </Column>
     </DataTable>
@@ -62,4 +69,8 @@ const clearFilter = () => {
   initFilters();
 };
 
+// TODO : Go to specific providers page
+const goToPage = (providerId) => {
+  console.log("TODO : go to provider " + providerId + " page");
+}
 </script>
