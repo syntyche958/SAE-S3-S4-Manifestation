@@ -36,17 +36,16 @@
 import { onMounted, ref } from 'vue';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import { InputText, Button, DataTable, Column, IconField, InputIcon } from 'primevue';
-import providerService from '@/services/provider.service';
+import { useProviderStore } from '@/stores/providers';
 
-var data = [{ id: 1, name: '(AAC) Associtaion des Archers de Carcassonne' }, { id: 2, name: 'Troupe de troubadours' }]
-
-const providers = ref();
-const filters = ref();
+const providers = ref([]);
+const filters = ref({});
 const loading = ref(true);
 
-onMounted(() => {
-  // TODO : Call apiService to get this data !
-  providers.value = data;
+onMounted(async () => {
+  const providerStore = useProviderStore();
+  await providerStore.getAllProviders();
+  providers.value = providerStore.providers;
   loading.value = false;
 })
 

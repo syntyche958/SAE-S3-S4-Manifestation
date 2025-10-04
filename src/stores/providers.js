@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 import ProviderService from '@/services/provider.service'
 
-export const useProviderStore = defineStore('bank', () => {
+export const useProviderStore = defineStore('provider', () => {
   const providers = ref([])
 
   async function getAllProviders() {
