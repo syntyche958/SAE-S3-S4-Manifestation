@@ -1,5 +1,5 @@
 <template>
-  <Card style="min-width: 0; width: auto; height: auto; display: inline-block;">
+  <Card>
     <template #content>
       <div id="map"></div>
     </template>
@@ -121,7 +121,14 @@ onMounted(() => {
 
 <style scoped>
 #map {
-  height: 750px;
-  width: 750px;
+  height: 80vh;
+  width: 50vw;
+}
+
+@media only screen and (max-width: 950px) {
+  #map {
+    height: 90vh;
+    width: 90vw;
+  }
 }
 </style>

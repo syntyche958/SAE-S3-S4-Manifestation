@@ -59,6 +59,12 @@ a {
   font-size: 100px;
 }
 
+@media only screen and (max-width: 950px) {
+  .image-container h1 {
+    font-size: 50px;
+  }
+}
+
 .image-container p {
   position: absolute;
   z-index: 1;
