@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue'
+
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 
 // menu model
 const items = ref([
-  { label: 'accueil' },
+  { label: 'accueil',command: () => { window.location.href = '/' }
+  },
   {
     label: 'prestataire',
     items: [
@@ -24,10 +26,15 @@ const items = ref([
 </script>
 
 <template>
-  <Menubar :model="items">
+  <Menubar :model="items" class="NavbarMargin">
     <template #end>
       <Button label="Se connecter" class="p-button-outlined" />
     </template>
   </Menubar>
 </template>
 
+<style scoped>
+.NavbarMargin{
+  margin-bottom: 10px;
+}
+</style>
