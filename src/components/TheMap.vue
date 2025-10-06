@@ -7,32 +7,47 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-import * as L from 'leaflet';
-import Card from 'primevue/card';
+import { onMounted, ref } from 'vue'
+import * as L from 'leaflet'
+import Card from 'primevue/card'
+import { useLocationStore } from '@/stores/locations'
 
+const markers = ref([])
 
-onMounted(() => {
+onMounted(async () => {
   // Map setup
-  let southWestBoundsCoords = L.latLng(43.203642, 2.359400);
-  let northEastBoundsCoords = L.latLng(43.209367, 2.368358);
-  let bounds = new L.LatLngBounds(southWestBoundsCoords, northEastBoundsCoords);
-  let options = { maxBounds: bounds, minZoom: 17 };
-  var map = L.map('map', options).setView([43.206496, 2.363834], 17);
+  let southWestBoundsCoords = L.latLng(43.203642, 2.3594)
+  let northEastBoundsCoords = L.latLng(43.209367, 2.368358)
+  let bounds = new L.LatLngBounds(southWestBoundsCoords, northEastBoundsCoords)
+  let options = { maxBounds: bounds, minZoom: 17 }
+  var map = L.map('map', options).setView([43.206496, 2.363834], 17)
 
   // Define tile layer
-  var geoportailFranceTileLayer = L.tileLayer('https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', {
-    attribution: '<a target="_blank" href="https://www.geoportail.gouv.fr/">Geoportail France</a>',
-    bounds: [[-75, -180], [81, 180]],
-    minZoom: 2,
-    maxZoom: 19,
-    format: 'image/jpeg',
-    style: 'normal'
-  });
-  geoportailFranceTileLayer.addTo(map);
+  var geoportailFranceTileLayer = L.tileLayer(
+    'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
+    {
+      attribution:
+        '<a target="_blank" href="https://www.geoportail.gouv.fr/">Geoportail France</a>',
+      bounds: [
+        [-75, -180],
+        [81, 180],
+      ],
+      minZoom: 2,
+      maxZoom: 19,
+      format: 'image/jpeg',
+      style: 'normal',
+    },
+  )
+  geoportailFranceTileLayer.addTo(map)
 
-  // Display pinPoint for each location
-  
+  // Display pinPoint or area for each location
+  const locationsStore = useLocationStore()
+  await locationsStore.getAllLocations()
+
+  for (let location of locationsStore.locations) {
+    let marker = L.marker(location["coord"]).addTo(map)
+    markers.value.push(marker)
+  }
 
   // let polygonDefaultColor = "black";
   // let polygonSelectedColor = "blue";
@@ -74,7 +89,6 @@ onMounted(() => {
   //   bottomArea.setStyle({ color: polygonDefaultColor });
   // })
   // bottomArea.addTo(map);
-
 })
 </script>
 
