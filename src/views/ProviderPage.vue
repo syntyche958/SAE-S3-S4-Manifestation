@@ -24,7 +24,6 @@ const selectedImage = ref(images[0].image)
 
 const activities = [
   {image: photo, text: 'photo1', description_text: "Concert médiéval mettant en scène des chanteurs et des musiciens spécialisés dans la musique d'époque", },
-  {image: photo, text: 'photo2', description_text: 'Spectacle humoristique de chasse à la sorcière réservé aux moins de 12 ans'},
   {image: photo, text: 'photo2', description_text: 'Spectacle humoristique de chasse à la sorcière réservé aux moins de 12 ans'}
 ]
 
@@ -83,14 +82,12 @@ onMounted(() => {
   </section>
 </template>
 
-
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 img {
   border: 2px solid #ddd12e;
   border-radius: 10px;
-  max-width: 200px;
+  max-width: 300px;
 }
 
 .clean-list {
@@ -143,7 +140,6 @@ img {
   border-radius: 10px;
   border: 1px solid #ddd12e;
   color: #142557;
-  font-family: 'Cormorant Garamond', serif;
 }
 
 .activities {
@@ -155,7 +151,6 @@ img {
   background-color: #fafafa;
   padding: 2rem;
   color: #142557;
-  font-family: 'Cormorant Garamond', serif;
 }
 
 .activity-card {
@@ -171,7 +166,6 @@ img {
   border: 1px solid #ddd12e;
   border-radius: 8px;
   color: #142557;
-  font-family: 'Cormorant Garamond', serif;
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
@@ -200,14 +194,12 @@ body {
   padding: 0;
   background-color: #efefef;
   color: #142557;
-  font-family: 'Cormorant Garamond', serif;
 }
 
 h1,
 h2 {
   padding-bottom: 0.3rem;
   color: #142557;
-  font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   letter-spacing: 1px;
 }
@@ -220,7 +212,6 @@ button {
   border-radius: 6px;
   text-decoration: none;
   transition: background-color 0.3s;
-  font-family: 'Cormorant Garamond', serif;
 }
 
 a:hover,
@@ -249,6 +240,7 @@ button:hover {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  max-width: 35%;
   padding: 1rem;
   background: #e5e5e5;
   border: 1px solid #ddd12e;
