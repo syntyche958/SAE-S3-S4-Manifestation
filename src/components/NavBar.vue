@@ -1,28 +1,44 @@
 <script setup>
-import { ref } from 'vue'
-
+import { ref, computed } from 'vue'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 
-// menu model
-const items = ref([
-  { label: 'accueil',command: () => { window.location.href = '/' }
+
+const userRole = ref('') // test role ( organisateur  / prestataire) le les met ici pour le ctrl c (ou rien pour voir les deux)
+
+
+const allItems = {
+  accueil: {
+    label: 'Accueil',
+    command: () => { window.location.href = '/' },
   },
-  {
-    label: 'prestataire',
+  prestataire: {
+    label: 'Prestataire',
+    command: () => { window.location.href = '/provider' },
     items: [
-      { label: 'page 1' },
-      { label: 'page 2' },
+      { label: 'Page 1' },
+      { label: 'Page 2' },
     ],
   },
-  {
-    label: 'organisateur',
+  organisateur: {
+    label: 'Organisateur',
     items: [
-      { label: 'page 1' },
-      { label: 'page 2' },
+      { label: 'Page 1' },
+      { label: 'Page 2'},
     ],
   },
-])
+}
+
+
+const items = computed(() => { //computed meilleur solution? ou alors mettre dans variable des boulean?
+  if (userRole.value === 'prestataire') {
+    return [allItems.accueil, allItems.prestataire]
+  } else if (userRole.value === 'organisateur') {
+    return [allItems.accueil, allItems.organisateur]
+  } else {
+    return [allItems.accueil, allItems.prestataire, allItems.organisateur]
+  }
+})
 </script>
 
 <template>
@@ -34,7 +50,12 @@ const items = ref([
 </template>
 
 <style scoped>
-.NavbarMargin{
-  margin-bottom: 10px;
+.NavbarMargin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  color: #EFEFEF;
 }
 </style>
