@@ -14,7 +14,7 @@ const router = createRouter({
     },
     {
       path: '/provider',
-      name: 'provider_page',
+      name: 'mgb',
       component: ProviderPage,
     },
     {
