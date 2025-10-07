@@ -13,6 +13,7 @@ import Card from 'primevue/card'
 import { useLocationStore } from '@/stores/locations'
 
 const markers = ref([])
+const polygons = ref([])
 
 onMounted(async () => {
   // Map setup
@@ -45,50 +46,27 @@ onMounted(async () => {
   await locationsStore.getAllLocations()
 
   for (let location of locationsStore.locations) {
-    let marker = L.marker(location["coord"]).addTo(map)
+    let marker = L.marker(location['coord']).addTo(map)
+    // marker.bindPopup(
+    //   "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
+    // )
+
+    marker.on('mouseover', () => {
+      map.closePopup()
+      marker.bindPopup(
+        "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
+      ).openPopup()
+      // var latlng = L.latLng(marker.getLatLng())
+      // var popup = L.popup().setLatLng(latlng).setContent("<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>").openOn(map)
+    })
+    // marker.on('mouseout', () => {
+    //   map.closePopup()
+    // })
     markers.value.push(marker)
+    // TODO : Pour les prestataires, afficher les zones !
+    // let polygon = L.polygon(location['area']).addTo(map)
+    // polygons.value.push(polygon)
   }
-
-  // let polygonDefaultColor = "black";
-  // let polygonSelectedColor = "blue";
-
-  // var topAreaLatLong = [[43.208413, 2.364308], [43.207302, 2.365821], [43.205386, 2.365081], [43.207756, 2.362989]]
-  // var topArea = L.polygon(topAreaLatLong, { color: polygonDefaultColor });
-  // topArea.addTo(map);
-
-  // topArea.on("mouseover", () => {
-  //   topArea.setStyle({ color: polygonSelectedColor })
-  // })
-
-  // topArea.on("mouseout", () => {
-  //   if (!topArea.isPopupOpen())
-  //     topArea.setStyle({ color: polygonDefaultColor })
-  // })
-
-  // topArea.bindPopup("<b>Emplacement libre!</b><br> Accès à l'eau 10m² blablabla")
-
-  // topArea.getPopup().on("remove", () => {
-  //   topArea.setStyle({ color: polygonDefaultColor });
-  // })
-
-  // var bottomAreaLatLong = [[43.207756, 2.362989], [43.205386, 2.365081], [43.204417, 2.361594]];
-  // var bottomArea = L.polygon(bottomAreaLatLong, { color: polygonDefaultColor });
-
-  // bottomArea.on("mouseover", () => {
-  //   bottomArea.setStyle({ color: polygonSelectedColor })
-  // })
-
-  // bottomArea.on("mouseout", () => {
-  //   if (!bottomArea.isPopupOpen())
-  //     bottomArea.setStyle({ color: polygonDefaultColor })
-  // })
-
-  // bottomArea.bindPopup("<b>Emplacement libre!</b><br> Accès à l'eau 10m² blablabla")
-
-  // bottomArea.getPopup().on("remove", () => {
-  //   bottomArea.setStyle({ color: polygonDefaultColor });
-  // })
-  // bottomArea.addTo(map);
 })
 </script>
 
