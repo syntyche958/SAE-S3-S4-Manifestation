@@ -46,15 +46,6 @@ a {
   height: 60vh;
 }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.65);
-}
-
 .image-container img {
   width: 100%;
   height: 100%;
