@@ -22,6 +22,7 @@ const allItems = {
   },
   organisateur: {
     label: 'Organisateur',
+    command: () => { window.location.href = '/organisateur' },
     items: [
       { label: 'Page 1' },
       { label: 'Page 2'},
