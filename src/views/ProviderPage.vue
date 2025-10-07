@@ -38,7 +38,7 @@
       <h1>Activités</h1>
       <div class="list-activity-cards">
         <div v-for="(item, index) in activities" :key="index">
-          <Card class="activity-card" style="width: 250px; overflow: hidden">
+          <Card class="activity-card" style="width: 250px; overflow: hidden; cursor: pointer;" @click="goToActivity">
             <template #header>
               <img style="object-fit: cover" alt="user header" :src=item.image />
             </template>
@@ -95,6 +95,12 @@ const activities = [
     description_text: 'Spectacle humoristique de chasse à la sorcière réservé aux moins de 12 ans',
   }
 ]
+
+const goToActivity = () => {
+  window.location.href = '/activity'
+}
+
+
 </script>
 
 <style scoped>
@@ -137,6 +143,7 @@ const activities = [
 
 
 body {
+  margin-top: 3rem;
   padding: 2rem;
   color: #142557;
 }
@@ -145,6 +152,10 @@ h1, h2 {
   padding-bottom: 0.3rem;
   font-weight: 600;
   letter-spacing: 1px;
+}
+
+a {
+  text-decoration: none;
 }
 
 img {
