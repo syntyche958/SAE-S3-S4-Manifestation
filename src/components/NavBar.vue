@@ -2,10 +2,9 @@
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
-const props = defineProps({
-  userType: Object
-})
+const authStore = useAuthStore();
 
 const allItems = {
   accueil: {
@@ -23,8 +22,8 @@ const allItems = {
 }
 
 const items = computed(() => {
-  console.log(props.userType)
-  switch (props.userType) {
+  let type = authStore.user?.type
+  switch (type) {
     case "admin":
       return [allItems.accueil, allItems.prestataire, allItems.organisateur];
     case "provider":
