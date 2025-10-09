@@ -10,9 +10,28 @@
     </div>
   </div>
 
-  <p>Description de l'activité</p>
-  <p>Carte avec emplacement</p>
-  <p>Notes et commentaires</p>
+  <div>
+    <Card>
+      <template #content>
+        <div>
+          <h2>Description de l'activité :</h2>
+          <p>
+            Durant cet évènement médiéval, nous metterons en scène un grand concert d'instruments
+            médiévaux, réalisé par des professionnels. Cet évènement est sur réservation. Vous y
+            découvrirez des musiques et des instruments que vous n'avez jamais vu auparavant. Si
+            vous êtes amateur de musique, d'instruments particuliers ou de l'époque médiévale, alors
+            vous adorerez les performances de notre troupe.
+          </p>
+        </div>
+      </template>
+    </Card>
+  </div>
+
+  <div class="emplacement">
+    <h2>Emplacement de l'activité :</h2>
+    <div id="map"></div>
+  </div>
+
 </template>
 
 <style scoped>
