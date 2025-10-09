@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import Button from 'primevue/button'
 import Editor from 'primevue/editor'
 
-import { useProviderStore } from '@/stores/providers'
 import TheMap from "@/components/TheMap.vue";
+import { MapMode } from '@/enums/Map.enums';
 
 const menu = ref(null)
 const activeSection = ref('manifestation')
@@ -52,7 +52,8 @@ const manifestContent = ref('<h3>Titre de la manifestation</h3><p>Description...
             Gérer les prestataires
           </li>
 
-          <li :class="{ active: activeSection === 'espace_prestataire' }" @click="(activeSection = 'espace_prestataire')">
+          <li :class="{ active: activeSection === 'espace_prestataire' }"
+            @click="(activeSection = 'espace_prestataire')">
             <i class="pi pi-home"></i>
             Espace Prestataire
           </li>
@@ -82,7 +83,7 @@ const manifestContent = ref('<h3>Titre de la manifestation</h3><p>Description...
         <!-- Carte interactive -->
         <section class="section" v-if="activeSection === 'carte'">
           <h2>Carte interactive</h2>
-          <TheMap />
+          <TheMap :displayMode="MapMode.ADMIN" />
         </section>
       </main>
     </div>
@@ -104,7 +105,7 @@ const manifestContent = ref('<h3>Titre de la manifestation</h3><p>Description...
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .user-info {
@@ -123,7 +124,7 @@ const manifestContent = ref('<h3>Titre de la manifestation</h3><p>Description...
 .sidebar {
   width: 280px;
   background: var(--surface-card, white);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .menu {
@@ -167,7 +168,7 @@ const manifestContent = ref('<h3>Titre de la manifestation</h3><p>Description...
   background: var(--surface-card, white);
   border-radius: var(--border-radius, 6px);
   padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
 }
 
@@ -180,8 +181,12 @@ const manifestContent = ref('<h3>Titre de la manifestation</h3><p>Description...
 
 /* Responsive */
 @media (max-width: 768px) {
-  .main-content { flex-direction: column }
-  .sidebar { display: none }
-}
+  .main-content {
+    flex-direction: column
+  }
 
+  .sidebar {
+    display: none
+  }
+}
 </style>

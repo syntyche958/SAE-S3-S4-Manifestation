@@ -1,6 +1,6 @@
 <template>
   <div :id="'map-and-provider-section'">
-    <TheMap />
+    <TheMap :display-mode="MapMode.VISITOR" />
     <ProviderTable />
   </div>
 </template>
@@ -8,6 +8,7 @@
 <script setup>
 import TheMap from './TheMap.vue';
 import ProviderTable from './ProviderTable.vue';
+import { MapMode } from '@/enums/Map.enums';
 </script>
 
 <style scoped>
