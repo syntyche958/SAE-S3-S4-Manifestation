@@ -1,11 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
+import { computed } from 'vue'
 
-
-const userRole = ref('') // test role ( organisateur  / prestataire) le les met ici pour le ctrl c (ou rien pour voir les deux)
-
+const props = defineProps({
+  userType: Object
+})
 
 const allItems = {
   accueil: {
@@ -22,22 +22,19 @@ const allItems = {
   },
   organisateur: {
     label: 'Organisateur',
-    command: () => { window.location.href = '/organizer' },
-    items: [
-      { label: 'Page 1' },
-      { label: 'Page 2'},
-    ],
+    command: () => { window.location.href = '/organisateur' },
   },
 }
 
-
-const items = computed(() => { //computed meilleur solution? ou alors mettre dans variable des boulean?
-  if (userRole.value === 'prestataire') {
-    return [allItems.accueil, allItems.prestataire]
-  } else if (userRole.value === 'organisateur') {
-    return [allItems.accueil, allItems.organisateur]
-  } else {
-    return [allItems.accueil, allItems.prestataire, allItems.organisateur]
+const items = computed(() => {
+  console.log(props.userType)
+  switch (props.userType) {
+    case "admin":
+      return [allItems.accueil, allItems.prestataire, allItems.organisateur];
+    case "provider":
+      return [allItems.accueil, allItems.prestataire];
+    default:
+      return [allItems.accueil];
   }
 })
 </script>
@@ -48,6 +45,7 @@ const items = computed(() => { //computed meilleur solution? ou alors mettre dan
       <Button label="Se connecter" class="p-button-outlined" />
     </template>
   </Menubar>
+  <div class="NavbarBottom"></div>
 </template>
 
 <style scoped>
@@ -58,5 +56,9 @@ const items = computed(() => { //computed meilleur solution? ou alors mettre dan
   width: 100%;
   z-index: 1000;
   color: #EFEFEF;
+}
+
+.NavbarBottom {
+  height: 80px;
 }
 </style>

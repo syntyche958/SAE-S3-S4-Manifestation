@@ -1,58 +1,11 @@
+<script setup>
+  import PresentationProviderSection from "@/components/PresentationProviderSection.vue";
+  import SideBarMenuProvider from "@/components/SideBarMenuProvider.vue";
+</script>
+
 <template>
-  <body>
-    <div class="content">
-      <div class="card" style="max-width: 400px">
-        <Galleria :value="images" :responsiveOptions="responsiveOptions" :numVisible="5" containerStyle="max-width: 640px">
-          <template #item="slotProps">
-            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
-          </template>
-          <template #thumbnail="slotProps">
-            <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
-          </template>
-        </Galleria>
-      </div>
-
-      <div class="card-presentation-wrapper">
-        <Card class="card-presentation">
-          <template #content>
-            <div>
-              <img :src="placeholder" alt="photo" />
-            </div>
-
-            <div>
-              <h2>Qui sommes-nous ?</h2>
-              <p class="m-0">
-                Nous sommes une troupe de théâtre représentant l'association
-                <i>"Troubadours Modernes"</i>. Nous proposons deux activités durant cet évènement :
-                spectacle pour enfants sur une petite scène, et un concert médiéval uniquement joué
-                avec des instruments d'époque.
-              </p>
-            </div>
-          </template>
-        </Card>
-      </div>
-
-    </div>
-
-    <section style="margin: 3rem">
-      <h1>Activités</h1>
-      <div class="list-activity-cards">
-        <div v-for="(item, index) in activities" :key="index">
-          <Card class="activity-card" style="width: 250px; overflow: hidden">
-            <template #header>
-              <img style="object-fit: cover" alt="user header" :src=item.image />
-            </template>
-            <template #title>{{item.name}}</template>
-            <template #content>
-              <p class="m-0">
-                {{ item.description_text }}
-              </p>
-            </template>
-          </Card>
-        </div>
-      </div>
-    </section>
-  </body>
+  <PresentationProviderSection />
+  <SideBarMenuProvider />
 </template>
 
 
@@ -95,7 +48,7 @@ const activities = [
     description_text: 'Spectacle humoristique de chasse à la sorcière réservé aux moins de 12 ans',
   }
 ]
- 
+
 </script>
 
 <style scoped>
