@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const activeSection = ref('manifestation')
+const activeSection = ref('apparence')
 
 const items = ref([
   {
@@ -13,33 +13,30 @@ const items = ref([
     command: () => (activeSection.value = 'services'),
   },
   {
-    label: 'Gérer les reservations',
-    command: () => (activeSection.value = 'reservations'),
-  },
-  {
     label: 'Regarder les statistiques',
     command: () => (activeSection.value = 'statistiques'),
   },
 ])
+
+const emit = defineEmits(['change-section'])
+
+function changeSection(new_section) {
+  emit('change-section', new_section)
+}
+
 </script>
 
 <template>
   <nav class="sidebar">
     <ul class="menu">
-      <li @click="activeSection = 'apparence'" :class="{ active: activeSection === 'apparence' }">
+      <li @click="activeSection = 'apparence'; changeSection('apparence')" :class="{ active: activeSection === 'apparence' }">
         Page de présentation
       </li>
-      <li @click="activeSection = 'services'" :class="{ active: activeSection === 'services' }">
+      <li @click="activeSection = 'services'; changeSection('services')" :class="{ active: activeSection === 'services' }">
         Choisir les services
       </li>
       <li
-        @click="activeSection = 'reservations'"
-        :class="{ active: activeSection === 'reservations' }"
-      >
-        Gérer les reservations
-      </li>
-      <li
-        @click="activeSection = 'statistiques'"
+        @click="activeSection = 'statistiques'; changeSection('statistiques')"
         :class="{ active: activeSection === 'statistiques' }"
       >
         Statistiques
