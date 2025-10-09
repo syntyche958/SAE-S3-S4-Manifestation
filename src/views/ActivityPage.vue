@@ -2,12 +2,10 @@
 </script>
 
 <template>
-  <div :id="presentation">
-    <div :class="'image-container'">
-      <img src="@/assets/images/photos/placeholder.png" :alt="'Main Image'" />
-      <h1>Nom activité</h1>
-      <a href="#map" :class="'p-button p-component'"> Voir l'emplacement </a>
-    </div>
+  <div :id="presentation" :class="'image-container'">
+    <img src="@/assets/images/photos/placeholder.png" :alt="'Main'" />
+    <h1>Nom activité</h1>
+    <a href="#map" :class="'p-button p-component'"> Voir l'emplacement </a>
   </div>
 
   <div>
