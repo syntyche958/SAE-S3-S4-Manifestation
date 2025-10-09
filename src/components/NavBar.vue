@@ -14,18 +14,10 @@ const allItems = {
   prestataire: {
     label: 'Prestataire',
     command: () => { window.location.href = '/provider' },
-    items: [
-      { label: 'Page 1' },
-      { label: 'Page 2' },
-    ],
   },
   organisateur: {
     label: 'Organisateur',
     command: () => { window.location.href = '/organizer' },
-    items: [
-      { label: 'Page 1' },
-      { label: 'Page 2' },
-    ],
   },
 }
 
