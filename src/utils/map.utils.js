@@ -32,6 +32,40 @@ export function setupMap(mapId) {
   return map
 }
 
+export async function displayLocations(map, mapMode) {
+  if (mapMode === MapMode.VISITOR) {
+    displayPinPoints(map)
+  } else {
+    displayAreas(map)
+  }
+}
+
+function bindPopup(map, marker) {
+  var mouseOnPopUp = false
+  // Add popup with needed event to open and close it
+  marker.on('mouseover', () => {
+    map.closePopup()
+    marker
+      .bindPopup(
+        // TODO : Use real values (different depending on the page)
+        "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
+      )
+      .openPopup()
+
+    let markerElement = marker.getPopup().getElement()
+    markerElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
+    markerElement.addEventListener('mouseleave', () => {
+      mouseOnPopUp = false
+      marker.closePopup()
+    })
+    marker.on('mouseout', () => {
+      setTimeout(() => {
+        if (!mouseOnPopUp) marker.closePopup()
+      }, 200)
+    })
+  })
+}
+
 function displayPinPoints(map) {
   const markers = ref([])
   const locationStore = useLocationStore()
@@ -39,29 +73,7 @@ function displayPinPoints(map) {
   for (let location of locationStore.locations) {
     let marker = L.marker(location['coord']).addTo(map)
 
-    var mouseOnPopUp = false
-    // Add popup with needed event to open and close it
-    marker.on('mouseover', () => {
-      map.closePopup()
-      marker
-        .bindPopup(
-          // TODO : Use real values (different depending on the page)
-          "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
-        )
-        .openPopup()
-
-      let markerElement = marker.getPopup().getElement()
-      markerElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
-      markerElement.addEventListener('mouseleave', () => {
-        mouseOnPopUp = false
-        marker.closePopup()
-      })
-      marker.on('mouseout', () => {
-        setTimeout(() => {
-          if (!mouseOnPopUp) marker.closePopup()
-        }, 200)
-      })
-    })
+    bindPopup(map, marker)
     markers.value.push(marker)
   }
 }
@@ -72,16 +84,8 @@ function displayAreas(map) {
 
   for (let location of locationStore.locations) {
     let polygon = L.polygon(location['area']).addTo(map)
-    // TODO : Bind popup
+    bindPopup(map, polygon)
     // TODO : Display proper informations in popup (surface area, water, electricity, ... )
     polygons.value.push(polygon)
-  }
-}
-
-export async function displayLocations(map, mapMode) {
-  if (mapMode === MapMode.VISITOR) {
-    displayPinPoints(map)
-  } else {
-    displayAreas(map)
   }
 }
