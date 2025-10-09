@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ProviderPage from '@/views/ProviderPage.vue'
 import ActivityPage from '@/views/ActivityPage.vue'
-import Organizer from "@/views/Organizer.vue";
+import Admin from "@/views/Admin.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,9 +24,9 @@ const router = createRouter({
     },
     {
 
-      path: '/organizer',
-      name: 'organizer',
-      component: Organizer,
+      path: '/admin',
+      name: 'admin',
+      component: Admin,
     },
   ],
 })
