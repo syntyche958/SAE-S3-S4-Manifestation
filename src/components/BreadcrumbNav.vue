@@ -1,11 +1,18 @@
 <script setup>
 import Breadcrumb from 'primevue/breadcrumb';
-const breadItem={
-  Accueil:{
-    label:'Accueil'
-  }
+
+const home = {
+  label: 'Accueil',
+  command: () => { console.log('test') }
 }
+
+
+const items = [/*
+  { label: 'Prestataires' },
+  { label: 'activité' }*/
+]
+
 </script>
 <template>
-  <Breadcrumb :home="breadItem" :model="breadItem"/>
+  <Breadcrumb :home="home" :model="items"/>
 </template>
