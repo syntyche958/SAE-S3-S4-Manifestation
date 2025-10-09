@@ -2,6 +2,8 @@
 import { ref, computed } from 'vue'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
+import { useRoute } from 'vue-router'
+const routeActuel = useRoute()
 
 
 const userRole = ref('organisateur') // test role ( organisateur  / prestataire / visiteur ) le les met ici pour le ctrl c (ou rien pour voir les deux)
@@ -35,6 +37,7 @@ const items = computed(() => { //computed meilleur solution? ou alors mettre dan
     return [allItems.accueil, allItems.prestataire, allItems.organisateur]
   }
 })
+console.log(routeActuel.path)
 </script>
 
 <template>
@@ -43,6 +46,7 @@ const items = computed(() => { //computed meilleur solution? ou alors mettre dan
       <Button label="Se connecter" class="p-button-outlined" />
     </template>
   </Menubar>
+    <div class="NavbarBottom"></div>
 </template>
 
 <style scoped>
@@ -53,6 +57,9 @@ const items = computed(() => { //computed meilleur solution? ou alors mettre dan
   width: 100%;
   z-index: 1000;
   color: #EFEFEF;
-  margin-bottom: 400px;
 }
+.NavbarBottom{
+  height: 80px;
+}
+
 </style>
