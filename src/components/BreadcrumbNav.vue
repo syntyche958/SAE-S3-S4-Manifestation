@@ -1,16 +1,19 @@
 <script setup>
 import Breadcrumb from 'primevue/breadcrumb';
+import { computed } from 'vue'
 
 const home = {
   label: 'Accueil',
-  command: () => { console.log('test') }
+  command: () => { window.location.href = '/' }
 }
 
 
-const items = [/*
-  { label: 'Prestataires' },
-  { label: 'activité' }*/
-]
+const AllItems = [
+  { label: 'Prestataires',here: false },
+  { label: 'activité',here: false }
+]//trouver comment afficher ces items quand on arrive à la bonne page trouver route actuel et se baser dessus?
+
+const items = computed(()=>AllItems.filter(item=>item.here))
 
 </script>
 <template>
