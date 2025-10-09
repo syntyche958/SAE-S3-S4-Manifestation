@@ -4,7 +4,7 @@ import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 
 
-const userRole = ref('') // test role ( organisateur  / prestataire) le les met ici pour le ctrl c (ou rien pour voir les deux)
+const userRole = ref('organisateur') // test role ( organisateur  / prestataire / visiteur ) le les met ici pour le ctrl c (ou rien pour voir les deux)
 
 
 const allItems = {
@@ -15,18 +15,10 @@ const allItems = {
   prestataire: {
     label: 'Prestataire',
     command: () => { window.location.href = '/provider' },
-    items: [
-      { label: 'Page 1' },
-      { label: 'Page 2' },
-    ],
   },
   organisateur: {
     label: 'Organisateur',
     command: () => { window.location.href = '/organisateur' },
-    items: [
-      { label: 'Page 1' },
-      { label: 'Page 2'},
-    ],
   },
 }
 
@@ -35,8 +27,11 @@ const items = computed(() => { //computed meilleur solution? ou alors mettre dan
   if (userRole.value === 'prestataire') {
     return [allItems.accueil, allItems.prestataire]
   } else if (userRole.value === 'organisateur') {
-    return [allItems.accueil, allItems.organisateur]
-  } else {
+    return [allItems.accueil,allItems.prestataire, allItems.organisateur]
+  }
+  else if (userRole.value === 'visiteur') {
+    return [allItems.accueil]}
+  else {
     return [allItems.accueil, allItems.prestataire, allItems.organisateur]
   }
 })
@@ -58,5 +53,6 @@ const items = computed(() => { //computed meilleur solution? ou alors mettre dan
   width: 100%;
   z-index: 1000;
   color: #EFEFEF;
+  margin-bottom: 400px;
 }
 </style>
