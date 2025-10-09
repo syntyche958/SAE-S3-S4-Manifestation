@@ -13,6 +13,10 @@ const items = ref([
     command: () => (activeSection.value = 'services'),
   },
   {
+    label: 'Gérer les reservations',
+    command: () => (activeSection.value = 'reservations'),
+  },
+  {
     label: 'Regarder les statistiques',
     command: () => (activeSection.value = 'statistiques'),
   },
