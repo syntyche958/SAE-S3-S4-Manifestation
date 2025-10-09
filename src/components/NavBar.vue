@@ -1,13 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
-import { useRoute } from 'vue-router'
-const routeActuel = useRoute()
+import { computed } from 'vue'
 
-
-const userRole = ref('organisateur') // test role ( organisateur  / prestataire / visiteur ) le les met ici pour le ctrl c (ou rien pour voir les deux)
-
+const props = defineProps({
+  userType: Object
+})
 
 const allItems = {
   accueil: {
@@ -24,20 +22,17 @@ const allItems = {
   },
 }
 
-
-const items = computed(() => { //computed meilleur solution? ou alors mettre dans variable des boulean?
-  if (userRole.value === 'prestataire') {
-    return [allItems.accueil, allItems.prestataire]
-  } else if (userRole.value === 'organisateur') {
-    return [allItems.accueil,allItems.prestataire, allItems.organisateur]
-  }
-  else if (userRole.value === 'visiteur') {
-    return [allItems.accueil]}
-  else {
-    return [allItems.accueil, allItems.prestataire, allItems.organisateur]
+const items = computed(() => {
+  console.log(props.userType)
+  switch (props.userType) {
+    case "admin":
+      return [allItems.accueil, allItems.prestataire, allItems.organisateur];
+    case "provider":
+      return [allItems.accueil, allItems.prestataire];
+    default:
+      return [allItems.accueil];
   }
 })
-console.log(routeActuel.path)
 </script>
 
 <template>
@@ -46,7 +41,7 @@ console.log(routeActuel.path)
       <Button label="Se connecter" class="p-button-outlined" />
     </template>
   </Menubar>
-    <div class="NavbarBottom"></div>
+  <div class="NavbarBottom"></div>
 </template>
 
 <style scoped>
@@ -58,8 +53,8 @@ console.log(routeActuel.path)
   z-index: 1000;
   color: #EFEFEF;
 }
-.NavbarBottom{
+
+.NavbarBottom {
   height: 80px;
 }
-
 </style>

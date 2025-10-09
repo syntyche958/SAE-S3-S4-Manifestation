@@ -36,6 +36,6 @@ var locations = [
   },
 ]
 
-var user = [{ type: 'admin' }]
+var user = [{ type: 'admin' }] // visitor, provider, admin
 
 export { providers, locations, user }

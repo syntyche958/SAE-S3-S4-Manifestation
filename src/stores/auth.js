@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import AuthService from '@/services/auth.service'
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref({})
+  const user = ref()
 
   async function getUser() {
     let response = await AuthService.getUser()
