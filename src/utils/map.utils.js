@@ -47,7 +47,7 @@ function bindPopup(map, marker) {
     map.closePopup()
     marker
       .bindPopup(
-        // TODO : Use real values (different depending on the page)
+        // TODO : Use real values (different depending on the display mode)
         "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
       )
       .openPopup()
