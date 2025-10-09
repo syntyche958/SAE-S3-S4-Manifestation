@@ -72,6 +72,7 @@ const clearFilter = () => {
 };
 
 // TODO : Go to specific providers page
+// TODO : Go to specific providers page
 const goToPage = (providerId) => {
   console.log("TODO : go to provider " + providerId + " page");
 }

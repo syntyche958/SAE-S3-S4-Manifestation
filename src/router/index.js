@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ProviderPage from '@/views/ProviderPage.vue'
-import organisateur from "@/views/Organisateur.vue";
+import Organizer from "@/views/Organizer.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,9 +17,9 @@ const router = createRouter({
       component: ProviderPage,
     },
     {
-      path: '/organisateur',
-      name: 'organisateur',
-      component: organisateur,
+      path: '/organizer',
+      name: 'organizer',
+      component: Organizer,
     },
   ],
 })

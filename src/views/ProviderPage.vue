@@ -95,6 +95,7 @@ const activities = [
     description_text: 'Spectacle humoristique de chasse à la sorcière réservé aux moins de 12 ans',
   }
 ]
+ 
 </script>
 
 <style scoped>
