@@ -47,21 +47,26 @@ onMounted(async () => {
 
   for (let location of locationsStore.locations) {
     let marker = L.marker(location['coord']).addTo(map)
-    // marker.bindPopup(
-    //   "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
-    // )
 
+    var mouseOnPopUp = false;
+    // Add popup with needed event to open and close it
     marker.on('mouseover', () => {
       map.closePopup()
       marker.bindPopup(
+        // TODO : Use real values (different depending on the page)
         "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
       ).openPopup()
-      // var latlng = L.latLng(marker.getLatLng())
-      // var popup = L.popup().setLatLng(latlng).setContent("<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>").openOn(map)
+
+      let markerElement = marker.getPopup().getElement()
+      console.log(markerElement)
+      markerElement.addEventListener("mouseenter", () => mouseOnPopUp = true)
+      markerElement.addEventListener("mouseleave", () => { mouseOnPopUp = false; marker.closePopup() })
+      marker.on("mouseout", () => {
+        setTimeout(() => {
+          if (!mouseOnPopUp) marker.closePopup();
+        }, 200)
+      })
     })
-    // marker.on('mouseout', () => {
-    //   map.closePopup()
-    // })
     markers.value.push(marker)
     // TODO : Pour les prestataires, afficher les zones !
     // let polygon = L.polygon(location['area']).addTo(map)
