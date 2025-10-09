@@ -1,4 +1,4 @@
-import { providers, locations } from '@/datasource/data'
+import { providers, locations, user } from '@/datasource/data'
 
 /**
  * Get all providers
@@ -16,4 +16,12 @@ function getAllLocations() {
   return { error: 0, status: 200, data: locations }
 }
 
-export default { getAllProviders, getAllLocations }
+/**
+ * Get user informations
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{type:string}}}
+ */
+function getUser() {
+  return { error: 0, status: 200, data: user }
+}
+
+export default { getAllProviders, getAllLocations, getUser }

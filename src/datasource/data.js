@@ -36,4 +36,6 @@ var locations = [
   },
 ]
 
-export { providers, locations }
+var user = [{ type: 'admin' }]
+
+export { providers, locations, user }
