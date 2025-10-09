@@ -24,36 +24,35 @@ const items = ref([
 </script>
 
 <template>
-  <body>
-    <nav class="sidebar">
-      <ul class="menu">
-        <li @click="activeSection = 'apparence'" :class="{ active: activeSection === 'apparence' }">
-          Page de présentation
-        </li>
-        <li @click="activeSection = 'services'" :class="{ active: activeSection === 'services' }">
-          Choisir les services
-        </li>
-        <li
-          @click="activeSection = 'reservations'"
-          :class="{ active: activeSection === 'reservations' }"
-        >
-          Gérer les reservations
-        </li>
-        <li
-          @click="activeSection = 'statistiques'"
-          :class="{ active: activeSection === 'statistiques' }"
-        >
-          Statistiques
-        </li>
-      </ul>
-    </nav>
-  </body>
+  <nav class="sidebar">
+    <ul class="menu">
+      <li @click="activeSection = 'apparence'" :class="{ active: activeSection === 'apparence' }">
+        Page de présentation
+      </li>
+      <li @click="activeSection = 'services'" :class="{ active: activeSection === 'services' }">
+        Choisir les services
+      </li>
+      <li
+        @click="activeSection = 'reservations'"
+        :class="{ active: activeSection === 'reservations' }"
+      >
+        Gérer les reservations
+      </li>
+      <li
+        @click="activeSection = 'statistiques'"
+        :class="{ active: activeSection === 'statistiques' }"
+      >
+        Statistiques
+      </li>
+    </ul>
+  </nav>
+  <div :style="{width: '220px', height:'220px', 'flex-shrink':0}"></div>
 </template>
 
 <style scoped>
 .sidebar {
   position: fixed;
-  top: 60px; /* ajuster selon la hauteur de ta navbar */
+  top: 175px; /* ajuster selon la hauteur de ta navbar */
   left: 0;
   width: 220px;
   background: var(--surface-card, white);
@@ -86,11 +85,5 @@ const items = ref([
   background-color: var(--primary-color-lighter, #eff6ff);
   border-left: 4px solid var(--primary-color, #3b82f6);
   color: var(--primary-color, #3b82f6);
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  color: #142557;
 }
 </style>
