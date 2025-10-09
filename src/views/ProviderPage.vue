@@ -9,10 +9,10 @@
 </template>
 
 
-<script setup>
+<!--<script setup>
 import { PhotoService } from '@/services/provider.service.js'
-import Card from 'primevue/card'
-import Galleria from 'primevue/galleria'
+//import Card from 'primevue/card'
+//import Galleria from 'primevue/galleria'
 import placeholder from '@/assets/images/photos/placeholder.png'
 
 import { ref, onMounted } from 'vue'
@@ -104,4 +104,4 @@ h1, h2 {
 img {
   border-radius: 10px;
 }
-</style>
+</style>-->

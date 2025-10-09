@@ -7,7 +7,6 @@ const home = {
   command: () => { window.location.href = '/' }
 }
 
-
 const AllItems = [
   { label: 'Prestataires',here: false },
   { label: 'activité',here: false }
