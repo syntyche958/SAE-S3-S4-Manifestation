@@ -26,7 +26,7 @@
           containerStyle="max-width: 640px"
         >
           <template #item="slotProps">
-            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%" />
+            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; border-radius: 5px" />
           </template>
           <template #thumbnail="slotProps">
             <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <section style="margin: 3rem">
+    <section style="margin: 3rem; margin-left: 17%">
       <h1>Activités</h1>
       <div class="list-activity-cards">
         <div v-for="(item, index) in activities" :key="index">
@@ -142,16 +142,56 @@ const items = ref([
 </script>
 
 <style scoped>
+
+.sidebar {
+  position: fixed;
+  top: 60px; /* ajuster selon la hauteur de ta navbar */
+  left: 0;
+  width: 220px;
+  background: var(--surface-card, white);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1000;
+  border-radius: 0 0 10px 0;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--surface-border, #dee2e6);
+  transition: all 0.3s;
+}
+
+.menu li:hover {
+  background-color: var(--surface-hover, #f8f9fa);
+}
+
+.menu li.active {
+  background-color: var(--primary-color-lighter, #EFF6FF);
+  border-left: 4px solid var(--primary-color, #3B82F6);
+  color: var(--primary-color, #3B82F6);
+}
+
 .content {
+  margin-left: 240px;
+  padding: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5rem;
   margin-bottom: 2rem;
   flex: 1;
-  padding: 2rem;
   overflow-y: auto;
 }
+
 
 .card-presentation-wrapper {
   display: inline-block;
@@ -176,37 +216,7 @@ const items = ref([
   margin: 2rem;
 }
 
-.sidebar {
-  width: 280px;
-  background: var(--surface-card, white);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-}
-
-.menu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.menu li {
-  padding: 1.2rem 1.5rem;
-  cursor: pointer;
-  border-bottom: 1px solid var(--surface-border, #dee2e6);
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
-.menu li:hover {
-  background-color: var(--surface-hover, #f8f9fa);
-}
-.menu li.active {
-  background-color: var(--primary-color-lighter, #EFF6FF);
-  border-left: 4px solid var(--primary-color, #3B82F6);
-  color: var(--primary-color, #3B82F6);
-}
-.menu li i {
-  font-size: 1.2rem;
-}
+/* Nouveau style du menu prestataire : collé à la navbar, en haut à gauche */
 
 .section h2 {
   color: var(--text-color, #212529);
@@ -218,12 +228,6 @@ const items = ref([
 .activity-card:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
-
-body {
-  margin-top: 3rem;
-  padding: 2rem;
-  color: #142557;
 }
 
 h1,
@@ -240,4 +244,11 @@ a {
 img {
   border-radius: 10px;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #142557;
+}
+
 </style>
