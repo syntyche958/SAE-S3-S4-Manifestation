@@ -36,7 +36,7 @@ const activities = [
   },
 ]
 const goToActivity = () => {
-  window.location.href = '/activity'
+  window.location.href = '/provider/activity'
 }
 </script>
 

@@ -18,7 +18,7 @@ const router = createRouter({
       component: ProviderPage,
     },
     {
-      path: '/activity',
+      path: '/provider/activity',
       name: 'activity_page',
       component: ActivityPage,
     },
