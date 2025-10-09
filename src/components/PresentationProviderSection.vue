@@ -41,7 +41,7 @@ const goToActivity = () => {
 </script>
 
 <template>
-  <body>
+  <div>
     <div class="content">
       <div class="card" style="max-width: 400px">
         <Galleria
@@ -84,7 +84,7 @@ const goToActivity = () => {
       </div>
     </div>
 
-    <section style="margin: 3rem; margin-left: 17%">
+    <section style="margin: 3rem">
       <h1>Activités</h1>
       <div class="list-activity-cards">
         <div v-for="(item, index) in activities" :key="index">
@@ -106,12 +106,11 @@ const goToActivity = () => {
         </div>
       </div>
     </section>
-  </body>
+  </div>
 </template>
 
 <style scoped>
 .content {
-  margin-left: 240px;
   padding: 2rem;
   display: flex;
   justify-content: center;
