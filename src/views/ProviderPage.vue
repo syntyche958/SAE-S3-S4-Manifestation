@@ -4,8 +4,10 @@
 </script>
 
 <template>
-  <PresentationProviderSection />
-  <SideBarMenuProvider />
+  <div style="display: flex;">
+    <SideBarMenuProvider />
+    <PresentationProviderSection />
+  </div>
 </template>
 
 
