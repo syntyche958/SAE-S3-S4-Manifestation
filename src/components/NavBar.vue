@@ -3,6 +3,7 @@ import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import LocaleChanger from './LocaleChanger.vue';
 
 const authStore = useAuthStore();
 
@@ -45,7 +46,10 @@ const items = computed(() => {
 <template>
   <Menubar :model="items" class="NavbarMargin">
     <template #end>
-      <Button label="Se connecter" class="p-button-outlined" />
+      <div style="display: flex;">
+        <LocaleChanger />
+        <Button label="Se connecter" class="p-button-outlined" />
+      </div>
     </template>
   </Menubar>
   <div class="NavbarBottom"></div>

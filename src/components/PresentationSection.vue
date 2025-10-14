@@ -8,7 +8,7 @@
       <div :class="'overlay'"></div>
       <h1>Carcassonne autrefois</h1>
       <p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>
-      <a href="#map" :class="'p-button p-component'"> Voir la carte </a>
+      <a href="#map" :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
     </div>
   </div>
 </template>

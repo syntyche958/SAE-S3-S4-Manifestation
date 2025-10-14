@@ -7,12 +7,13 @@
         <!-- Header -->
         <template #header>
           <div :style="{ 'display': 'flex', 'justify-content': 'space-between' }">
-            <Button type="button" icon="pi pi-filter-slash" label="Clear" variant="outlined" @click="clearFilter()" />
+            <Button type="button" icon="pi pi-filter-slash" :label="$t('message.clear')" variant="outlined"
+              @click="clearFilter()" />
             <IconField>
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
-              <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+              <InputText v-model="filters['global'].value" :placeholder="$t('message.keywordSearch')" />
             </IconField>
           </div>
         </template>
@@ -33,7 +34,7 @@
         <!-- Column « go to page »  -->
         <Column field="id" header="" style="min-width: 12rem">
           <template #body="{ data }">
-            <Button type="button" label="Go to page" @click="goToPage(data.id)" />
+            <Button type="button" :label="$t('message.goToPage')" @click="goToPage(data.id)" />
           </template>
         </Column>
       </DataTable>
