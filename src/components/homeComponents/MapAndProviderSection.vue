@@ -6,8 +6,8 @@
 </template>
 
 <script setup>
-import TheMap from './TheMap.vue';
-import ProviderTable from './ProviderTable.vue';
+import TheMap from '@/components/TheMap.vue';
+import ProviderTable from '@/components/homeComponents/ProviderTable.vue'
 import { MapMode } from '@/enums/Map.enums';
 </script>
 

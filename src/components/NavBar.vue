@@ -3,7 +3,7 @@ import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import LocaleChanger from './LocaleChanger.vue';
+import LocaleChanger from '@/components/LocaleChanger.vue';
 
 const authStore = useAuthStore();
 

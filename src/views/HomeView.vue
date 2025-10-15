@@ -1,6 +1,6 @@
 <script setup>
-import MapAndProviderSection from '@/components/MapAndProviderSection.vue';
-import PresentationSection from '@/components/PresentationSection.vue'
+import MapAndProviderSection from '@/components/homeComponents/MapAndProviderSection.vue';
+import PresentationSection from '@/components/homeComponents/PresentationSection.vue'
 </script>
 
 <template>
