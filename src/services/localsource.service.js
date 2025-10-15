@@ -1,4 +1,4 @@
-import { providers, locations, user } from '@/datasource/data'
+import { providers, locations, user, newProviders, providerImages } from '@/datasource/data'
 
 /**
  * Get all providers
@@ -24,4 +24,20 @@ function getUser() {
   return { error: 0, status: 200, data: user }
 }
 
-export default { getAllProviders, getAllLocations, getUser }
+/**
+ * Get all new providers
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{name:string}}}
+ */
+function getAllNewProviders() {
+  return { error: 0, status: 200, data: newProviders }
+}
+
+/**
+ * Get provider images
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:[{id:number, images:[{itemImageSrc: string, thumbnailImageSrc: string, alt: string, title:string}]}]}}
+ */
+function getProviderImages(id) {
+  return { error: 0, status: 200, data: providerImages.find((pi) => pi.id == id) }
+}
+
+export default { getAllProviders, getAllNewProviders, getProviderImages, getAllLocations, getUser }

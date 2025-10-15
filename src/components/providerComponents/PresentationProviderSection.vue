@@ -1,12 +1,15 @@
 <script setup>
-import { PhotoService } from '@/services/provider.service.js'
 import Card from 'primevue/card'
 import Galleria from 'primevue/galleria'
 import placeholder from '@/assets/images/photos/placeholder.png'
 import { ref, onMounted } from 'vue'
+import { useProviderStore } from '@/stores/providers'
 
-onMounted(() => {
-  PhotoService.getImages().then((data) => (images.value = data))
+onMounted(async () => {
+  const providerStore = useProviderStore()
+  // TODO : Use connected user id !
+  await providerStore.getProviderImages(1)
+  images.value = providerStore.providerImages
 })
 
 const images = ref()
@@ -44,18 +47,10 @@ const goToActivity = () => {
   <div>
     <div class="content">
       <div class="card" style="max-width: 400px">
-        <Galleria
-          :value="images"
-          :responsiveOptions="responsiveOptions"
-          :numVisible="5"
-          containerStyle="max-width: 640px"
-        >
+        <Galleria :value="images" :responsiveOptions="responsiveOptions" :numVisible="5"
+          containerStyle="max-width: 640px">
           <template #item="slotProps">
-            <img
-              :src="slotProps.item.itemImageSrc"
-              :alt="slotProps.item.alt"
-              style="width: 100%; border-radius: 5px"
-            />
+            <img :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" style="width: 100%; border-radius: 5px" />
           </template>
           <template #thumbnail="slotProps">
             <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
@@ -88,11 +83,7 @@ const goToActivity = () => {
       <h1>Activités</h1>
       <div class="list-activity-cards">
         <div v-for="(item, index) in activities" :key="index">
-          <Card
-            class="activity-card"
-            style="width: 250px; overflow: hidden; cursor: pointer"
-            @click="goToActivity"
-          >
+          <Card class="activity-card" style="width: 250px; overflow: hidden; cursor: pointer" @click="goToActivity">
             <template #header>
               <img style="object-fit: cover" alt="user header" :src="item.image" />
             </template>
@@ -128,15 +119,18 @@ const goToActivity = () => {
     box-shadow 0.3s ease;
   border-radius: 10px;
 }
+
 .card-presentation-wrapper:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
+
 .list-activity-cards {
   display: flex;
   justify-content: flex-start;
   flex-direction: row;
 }
+
 .activity-card {
   transition:
     transform 0.3s ease,

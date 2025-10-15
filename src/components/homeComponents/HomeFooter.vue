@@ -13,7 +13,7 @@
       </div>
       <div id="button-container">
         <Button type="button" :label="$t('message.cancel')" severity="secondary" @click="visible = false"></Button>
-        <Button type="button" :label="$t('message.send')" @click="visible = false"></Button>
+        <Button type="button" :label="$t('message.send')" @click="registerProvider()"></Button>
       </div>
     </Dialog>
   </div>
@@ -26,8 +26,11 @@ import { Dialog, Button, InputText } from 'primevue';
 const visible = ref(false);
 
 const openModal = () => {
-  console.log('open');
   visible.value = true;
+}
+
+const registerProvider = () => {
+  visible.value = false;
 }
 
 </script>
