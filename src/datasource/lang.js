@@ -5,6 +5,10 @@ const messages = {
       goToPage: 'Go to page',
       clear: 'Clear',
       keywordSearch: 'Keyword Search',
+      registerAsProvider: 'Register as provider',
+      providerName: 'Name of provider',
+      cancel: 'Cancel',
+      send: 'Send',
     },
   },
   fr: {
@@ -13,6 +17,10 @@ const messages = {
       goToPage: 'Voir la page',
       clear: 'Effacer',
       keywordSearch: 'Recherche par mot-clé',
+      registerAsProvider: "S'enregistrer en tant que prestataire",
+      providerName: 'Nom du prestataire',
+      cancel: 'Annuler',
+      send: 'Envoyer',
     },
   },
 }
