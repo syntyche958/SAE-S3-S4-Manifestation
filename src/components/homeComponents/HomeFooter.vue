@@ -9,7 +9,7 @@
       position="bottom" :modal="true" :draggable="false">
       <div class="input-text-container">
         <label for="provider-name">{{ $t('message.providerName') }}</label>
-        <InputText id="provider-name" autocomplete="off" />
+        <InputText id="provider-name" autocomplete="off" v-model="newProviderName" />
       </div>
       <div id="button-container">
         <Button type="button" :label="$t('message.cancel')" severity="secondary" @click="visible = false"></Button>
@@ -22,8 +22,10 @@
 <script setup>
 import { ref } from 'vue';
 import { Dialog, Button, InputText } from 'primevue';
+import { useProviderStore } from '@/stores/providers';
 
 const visible = ref(false);
+const newProviderName = ref("")
 
 const openModal = () => {
   visible.value = true;
@@ -31,6 +33,9 @@ const openModal = () => {
 
 const registerProvider = () => {
   visible.value = false;
+  const providerStore = useProviderStore()
+  providerStore.addNewProvider(newProviderName.value)
+  console.log(providerStore.newProviders)
 }
 
 </script>

@@ -35,11 +35,23 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
+  async function addNewProvider(providerName) {
+    let response = await ProviderService.addNewProvider(providerName)
+    if (response.error == 0) {
+      // TODO : Quand le back-end sera en place, plutôt appeler getAllNewProviders() pour maj le store !
+      newProviders.value.push(response.data)
+    } else {
+      console.log(response.data)
+    }
+  }
+
   return {
     providers,
     providerImages,
+    newProviders,
     getAllProviders,
     getAllNewProviders,
     getProviderImages,
+    addNewProvider,
   }
 })

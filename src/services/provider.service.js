@@ -14,6 +14,15 @@ async function getAllNewProvidersFromLocalSource() {
   return LocalSource.getAllNewProviders()
 }
 
+async function addNewProvidersToLocalSource(providerName) {
+  let lastId = 0
+  let providers = LocalSource.getAllProviders()
+  for (let provider of providers.data) {
+    if (provider.id > lastId) lastId = provider.id
+  }
+  return { error: 0, status: 200, data: { id: lastId + 1, name: providerName } }
+}
+
 async function getAllProviders() {
   let response = null
   try {
@@ -48,4 +57,16 @@ async function getProviderImages(id) {
   return response
 }
 
-export default { getAllProviders, getAllNewProviders, getProviderImages }
+async function addNewProvider(providerName) {
+  let response = null
+  try {
+    response = await addNewProvidersToLocalSource(providerName)
+  } catch {
+    console.log('in it')
+    return networkErrResponse
+  }
+
+  return response
+}
+
+export default { getAllProviders, getAllNewProviders, getProviderImages, addNewProvider }
