@@ -140,8 +140,8 @@ var locations = [
   },
 ]
 
-// var user = [{ type: 'admin' }]
-var user = [{ id: 1, type: 'provider' }]
+var user = [{ type: 'admin' }]
+// var user = [{ id: 1, type: 'provider' }]
 // var user = [{ type: 'visitor' }]
 
 export { providers, locations, user, newProviders, providerImages }

@@ -1,10 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Button from 'primevue/button'
 import Editor from 'primevue/editor'
 
 import TheMap from "@/components/TheMap.vue";
 import { MapMode } from '@/enums/Map.enums';
+import { useProviderStore } from '@/stores/providers';
+
+onMounted(async () => {
+  // TODO : Appeler seulement quand necessaire => quand l'onglet "gérer les prestataire" est selectionné
+  const providerStore = useProviderStore();
+  providerStore.getAllNewProviders()
+})
 
 const menu = ref(null)
 const activeSection = ref('manifestation')

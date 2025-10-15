@@ -10,12 +10,28 @@ async function getProviderImagesFromLocalSource(id) {
   return LocalSource.getProviderImages(id)
 }
 
+async function getAllNewProvidersFromLocalSource() {
+  return LocalSource.getAllNewProviders()
+}
+
 async function getAllProviders() {
   let response = null
   try {
     response = await getAllProvidersFromLocalSource()
   } catch {
     return networkErrResponse
+  }
+
+  return response
+}
+
+async function getAllNewProviders() {
+  let response = null
+  try {
+    response = await getAllNewProvidersFromLocalSource()
+  } catch (e) {
+    console.log('in')
+    return networkErrResponse + e
   }
 
   return response
@@ -32,4 +48,4 @@ async function getProviderImages(id) {
   return response
 }
 
-export default { getAllProviders, getProviderImages }
+export default { getAllProviders, getAllNewProviders, getProviderImages }

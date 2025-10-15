@@ -5,7 +5,8 @@ import ProviderService from '@/services/provider.service'
 
 export const useProviderStore = defineStore('provider', () => {
   const providers = ref([])
-  const providerImages = ref({})
+  const providerImages = ref([])
+  const newProviders = ref([])
 
   async function getAllProviders() {
     let response = await ProviderService.getAllProviders()
@@ -25,10 +26,20 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
+  async function getAllNewProviders() {
+    let response = await ProviderService.getAllNewProviders()
+    if (response.error == 0) {
+      newProviders.value = response.data
+    } else {
+      console.log(response.data)
+    }
+  }
+
   return {
     providers,
     providerImages,
     getAllProviders,
+    getAllNewProviders,
     getProviderImages,
   }
 })
