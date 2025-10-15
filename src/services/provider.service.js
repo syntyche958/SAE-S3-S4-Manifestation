@@ -15,12 +15,7 @@ async function getAllNewProvidersFromLocalSource() {
 }
 
 async function addNewProvidersToLocalSource(providerName) {
-  let lastId = 0
-  let providers = LocalSource.getAllProviders()
-  for (let provider of providers.data) {
-    if (provider.id > lastId) lastId = provider.id
-  }
-  return { error: 0, status: 200, data: { id: lastId + 1, name: providerName } }
+  return { error: 0, status: 200, data: { name: providerName } }
 }
 
 async function getAllProviders() {
