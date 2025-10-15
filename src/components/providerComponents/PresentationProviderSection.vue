@@ -7,7 +7,7 @@ import { useProviderStore } from '@/stores/providers'
 
 onMounted(async () => {
   const providerStore = useProviderStore()
-  // TODO : Use connected user id !
+  // TODO : Use id of provider to display (need work done on breedcrumb) !
   await providerStore.getProviderImages(1)
   images.value = providerStore.providerImages
 })

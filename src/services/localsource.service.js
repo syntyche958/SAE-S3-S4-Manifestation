@@ -18,7 +18,7 @@ function getAllLocations() {
 
 /**
  * Get user informations
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{type:string}}}
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id:string, type:string}}}
  */
 function getUser() {
   return { error: 0, status: 200, data: user }
