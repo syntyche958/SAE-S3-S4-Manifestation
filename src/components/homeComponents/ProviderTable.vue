@@ -47,6 +47,7 @@ import { onMounted, ref } from 'vue';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import { InputText, Button, DataTable, Column, IconField, InputIcon, Card } from 'primevue';
 import { useProviderStore } from '@/stores/providers';
+import router from '@/router/index.js'
 
 const providers = ref([]);
 const filters = ref({});
@@ -76,5 +77,6 @@ const clearFilter = () => {
 // TODO : Go to specific providers page
 const goToPage = (providerId) => {
   console.log("TODO : go to provider " + providerId + " page");
+  router.push({ name: 'provider_page', params: { provider_id: providerId } })
 }
 </script>
