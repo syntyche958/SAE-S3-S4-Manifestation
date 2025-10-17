@@ -29,9 +29,5 @@ onMounted(async () => {
     <BreadcrumbNav />
   </header>
 
-  <Toast/>
-
-  <Main>
-    <RouterView />
-  </Main>
+  <RouterView />
 </template>
