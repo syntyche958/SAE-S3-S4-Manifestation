@@ -7,10 +7,11 @@
 
     <!-- Modal -->
     <Dialog v-model:visible="visible" :header="$t('message.registerAsProvider')" :style="{ width: '25rem' }"
-      position="bottom" :modal="true" :draggable="false">
+      :modal="true" :draggable="false">
       <div class="input-text-container">
         <label for="provider-name">{{ $t('message.providerName') }}</label>
         <InputText id="provider-name" autocomplete="off" v-model="newProviderName" />
+        <!-- TODO : Ajouter une description ! -->
       </div>
       <div id="button-container">
         <Button type="button" :label="$t('message.cancel')" severity="secondary" @click="visible = false"></Button>
