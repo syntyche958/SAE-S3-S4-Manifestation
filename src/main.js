@@ -8,11 +8,8 @@ import Aura from '@primeuix/themes/aura'
 
 import App from './App.vue'
 import router from './router'
-<<<<<<< HEAD
 import { messages } from './datasource/lang'
-=======
 import { ToastService } from 'primevue'
->>>>>>> syntyche
 
 const app = createApp(App)
 

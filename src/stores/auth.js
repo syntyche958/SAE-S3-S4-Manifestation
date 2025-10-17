@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function getUser() {
     let response = await AuthService.getUser()
-    if (response.error == 0) {
+    if (response.error === 0) {
       user.value = response.data[0]
     } else {
       console.log(response.data)
