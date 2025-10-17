@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import ProviderPage from '@/views/ProviderPage.vue'
 import ActivityPage from '@/views/ActivityPage.vue'
 import { providers } from '@/datasource/data.js'
-import Admin from "@/views/Admin.vue";
+import Admin from "@/views/AdminView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
