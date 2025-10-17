@@ -1,4 +1,6 @@
 <template>
+  <Toast />
+  <ConfirmDialog></ConfirmDialog>
   <div class="card">
     <h1 class="m-0">Demande de nouveau prestataires</h1>
     <DataTable :value="providerStore.newProviders" dataKey="id">
@@ -6,9 +8,9 @@
       <Column field="description" header="Description" sortable style="min-width: 20rem" />
       <Column style="min-width: 12rem" header="Actions">
         <template #body="slotProps">
-          <Button icon="pi pi-check" variant="outlined" severity="success" @click="validate(slotProps.data)"
+          <Button icon="pi pi-check" variant="outlined" severity="success" @click="confirmValidation(slotProps.data)"
             title="Valider" v-tooltip.top="'Valider'" />
-          <Button icon="pi pi-trash" variant="outlined" severity="danger" @click="_delete(slotProps.data)"
+          <Button icon="pi pi-trash" variant="outlined" severity="danger" @click="confirmDeletion(slotProps.data)"
             title="Supprimer" v-tooltip.top="'Supprimer'" />
         </template>
       </Column>
@@ -19,13 +21,53 @@
 <script setup>
 import { useProviderStore } from '@/stores/providers';
 import { Button, DataTable, Column } from 'primevue';
+import ConfirmDialog from 'primevue/confirmdialog';
+import Toast from 'primevue/toast';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
+
+const confirm = useConfirm();
+const toast = useToast();
 
 const providerStore = useProviderStore();
-// TODO
-const _delete = () => {
 
-}
-const validate = () => {
+const confirmDeletion = (data) => {
+  confirm.require({
+    message: `Êtes vous sûr de vouloir supprimer la demande de ${data.name}`,
+    header: 'Suppression',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Annuler',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: 'Supprimer',
+      severity: 'danger'
+    },
+    accept: async () => {
+      await providerStore.removeNewProvider(data, toast)
+    }
+  });
+};
 
+const confirmValidation = (data) => {
+  confirm.require({
+    message: `Êtes vous sûr de vouloir valider la demande de ${data.name}`,
+    header: "Ajout d'un prestataire",
+    icon: 'pi pi-info-circle',
+    rejectProps: {
+      label: 'Annuler',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: 'Valider',
+      severity: 'success'
+    },
+    accept: async () => {
+      // TODO !
+    }
+  });
 }
 </script>

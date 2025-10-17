@@ -10,6 +10,7 @@ import router from './router'
 import { messages } from './datasource/lang'
 import { ToastService } from 'primevue'
 import Tooltip from 'primevue/tooltip'
+import ConfirmationService from 'primevue/confirmationservice'
 
 const app = createApp(App)
 app.directive('tooltip', Tooltip)
@@ -32,5 +33,6 @@ app.use(PrimeVue, {
 })
 app.use(router)
 app.use(ToastService)
+app.use(ConfirmationService)
 
 app.mount('#app')

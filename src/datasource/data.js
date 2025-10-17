@@ -10,7 +10,7 @@ var presentation = {
   small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
 }
 
-var newProviders = [{ name: 'Carcassonne Escrime' }]
+var newProviders = [{ id: 1, name: 'Carcassonne Escrime' }]
 
 var providerImages = [
   {

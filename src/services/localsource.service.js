@@ -33,7 +33,7 @@ function getUser() {
 
 /**
  * Get all new providers
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{name:string}}}
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id: number, name:string}}}
  */
 function getAllNewProviders() {
   return { error: 0, status: 200, data: newProviders }
