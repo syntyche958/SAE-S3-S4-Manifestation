@@ -41,7 +41,7 @@ import EventEditor from './EventEditor.vue';
 import TheMap from '../TheMap.vue';
 import { MapMode } from '@/enums/Map.enums';
 import AdminStats from './AdminStats.vue';
-import ManageProviders from './ManageProviders.vue';
+import ManageProviders from './ManageNewProviders.vue';
 
 import Tabs from 'primevue/tabs';
 import TabList from 'primevue/tablist'

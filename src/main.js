@@ -9,9 +9,10 @@ import App from './App.vue'
 import router from './router'
 import { messages } from './datasource/lang'
 import { ToastService } from 'primevue'
+import Tooltip from 'primevue/tooltip'
 
 const app = createApp(App)
-
+app.directive('tooltip', Tooltip)
 const i18n = createI18n({
   legacy: false,
   locale: 'fr',
