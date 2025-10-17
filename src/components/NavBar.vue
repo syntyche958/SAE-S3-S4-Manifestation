@@ -4,21 +4,22 @@ import Button from 'primevue/button'
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import LocaleChanger from '@/components/LocaleChanger.vue';
+import router from '@/router';
 
 const authStore = useAuthStore();
 
 const allItems = {
   accueil: {
     label: 'Accueil',
-    command: () => { window.location.href = '/' },
+    command: () => { router.push('/') },
   },
   prestataire: {
     label: 'Prestataire',
-    command: () => { window.location.href = '/provider' },
+    command: () => { router.push('/provider') },
   },
   organisateur: {
     label: 'Administrateur',
-    command: () => { window.location.href = '/admin' },
+    command: () => { router.push('/admin') },
   },
 }
 
