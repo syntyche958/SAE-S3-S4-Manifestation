@@ -6,6 +6,10 @@ var providers = [
   { id: 5, name: '« Camion de restauration »' },
 ]
 
+var presentation = {
+  small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
+}
+
 var newProviders = [{ name: 'Carcassonne Escrime' }]
 
 var providerImages = [
@@ -144,4 +148,4 @@ var user = [{ type: 'admin' }]
 // var user = [{ id: 1, type: 'provider' }]
 // var user = [{ type: 'visitor' }]
 
-export { providers, locations, user, newProviders, providerImages }
+export { providers, locations, user, newProviders, providerImages, presentation }

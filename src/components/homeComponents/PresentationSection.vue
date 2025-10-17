@@ -1,4 +1,11 @@
 <script setup>
+import { usePresentationStore } from '@/stores/presentation';
+
+const presentationStore = usePresentationStore()
+
+const props = defineProps({
+  preview: { type: Boolean, required: false, default: false }
+})
 </script>
 
 <template>
@@ -7,8 +14,10 @@
       <img src="@/assets/images/main_bg.jpg.avif" :alt="'Image of the carcassonne castle'" />
       <div :class="'overlay'"></div>
       <h1>Carcassonne autrefois</h1>
-      <p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>
-      <a href="#map" :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
+      <div id="small-presentation" v-html="presentationStore.small" />
+      <a v-if="props.preview" :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
+      <a v-else href='#map' :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
+
     </div>
   </div>
 </template>
@@ -65,7 +74,7 @@ a {
   }
 }
 
-.image-container p {
+#small-presentation {
   position: absolute;
   z-index: 1;
   top: 75%;

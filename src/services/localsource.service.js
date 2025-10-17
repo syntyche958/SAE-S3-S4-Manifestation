@@ -1,4 +1,11 @@
-import { providers, locations, user, newProviders, providerImages } from '@/datasource/data'
+import {
+  providers,
+  locations,
+  user,
+  newProviders,
+  providerImages,
+  presentation,
+} from '@/datasource/data'
 
 /**
  * Get all providers
@@ -40,4 +47,19 @@ function getProviderImages(id) {
   return { error: 0, status: 200, data: providerImages.find((pi) => pi.id == id) }
 }
 
-export default { getAllProviders, getAllNewProviders, getProviderImages, getAllLocations, getUser }
+/**
+ * Get presentation html content
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data: {small:string}}}
+ */
+function getPresentationContent() {
+  return { error: 0, status: 200, data: presentation }
+}
+
+export default {
+  getAllProviders,
+  getAllNewProviders,
+  getProviderImages,
+  getAllLocations,
+  getUser,
+  getPresentationContent,
+}

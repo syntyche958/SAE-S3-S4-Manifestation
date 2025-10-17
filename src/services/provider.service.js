@@ -1,6 +1,7 @@
 import LocalSource from '@/services/localsource.service.js'
 
-var networkErrResponse = { error: 1, status: 400, data: 'A network error occured : ' }
+// TODO : Refactor
+var networkErrResponse = { error: 1, status: 400, data: 'A network error occured' }
 
 async function getAllProvidersFromLocalSource() {
   return LocalSource.getAllProviders()

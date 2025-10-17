@@ -1,11 +1,14 @@
 @import 'primeicons/primeicons.css';
-@import "tailwindcss";
+@import 'tailwindcss';
 /* @import './base.css'; */
 
 html {
   scroll-behavior: smooth;
 }
 
+h1 {
+  @apply text-3xl;
+}
 /* #app {
   max-width: 1280px;
   margin: 0 auto;
