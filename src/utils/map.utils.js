@@ -41,11 +41,12 @@ export async function displayLocations(map, mapMode) {
 }
 
 function bindPopup(map, marker) {
-  // TODO : Also verify mouse if mouse is on marker or not
   var mouseOnPopUp = false
+  var mouseOneMarker = false
   // Add popup with needed event to open and close it
   marker.on('mouseover', () => {
     map.closePopup()
+    mouseOneMarker = true
     marker
       .bindPopup(
         // TODO : Use real values (different depending on the display mode)
@@ -60,8 +61,9 @@ function bindPopup(map, marker) {
       marker.closePopup()
     })
     marker.on('mouseout', () => {
+      mouseOneMarker = false
       setTimeout(() => {
-        if (!mouseOnPopUp) marker.closePopup()
+        if (!mouseOnPopUp && !mouseOneMarker) marker.closePopup()
       }, 200)
     })
   })
