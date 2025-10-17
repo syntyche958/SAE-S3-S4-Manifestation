@@ -11,6 +11,9 @@
         <select class="ql-color"></select>
         <select class="ql-background"></select>
       </span>
+      <span class="ql-formats">
+        <button v-tooltip.bottom="'Clean'" class="ql-clean"></button>
+      </span>
     </template>
   </Editor>
   <div style="margin-top: 12px">
