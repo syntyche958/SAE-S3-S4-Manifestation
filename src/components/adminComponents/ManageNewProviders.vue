@@ -66,7 +66,7 @@ const confirmValidation = (data) => {
       severity: 'success'
     },
     accept: async () => {
-      // TODO !
+      await providerStore.validateNewProviders(data)
     }
   });
 }

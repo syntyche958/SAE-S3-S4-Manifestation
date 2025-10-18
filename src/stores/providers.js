@@ -78,6 +78,28 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
+  async function validateNewProviders(data, toast) {
+    let response = await ProviderService.validateNewProviders(data)
+    
+    newProviders.value = newProviders.value.filter((p) => p.id != data.id)
+    providers.value.push(response.data)
+    if (response.error === 0) {
+      toast.add({
+        severity: 'success',
+        summary: 'Succès',
+        detail: `La demande de ${data.name} a été validé avec succès`,
+        life: 3000,
+      })
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Échec',
+        detail: `Échec de la validation de la demande de ${data.name}`,
+        life: 3000,
+      })
+    }
+  }
+
   return {
     providers,
     providerImages,
@@ -87,5 +109,6 @@ export const useProviderStore = defineStore('provider', () => {
     getProviderImages,
     addNewProvider,
     removeNewProvider,
+    validateNewProviders,
   }
 })

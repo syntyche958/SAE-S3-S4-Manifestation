@@ -31,6 +31,17 @@ async function addNewProvidersToLocalSource(providerName) {
   return { error: 0, status: 200, data: { id: lastId + 1, name: providerName } }
 }
 
+async function validateNewProvidersFromLocalSource(data) {
+  const providerStore = useProviderStore()
+  // Return new provider
+  let lastId = 0
+  providerStore.providers.forEach((p) => {
+    lastId = Math.max(lastId, p.id)
+  })
+  data.id = lastId + 1
+  return { error: 0, status: 200, data }
+}
+
 async function getAllProviders() {
   let response = null
   try {
@@ -86,10 +97,22 @@ async function removeNewProvider(id) {
   return response
 }
 
+async function validateNewProviders(data) {
+  let response = null
+  try {
+    response = await validateNewProvidersFromLocalSource(data)
+  } catch {
+    return networkErrResponse
+  }
+
+  return response
+}
+
 export default {
   getAllProviders,
   getAllNewProviders,
   getProviderImages,
   addNewProvider,
   removeNewProvider,
+  validateNewProviders,
 }
