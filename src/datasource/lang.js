@@ -9,6 +9,8 @@ const messages = {
       providerName: 'Name of provider',
       cancel: 'Cancel',
       send: 'Send',
+      save: 'Save',
+      preview: 'Preview',
     },
   },
   fr: {
@@ -21,6 +23,8 @@ const messages = {
       providerName: 'Nom du prestataire',
       cancel: 'Annuler',
       send: 'Envoyer',
+      save: 'Sauvegarder',
+      preview: 'Aperçu',
     },
   },
 }

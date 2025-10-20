@@ -17,8 +17,9 @@
     </template>
   </Editor>
   <div style="margin-top: 12px">
-    <Button label="Sauvegarder" icon="pi pi-save" @click="presentationStore.updateSmallText(smallText)" />
-    <Button label="Aperçu" variant="outlined" severity="secondary" @click="smallTextPreviewVisible = true"></Button>
+    <Button :label="$t('message.save')" icon="pi pi-save" @click="presentationStore.updateSmallText(smallText)" />
+    <Button :label="$t('message.preview')" variant="outlined" severity="secondary"
+      @click="smallTextPreviewVisible = true"></Button>
   </div>
 
   <Dialog v-model:visible="smallTextPreviewVisible" maximizable modal header="Apercu page de présentation"
