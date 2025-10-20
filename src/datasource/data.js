@@ -1,4 +1,4 @@
-var providers = [
+const providers = [
   { id: 1, name: 'Centre équestre' },
   { id: 2, name: 'Ville de carcassonne' },
   { id: 3, name: 'Remparts et lumière' },
@@ -12,7 +12,7 @@ var presentation = {
 
 var newProviders = [{ id: 1, name: 'Carcassonne Escrime' }]
 
-var providerImages = [
+const providerImages = [
   {
     id: 1,
     images: [
@@ -110,7 +110,7 @@ var providerImages = [
   },
 ]
 
-var locations = [
+const locations = [
   {
     id: 1,
     coord: [43.205016837015535, 2.362105757763999],
@@ -144,8 +144,8 @@ var locations = [
   },
 ]
 
-var user = [{ type: 'admin' }]
-// var user = [{ id: 1, type: 'provider' }]
-// var user = [{ type: 'visitor' }]
+const user = [{ type: 'admin' }]
+// const user = [{ id: 1, type: 'provider' }]
+// const user = [{ type: 'visitor' }]
 
 export { providers, locations, user, newProviders, providerImages, presentation }

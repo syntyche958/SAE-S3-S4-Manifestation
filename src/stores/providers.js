@@ -10,7 +10,7 @@ export const useProviderStore = defineStore('provider', () => {
 
   async function getAllProviders() {
     let response = await ProviderService.getAllProviders()
-    if (response.error == 0) {
+    if (response.error === 0) {
       providers.value = response.data
     } else {
       console.log(response.data)
@@ -19,7 +19,7 @@ export const useProviderStore = defineStore('provider', () => {
 
   async function getProviderImages(id) {
     let response = await ProviderService.getProviderImages(id)
-    if (response.error == 0) {
+    if (response.error === 0) {
       providerImages.value = response.data.images
     } else {
       console.log(response.data)
@@ -28,7 +28,7 @@ export const useProviderStore = defineStore('provider', () => {
 
   async function getAllNewProviders() {
     let response = await ProviderService.getAllNewProviders()
-    if (response.error == 0) {
+    if (response.error === 0) {
       newProviders.value = response.data
     } else {
       console.log(response.data)

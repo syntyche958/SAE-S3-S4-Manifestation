@@ -17,7 +17,7 @@ const props = defineProps({
 
 onMounted(async () => {
   // Map setup
-  var map = setupMap('map')
+  const map = setupMap('map')
   await displayLocations(map, props.displayMode)
 
   /* Fix :

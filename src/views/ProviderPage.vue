@@ -39,6 +39,7 @@ const showSidebarAdmin = computed(() => {
 </script>
 
 <template>
+  <!-- TODO :  Ajouter les textes et images modifiables dans des popups (logo crayon en haut à droite) -> Primevue Dialog -->
   <div v-if="showSidebarProvider">
     <div style="display: flex">
       <SideBarMenuProvider @change-section="setActiveSection" />
