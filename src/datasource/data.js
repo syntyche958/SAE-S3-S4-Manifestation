@@ -6,11 +6,11 @@ const providers = [
   { id: 5, name: '« Camion de restauration »' },
 ]
 
-var presentation = {
+const presentation = {
   small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
 }
 
-var newProviders = [{ id: 1, name: 'Carcassonne Escrime' }]
+const newProviders = [{ id: 1, name: 'Carcassonne Escrime' }]
 
 const providerImages = [
   {
