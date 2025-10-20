@@ -66,7 +66,7 @@ const confirmValidation = (data) => {
       severity: 'success'
     },
     accept: async () => {
-      await providerStore.validateNewProviders(data)
+      await providerStore.validateNewProviders(data, toast)
     }
   });
 }
