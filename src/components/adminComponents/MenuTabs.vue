@@ -2,11 +2,11 @@
   <div class="card">
     <Tabs value="0">
       <TabList>
-        <Tab value="0"><i class="pi pi-file-edit"></i><span>Gérer la manifestation</span></Tab>
-        <Tab value="1"><i class="pi pi-map"></i><span>Carte interactive</span></Tab>
-        <Tab value="2"><i class="pi pi-users"></i><span>Gerer les demandes de prestataires</span></Tab>
-        <Tab value="3"><i class="pi pi-home"></i><span>Espace Prestataire</span></Tab>
-        <Tab value="4"><i class="pi pi-chart-bar"></i><span>Statistiques</span></Tab>
+        <Tab value="0"><i class="pi pi-file-edit"></i><span> Gérer la manifestation</span></Tab>
+        <Tab value="1"><i class="pi pi-map"></i><span> Carte interactive</span></Tab>
+        <Tab value="2"><i class="pi pi-users"></i><span> Gerer les demandes de prestataires</span></Tab>
+        <Tab value="3"><i class="pi pi-home"></i><span> Espace Prestataire</span></Tab>
+        <Tab value="4"><i class="pi pi-chart-bar"></i><span> Statistiques</span></Tab>
       </TabList>
 
       <TabPanels>
