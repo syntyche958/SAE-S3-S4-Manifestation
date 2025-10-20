@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import ProviderPage from '@/views/ProviderPage.vue'
+import ProviderPage from '@/views/ProviderView.vue'
 import ActivityPage from '@/views/ActivityPage.vue'
 import { providers } from '@/datasource/data.js'
 import Admin from "@/views/AdminView.vue";
