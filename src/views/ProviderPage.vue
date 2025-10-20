@@ -1,60 +1,31 @@
+<template>
+  <Tabs value="0">
+    <TabList>
+      <Tab value="0"><i class="pi pi-file-edit"></i><span> Apparence de la page</span></Tab>
+      <Tab value="1"><i class="pi pi-file-edit"></i><span> Choix des services</span></Tab>
+      <Tab disabled><i class="pi pi-file-edit"></i><span> Regarder les statistiques</span></Tab>
+    </TabList>
+
+    <TabPanels>
+      <TabPanel value="0">
+        <PresentationProviderSection />
+      </TabPanel>
+
+      <TabPanel value="1">
+        <ServicesProviderSection />
+      </TabPanel>
+
+    </TabPanels>
+  </Tabs>
+</template>
+
 <script setup>
-import { computed, ref, onMounted } from 'vue'
-import { useAuthStore } from '@/stores/auth.js'
-
-const authStore = useAuthStore()
-
 import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
-import StatisticsProviderSection from '@/components/providerComponents/StatisticsProviderSection.vue'
-import SideBarMenuProvider from '@/components/providerComponents/SideBarMenuProvider.vue'
-import SideBarMenuAdmin from '@/components/providerComponents/SideBarMenuAdmin.vue'
 
-const section = ref('apparence')
-function setActiveSection(nameSection) {
-  section.value = nameSection
-}
-const currentProviderSectionComponent = computed(() => {
-  if (section.value === 'apparence') return PresentationProviderSection
-  if (section.value === 'services') return ServicesProviderSection
-  return StatisticsProviderSection
-})
-
-onMounted(() => {
-  if (!authStore.user) {
-    authStore.getUser()
-  }
-})
-
-const showSidebarProvider = computed(() => {
-  const role = authStore.user?.type
-  return role === 'provider'
-})
-
-const showSidebarAdmin = computed(() => {
-  const role = authStore.user?.type
-  return role === 'admin'
-})
-
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist'
+import Tab from 'primevue/tab'
+import TabPanels from 'primevue/tabpanels'
+import TabPanel from 'primevue/tabpanel'
 </script>
-
-<template>
-  <!-- TODO :  Ajouter les textes et images modifiables dans des popups (logo crayon en haut à droite) -> Primevue Dialog -->
-  <div v-if="showSidebarProvider">
-    <div style="display: flex">
-      <SideBarMenuProvider @change-section="setActiveSection" />
-      <component :is="currentProviderSectionComponent" />
-    </div>
-  </div>
-  <div v-else-if="showSidebarAdmin">
-    <div style="display: flex">
-      <SideBarMenuAdmin @change-section="setActiveSection" />
-      <component :is="currentProviderSectionComponent" />
-    </div>
-  </div>
-  <div v-else>
-    <div style="display: flex">
-      <component :is="currentProviderSectionComponent" />
-    </div>
-  </div>
-</template>
