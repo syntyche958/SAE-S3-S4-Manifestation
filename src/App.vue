@@ -23,7 +23,6 @@ onMounted(async () => {
   await authStore.getUser()
   await locationStore.getAllLocations()
   await presentationStore.getPresentationContent()
-  // TODO : Use enum
   // TODO : Appeler seulement quand necessaire, dans AdminView quand le composant concerné est affiché !
   if (authStore.user.type === UserTypeEnum.ADMIN) {
     providerStore.getAllNewProviders()
