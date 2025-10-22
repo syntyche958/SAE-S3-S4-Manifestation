@@ -9,7 +9,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div :id="presentation">
+  <div id="presentation">
     <div :class="'image-container'">
       <img src="@/assets/images/main_bg.jpg.avif" :alt="'Image of the carcassonne castle'" />
       <div :class="'overlay'"></div>
