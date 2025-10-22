@@ -38,8 +38,8 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
-  async function addNewProvider(providerName) {
-    let response = await ProviderService.addNewProvider(providerName)
+  async function addNewProvider(providerName, providerDesc) {
+    let response = await ProviderService.addNewProvider(providerName, providerDesc)
     if (response.error === 0) {
       // TODO : Quand le back-end sera en place, plutôt appeler getAllNewProviders() pour maj le store !
       displaySuccessToast('Votre demande a été enregistré avec succès')

@@ -7,12 +7,15 @@
     <!-- Modal -->
     <Dialog v-model:visible="visible" :header="$t('message.registerAsProvider')" :style="{ width: '25rem' }"
       :modal="true" :draggable="false">
-      <div class="input-text-container">
-        <label for="provider-name">{{ $t('message.providerName') }}</label>
-        <InputText id="provider-name" autocomplete="off" v-model="newProviderName" />
-        <!-- TODO : Ajouter une description !  -->
+      <div class="flex items-center gap-4 mb-4">
+        <label for="provider-name" class="font-semibold w-24">{{ $t('message.providerName') }}</label>
+        <InputText id="provider-name" class="flex-auto" autocomplete="off" v-model="newProviderName" />
       </div>
-      <div id="button-container">
+      <div class="flex items-center gap-4 mb-8">
+        <label for="provider-description" class="font-semibold w-24">Description</label>
+        <InputText id="provider-description" class="flex-auto" autocomplete="off" v-model="providerDescription" />
+      </div>
+      <div class="flex justify-end gap-2">
         <Button type="button" :label="$t('message.cancel')" severity="secondary" @click="visible = false"></Button>
         <Button type="button" :label="$t('message.send')" @click="registerProvider()"></Button>
       </div>
@@ -27,6 +30,7 @@ import { useProviderStore } from '@/stores/providers';
 
 const visible = ref(false);
 const newProviderName = ref("")
+const providerDescription = ref("")
 
 const openModal = () => {
   visible.value = true;
@@ -35,7 +39,7 @@ const openModal = () => {
 const registerProvider = () => {
   visible.value = false;
   const providerStore = useProviderStore()
-  providerStore.addNewProvider(newProviderName.value)
+  providerStore.addNewProvider(newProviderName.value, providerDescription.value)
   newProviderName.value = ""
 }
 
@@ -46,27 +50,5 @@ const registerProvider = () => {
   background-color: aquamarine;
   width: 100%;
   height: 30vh;
-}
-
-label {
-  width: calc(0.25rem*24);
-  font-weight: 600;
-}
-
-#provider-name {
-  flex: auto;
-}
-
-#button-container {
-  display: flex;
-  justify-content: flex-end;
-  gap: calc(0.25rem*2);
-}
-
-.input-text-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: calc(0.25rem * 4);
-  gap: calc(0.25rem * 4);
 }
 </style>

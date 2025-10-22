@@ -12,7 +12,14 @@ const presentation = {
   small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
 }
 
-const newProviders = [{ id: 1, name: 'Carcassonne Escrime' }]
+const newProviders = [
+  {
+    id: 1,
+    name: 'Carcassonne Escrime',
+    description:
+      "Assocition sportive d'escrime de Carcassonne. Activité proposé : découverte de l'escrime pour tout âge",
+  },
+]
 
 const providerImages = [
   {

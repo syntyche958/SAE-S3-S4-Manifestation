@@ -22,13 +22,17 @@ async function removeNewProviderFromLocalSource(id) {
   return { error: 0, status: 200, data: 'done' }
 }
 
-async function addNewProvidersToLocalSource(providerName) {
+async function addNewProvidersToLocalSource(providerName, providerDesc) {
   const providerStore = useProviderStore()
   let lastId = 0
   providerStore.newProviders.forEach((p) => {
     lastId = Math.max(lastId, p.id)
   })
-  return { error: 0, status: 200, data: { id: lastId + 1, name: providerName } }
+  return {
+    error: 0,
+    status: 200,
+    data: { id: lastId + 1, name: providerName, description: providerDesc },
+  }
 }
 
 async function validateNewProvidersFromLocalSource(data) {
@@ -75,10 +79,10 @@ async function getProviderImages(id) {
   return response
 }
 
-async function addNewProvider(providerName) {
+async function addNewProvider(providerName, providerDesc) {
   let response = null
   try {
-    response = await addNewProvidersToLocalSource(providerName)
+    response = await addNewProvidersToLocalSource(providerName, providerDesc)
   } catch {
     return networkErrResponse
   }
