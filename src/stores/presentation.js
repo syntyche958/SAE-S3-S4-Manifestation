@@ -4,8 +4,10 @@ import { defineStore } from 'pinia'
 import PresentationService from '@/services/presentation.service'
 
 export const usePresentationStore = defineStore('presentation', () => {
+  // STATE
   const small = ref('')
 
+  // ACTIONS
   async function getPresentationContent() {
     let response = await PresentationService.getPresentationContent()
     if (response.error === 0) {

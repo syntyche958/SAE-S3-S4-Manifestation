@@ -24,7 +24,7 @@
 
   <Dialog v-model:visible="smallTextPreviewVisible" maximizable modal header="Apercu page de présentation"
     :style="{ width: '90%' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-    <PresentationSection :preview="true" />
+    <PresentationSection :isPreview="true" />
   </Dialog>
 
 </template>
