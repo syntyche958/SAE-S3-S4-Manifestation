@@ -1,4 +1,4 @@
-export const MapMode = Object.freeze({
+export const MapModeEnum = Object.freeze({
   VISITOR: 'visitor',
   ADMIN: 'admin',
 })

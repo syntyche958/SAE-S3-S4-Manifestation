@@ -1,3 +1,5 @@
+import { UserTypeEnum } from '@/enums/User.enum'
+
 const providers = [
   { id: 1, name: 'Centre équestre' },
   { id: 2, name: 'Ville de carcassonne' },
@@ -144,8 +146,8 @@ const locations = [
   },
 ]
 
-const user = [{ type: 'admin' }]
-// const user = [{ id: 1, type: 'provider' }]
-// const user = [{ type: 'visitor' }]
+const user = [{ type: UserTypeEnum.ADMIN }]
+// const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
+// const user = [{ type: UserTypeEnum.VISITOR }]
 
 export { providers, locations, user, newProviders, providerImages, presentation }

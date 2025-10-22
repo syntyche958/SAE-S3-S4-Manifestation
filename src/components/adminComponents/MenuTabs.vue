@@ -15,7 +15,7 @@
 
       <TabPanel value="1">
         <h1>Carte interactive</h1>
-        <TheMap :displayMode="MapMode.ADMIN" />
+        <TheMap :displayMode="MapModeEnum.ADMIN" />
       </TabPanel>
 
       <TabPanel value="2">
@@ -37,7 +37,7 @@
 <script setup>
 import EventEditor from './EventEditor.vue';
 import TheMap from '../TheMap.vue';
-import { MapMode } from '@/enums/Map.enums';
+import { MapModeEnum } from '@/enums/Map.enums';
 import AdminStats from './AdminStats.vue';
 import ManageProviders from './ManageNewProviders.vue';
 

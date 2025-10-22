@@ -5,6 +5,7 @@ import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import LocaleChanger from '@/components/LocaleChanger.vue';
 import router from '@/router';
+import { UserTypeEnum } from '@/enums/User.enum';
 
 const authStore = useAuthStore();
 
@@ -24,11 +25,10 @@ const allItems = {
 }
 
 const items = computed(() => {
-  let type = authStore.user?.type
-  switch (type) {
-    case "admin":
+  switch (authStore.user?.type) {
+    case UserTypeEnum.ADMIN:
       return [allItems.accueil, allItems.prestataire, allItems.organisateur];
-    case "provider":
+    case UserTypeEnum.PROVIDER:
       return [allItems.accueil, allItems.prestataire];
     default:
       return [allItems.accueil];

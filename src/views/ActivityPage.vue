@@ -3,7 +3,7 @@ import PresentationActivitySection from '@/components/activityComponents/Present
 import SideBarMenuActivity from '@/components/activityComponents/SideBarMenuActivity.vue'
 import DescriptionActivitySection from '@/components/activityComponents/DescriptionActivitySection.vue'
 import TheMap from '@/components/TheMap.vue'
-import { MapMode } from '@/enums/Map.enums.js'
+import { MapModeEnum } from '@/enums/Map.enums.js'
 </script>
 
 <template>
@@ -11,14 +11,14 @@ import { MapMode } from '@/enums/Map.enums.js'
     <div>
       <SideBarMenuActivity />
     </div>
-    <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 20px" >
+    <div style="display: flex; flex-direction: column; justify-content: flex-start; gap: 20px">
       <PresentationActivitySection />
 
       <DescriptionActivitySection />
 
       <div style="margin: auto">
         <h2>Emplacement de l'activité</h2>
-        <TheMap :display-mode="MapMode.VISITOR"/>
+        <TheMap :display-mode="MapModeEnum.VISITOR" />
       </div>
     </div>
   </div>

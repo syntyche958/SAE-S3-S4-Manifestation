@@ -41,7 +41,6 @@ const registerProvider = () => {
   const providerStore = useProviderStore()
   providerStore.addNewProvider(newProviderName.value, toast)
   newProviderName.value = ""
-  console.log(providerStore.newProviders)
 }
 
 </script>

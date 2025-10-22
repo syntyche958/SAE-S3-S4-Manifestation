@@ -5,8 +5,9 @@ import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import { useAuthStore } from '@/stores/auth';
 import { onMounted } from 'vue'
 import { useLocationStore } from '@/stores/locations';
-import { useProviderStore } from './stores/providers';
-import { usePresentationStore } from './stores/presentation';
+import { useProviderStore } from '@/stores/providers';
+import { usePresentationStore } from '@/stores/presentation';
+import { UserTypeEnum } from '@/enums/User.enum';
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
@@ -19,7 +20,7 @@ onMounted(async () => {
   await presentationStore.getPresentationContent()
   // TODO : Use enum
   // TODO : Appeler seulement quand necessaire, dans AdminView quand le composant concerné est affiché !
-  if (authStore.user.type === 'admin') {
+  if (authStore.user.type === UserTypeEnum.ADMIN) {
     providerStore.getAllNewProviders()
   }
 })

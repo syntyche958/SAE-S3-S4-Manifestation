@@ -1,7 +1,7 @@
 import * as L from 'leaflet'
 import { useLocationStore } from '@/stores/locations'
 import { ref } from 'vue'
-import { MapMode } from '@/enums/Map.enums'
+import { MapModeEnum } from '@/enums/Map.enums'
 
 export function setupMap(mapId) {
   // Map setup
@@ -33,7 +33,7 @@ export function setupMap(mapId) {
 }
 
 export async function displayLocations(map, mapMode) {
-  if (mapMode === MapMode.VISITOR) {
+  if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map)
   } else {
     displayAreas(map)
