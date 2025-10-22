@@ -11,6 +11,7 @@ const messages = {
       send: 'Send',
       save: 'Save',
       preview: 'Preview',
+      fillAllFields: 'Please fill in all the fields',
     },
   },
   fr: {
@@ -25,6 +26,7 @@ const messages = {
       send: 'Envoyer',
       save: 'Sauvegarder',
       preview: 'Aperçu',
+      fillAllFields: 'Veuillez remplir tous les champs',
     },
   },
 }
