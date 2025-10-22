@@ -2,12 +2,15 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import ProviderService from '@/services/provider.service'
+import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
 export const useProviderStore = defineStore('provider', () => {
+  // STATE
   const providers = ref([])
   const providerImages = ref([])
   const newProviders = ref([])
 
+  // ACTIONS
   async function getAllProviders() {
     let response = await ProviderService.getAllProviders()
     if (response.error === 0) {
@@ -17,8 +20,8 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
-  async function getProviderImages(id) {
-    let response = await ProviderService.getProviderImages(id)
+  async function getProviderImages(idProvider) {
+    let response = await ProviderService.getProviderImages(idProvider)
     if (response.error === 0) {
       providerImages.value = response.data.images
     } else {
@@ -35,68 +38,38 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
-  async function addNewProvider(providerName, toast) {
+  async function addNewProvider(providerName) {
     let response = await ProviderService.addNewProvider(providerName)
     if (response.error === 0) {
       // TODO : Quand le back-end sera en place, plutôt appeler getAllNewProviders() pour maj le store !
-      toast.add({
-        severity: 'success',
-        summary: 'Succès',
-        detail: `Votre demande a été enregistré avec succès`,
-        life: 3000,
-      })
+      displaySuccessToast('Votre demande a été enregistré avec succès')
       newProviders.value.push(response.data)
     } else {
-      toast.add({
-        severity: 'error',
-        summary: 'Échec',
-        detail: `Échec de l'envoi de la demande, veuillez réessayer'`,
-        life: 3000,
-      })
+      displayErrToast("Échec de l'envoi de la demande, veuillez réessayer")
       console.log(response.data)
     }
   }
 
-  async function removeNewProvider(data, toast) {
+  async function removeNewProvider(data) {
     let response = await ProviderService.removeNewProvider(data.id)
     if (response.error === 0) {
       // TODO : Quand le back-end sera en place, appeler getAllNewProviders() pour maj le store !
-      toast.add({
-        severity: 'success',
-        summary: 'Succès',
-        detail: `La demande de ${data.name} a été supprimé avec succès`,
-        life: 3000,
-      })
+      displaySuccessToast(`La demande de ${data.name} a été supprimé avec succès`)
     } else {
+      displayErrToast(`Échec de la suppression de la demande de ${data.name}`)
       console.log(response.data)
-      toast.add({
-        severity: 'error',
-        summary: 'Échec',
-        detail: `Échec de la suppression de la demande de ${data.name}`,
-        life: 3000,
-      })
     }
   }
 
-  async function validateNewProviders(data, toast) {
+  async function validateNewProviders(data) {
     let response = await ProviderService.validateNewProviders(data)
-    
+
     newProviders.value = newProviders.value.filter((p) => p.id != data.id)
     providers.value.push(response.data)
     if (response.error === 0) {
-      toast.add({
-        severity: 'success',
-        summary: 'Succès',
-        detail: `La demande de ${data.name} a été validé avec succès`,
-        life: 3000,
-      })
+      displaySuccessToast(`La demande de ${data.name} a été validé avec succès`)
     } else {
-      toast.add({
-        severity: 'error',
-        summary: 'Échec',
-        detail: `Échec de la validation de la demande de ${data.name}`,
-        life: 3000,
-      })
+      displayErrToast(`Échec de la validation de la demande de ${data.name}`)
     }
   }
 

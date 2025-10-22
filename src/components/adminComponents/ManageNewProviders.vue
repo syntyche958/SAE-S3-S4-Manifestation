@@ -1,5 +1,4 @@
 <template>
-  <Toast />
   <ConfirmDialog></ConfirmDialog>
   <div class="card">
     <h1 class="m-0">Demande de nouveau prestataires</h1>
@@ -22,12 +21,9 @@
 import { useProviderStore } from '@/stores/providers';
 import { Button, DataTable, Column } from 'primevue';
 import ConfirmDialog from 'primevue/confirmdialog';
-import Toast from 'primevue/toast';
 import { useConfirm } from "primevue/useconfirm";
-import { useToast } from "primevue/usetoast";
 
 const confirm = useConfirm();
-const toast = useToast();
 
 const providerStore = useProviderStore();
 
@@ -46,7 +42,7 @@ const confirmDeletion = (data) => {
       severity: 'danger'
     },
     accept: async () => {
-      await providerStore.removeNewProvider(data, toast)
+      await providerStore.removeNewProvider(data)
     }
   });
 };
@@ -66,7 +62,7 @@ const confirmValidation = (data) => {
       severity: 'success'
     },
     accept: async () => {
-      await providerStore.validateNewProviders(data, toast)
+      await providerStore.validateNewProviders(data)
     }
   });
 }

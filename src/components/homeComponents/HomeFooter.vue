@@ -1,5 +1,4 @@
 <template>
-  <Toast />
   <div id="footer">
     <!-- Button -->
     <Button :label="$t('message.registerAsProvider')" icon="pi pi-user-plus" @click="openModal()" severity="secondary"
@@ -25,10 +24,7 @@
 import { ref } from 'vue';
 import { Dialog, Button, InputText } from 'primevue';
 import { useProviderStore } from '@/stores/providers';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue';
 
-const toast = useToast()
 const visible = ref(false);
 const newProviderName = ref("")
 
@@ -39,7 +35,7 @@ const openModal = () => {
 const registerProvider = () => {
   visible.value = false;
   const providerStore = useProviderStore()
-  providerStore.addNewProvider(newProviderName.value, toast)
+  providerStore.addNewProvider(newProviderName.value)
   newProviderName.value = ""
 }
 
