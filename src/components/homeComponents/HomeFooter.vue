@@ -59,11 +59,3 @@ const registerProvider = () => {
 }
 
 </script>
-
-<style scoped>
-#footer {
-  background-color: aquamarine;
-  width: 100%;
-  height: 30vh;
-}
-</style>

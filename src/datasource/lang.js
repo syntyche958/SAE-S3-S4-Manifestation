@@ -1,6 +1,8 @@
 const messages = {
   en: {
     message: {
+      provider: 'Provider',
+      activity: 'Activity',
       seeMap: 'See map',
       goToPage: 'Go to page',
       clear: 'Clear',
@@ -12,10 +14,13 @@ const messages = {
       save: 'Save',
       preview: 'Preview',
       fillAllFields: 'Please fill in all the fields',
+      contactProvider: 'Contact a provider',
     },
   },
   fr: {
     message: {
+      provider: 'Prestataire',
+      activity: 'Activité',
       seeMap: 'Voir la carte',
       goToPage: 'Voir la page',
       clear: 'Effacer',
@@ -27,6 +32,7 @@ const messages = {
       save: 'Sauvegarder',
       preview: 'Aperçu',
       fillAllFields: 'Veuillez remplir tous les champs',
+      contactProvider: ' Contacter un prestataire',
     },
   },
 }

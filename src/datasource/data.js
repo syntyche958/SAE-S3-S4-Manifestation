@@ -153,8 +153,8 @@ const locations = [
   },
 ]
 
-const user = [{ type: UserTypeEnum.ADMIN }]
+// const user = [{ type: UserTypeEnum.ADMIN }]
 // const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
-// const user = [{ type: UserTypeEnum.VISITOR }]
+const user = [{ type: UserTypeEnum.VISITOR }]
 
 export { providers, locations, user, newProviders, providerImages, presentation }

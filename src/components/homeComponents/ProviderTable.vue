@@ -43,22 +43,23 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
 import { InputText, Button, DataTable, Column, IconField, InputIcon, Card } from 'primevue';
 import { useProviderStore } from '@/stores/providers';
 import router from '@/router/index.js'
 
-const providers = ref([]);
+const providerStore = useProviderStore();
+const providers = computed(() => providerStore.providers)
 const filters = ref({});
 const loading = ref(true);
 
-onMounted(async () => {
-  const providerStore = useProviderStore();
-  await providerStore.getAllProviders();
-  providers.value = providerStore.providers;
-  loading.value = false;
-})
+watch(providers, () => {
+  if (providers.value != null) {
+    console.log('in')
+    loading.value = false
+  }
+}, { immediate: true, deep: true })
 
 const initFilters = () => {
   filters.value = {
