@@ -7,6 +7,7 @@
   <Dialog v-model:visible="visible" :header="$t('message.contactProvider')" :style="{ width: '30rem' }" :modal="true"
     :draggable="false">
 
+    <!-- TODO : Vérifier que le mail est bien formulé, regex ? -->
     <div class="flex items-center gap-4 mb-4">
       <label for="visitor-mail" class="font-semibold w-24">Email</label>
       <InputText id="visitor-mail" class="flex-auto" autocomplete="off" v-model="visitorMail" />
