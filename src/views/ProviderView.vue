@@ -25,8 +25,6 @@
       </TabPanels>
     </Tabs>
   </div>
-
-  <ProviderFooter />
 </template>
 
 <script setup>
@@ -40,7 +38,6 @@ import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import { useAuthStore } from '@/stores/auth';
 import { UserTypeEnum } from '@/enums/User.enum';
-import ProviderFooter from '@/components/providerComponents/ProviderFooter.vue';
 
 const authStore = useAuthStore()
 </script>

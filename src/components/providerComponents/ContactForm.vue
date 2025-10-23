@@ -1,9 +1,7 @@
 <template>
-  <div id="footer">
-    <!-- Button -->
-    <Button :label="$t('message.contactProvider')" icon="pi pi-envelope" @click="openModal()" severity="secondary"
-      style="min-width: 10rem" />
-  </div>
+  <!-- Button -->
+  <Button :label="$t('message.contactProvider')" icon="pi pi-envelope" @click="openModal()" severity="secondary"
+    style="min-width: 10rem" />
 
   <!-- Modal -->
   <Dialog v-model:visible="visible" :header="$t('message.contactProvider')" :style="{ width: '30rem' }" :modal="true"

@@ -11,6 +11,7 @@ import { UserTypeEnum } from '@/enums/User.enum';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue';
 import { setToast } from './utils/toast.utils';
+import TheFooter from './components/TheFooter.vue';
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
@@ -39,4 +40,6 @@ onMounted(async () => {
   </header>
 
   <RouterView />
+
+  <TheFooter />
 </template>
