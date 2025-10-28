@@ -12,6 +12,11 @@
   </div>
 
   <Menu v-if="visible" :model="items" class="absolute transform -translate-x-[75%]">
+    <template #start>
+      <div class="flex justify-center my-2">
+        <b>{{ userName }}</b>
+      </div>
+    </template>
     <template #item="{ item, props }">
       <a v-ripple class="flex items-center" v-bind="props.action">
         <span :class="item.icon" />
@@ -31,13 +36,25 @@ import Badge from 'primevue/badge'
 import { useContactStore } from '@/stores/contact'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
+import { useProviderStore } from '@/stores/providers'
 
 const contactStore = useContactStore()
 const authStore = useAuthStore()
+const providerStore = useProviderStore()
+
+const userName = computed(() => {
+  if (authStore.user.type === UserTypeEnum.ADMIN) return 'ADMIN'
+  let providerId = authStore.user.id
+  return providerStore.providers.find((p) => p.id == providerId).name
+})
 
 const visible = ref(false)
 const items = computed(() => {
-  let res = []
+  let res = [
+    {
+      separator: true,
+    },
+  ]
   if (authStore.user?.type === UserTypeEnum.PROVIDER) {
     res.push({
       label: 'Message',
