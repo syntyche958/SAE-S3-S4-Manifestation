@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import contactService from '@/services/contact.service'
+import ContactService from '@/services/contact.service'
 
 export const useContactStore = defineStore('contact', () => {
   // STATE
@@ -8,7 +8,7 @@ export const useContactStore = defineStore('contact', () => {
 
   // ACTIONS
   async function getAllContacts() {
-    let response = await contactService.getAllContacts()
+    let response = await ContactService.getAllContacts()
     if (response.error === 0) {
       contacts.value = response.data
     } else {
@@ -17,9 +17,18 @@ export const useContactStore = defineStore('contact', () => {
   }
 
   // TODO : Add async function getAllContacts(provider_id)
+  async function getAllContactsById(provider_id) {
+    let response = await ContactService.getAllContactsById(provider_id)
+    if (response.error === 0) {
+      contacts.value = response.data
+    } else {
+      console.log(response.data)
+    }
+  }
 
   return {
     contacts,
     getAllContacts,
+    getAllContactsById,
   }
 })

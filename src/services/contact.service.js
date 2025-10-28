@@ -7,6 +7,10 @@ async function getAllContactsFromLocalSource() {
   return LocalSource.getAllContacts()
 }
 
+async function getAllContactsByIdFromLocalSource(provider_id) {
+  return LocalSource.getAllContactsById(provider_id)
+}
+
 async function getAllContacts() {
   try {
     return await getAllContactsFromLocalSource()
@@ -15,6 +19,15 @@ async function getAllContacts() {
   }
 }
 
+async function getAllContactsById(provider_id) {
+  try {
+    return await getAllContactsByIdFromLocalSource(provider_id)
+  } catch {
+    return networkErrResponse
+  }
+}
+
 export default {
   getAllContacts,
+  getAllContactsById,
 }

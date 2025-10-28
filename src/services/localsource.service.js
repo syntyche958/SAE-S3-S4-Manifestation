@@ -25,6 +25,14 @@ function getAllContacts() {
 }
 
 /**
+ * Get all contacts
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{mail:string, providerId:number, activityId:number, message:string}}}
+ */
+function getAllContactsById(provider_id) {
+  return { error: 0, status: 200, data: contacts.filter((c) => c.providerId == provider_id) }
+}
+
+/**
  * Get all locations
  * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id:number, coord:array, area: array}}}
  */
@@ -72,4 +80,5 @@ export default {
   getUser,
   getPresentationContent,
   getAllContacts,
+  getAllContactsById,
 }

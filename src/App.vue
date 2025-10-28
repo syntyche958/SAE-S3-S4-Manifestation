@@ -30,6 +30,8 @@ onMounted(async () => {
   if (authStore.user.type === UserTypeEnum.ADMIN) {
     await providerStore.getAllNewProviders()
     await contactStore.getAllContacts()
+  } else if (authStore.user.type === UserTypeEnum.PROVIDER) {
+    await contactStore.getAllContactsById(authStore.user.id)
   }
 })
 </script>
