@@ -1,6 +1,12 @@
 <template>
   <!-- Visitor -->
-  <div v-if="authStore.user?.type == UserTypeEnum.VISITOR">
+  <div
+    v-if="
+      authStore.user?.type === UserTypeEnum.VISITOR ||
+      (authStore.user?.type === UserTypeEnum.PROVIDER &&
+        route.params.provider_id != authStore.user?.id)
+    "
+  >
     <PresentationProviderSection />
   </div>
 
@@ -21,23 +27,25 @@
         <TabPanel value="1">
           <ServicesProviderSection />
         </TabPanel>
-
       </TabPanels>
     </Tabs>
   </div>
 </template>
 
 <script setup>
-import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
-import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
+import { useRoute } from 'vue-router'
 
-import Tabs from 'primevue/tabs';
+import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import { useAuthStore } from '@/stores/auth';
-import { UserTypeEnum } from '@/enums/User.enum';
+
+import { useAuthStore } from '@/stores/auth'
+import { UserTypeEnum } from '@/enums/User.enum'
+import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
+import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
 
 const authStore = useAuthStore()
+const route = useRoute()
 </script>
