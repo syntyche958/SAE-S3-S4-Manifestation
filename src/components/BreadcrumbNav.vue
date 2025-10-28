@@ -1,33 +1,27 @@
+<template>
+  <Breadcrumb :home="home" :model="activity" />
+</template>
+
 <script setup>
-import Breadcrumb from 'primevue/breadcrumb';
-import { useRoute, useRouter } from 'vue-router'
+import Breadcrumb from 'primevue/breadcrumb'
+import { useRoute } from 'vue-router'
 import { ref, watch } from 'vue'
+import { useProviderStore } from '@/stores/providers'
+
+// TODO : Utiliser seulement pour la page activité !
 
 const route = useRoute()
-const router = useRouter()
 
-const home = {
-  label: 'Accueil',
-  command: () => router.push('/')
-}
+const providerStore = useProviderStore()
 
-
-const items = ref([])
+const home = ref()
+const activity = ref([])
 
 function updateBreadcrumb() {
-  const segments = route.path.split('/').filter(Boolean)//découpe  route en item et sup élément vide (filter)
-  items.value = segments.map((segment, index) => {//crée item
-    const path = '/' + segments.slice(0, index + 1).join('/')//recrée chemin
-    return {
-      label:  segment.slice(0),
-      command: () => router.push(path)
-    }
-  })
+  home.value = {
+    label: providerStore.providers.find((p) => p.id == route.params.provider_id).name,
+  }
 }
-
 
 watch(() => route.path, updateBreadcrumb, { immediate: true })
 </script>
-<template>
-  <Breadcrumb :home="home" :model="items"/>
-</template>

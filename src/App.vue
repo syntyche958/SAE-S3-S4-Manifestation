@@ -2,7 +2,6 @@
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
-import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useLocationStore } from '@/stores/locations'
 import { useProviderStore } from '@/stores/providers'
@@ -36,7 +35,6 @@ onMounted(async () => {
   <Toast />
   <header>
     <NavBar />
-    <BreadcrumbNav />
   </header>
 
   <RouterView />

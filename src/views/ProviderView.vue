@@ -1,4 +1,5 @@
 <template>
+  <BreadcrumbNav />
   <!-- Visitor -->
   <div
     v-if="
@@ -45,6 +46,7 @@ import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
 import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
+import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 
 const authStore = useAuthStore()
 const route = useRoute()
