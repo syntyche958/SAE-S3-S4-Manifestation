@@ -17,8 +17,8 @@ export const useContactStore = defineStore('contact', () => {
   }
 
   // TODO : Add async function getAllContacts(provider_id)
-  async function getAllContactsById(provider_id) {
-    let response = await ContactService.getAllContactsById(provider_id)
+  async function getAllContactsById(providerId) {
+    let response = await ContactService.getAllContactsById(providerId)
     if (response.error === 0) {
       contacts.value = response.data
     } else {
@@ -26,9 +26,21 @@ export const useContactStore = defineStore('contact', () => {
     }
   }
 
+  async function addContact(mail, providerId, activityId, message) {
+    let response = await ContactService.addContact(mail, providerId, activityId, message)
+    if (response.error === 0) {
+      contacts.value += response.data
+    } else {
+      console.log(response.data)
+    }
+
+    return response
+  }
+
   return {
     contacts,
     getAllContacts,
     getAllContactsById,
+    addContact,
   }
 })

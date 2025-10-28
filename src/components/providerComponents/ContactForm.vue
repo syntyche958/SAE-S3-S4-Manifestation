@@ -79,6 +79,7 @@ import { ref, computed } from 'vue'
 import { Button, InputText, Dialog, Select, Textarea } from 'primevue'
 import { useProviderStore } from '@/stores/providers'
 import { useContactStore } from '@/stores/contact'
+import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
 const providerStore = useProviderStore()
 const contactStore = useContactStore()
@@ -98,13 +99,23 @@ const openModal = () => {
   visible.value = true
 }
 
-function sendRequest() {
-  console.log('TODO')
+async function sendRequest() {
   visible.value = false
-
   // Reset values
   message.value = ''
   visitorMail.value = ''
-  selectedProvider.value = null
+
+  let response = await contactStore.addContact(
+    visitorMail.value,
+    selectedProvider.value.id,
+    null,
+    message.value,
+  )
+
+  if (response.error === 0) {
+    displaySuccessToast('Message envoyé avec succès !')
+  } else {
+    displayErrToast("Echec de l'envoi, veuillez réessayer !")
+  }
 }
 </script>

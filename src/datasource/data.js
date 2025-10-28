@@ -155,6 +155,7 @@ const locations = [
 
 const contacts = [
   {
+    id: 1,
     mail: 'john.doe@gmail.com',
     providerId: 1,
     activityId: null,
