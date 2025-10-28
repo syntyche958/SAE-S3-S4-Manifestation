@@ -12,7 +12,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "sonarscan": "sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqp_96db48f0aab0a5a2e5932e930e8f0f3c854924d6 -Dsonar.projectKey=Manif"
   },
   "dependencies": {
     "@primeuix/themes": "^1.2.5",

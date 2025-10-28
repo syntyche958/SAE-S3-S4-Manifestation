@@ -3,15 +3,15 @@ import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
-import { useAuthStore } from '@/stores/auth';
-import { useLocationStore } from '@/stores/locations';
-import { useProviderStore } from '@/stores/providers';
-import { usePresentationStore } from '@/stores/presentation';
-import { UserTypeEnum } from '@/enums/User.enum';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue';
-import { setToast } from './utils/toast.utils';
-import TheFooter from './components/TheFooter.vue';
+import { useAuthStore } from '@/stores/auth'
+import { useLocationStore } from '@/stores/locations'
+import { useProviderStore } from '@/stores/providers'
+import { usePresentationStore } from '@/stores/presentation'
+import { UserTypeEnum } from '@/enums/User.enum'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue'
+import { setToast } from './utils/toast.utils'
+import TheFooter from './components/TheFooter.vue'
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()

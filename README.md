@@ -11,6 +11,7 @@ This template should help get you started developing with Vue 3 in Vite.
 See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
+
 ```sh
 npm install
 ```
@@ -64,4 +65,46 @@ settings.json
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
+```
+
+## SonarQube
+
+**Init**
+Run server : docker
+
+```sh
+docker run -d --name sonarqube \
+  -p 9000:9000 \
+  -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
+  -v sonarqube_data:/opt/sonarqube/data \
+  -v sonarqube_logs:/opt/sonarqube/logs \
+  -v sonarqube_extensions:/opt/sonarqube/extensions \
+  sonarqube:latest
+```
+
+Instal sonar-scan
+
+```sh
+sudo npm install -g @sonar/scan
+```
+
+**Start server**
+
+```sh
+docker start sonarqube
+```
+
+**Stop server**
+
+```sh
+docker stop sonarqube
+```
+
+**Run scan**
+
+```sh
+sonar \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.token=sqp_96db48f0aab0a5a2e5932e930e8f0f3c854924d6 \
+  -Dsonar.projectKey=Manif
 ```

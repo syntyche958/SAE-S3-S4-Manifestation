@@ -1,27 +1,25 @@
 <script setup>
-import { usePresentationStore } from '@/stores/presentation';
+import { usePresentationStore } from '@/stores/presentation'
 
 const presentationStore = usePresentationStore()
 
 const props = defineProps({
-  isPreview: { type: Boolean, required: false, default: false }
+  isPreview: { type: Boolean, required: false, default: false },
 })
 </script>
 
 <template>
   <div id="presentation">
     <div :class="'image-container'">
-      <img src="@/assets/images/main_bg.jpg.avif" :alt="'Image of the carcassonne castle'" />
+      <img src="@/assets/images/main_bg.jpg.avif" :alt="'Carcassonne castle'" />
       <div :class="'overlay'"></div>
       <h1>Carcassonne autrefois</h1>
       <div id="small-presentation" v-html="presentationStore.small" />
       <a v-if="props.isPreview" :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
-      <a v-else href='#map' :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
-
+      <a v-else href="#map" :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 a {
