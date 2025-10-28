@@ -153,8 +153,17 @@ const locations = [
   },
 ]
 
-// const user = [{ type: UserTypeEnum.ADMIN }]
-// const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
-const user = [{ type: UserTypeEnum.VISITOR }]
+const contacts = [
+  {
+    mail: 'john.doe@gmail.com',
+    providerId: 1,
+    activityId: null,
+    message: "Bonjour, j'aimerais savoir si il y a une limite de poids pour la balade à cheval ?",
+  },
+]
 
-export { providers, locations, user, newProviders, providerImages, presentation }
+const user = [{ type: UserTypeEnum.ADMIN }]
+// const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
+// const user = [{ type: UserTypeEnum.VISITOR }]
+
+export { contacts, providers, locations, user, newProviders, providerImages, presentation }

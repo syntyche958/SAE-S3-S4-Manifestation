@@ -5,6 +5,7 @@ import {
   newProviders,
   providerImages,
   presentation,
+  contacts,
 } from '@/datasource/data'
 
 /**
@@ -13,6 +14,14 @@ import {
  */
 function getAllProviders() {
   return { error: 0, status: 200, data: providers }
+}
+
+/**
+ * Get all contacts
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{mail:string, providerId:number, activityId:number, message:string}}}
+ */
+function getAllContacts() {
+  return { error: 0, status: 200, data: contacts }
 }
 
 /**
@@ -62,4 +71,5 @@ export default {
   getAllLocations,
   getUser,
   getPresentationContent,
+  getAllContacts,
 }

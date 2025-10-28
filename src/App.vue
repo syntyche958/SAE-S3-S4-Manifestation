@@ -11,11 +11,13 @@ import Toast from 'primevue/toast'
 import { useToast } from 'primevue'
 import { setToast } from './utils/toast.utils'
 import TheFooter from './components/TheFooter.vue'
+import { useContactStore } from './stores/contact'
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
 const providerStore = useProviderStore()
 const presentationStore = usePresentationStore()
+const contactStore = useContactStore()
 
 setToast(useToast())
 
@@ -26,7 +28,8 @@ onMounted(async () => {
   await providerStore.getAllProviders()
   // TODO : Appeler seulement quand necessaire, dans AdminView quand le composant concerné est affiché !
   if (authStore.user.type === UserTypeEnum.ADMIN) {
-    providerStore.getAllNewProviders()
+    await providerStore.getAllNewProviders()
+    await contactStore.getAllContacts()
   }
 })
 </script>
