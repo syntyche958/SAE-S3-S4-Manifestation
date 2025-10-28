@@ -3,35 +3,50 @@ import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import LocaleChanger from '@/components/LocaleChanger.vue';
-import router from '@/router';
-import { UserTypeEnum } from '@/enums/User.enum';
+import LocaleChanger from '@/components/LocaleChanger.vue'
+import router from '@/router'
+import { UserTypeEnum } from '@/enums/User.enum'
+import { useProviderStore } from '@/stores/providers'
+import { useI18n } from 'vue-i18n'
 
-const authStore = useAuthStore();
+const { t } = useI18n()
 
-const allItems = {
-  accueil: {
-    label: 'Accueil',
-    command: () => { router.push('/') },
+const authStore = useAuthStore()
+const providerStore = useProviderStore()
+
+const homeItem = {
+  label: computed(() => t('message.home')),
+  command: () => {
+    router.push('/')
   },
-  prestataire: {
-    label: 'Prestataire',
-    command: () => { router.push('/provider') },
-  },
-  organisateur: {
-    label: 'Administrateur',
-    command: () => { router.push('/admin') },
+}
+const adminItem = {
+  label: computed(() => t('message.admin')),
+  command: () => {
+    router.push('/admin')
   },
 }
 
 const items = computed(() => {
+  let providersItem = {
+    label: t('message.providers'),
+    items: [],
+  }
+
+  for (let provider of providerStore.providers) {
+    providersItem.items.push({
+      label: provider.name,
+      command: () => {
+        router.push(`/provider/${provider.id}`)
+      },
+    })
+  }
+
   switch (authStore.user?.type) {
     case UserTypeEnum.ADMIN:
-      return [allItems.accueil, allItems.prestataire, allItems.organisateur];
-    case UserTypeEnum.PROVIDER:
-      return [allItems.accueil, allItems.prestataire];
+      return [homeItem, providersItem, adminItem]
     default:
-      return [allItems.accueil];
+      return [homeItem, providersItem]
   }
 })
 </script>
@@ -39,7 +54,7 @@ const items = computed(() => {
 <template>
   <Menubar :model="items" class="NavbarMargin">
     <template #end>
-      <div style="display: flex;">
+      <div style="display: flex">
         <LocaleChanger />
         <Button label="Se connecter" class="p-button-outlined" />
       </div>
@@ -55,7 +70,7 @@ const items = computed(() => {
   left: 0;
   width: 100%;
   z-index: 1000;
-  color: #EFEFEF;
+  color: #efefef;
 }
 
 .NavbarBottom {

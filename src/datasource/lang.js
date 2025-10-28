@@ -1,7 +1,10 @@
 const messages = {
   en: {
     message: {
+      home: 'Home',
+      admin: 'Administrator ',
       provider: 'Provider',
+      providers: 'Providers',
       activity: 'Activity',
       seeMap: 'See map',
       goToPage: 'Go to page',
@@ -19,7 +22,10 @@ const messages = {
   },
   fr: {
     message: {
+      home: 'Accueil',
+      admin: 'Administrateur',
       provider: 'Prestataire',
+      providers: 'Prestataires',
       activity: 'Activité',
       seeMap: 'Voir la carte',
       goToPage: 'Voir la page',
