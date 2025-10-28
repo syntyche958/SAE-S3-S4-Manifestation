@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import ContactService from '@/services/contact.service'
 
+// TODO : Mettre en place l'affichage des messages côté prestataire !
 export const useContactStore = defineStore('contact', () => {
   // STATE
   const contacts = ref([])

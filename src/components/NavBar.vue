@@ -1,3 +1,23 @@
+<template>
+  <Menubar :model="items" class="fixed w-full z-1000">
+    <template #end>
+      <div style="display: flex">
+        <LocaleChanger />
+        <div
+          v-if="
+            authStore.user?.type === UserTypeEnum.ADMIN ||
+            authStore.user?.type === UserTypeEnum.PROVIDER
+          "
+        >
+          <TheAvatar />
+        </div>
+        <Button v-else label="Se connecter" class="p-button-outlined" />
+      </div>
+    </template>
+  </Menubar>
+  <div class="h-20"></div>
+</template>
+
 <script setup>
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
@@ -8,6 +28,7 @@ import router from '@/router'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useI18n } from 'vue-i18n'
+import TheAvatar from './TheAvatar.vue'
 
 const { t } = useI18n()
 
@@ -50,30 +71,3 @@ const items = computed(() => {
   }
 })
 </script>
-
-<template>
-  <Menubar :model="items" class="NavbarMargin">
-    <template #end>
-      <div style="display: flex">
-        <LocaleChanger />
-        <Button label="Se connecter" class="p-button-outlined" />
-      </div>
-    </template>
-  </Menubar>
-  <div class="NavbarBottom"></div>
-</template>
-
-<style scoped>
-.NavbarMargin {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  color: #efefef;
-}
-
-.NavbarBottom {
-  height: 80px;
-}
-</style>
