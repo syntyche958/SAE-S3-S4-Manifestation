@@ -1,5 +1,5 @@
 <template>
-  <div @click="visible = !visible">
+  <div @click="visible = !visible" class="cursor-pointer">
     <OverlayBadge
       v-if="contactStore.contacts.length > 0 && authStore.user?.type === UserTypeEnum.PROVIDER"
       class="inline-flex"
@@ -25,6 +25,35 @@
       </a>
     </template>
   </Menu>
+
+  <Dialog
+    v-model:visible="dialogVisible"
+    header="Messages"
+    :style="{ width: '25rem' }"
+    position="topright"
+    :modal="true"
+    :draggable="false"
+  >
+    <span class="text-surface-500 dark:text-surface-400 block mb-8">Answer visitor messages</span>
+    <!-- TODO : Mettre un tableau contenant [Activité, Message, Btn[Répondre, Marqué comme terminé]] -->
+    <!-- <div class="flex items-center gap-4 mb-4">
+      <label for="username" class="font-semibold w-24">Username</label>
+      <InputText id="username" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex items-center gap-4 mb-8">
+      <label for="email" class="font-semibold w-24">Email</label>
+      <InputText id="email" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex justify-end gap-2">
+      <Button
+        type="button"
+        label="Cancel"
+        severity="secondary"
+        @click="dialogVisible = false"
+      ></Button>
+      <Button type="button" label="Save" @click="dialogVisible = false"></Button>
+    </div> -->
+  </Dialog>
 </template>
 
 <script setup>
@@ -33,6 +62,7 @@ import Avatar from 'primevue/avatar'
 import Menu from 'primevue/menu'
 import OverlayBadge from 'primevue/overlaybadge'
 import Badge from 'primevue/badge'
+import Dialog from 'primevue/dialog'
 import { useContactStore } from '@/stores/contact'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
@@ -49,6 +79,8 @@ const userName = computed(() => {
 })
 
 const visible = ref(false)
+const dialogVisible = ref(false)
+
 const items = computed(() => {
   let res = [
     {
@@ -60,7 +92,7 @@ const items = computed(() => {
       label: 'Message',
       icon: 'pi pi-inbox',
       badge: contactStore.contacts.length,
-      command: () => console.log('TODO'),
+      command: () => (dialogVisible.value = true),
     })
   }
   res.push({
