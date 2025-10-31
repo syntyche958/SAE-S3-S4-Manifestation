@@ -27,7 +27,7 @@
       <!-- TODO : Default value if on a provider page ! -->
       <Select
         v-model="selectedProvider"
-        :options="providers"
+        :options="providerStore.providers"
         optionLabel="name"
         placeholder="Select the provider"
         class="w-full md:w-56"
@@ -88,7 +88,6 @@ const btnDisabled = computed(() =>
   message.value != '' && visitorMail.value != '' && selectedProvider.value ? false : true,
 )
 const message = ref('')
-const providers = computed(() => providerStore.providers)
 const visitorMail = ref('')
 const selectedProvider = ref()
 // const activities = computed(() => activityStore.getFrom(providers.value.id))
@@ -100,10 +99,12 @@ const openModal = () => {
 
 function sendRequest() {
   visible.value = false
+  contactStore.addContact(visitorMail.value, selectedProvider.value.id, null, message.value)
+
   // Reset values
   message.value = ''
   visitorMail.value = ''
-
-  contactStore.addContact(visitorMail.value, selectedProvider.value.id, null, message.value)
+  selectedProvider.value = null
+  // selectedActivity.value = null
 }
 </script>
