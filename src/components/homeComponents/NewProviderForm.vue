@@ -13,7 +13,7 @@
   <Dialog
     v-model:visible="visible"
     :header="$t('message.registerAsProvider')"
-    :style="{ width: '30rem' }"
+    class="w-auto sm:w-[25vw] mx-10 sm:mx-0"
     :modal="true"
     :draggable="false"
   >
