@@ -32,7 +32,7 @@ export const useContactStore = defineStore('contact', () => {
   async function addContact(mail, providerId, activityId, message) {
     let response = await ContactService.addContact(mail, providerId, activityId, message)
     if (response.error === 0) {
-      contacts.value += response.data
+      contacts.value.push(response.data)
       displaySuccessToast('Message envoyé avec succès !')
     } else {
       console.log(response.data)
