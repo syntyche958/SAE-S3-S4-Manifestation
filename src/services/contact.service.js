@@ -12,6 +12,10 @@ async function getAllContactsByIdFromLocalSource(provider_id) {
   return LocalSource.getAllContactsById(provider_id)
 }
 
+async function removeContactFromLocalSource(id) {
+  return { error: 0, status: 200, data: { id } }
+}
+
 async function addContactToLocalSource(mail, providerId, activityId, message) {
   const contactStore = useContactStore()
 
@@ -57,8 +61,17 @@ async function addContact(mail, providerId, activityId, message) {
   }
 }
 
+async function removeContact(id) {
+  try {
+    return await removeContactFromLocalSource(id)
+  } catch {
+    return networkErrResponse
+  }
+}
+
 export default {
   getAllContacts,
   getAllContactsById,
   addContact,
+  removeContact,
 }
