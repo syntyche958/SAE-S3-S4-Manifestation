@@ -12,99 +12,124 @@
   <Dialog
     v-model:visible="visible"
     :header="$t('message.contactProvider')"
-    :style="{ width: '30rem' }"
+    class="w-auto sm:w-[25vw]"
     :modal="true"
     :draggable="false"
   >
-    <!-- TODO : Vérifier que le mail est bien formulé, regex ? -->
-    <div class="flex items-center gap-4 mb-4">
-      <label for="visitor-mail" class="font-semibold w-24">Email</label>
-      <InputText id="visitor-mail" class="flex-auto" autocomplete="off" v-model="visitorMail" />
-    </div>
+    <Form
+      v-slot="$form"
+      :resolver="resolver"
+      :initialValues="initialValues"
+      @submit="onFormSubmit"
+      class="flex flex-col gap-4 w-full"
+    >
+      <!-- Email input -->
+      <div class="flex flex-col gap-1">
+        <label for="email" class="font-semibold w-24">Email</label>
+        <InputText id="email" name="email" type="text" fluid />
+        <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
+          $form.email.error?.message
+        }}</Message>
+      </div>
 
-    <div class="flex items-center gap-4 mb-8">
-      <label class="font-semibold w-24">{{ $t('message.provider') }}</label>
-      <!-- TODO : Default value if on a provider page ! -->
-      <Select
-        v-model="selectedProvider"
-        :options="providerStore.providers"
-        optionLabel="name"
-        placeholder="Select the provider"
-        class="w-full md:w-56"
-      />
-    </div>
+      <!-- Provider input -->
+      <div class="flex flex-col gap-1">
+        <label class="font-semibold w-24">{{ $t('message.provider') }}</label>
+        <!-- TODO : Default value if on a provider page ! -->
+        <Select
+          :options="providerStore.providers"
+          optionLabel="name"
+          name="provider"
+          placeholder="Select the provider"
+          fluid
+        />
+        <Message v-if="$form.provider?.invalid" severity="error" size="small" variant="simple">{{
+          $form.provider.error?.message
+        }}</Message>
+      </div>
 
-    <!-- TODO : Default value if on a activity page ! -->
-    <!-- TODO : Ajouter quand le store activity sera mis en place -->
-    <div class="flex items-center gap-4 mb-8">
-      <label class="font-semibold w-24">{{ $t('message.activity') }} (opt)</label>
-      <Select
-        disabled
-        v-model="selectedActivity"
-        :options="activities"
-        optionLabel="name"
-        placeholder="Select the activity"
-        class="w-full md:w-56"
-      />
-    </div>
+      <!-- TODO : Default value if on a activity page ! -->
+      <!-- TODO : Ajouter quand le store activity sera mis en place -->
+      <!-- Activity input -->
+      <div class="flex flex-col gap-1">
+        <label class="font-semibold w-24">{{ $t('message.activity') }} (opt)</label>
+        <Select
+          disabled
+          v-model="selectedActivity"
+          :options="activities"
+          optionLabel="name"
+          placeholder="Select the activity"
+          fluid
+        />
+      </div>
 
-    <div class="flex items-center gap-4 mb-8">
-      <label for="message" class="font-semibold w-24">Message</label>
-      <Textarea id="message" rows="5" cols="31" v-model="message" />
-    </div>
+      <!-- Message input -->
+      <div class="flex flex-col gap-1">
+        <label for="message" class="font-semibold w-24">Message</label>
+        <Textarea id="message" name="message" fluid />
+        <Message v-if="$form.message?.invalid" severity="error" size="small" variant="simple">{{
+          $form.message.error?.message
+        }}</Message>
+      </div>
 
-    <div class="flex justify-end gap-2">
-      <Button
-        type="button"
-        :label="$t('message.cancel')"
-        severity="secondary"
-        @click="visible = false"
-      ></Button>
-      <Button
-        type="button"
-        :label="$t('message.send')"
-        v-tooltip.top="{
-          value: $t('message.fillAllFields'),
-          disabled: !btnDisabled,
-          class: 'text-center',
-        }"
-        @click="sendRequest()"
-        :disabled="btnDisabled"
-      ></Button>
-    </div>
-  </Dialog>
+      <!-- Buttons -->
+      <div class="flex justify-end gap-2">
+        <Button
+          type="button"
+          :label="$t('message.cancel')"
+          severity="secondary"
+          @click="visible = false"
+        ></Button>
+        <Button type="submit" :label="$t('message.send')"></Button>
+      </div> </Form
+  ></Dialog>
 </template>
+
 <script setup>
-import { ref, computed } from 'vue'
-import { Button, InputText, Dialog, Select, Textarea } from 'primevue'
+import { ref } from 'vue'
+import { Button, InputText, Dialog, Select, Textarea, Message } from 'primevue'
+import { Form } from '@primevue/forms'
+
+import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { useProviderStore } from '@/stores/providers'
 import { useContactStore } from '@/stores/contact'
+import { z } from 'zod'
 
 const providerStore = useProviderStore()
 const contactStore = useContactStore()
 
+const initialValues = ref({
+  email: '',
+  activity: '',
+  message: '',
+})
+
 const visible = ref(false)
-const btnDisabled = computed(() =>
-  message.value != '' && visitorMail.value != '' && selectedProvider.value ? false : true,
-)
-const message = ref('')
-const visitorMail = ref('')
-const selectedProvider = ref()
-// const activities = computed(() => activityStore.getFrom(providers.value.id))
-// const selectedActivity = ref()
 
 const openModal = () => {
   visible.value = true
 }
 
-function sendRequest() {
-  visible.value = false
-  contactStore.addContact(visitorMail.value, selectedProvider.value.id, null, message.value)
+const onFormSubmit = ({ valid, values }) => {
+  if (!valid) return
 
-  // Reset values
-  message.value = ''
-  visitorMail.value = ''
-  selectedProvider.value = null
-  // selectedActivity.value = null
+  visible.value = false
+  contactStore.addContact(values.email, values.provider.id, null, values.message)
 }
+
+const resolver = ref(
+  zodResolver(
+    z.object({
+      email: z
+        .email({ message: 'Invalid email address.' })
+        .min(1, { message: 'Email is required.' }),
+      message: z
+        .string()
+        .min(10, { message: 'Message with more than ten characters is required.' }),
+      provider: z
+        .any()
+        .refine((p) => p !== undefined, { message: 'Provider selection is required' }),
+    }),
+  ),
+)
 </script>
