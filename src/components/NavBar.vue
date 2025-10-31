@@ -28,7 +28,7 @@ import router from '@/router'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useI18n } from 'vue-i18n'
-import TheAvatar from './TheAvatar.vue'
+import TheAvatar from './AvatarMenu.vue'
 
 const { t } = useI18n()
 
