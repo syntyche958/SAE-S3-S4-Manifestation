@@ -1,5 +1,5 @@
 <template>
-  <Card :style="{ 'flex-grow': 1 }">
+  <Card class="grow sm:my-4 sm:mr-4 h-fit">
     <template #content>
       <DataTable
         v-model:filters="filters"
@@ -95,10 +95,7 @@ const clearFilter = () => {
   initFilters()
 }
 
-// TODO : Go to specific providers page
-// TODO : Go to specific providers page
 const goToPage = (providerId) => {
-  console.log('TODO : go to provider ' + providerId + ' page')
   router.push({ name: 'provider_page', params: { provider_id: providerId } })
 }
 </script>
