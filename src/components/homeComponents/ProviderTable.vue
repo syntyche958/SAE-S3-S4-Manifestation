@@ -20,6 +20,7 @@
               :label="$t('message.clear')"
               variant="outlined"
               @click="clearFilter()"
+              size="small"
             />
             <IconField>
               <InputIcon>
@@ -49,7 +50,12 @@
         <!-- Column « go to page »  -->
         <Column field="id" header="" style="min-width: 12rem">
           <template #body="{ data }">
-            <Button type="button" :label="$t('message.goToPage')" @click="goToPage(data.id)" />
+            <Button
+              type="button"
+              :label="$t('message.goToPage')"
+              @click="goToPage(data.id)"
+              size="small"
+            />
           </template>
         </Column>
       </DataTable>

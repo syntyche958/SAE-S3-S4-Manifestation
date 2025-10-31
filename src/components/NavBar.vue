@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-center">
-    <Menubar :model="items" class="fixed mt-3 w-[99%] sm:w-[95%] z-1001">
+  <div class="fixed flex justify-center z-1001 mt-3 sm:mt-6 w-full">
+    <Menubar :model="items" class="z-1001 w-fit sm:w-[95%]">
       <template #end>
         <div style="display: flex">
           <LocaleChanger />
