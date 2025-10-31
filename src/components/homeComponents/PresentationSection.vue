@@ -9,28 +9,25 @@ const props = defineProps({
 </script>
 
 <template>
-  <div id="presentation">
-    <div :class="'image-container'">
-      <img src="@/assets/images/main_bg.jpg.avif" :alt="'Carcassonne castle'" />
-      <div :class="'overlay'"></div>
-      <h1>Carcassonne autrefois</h1>
-      <div id="small-presentation" v-html="presentationStore.small" />
-      <a v-if="props.isPreview" :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
-      <a v-else href="#map" :class="'p-button p-component'"> {{ $t('message.seeMap') }} </a>
-    </div>
+  <div class="absolute top-0 left-0 w-full h-full">
+    <img
+      src="@/assets/images/main_bg.jpg.avif"
+      alt="Carcassonne castle"
+      class="w-full h-full object-cover"
+    />
+    <div class="overlay"></div>
+    <h1>Carcassonne autrefois</h1>
+    <div id="small-presentation" v-html="presentationStore.small" />
+    <a v-if="props.isPreview" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
+    <a v-else href="#map" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
   </div>
+
+  <div class="relative h-screen"></div>
 </template>
 
 <style scoped>
 a {
   text-decoration: none;
-}
-
-.image-container {
-  user-select: none;
-  position: relative;
-  width: 100%;
-  height: 80vh;
 }
 
 .overlay {
@@ -42,18 +39,7 @@ a {
   background: rgba(0, 0, 0, 0.65);
 }
 
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#presentation {
-  width: 100%;
-  height: 80vh;
-}
-
-.image-container h1 {
+h1 {
   position: absolute;
   z-index: 1;
   top: 25%;
@@ -84,7 +70,7 @@ a {
   pointer-events: none;
 }
 
-.image-container a {
+a {
   position: absolute;
   z-index: 1;
   top: 90%;

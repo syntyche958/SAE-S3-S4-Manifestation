@@ -1,24 +1,27 @@
 <template>
-  <Menubar :model="items" class="fixed w-full z-1000">
-    <template #end>
-      <div style="display: flex">
-        <LocaleChanger />
-        <div
-          v-if="
-            authStore.user?.type === UserTypeEnum.ADMIN ||
-            authStore.user?.type === UserTypeEnum.PROVIDER
-          "
-        >
-          <TheAvatar />
+  <div class="flex justify-center">
+    <Menubar :model="items" class="fixed mt-3 w-[99%] sm:w-[95%] z-1001">
+      <template #end>
+        <div style="display: flex">
+          <LocaleChanger />
+          <div
+            v-if="
+              authStore.user?.type === UserTypeEnum.ADMIN ||
+              authStore.user?.type === UserTypeEnum.PROVIDER
+            "
+          >
+            <TheAvatar />
+          </div>
+          <Button v-else label="Se connecter" class="p-button-outlined" />
         </div>
-        <Button v-else label="Se connecter" class="p-button-outlined" />
-      </div>
-    </template>
-  </Menubar>
-  <div class="h-20"></div>
+      </template>
+    </Menubar>
+  </div>
+  <div v-if="route.path !== '/'" class="h-20"></div>
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import { computed } from 'vue'
@@ -30,6 +33,7 @@ import { useProviderStore } from '@/stores/providers'
 import { useI18n } from 'vue-i18n'
 import TheAvatar from './AvatarMenu.vue'
 
+const route = useRoute()
 const { t } = useI18n()
 
 const authStore = useAuthStore()

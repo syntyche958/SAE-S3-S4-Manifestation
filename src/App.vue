@@ -38,9 +38,7 @@ onMounted(async () => {
 
 <template>
   <Toast position="top-center" />
-  <header>
-    <NavBar />
-  </header>
+  <NavBar />
 
   <RouterView />
 
