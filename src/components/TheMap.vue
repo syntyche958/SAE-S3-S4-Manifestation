@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card :class="props?.class ? props.class : ''">
     <template #content>
       <div id="map"></div>
     </template>
@@ -13,6 +13,7 @@ import { displayLocations, setupMap } from '@/utils/map.utils'
 
 const props = defineProps({
   displayMode: { type: String, required: true },
+  class: { type: String, required: false },
 })
 
 onMounted(async () => {
