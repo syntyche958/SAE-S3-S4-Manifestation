@@ -55,7 +55,6 @@
         <label class="font-semibold w-24">{{ $t('message.activity') }} (opt)</label>
         <Select
           disabled
-          v-model="selectedActivity"
           :options="activities"
           optionLabel="name"
           placeholder="Select the activity"
@@ -98,13 +97,13 @@ import { z } from 'zod'
 const providerStore = useProviderStore()
 const contactStore = useContactStore()
 
+const visible = ref(false)
 const initialValues = ref({
   email: '',
   activity: '',
   message: '',
 })
-
-const visible = ref(false)
+const activities = ref([]) // TODO
 
 const openModal = () => {
   visible.value = true

@@ -1,59 +1,95 @@
 <template>
   <!-- Button -->
-  <Button :label="$t('message.registerAsProvider')" icon="pi pi-user-plus" @click="openModal()" severity="secondary"
-    style="min-width: 10rem" />
+  <Button
+    :label="$t('message.registerAsProvider')"
+    icon="pi pi-user-plus"
+    @click="openModal()"
+    severity="secondary"
+    style="min-width: 10rem"
+  />
 
   <!-- Modal -->
-  <Dialog v-model:visible="visible" :header="$t('message.registerAsProvider')" :style="{ width: '30rem' }" :modal="true"
-    :draggable="false">
+  <Dialog
+    v-model:visible="visible"
+    :header="$t('message.registerAsProvider')"
+    :style="{ width: '30rem' }"
+    :modal="true"
+    :draggable="false"
+  >
+    <Form
+      v-slot="$form"
+      :resolver="resolver"
+      :initialValues="initialValues"
+      @submit="onFormSubmit"
+      class="flex flex-col gap-4 w-full"
+    >
+      <!-- New provider name input -->
+      <div class="flex flex-col gap-1">
+        <label for="name" class="font-semibold w-24">{{ $t('message.providerName') }}</label>
+        <InputText id="name" class="flex-auto" name="name" fluid />
+        <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">{{
+          $form.name.error?.message
+        }}</Message>
+      </div>
 
-    <div class="flex items-center gap-4 mb-4">
-      <label for="provider-name" class="font-semibold w-24">{{ $t('message.providerName') }}</label>
-      <InputText id="provider-name" class="flex-auto" autocomplete="off" v-model="newProviderName" />
-    </div>
+      <!-- Description input -->
+      <div class="flex flex-col gap-1">
+        <label for="description" class="font-semibold w-24">Description</label>
+        <Textarea id="description" name="description" fluid />
+        <Message v-if="$form.description?.invalid" severity="error" size="small" variant="simple">{{
+          $form.description.error?.message
+        }}</Message>
+      </div>
 
-    <div class="flex items-center gap-4 mb-8">
-      <label for="provider-description" class="font-semibold w-24">Description</label>
-      <Textarea id="provider-description" rows="5" cols="31" v-model="providerDescription" />
-    </div>
-
-    <div class="flex justify-end gap-2">
-      <Button type="button" :label="$t('message.cancel')" severity="secondary" @click="visible = false"></Button>
-      <Button type="button" :label="$t('message.send')"
-        v-tooltip.top="{ value: $t('message.fillAllFields'), disabled: !btnDisabled, class: 'text-center' }"
-        @click="registerProvider()" :disabled="btnDisabled"></Button>
-    </div>
-
+      <!-- Buttons -->
+      <div class="flex justify-end gap-2">
+        <Button
+          type="button"
+          :label="$t('message.cancel')"
+          severity="secondary"
+          @click="visible = false"
+        ></Button>
+        <Button type="submit" :label="$t('message.send')"></Button></div
+    ></Form>
   </Dialog>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import { Dialog, Button, InputText } from 'primevue';
-import { useProviderStore } from '@/stores/providers';
-import Textarea from 'primevue/textarea';
+import { z } from 'zod'
+import { ref } from 'vue'
+import { Dialog, Button, InputText, Textarea, Message } from 'primevue'
+import { Form } from '@primevue/forms'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
 
+import { useProviderStore } from '@/stores/providers'
 
+const providerStore = useProviderStore()
 
-const visible = ref(false);
-const newProviderName = ref("")
-const providerDescription = ref("")
-const btnDisabled = computed(() => newProviderName.value === "" || providerDescription.value === "" ? true : false)
+const visible = ref(false)
+const initialValues = ref({
+  name: '',
+  description: '',
+})
 
 const openModal = () => {
-  visible.value = true;
+  visible.value = true
 }
 
-const registerProvider = () => {
-  visible.value = false;
+const onFormSubmit = ({ valid, values }) => {
+  if (!valid) return
 
-  // Register provider
-  const providerStore = useProviderStore()
-  providerStore.addNewProvider(newProviderName.value, providerDescription.value)
-
-  // Reset values
-  newProviderName.value = ""
-  providerDescription.value = ""
+  visible.value = false
+  providerStore.addNewProvider(values.name, values.description)
 }
 
+const resolver = ref(
+  zodResolver(
+    z.object({
+      name: z.string().min(3, { message: 'Name with more than 2 characters is required.' }),
+      description: z
+        .string()
+        .min(10, { message: 'Description with more than 10 characters is required.' }),
+    }),
+  ),
+)
 </script>
