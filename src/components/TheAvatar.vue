@@ -29,40 +29,50 @@
   <Dialog
     v-model:visible="dialogVisible"
     header="Messages"
-    :style="{ width: '25rem' }"
+    :style="{ width: 'auto' }"
     position="topright"
     :modal="true"
     :draggable="false"
   >
-    <span class="text-surface-500 dark:text-surface-400 block mb-8">Answer visitor messages</span>
-    <!-- TODO : Mettre un tableau contenant [Activité, Message, Btn[Répondre, Marqué comme terminé]] -->
-    <!-- <div class="flex items-center gap-4 mb-4">
-      <label for="username" class="font-semibold w-24">Username</label>
-      <InputText id="username" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex items-center gap-4 mb-8">
-      <label for="email" class="font-semibold w-24">Email</label>
-      <InputText id="email" class="flex-auto" autocomplete="off" />
-    </div>
-    <div class="flex justify-end gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        severity="secondary"
-        @click="dialogVisible = false"
-      ></Button>
-      <Button type="button" label="Save" @click="dialogVisible = false"></Button>
-    </div> -->
+    <span
+      v-if="contactStore.contacts.length === 0"
+      class="text-surface-500 dark:text-surface-400 block mb-8"
+      >Pas de nouveau message</span
+    >
+    <DataTable
+      v-if="contactStore.contacts.length !== 0"
+      :value="contactStore.contacts"
+      tableStyle="min-width: 50rem"
+    >
+      <Column field="activityId" header="Activité"></Column>
+      <Column field="message" header="Message"></Column>
+      <Column field="id" header="Actions">
+        <template #body="{ data }"
+          ><div class="flex">
+            <Button label="Répondre" icon="pi pi-envelope" @click="() => envoyerMail(data.mail)" />
+            <Button
+              label="Marqué comme terminé"
+              icon="pi pi-check-circle"
+              @click="() => contactStore.removeContact(data.id)"
+            />
+          </div> </template
+      ></Column>
+    </DataTable>
   </Dialog>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue'
+
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
 import Avatar from 'primevue/avatar'
 import Menu from 'primevue/menu'
 import OverlayBadge from 'primevue/overlaybadge'
 import Badge from 'primevue/badge'
 import Dialog from 'primevue/dialog'
+import Button from 'primevue/button'
+
 import { useContactStore } from '@/stores/contact'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
@@ -103,4 +113,8 @@ const items = computed(() => {
 
   return res
 })
+
+const envoyerMail = (mail) => {
+  window.location.href = `mailto:${mail}`
+}
 </script>
