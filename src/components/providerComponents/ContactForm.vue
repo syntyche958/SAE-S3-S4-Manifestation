@@ -6,6 +6,7 @@
     @click="openModal()"
     severity="secondary"
     style="min-width: 10rem"
+    size="small"
   />
 
   <!-- Modal -->

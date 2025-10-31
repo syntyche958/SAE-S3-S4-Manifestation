@@ -1,10 +1,3 @@
-<script setup>
-import { Divider } from 'primevue'
-
-import NewProviderForm from './homeComponents/NewProviderForm.vue'
-import ContactForm from './providerComponents/ContactForm.vue'
-</script>
-
 <template>
   <div class="w-full">
     <Divider type="solid" />
@@ -14,3 +7,10 @@ import ContactForm from './providerComponents/ContactForm.vue'
     </div>
   </div>
 </template>
+
+<script setup>
+import { Divider } from 'primevue'
+
+import NewProviderForm from '@/components/homeComponents/NewProviderForm.vue'
+import ContactForm from '@/components/providerComponents/ContactForm.vue'
+</script>

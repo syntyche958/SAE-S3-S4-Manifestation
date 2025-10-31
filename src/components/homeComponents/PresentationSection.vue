@@ -1,13 +1,3 @@
-<script setup>
-import { usePresentationStore } from '@/stores/presentation'
-
-const presentationStore = usePresentationStore()
-
-const props = defineProps({
-  isPreview: { type: Boolean, required: false, default: false },
-})
-</script>
-
 <template>
   <div class="absolute top-0 left-0 w-full h-full">
     <!-- <img
@@ -19,7 +9,10 @@ const props = defineProps({
       <source src="@/assets/drone_video.mp4" />
     </video>
     <div class="overlay"></div>
-    <h1>Carcassonne autrefois</h1>
+    <span
+      class="absolute z-1 top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 text-white text-center pointer-events-none [text-shadow:0_0_10px_rgba(0,0,0,0.7)] text-5xl sm:text-8xl"
+      >Carcassonne autrefois</span
+    >
     <div id="small-presentation" v-html="presentationStore.small" />
     <a v-if="props.isPreview" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
     <a v-else href="#map" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
@@ -27,6 +20,16 @@ const props = defineProps({
 
   <div class="relative h-screen"></div>
 </template>
+
+<script setup>
+import { usePresentationStore } from '@/stores/presentation'
+
+const presentationStore = usePresentationStore()
+
+const props = defineProps({
+  isPreview: { type: Boolean, required: false, default: false },
+})
+</script>
 
 <style scoped>
 a {
@@ -40,25 +43,6 @@ a {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-}
-
-h1 {
-  position: absolute;
-  z-index: 1;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -25%);
-  color: white;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-  pointer-events: none;
-  font-size: 100px;
-}
-
-@media only screen and (max-width: 950px) {
-  .image-container h1 {
-    font-size: 50px;
-  }
 }
 
 #small-presentation {
