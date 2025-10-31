@@ -1,7 +1,7 @@
 <template>
   <div @click="visible = !visible" class="cursor-pointer">
     <OverlayBadge
-      v-if="contactStore.contacts.length > 0 && authStore.user?.type === UserTypeEnum.PROVIDER"
+      v-if="contacts.length > 0 && authStore.user?.type === UserTypeEnum.PROVIDER"
       class="inline-flex"
       size="xsmall"
     >
@@ -17,6 +17,7 @@
         <b>{{ userName }}</b>
       </div>
     </template>
+
     <template #item="{ item, props }">
       <a v-ripple class="flex items-center" v-bind="props.action">
         <span :class="item.icon" />
@@ -34,16 +35,10 @@
     :modal="true"
     :draggable="false"
   >
-    <span
-      v-if="contactStore.contacts.length === 0"
-      class="text-surface-500 dark:text-surface-400 block mb-8"
+    <span v-if="contacts.length === 0" class="text-surface-500 dark:text-surface-400 block mb-8"
       >Pas de nouveau message</span
     >
-    <DataTable
-      v-if="contactStore.contacts.length !== 0"
-      :value="contactStore.contacts"
-      tableStyle="min-width: 50rem"
-    >
+    <DataTable v-if="contacts.length !== 0" :value="contacts" tableStyle="min-width: 50rem">
       <Column field="activityId" header="Activité"></Column>
       <Column field="message" header="Message"></Column>
       <Column field="id" header="Actions">
@@ -82,6 +77,11 @@ const contactStore = useContactStore()
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
 
+const contacts = computed(() =>
+  contactStore.contacts
+    ? contactStore.contacts.filter((c) => c.providerId === authStore.user.id)
+    : [],
+)
 const userName = computed(() => {
   if (authStore.user.type === UserTypeEnum.ADMIN) return 'ADMIN'
   let providerId = authStore.user.id
@@ -101,7 +101,7 @@ const items = computed(() => {
     res.push({
       label: 'Message',
       icon: 'pi pi-inbox',
-      badge: contactStore.contacts.length,
+      badge: contacts.value.length,
       command: () => (dialogVisible.value = true),
     })
   }
