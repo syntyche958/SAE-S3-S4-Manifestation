@@ -10,11 +10,14 @@ const props = defineProps({
 
 <template>
   <div class="absolute top-0 left-0 w-full h-full">
-    <img
+    <!-- <img
       src="@/assets/images/main_bg.jpg.avif"
       alt="Carcassonne castle"
       class="w-full h-full object-cover"
-    />
+    /> -->
+    <video class="w-full h-full object-cover" autoplay loop muted>
+      <source src="@/assets/drone_video.mp4" />
+    </video>
     <div class="overlay"></div>
     <h1>Carcassonne autrefois</h1>
     <div id="small-presentation" v-html="presentationStore.small" />
@@ -36,7 +39,7 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 h1 {
