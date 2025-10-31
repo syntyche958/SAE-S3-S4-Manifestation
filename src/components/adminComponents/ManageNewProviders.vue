@@ -7,10 +7,21 @@
       <Column field="description" header="Description" sortable style="min-width: 20rem" />
       <Column style="min-width: 12rem" header="Actions">
         <template #body="slotProps">
-          <Button icon="pi pi-check" variant="outlined" severity="success" @click="confirmValidation(slotProps.data)"
-            title="Valider" v-tooltip.top="'Valider'" />
-          <Button icon="pi pi-trash" variant="outlined" severity="danger" @click="confirmDeletion(slotProps.data)"
-            title="Supprimer" v-tooltip.top="'Supprimer'" />
+          <Button
+            icon="pi pi-check"
+            variant="outlined"
+            severity="success"
+            @click="confirmValidation(slotProps.data)"
+            v-tooltip.top="'Valider'"
+          />
+          <Button
+            icon="pi pi-trash"
+            variant="outlined"
+            severity="danger"
+            @click="confirmDeletion(slotProps.data)"
+            title="Supprimer"
+            v-tooltip.top="'Supprimer'"
+          />
         </template>
       </Column>
     </DataTable>
@@ -18,14 +29,14 @@
 </template>
 
 <script setup>
-import { useProviderStore } from '@/stores/providers';
-import { Button, DataTable, Column } from 'primevue';
-import ConfirmDialog from 'primevue/confirmdialog';
-import { useConfirm } from "primevue/useconfirm";
+import { useProviderStore } from '@/stores/providers'
+import { Button, DataTable, Column } from 'primevue'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useConfirm } from 'primevue/useconfirm'
 
-const confirm = useConfirm();
+const confirm = useConfirm()
 
-const providerStore = useProviderStore();
+const providerStore = useProviderStore()
 
 const confirmDeletion = (data) => {
   confirm.require({
@@ -35,17 +46,17 @@ const confirmDeletion = (data) => {
     rejectProps: {
       label: 'Annuler',
       severity: 'secondary',
-      outlined: true
+      outlined: true,
     },
     acceptProps: {
       label: 'Supprimer',
-      severity: 'danger'
+      severity: 'danger',
     },
     accept: async () => {
       await providerStore.removeNewProvider(data)
-    }
-  });
-};
+    },
+  })
+}
 
 const confirmValidation = (data) => {
   confirm.require({
@@ -55,15 +66,15 @@ const confirmValidation = (data) => {
     rejectProps: {
       label: 'Annuler',
       severity: 'secondary',
-      outlined: true
+      outlined: true,
     },
     acceptProps: {
       label: 'Valider',
-      severity: 'success'
+      severity: 'success',
     },
     accept: async () => {
       await providerStore.validateNewProviders(data)
-    }
-  });
+    },
+  })
 }
 </script>
