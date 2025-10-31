@@ -37,7 +37,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Toast />
+  <Toast position="top-center" />
   <header>
     <NavBar />
   </header>
