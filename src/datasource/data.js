@@ -179,7 +179,7 @@ const contacts = [
 ]
 
 // const user = [{ type: UserTypeEnum.ADMIN }]
-const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
+const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
 // const user = [{ type: UserTypeEnum.VISITOR }]
 
 export { contacts, providers,activity, locations, user, newProviders, providerImages, presentation }

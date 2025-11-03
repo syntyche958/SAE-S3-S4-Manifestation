@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
+import placeholder from '@/assets/images/photos/placeholder.png'
 import ProviderService from '@/services/provider.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
@@ -22,14 +23,19 @@ export const useProviderStore = defineStore('provider', () => {
 
   async function getProviderImages(idProvider) {
     let response = await ProviderService.getProviderImages(idProvider)
-    if (response.error === 0) {
-      if (response.data.id === idProvider) { // TODO : Si id existe pas pas de bug
-        providerImages.value = response.data.images
-      }
-    } else {
-      console.log(response.data)
+
+    if (response && response.error === 0 && response.data && response.data.id === idProvider && response.data.images?.length) {
+      return response.data.images
     }
+
+    return Array(5).fill(0).map((_, i) => ({ // .map = parcourt chaque case et crée un nouvel objet pour chaque élément et transforme chaque case en objet image pr le caroussel
+      itemImageSrc: placeholder,
+      thumbnailImageSrc: placeholder,
+      alt: `Placeholder ${i+1}`,
+      title: `Placeholder ${i+1}`
+    }))
   }
+
 
   async function getAllNewProviders() {
     let response = await ProviderService.getAllNewProviders()
@@ -60,6 +66,7 @@ export const useProviderStore = defineStore('provider', () => {
     } else {
       displayErrToast(`Échec de la suppression de la demande de ${data.name}`)
       console.log(response.data)
+
     }
   }
 
