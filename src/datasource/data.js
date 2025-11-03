@@ -8,6 +8,10 @@ const providers = [
   { id: 5, name: '« Camion de restauration »' },
 ]
 
+const activity =[
+  {id:1,providerId: providers.find(p => p.id === 1).id,name:'balade à cheval'}
+]
+
 const presentation = {
   small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
 }
