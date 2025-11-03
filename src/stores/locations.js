@@ -8,7 +8,7 @@ export const useLocationStore = defineStore('locations', () => {
 
   async function getAllLocations() {
     let response = await LocationsService.getAllLocations()
-    if (response.error == 0) {
+    if (response.error === 0) {
       locations.value = response.data
     } else {
       console.log(response.data)

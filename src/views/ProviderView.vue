@@ -5,9 +5,9 @@
     v-if="
       authStore.user?.type === UserTypeEnum.VISITOR ||
       (authStore.user?.type === UserTypeEnum.PROVIDER &&
-        route.params.provider_id != authStore.user?.id)
+        route.params.provider_id !== authStore.user?.id)
     "
-  >
+  >.
     <PresentationProviderSection />
   </div>
 

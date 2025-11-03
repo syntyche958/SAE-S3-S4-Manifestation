@@ -55,6 +55,12 @@ const providerImages = [
         alt: 'Description for Image 5',
         title: 'Title 5',
       },
+    ],
+  },
+  {
+    id: 2,
+    images: [
+
       {
         itemImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria6.jpg',
         thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria6s.jpg',
@@ -85,6 +91,11 @@ const providerImages = [
         alt: 'Description for Image 10',
         title: 'Title 10',
       },
+    ],
+  },
+  {
+    id: 3,
+    images: [
       {
         itemImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria11.jpg',
         thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria11s.jpg',
@@ -114,9 +125,9 @@ const providerImages = [
         thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria15s.jpg',
         alt: 'Description for Image 15',
         title: 'Title 15',
-      },
-    ],
-  },
+      }
+    ]
+  }
 ]
 
 const locations = [
@@ -164,7 +175,7 @@ const contacts = [
 ]
 
 // const user = [{ type: UserTypeEnum.ADMIN }]
-const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
+const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
 // const user = [{ type: UserTypeEnum.VISITOR }]
 
 export { contacts, providers, locations, user, newProviders, providerImages, presentation }

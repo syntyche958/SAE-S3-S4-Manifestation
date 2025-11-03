@@ -61,7 +61,7 @@ function getAllNewProviders() {
  * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:[{id:number, images:[{itemImageSrc: string, thumbnailImageSrc: string, alt: string, title:string}]}]}}
  */
 function getProviderImages(id) {
-  return { error: 0, status: 200, data: providerImages.find((pi) => pi.id == id) }
+  return { error: 0, status: 200, data: providerImages.find((pi) => pi.id === id) }
 }
 
 /**

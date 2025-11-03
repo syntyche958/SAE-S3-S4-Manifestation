@@ -23,7 +23,9 @@ export const useProviderStore = defineStore('provider', () => {
   async function getProviderImages(idProvider) {
     let response = await ProviderService.getProviderImages(idProvider)
     if (response.error === 0) {
-      providerImages.value = response.data.images
+      if (response.data.id === idProvider) { // TODO : Si id existe pas pas de bug
+        providerImages.value = response.data.images
+      }
     } else {
       console.log(response.data)
     }

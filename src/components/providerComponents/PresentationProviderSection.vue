@@ -4,12 +4,14 @@ import Galleria from 'primevue/galleria'
 import placeholder from '@/assets/images/photos/placeholder.png'
 import { ref, onMounted } from 'vue'
 import { useProviderStore } from '@/stores/providers'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 onMounted(async () => {
   const providerStore = useProviderStore()
-  // TODO : Use id of provider to display (need work done on breedcrumb) !
-  await providerStore.getProviderImages(1)
-  images.value = providerStore.providerImages
+  await providerStore.getProviderImages(Number.parseInt(route.params.provider_id)) // TODO : Si pas d'images pas degeu quand même
+  images.value = providerStore.getProviderImages(Number.parseInt(route.params.provider_id))
 })
 
 const images = ref()

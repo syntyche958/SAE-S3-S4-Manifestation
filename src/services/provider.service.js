@@ -75,7 +75,6 @@ async function getProviderImages(id) {
   } catch {
     return networkErrResponse
   }
-
   return response
 }
 
