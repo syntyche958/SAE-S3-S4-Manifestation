@@ -182,4 +182,4 @@ const contacts = [
 const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
 // const user = [{ type: UserTypeEnum.VISITOR }]
 
-export { contacts, providers, locations, user, newProviders, providerImages, presentation }
+export { contacts, providers,activity, locations, user, newProviders, providerImages, presentation }

@@ -1,5 +1,6 @@
 import {
   providers,
+  activity,
   locations,
   user,
   newProviders,
@@ -15,6 +16,14 @@ import {
 function getAllProviders() {
   return { error: 0, status: 200, data: providers }
 }
+
+/**
+ * Get all activity
+ * @returns {{error:number, status:number, data:{id:number, providerId:number, name:string}}}
+ */
+function getAllActivity() {
+  return { error: 0, status: 200, data: activity }}
+
 
 /**
  * Get all contacts
@@ -74,6 +83,7 @@ function getPresentationContent() {
 
 export default {
   getAllProviders,
+  getAllActivity,
   getAllNewProviders,
   getProviderImages,
   getAllLocations,
