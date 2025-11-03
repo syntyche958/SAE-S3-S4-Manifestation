@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ProviderView from '@/views/ProviderView.vue'
-import ActivityPage from '@/views/ActivityPage.vue'
-import { providers } from '@/datasource/data.js'
+import ActivityView from '@/views/ActivityView.vue'
 import Admin from '@/views/AdminView.vue'
 
 const router = createRouter({
@@ -17,16 +16,11 @@ const router = createRouter({
       path: '/provider/:provider_id',
       name: 'provider_page',
       component: ProviderView,
-      props: (route) => {
-        const id = Number.parseInt(route.params.provider_id)
-        const provider = providers.find((p) => p.id === id)
-        return { provider }
-      },
     },
     {
-      path: '/provider/activity',
+      path: '/provider/:provider_id/activity/:activity_id',
       name: 'activity_page',
-      component: ActivityPage,
+      component: ActivityView,
     },
     {
       path: '/admin',

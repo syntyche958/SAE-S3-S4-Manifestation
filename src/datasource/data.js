@@ -8,8 +8,8 @@ const providers = [
   { id: 5, name: '« Camion de restauration »' },
 ]
 
-const activity =[
-  {id:1,providerId: providers.find(p => p.id === 1).id,name:'balade à cheval'}
+const activity = [
+  { id: 1, providerId: providers.find((p) => p.id === 1).id, name: 'balade à cheval' },
 ]
 
 const presentation = {
@@ -64,7 +64,6 @@ const providerImages = [
   {
     id: 2,
     images: [
-
       {
         itemImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria6.jpg',
         thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria6s.jpg',
@@ -129,9 +128,9 @@ const providerImages = [
         thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria15s.jpg',
         alt: 'Description for Image 15',
         title: 'Title 15',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ]
 
 const locations = [
@@ -182,4 +181,13 @@ const contacts = [
 const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
 // const user = [{ type: UserTypeEnum.VISITOR }]
 
-export { contacts, providers,activity, locations, user, newProviders, providerImages, presentation }
+export {
+  contacts,
+  providers,
+  activity,
+  locations,
+  user,
+  newProviders,
+  providerImages,
+  presentation,
+}
