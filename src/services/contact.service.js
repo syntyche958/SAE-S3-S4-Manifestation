@@ -8,8 +8,8 @@ async function getAllContactsFromLocalSource() {
   return LocalSource.getAllContacts()
 }
 
-async function getAllContactsByIdFromLocalSource(provider_id) {
-  return LocalSource.getAllContactsById(provider_id)
+async function getAllContactsByIdFromLocalSource(userId) {
+  return LocalSource.getAllContactsById(userId)
 }
 
 async function removeContactFromLocalSource(id) {
@@ -45,9 +45,9 @@ async function getAllContacts() {
   }
 }
 
-async function getAllContactsById(provider_id) {
+async function getAllContactsById(userId) {
   try {
-    return await getAllContactsByIdFromLocalSource(provider_id)
+    return await getAllContactsByIdFromLocalSource(userId)
   } catch {
     return networkErrResponse
   }

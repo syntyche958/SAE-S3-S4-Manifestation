@@ -14,7 +14,7 @@
   <Menu v-if="visible" :model="items" class="absolute transform -translate-x-[75%]">
     <template #start>
       <div class="flex justify-center my-2">
-        <b>{{ userName }}</b>
+        <b>{{ providerName }}</b>
       </div>
     </template>
 
@@ -77,15 +77,24 @@ const contactStore = useContactStore()
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
 
-const contacts = computed(() =>
-  contactStore.contacts
-    ? contactStore.contacts.filter((c) => c.providerId === authStore.user.id)
-    : [],
-)
-const userName = computed(() => {
+const contacts = computed(() => {
+  if (authStore.user.type !== UserTypeEnum.PROVIDER) return []
+
+  const provider = providerStore.providers.find((p) => p.userId === authStore.user.id)
+  if (!provider) return []
+
+  return contactStore.contacts
+    ? contactStore.contacts.filter((c) => c.providerId === provider.id)
+    : []
+})
+
+const providerName = computed(() => {
   if (authStore.user.type === UserTypeEnum.ADMIN) return 'ADMIN'
-  let providerId = authStore.user.id
-  return providerStore.providers.find((p) => p.id == providerId).name
+  if (authStore.user.type === UserTypeEnum.PROVIDER) {
+    return providerStore.providers.find((p) => p.userId == authStore.user.id).name
+  }
+
+  return authStore.user.username
 })
 
 const visible = ref(false)

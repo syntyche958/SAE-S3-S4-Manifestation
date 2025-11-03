@@ -22,8 +22,8 @@ function getAllProviders() {
  * @returns {{error:number, status:number, data:{id:number, providerId:number, name:string}}}
  */
 function getAllActivity() {
-  return { error: 0, status: 200, data: activity }}
-
+  return { error: 0, status: 200, data: activity }
+}
 
 /**
  * Get all contacts
@@ -37,8 +37,10 @@ function getAllContacts() {
  * Get all contacts
  * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{mail:string, providerId:number, activityId:number, message:string}}}
  */
-function getAllContactsById(provider_id) {
-  return { error: 0, status: 200, data: contacts.filter((c) => c.providerId == provider_id) }
+function getAllContactsById(userId) {
+  const providerId = providers.find((p) => p.userId === userId).id
+  const data = contacts.filter((c) => c.providerId == providerId)
+  return { error: 0, status: 200, data }
 }
 
 /**

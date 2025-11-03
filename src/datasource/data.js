@@ -1,11 +1,11 @@
 import { UserTypeEnum } from '@/enums/User.enum'
 
 const providers = [
-  { id: 1, name: 'Centre équestre' },
-  { id: 2, name: 'Ville de carcassonne' },
-  { id: 3, name: 'Remparts et lumière' },
-  { id: 4, name: 'Troubadours moderne' },
-  { id: 5, name: '« Camion de restauration »' },
+  { id: 1, userId: 2, name: 'Centre équestre' },
+  { id: 2, userId: 4, name: 'Ville de carcassonne' },
+  { id: 3, userId: 5, name: 'Remparts et lumière' },
+  { id: 4, userId: 6, name: 'Troubadours moderne' },
+  { id: 5, userId: 7, name: '« Camion de restauration »' },
 ]
 
 const activity = [
