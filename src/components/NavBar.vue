@@ -1,23 +1,25 @@
 <template>
-  <div class="fixed flex justify-center z-1001 mt-3 sm:mt-6 w-full">
-    <Menubar :model="items" class="z-1001 w-fit sm:w-[95%]">
-      <template #end>
-        <div style="display: flex">
-          <LocaleChanger />
-          <div
-            v-if="
-              authStore.user?.type === UserTypeEnum.ADMIN ||
-              authStore.user?.type === UserTypeEnum.PROVIDER
-            "
-          >
-            <TheAvatar />
+  <div>
+    <div class="fixed flex justify-center z-1001 mt-3 sm:mt-6 w-full">
+      <Menubar :model="items" class="z-1001 w-fit sm:w-[95%]">
+        <template #end>
+          <div style="display: flex">
+            <LocaleChanger />
+            <div
+              v-if="
+                authStore.user?.type === UserTypeEnum.ADMIN ||
+                authStore.user?.type === UserTypeEnum.PROVIDER
+              "
+            >
+              <TheAvatar />
+            </div>
+            <Button v-else label="Se connecter" class="p-button-outlined" />
           </div>
-          <Button v-else label="Se connecter" class="p-button-outlined" />
-        </div>
-      </template>
-    </Menubar>
+        </template>
+      </Menubar>
+    </div>
+    <div v-if="route.path !== '/'" class="h-20"></div>
   </div>
-  <div v-if="route.path !== '/'" class="h-20"></div>
 </template>
 
 <script setup>

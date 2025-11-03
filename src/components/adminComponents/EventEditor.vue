@@ -17,26 +17,39 @@
     </template>
   </Editor>
   <div style="margin-top: 12px">
-    <Button :label="$t('message.save')" icon="pi pi-save" @click="presentationStore.updateSmallText(smallText)" />
-    <Button :label="$t('message.preview')" variant="outlined" severity="secondary"
-      @click="smallTextPreviewVisible = true"></Button>
+    <Button
+      :label="$t('message.save')"
+      icon="pi pi-save"
+      @click="presentationStore.updateSmallText(smallText)"
+    />
+    <Button
+      :label="$t('message.preview')"
+      variant="outlined"
+      severity="secondary"
+      @click="smallTextPreviewVisible = true"
+    ></Button>
   </div>
 
-  <Dialog v-model:visible="smallTextPreviewVisible" maximizable modal header="Apercu page de présentation"
-    :style="{ width: '90%' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+  <Dialog
+    v-model:visible="smallTextPreviewVisible"
+    maximizable
+    modal
+    header="Apercu page de présentation"
+    :style="{ width: '90%' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+  >
     <PresentationSection :isPreview="true" />
   </Dialog>
-
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import Editor from 'primevue/editor';
-import { Button, Dialog } from 'primevue';
-import { usePresentationStore } from '@/stores/presentation';
-import PresentationSection from '../homeComponents/PresentationSection.vue';
+import { onMounted, ref } from 'vue'
+import Editor from 'primevue/editor'
+import { Button, Dialog } from 'primevue'
+import { usePresentationStore } from '@/stores/presentation'
+import PresentationSection from '../homeComponents/PresentationSection.vue'
 
-const smallText = ref("")
+const smallText = ref('')
 const smallTextPreviewVisible = ref(false)
 const presentationStore = usePresentationStore()
 
