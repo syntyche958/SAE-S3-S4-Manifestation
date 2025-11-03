@@ -15,18 +15,13 @@
     </div>
   </div> -->
 
-  <!-- Visitor -->
+  <!-- Provider(owner) / Admin -->
   <div
     v-if="
-      authStore.user?.type === UserTypeEnum.VISITOR ||
-      (authStore.user?.type === UserTypeEnum.PROVIDER &&
-        route.params.provider_id !== authStore.user?.id)
+      Number.parseInt(route.params.provider_id) ===
+      providerStore.providers.find((p) => p.userId === authStore.user?.id).id
     "
   >
-    <h1>Presentation de l'activité</h1>
-  </div>
-  <!-- Provider(owner) / Admin -->
-  <div v-else>
     <Tabs value="0">
       <TabList>
         <Tab value="0"><i class="pi pi-file-edit"></i><span> Apparence de la page</span></Tab>
@@ -43,6 +38,8 @@
       </TabPanels>
     </Tabs>
   </div>
+  <!-- Visitor -->
+  <div v-else><h1>Presentation de l'activité</h1></div>
 </template>
 
 <script setup>
@@ -60,8 +57,9 @@ import TabPanel from 'primevue/tabpanel'
 // import DescriptionActivitySection from '@/components/activityComponents/DescriptionActivitySection.vue'
 import TheMap from '@/components/TheMap.vue'
 // import { MapModeEnum } from '@/enums/Map.enums.js'
-import { UserTypeEnum } from '@/enums/User.enum'
+import { useProviderStore } from '@/stores/providers'
 
 const authStore = useAuthStore()
+const providerStore = useProviderStore()
 const route = useRoute()
 </script>

@@ -24,18 +24,26 @@ export const useProviderStore = defineStore('provider', () => {
   async function getProviderImages(idProvider) {
     let response = await ProviderService.getProviderImages(idProvider)
 
-    if (response && response.error === 0 && response.data && response.data.id === idProvider && response.data.images?.length) {
+    if (
+      response &&
+      response.error === 0 &&
+      response.data &&
+      response.data.id === idProvider &&
+      response.data.images?.length
+    ) {
       return response.data.images
     }
 
-    return Array(5).fill(0).map((_, i) => ({ // .map = parcourt chaque case et crée un nouvel objet pour chaque élément et transforme chaque case en objet image pr le caroussel
-      itemImageSrc: placeholder,
-      thumbnailImageSrc: placeholder,
-      alt: `Placeholder ${i+1}`,
-      title: `Placeholder ${i+1}`
-    }))
+    return Array(5)
+      .fill(0)
+      .map((_, i) => ({
+        // .map = parcourt chaque case et crée un nouvel objet pour chaque élément et transforme chaque case en objet image pr le caroussel
+        itemImageSrc: placeholder,
+        thumbnailImageSrc: placeholder,
+        alt: `Placeholder ${i + 1}`,
+        title: `Placeholder ${i + 1}`,
+      }))
   }
-
 
   async function getAllNewProviders() {
     let response = await ProviderService.getAllNewProviders()
@@ -66,7 +74,6 @@ export const useProviderStore = defineStore('provider', () => {
     } else {
       displayErrToast(`Échec de la suppression de la demande de ${data.name}`)
       console.log(response.data)
-
     }
   }
 
