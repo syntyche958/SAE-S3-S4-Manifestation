@@ -1,8 +1,6 @@
 import LocalSource from '@/services/localsource.service.js'
 import { useContactStore } from '@/stores/contact'
-
-// TODO : Refactor
-var networkErrResponse = { error: 1, status: 400, data: 'A network error occured' }
+import { networkErrResponse } from '@/utils/network.utils'
 
 async function getAllContactsFromLocalSource() {
   return LocalSource.getAllContacts()

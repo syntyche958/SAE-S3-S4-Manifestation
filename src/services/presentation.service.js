@@ -1,6 +1,5 @@
 import LocalSource from '@/services/localsource.service.js'
-
-var networkErrResponse = { error: 1, status: 400, data: 'A network error occured' }
+import { networkErrResponse } from '@/utils/network.utils'
 
 async function getPresentationContentFromLocalSource() {
   return LocalSource.getPresentationContent()

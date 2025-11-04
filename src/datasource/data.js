@@ -8,10 +8,6 @@ const providers = [
   { id: 5, userId: 7, name: '« Camion de restauration »' },
 ]
 
-const activity = [
-  { id: 1, providerId: providers.find((p) => p.id === 1).id, name: 'balade à cheval' },
-]
-
 const presentation = {
   small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
 }
@@ -177,17 +173,28 @@ const contacts = [
   },
 ]
 
-// const user = [{ id: 1 ,type: UserTypeEnum.ADMIN }]
+const activities = [
+  {
+    id: 1,
+    providerId: 1,
+    name: 'Balade à cheval',
+    description: 'Description de la balade à cheval',
+    presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
+    locationId: undefined,
+  },
+]
+
+// const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
 const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
 // const user = [{ id: 3 ,type: UserTypeEnum.VISITOR }]
 
 export {
   contacts,
   providers,
-  activity,
   locations,
   user,
   newProviders,
   providerImages,
   presentation,
+  activities,
 }

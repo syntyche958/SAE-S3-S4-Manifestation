@@ -1,12 +1,12 @@
 import {
   providers,
-  activity,
   locations,
   user,
   newProviders,
   providerImages,
   presentation,
   contacts,
+  activities,
 } from '@/datasource/data'
 
 /**
@@ -18,11 +18,11 @@ function getAllProviders() {
 }
 
 /**
- * Get all activity
- * @returns {{error:number, status:number, data:{id:number, providerId:number, name:string}}}
+ * Get all activities
+ * @returns {{error:number, status:number, data:{id:number, providerId:number, name:string, description: string, presentationContent: string, locationId: integer}}}
  */
-function getAllActivity() {
-  return { error: 0, status: 200, data: activity }
+function getAllActivities() {
+  return { error: 0, status: 200, data: activities }
 }
 
 /**
@@ -85,7 +85,7 @@ function getPresentationContent() {
 
 export default {
   getAllProviders,
-  getAllActivity,
+  getAllActivities,
   getAllNewProviders,
   getProviderImages,
   getAllLocations,
