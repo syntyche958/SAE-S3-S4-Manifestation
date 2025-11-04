@@ -2,18 +2,17 @@
 import Card from 'primevue/card'
 import Galleria from 'primevue/galleria'
 import placeholder from '@/assets/images/photos/placeholder.png'
-import { onMounted, ref } from 'vue'
+import {ref, watchEffect} from 'vue'
 import { useProviderStore } from '@/stores/providers'
 import { useRoute } from 'vue-router'
 
-const route = useRoute()
-const images = ref()
+const route = useRoute();
+const providerStore = useProviderStore();
+const images = ref();
 
-onMounted(async () => {
-  const providerStore = useProviderStore()
+watchEffect(async () =>
   images.value = await providerStore.getProviderImages(Number.parseInt(route.params.provider_id))
-
-})
+)
 
 const responsiveOptions = ref([
   {
