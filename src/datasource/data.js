@@ -182,11 +182,67 @@ const activities = [
     presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
     locationId: undefined,
   },
+  {
+    id: 2,
+    providerId: 2,
+    name: "Fabrication d'épée en bois",
+    description: 'Activité pratique artistique',
+    presentationContent: "<h1>L'art c'est génial !</h1>",
+    locationId: undefined,
+  },
+  {
+    id: 3,
+    providerId: 4,
+    name: 'Chasse à la sorcière ',
+    description: 'Spectacle pour enfant',
+    presentationContent: "<h1>Le spectacle c'est génial !</h1>",
+    locationId: undefined,
+  },
+  {
+    id: 4,
+    providerId: 2,
+    name: "Tir à l'arc",
+    description: 'Activité physique de précision',
+    presentationContent: "<h1>Le tir à l'arc c'est génial !</h1>",
+    locationId: undefined,
+  },
+  {
+    id: 5,
+    providerId: 4,
+    name: 'Concert médiéval',
+    description: "Instruments liés à l'époque",
+    presentationContent: "<h1>Le concert c'est génial !</h1>",
+    locationId: undefined,
+  },
+  {
+    id: 6,
+    providerId: 1,
+    name: 'Tournois de joute',
+    description: 'Activité physique',
+    presentationContent: "<h1>La compétition c'est génial !</h1>",
+    locationId: undefined,
+  },
+  {
+    id: 7,
+    providerId: 3,
+    name: 'Spectacle des lumières',
+    description: 'Spectacle',
+    presentationContent: "<h1>Le spectacle c'est génial !</h1>",
+    locationId: undefined,
+  },
+  {
+    id: 8,
+    providerId: 5,
+    name: "Médievalo Restau'",
+    description: 'Restaurant de spécialités de l’époque',
+    presentationContent: "<h1>Bien manger c'est important !</h1>",
+    locationId: undefined,
+  },
 ]
 
 const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
 // const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
-// const user = [{ id: 3 ,type: UserTypeEnum.VISITOR }]
+// const user = [{ id: 3, type: UserTypeEnum.VISITOR }]
 
 export {
   contacts,
