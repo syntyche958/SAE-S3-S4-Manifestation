@@ -7,6 +7,7 @@ import {
   presentation,
   contacts,
   activities,
+  session,
 } from '@/datasource/data'
 
 /**
@@ -23,6 +24,14 @@ function getAllProviders() {
  */
 function getAllActivities() {
   return { error: 0, status: 200, data: activities }
+}
+
+/**
+ * Get all sessions
+ * @return {{error:number, status:number, data:{id:number, activitiesId:number, beginingDate:date, duration:number}}}
+ */
+function getAllSessions(){
+  return {error:0, status:200, data:session}
 }
 
 /**
@@ -93,4 +102,5 @@ export default {
   getPresentationContent,
   getAllContacts,
   getAllContactsById,
+  getAllSessions,
 }

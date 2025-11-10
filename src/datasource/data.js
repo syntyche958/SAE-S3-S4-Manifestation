@@ -181,6 +181,7 @@ const activities = [
     description: 'Description de la balade à cheval',
     presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
   {
     id: 2,
@@ -189,6 +190,7 @@ const activities = [
     description: 'Activité pratique artistique',
     presentationContent: "<h1>L'art c'est génial !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
   {
     id: 3,
@@ -197,6 +199,7 @@ const activities = [
     description: 'Spectacle pour enfant',
     presentationContent: "<h1>Le spectacle c'est génial !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
   {
     id: 4,
@@ -205,6 +208,7 @@ const activities = [
     description: 'Activité physique de précision',
     presentationContent: "<h1>Le tir à l'arc c'est génial !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
   {
     id: 5,
@@ -213,6 +217,7 @@ const activities = [
     description: "Instruments liés à l'époque",
     presentationContent: "<h1>Le concert c'est génial !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
   {
     id: 6,
@@ -221,6 +226,7 @@ const activities = [
     description: 'Activité physique',
     presentationContent: "<h1>La compétition c'est génial !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
   {
     id: 7,
@@ -229,6 +235,7 @@ const activities = [
     description: 'Spectacle',
     presentationContent: "<h1>Le spectacle c'est génial !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
   {
     id: 8,
@@ -237,12 +244,23 @@ const activities = [
     description: 'Restaurant de spécialités de l’époque',
     presentationContent: "<h1>Bien manger c'est important !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
 ]
 
-const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
-// const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
-// const user = [{ id: 3, type: UserTypeEnum.VISITOR }]
+const session =[
+  {
+    id:1,
+    activitiesId:1,
+    beginingDate:"2025-11-15",
+    duration:30,
+  }
+]
+
+
+// const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
+const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
+// const user = [{ id: 3 ,type: UserTypeEnum.VISITOR }]
 
 export {
   contacts,
@@ -253,4 +271,5 @@ export {
   providerImages,
   presentation,
   activities,
+  session,
 }
