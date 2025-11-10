@@ -2,6 +2,7 @@ import * as L from 'leaflet'
 import { useLocationStore } from '@/stores/locations'
 import { ref } from 'vue'
 import { MapModeEnum } from '@/enums/Map.enums'
+import { useActivityStore } from '@/stores/activities'
 
 export function setupMap(mapId) {
   // Map setup
@@ -84,11 +85,13 @@ function displayPinPoints(map) {
 function displayAreas(map) {
   const polygons = ref([])
   const locationStore = useLocationStore()
+  const activityStore = useActivityStore()
 
   for (let location of locationStore.locations) {
-    let polygon = L.polygon(location['area']).addTo(map)
-    bindPopup(map, polygon)
-    // TODO : Display proper informations in popup (surface area, water, electricity, ... )
+    const locationId = location.id
+    const isAssigned =
+      activityStore.activities.filter((a) => a.locationId === locationId).length === 1
+    let polygon = L.polygon(location['area'], { color: isAssigned ? 'blue' : 'orange' }).addTo(map)
     polygons.value.push(polygon)
   }
 }

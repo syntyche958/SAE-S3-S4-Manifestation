@@ -16,5 +16,6 @@ export const useActivityStore = defineStore('activity', () => {
 
   return {
     getAllActivities,
+    activities,
   }
 })
