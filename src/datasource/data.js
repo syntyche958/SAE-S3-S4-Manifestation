@@ -181,8 +181,19 @@ const activities = [
     description: 'Description de la balade à cheval',
     presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
     locationId: undefined,
+    canRegister:false,
   },
 ]
+
+const session =[
+  {
+    id:1,
+    activitiesId:1,
+    beginingDate:"2025-11-15",
+    duration:30,
+  }
+]
+
 
 // const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
 const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
@@ -197,4 +208,5 @@ export {
   providerImages,
   presentation,
   activities,
+  session,
 }
