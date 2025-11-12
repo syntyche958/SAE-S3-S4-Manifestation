@@ -6,12 +6,11 @@ import ProviderService from '@/services/provider.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
 export const useProviderStore = defineStore('provider', () => {
-  // STATE
   const providers = ref([])
-  const providerImages = ref([])
   const newProviders = ref([])
+  const providerImages = ref([])
+  const providerDescription = ref('')
 
-  // ACTIONS
   async function getAllProviders() {
     let response = await ProviderService.getAllProviders()
     if (response.error === 0) {
@@ -33,7 +32,6 @@ export const useProviderStore = defineStore('provider', () => {
     ) {
       return response.data.images
     }
-
     return Array(5)
       .fill(0)
       .map((_, i) => ({
@@ -91,8 +89,9 @@ export const useProviderStore = defineStore('provider', () => {
 
   return {
     providers,
-    providerImages,
     newProviders,
+    providerImages,
+    providerDescription,
     getAllProviders,
     getAllNewProviders,
     getProviderImages,

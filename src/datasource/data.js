@@ -12,6 +12,22 @@ const presentation = {
   small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
 }
 
+const providerDescription = [
+  {
+    id: 1,
+    description: "Petite description de provider 1",
+  },
+  {
+    id: 2,
+    description: "Petite description de provider 2",
+  },
+  {
+    id: 3,
+    description: "Petite description de provider 3",
+  }
+  ]
+
+
 const newProviders = [
   {
     id: 1,
@@ -258,8 +274,8 @@ const session =[
 ]
 
 
-// const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
-const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
+const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
+// const user = [{ id: 2, type: UserTypeEnum.PROVIDER }]
 // const user = [{ id: 3 ,type: UserTypeEnum.VISITOR }]
 
 export {
@@ -270,6 +286,7 @@ export {
   newProviders,
   providerImages,
   presentation,
+  providerDescription,
   activities,
   session,
 }

@@ -8,6 +8,7 @@ import {
   contacts,
   activities,
   session,
+  providerDescription,
 } from '@/datasource/data'
 
 /**
@@ -78,7 +79,7 @@ function getAllNewProviders() {
 
 /**
  * Get provider images
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:[{id:number, images:[{itemImageSrc: string, thumbnailImageSrc: string, alt: string, title:string}]}]}}
+ * @returns {{error:number, status: number, data:string}}
  */
 function getProviderImages(id) {
   return { error: 0, status: 200, data: providerImages.find((pi) => pi.id === id) }
@@ -92,6 +93,15 @@ function getPresentationContent() {
   return { error: 0, status: 200, data: presentation }
 }
 
+/**
+ * Get provider Description content
+ * @returns {{error: number, status: number, data: {id: number, description: string}}}
+ */
+function getProviderDescription(id) {
+  return { error: 0, status: 200, data: providerDescription.find((pi) => pi.id === id) }
+}
+
+
 export default {
   getAllProviders,
   getAllActivities,
@@ -103,4 +113,5 @@ export default {
   getAllContacts,
   getAllContactsById,
   getAllSessions,
+  getProviderDescription,
 }

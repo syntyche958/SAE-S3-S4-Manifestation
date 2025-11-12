@@ -2,16 +2,20 @@
 import Card from 'primevue/card'
 import Galleria from 'primevue/galleria'
 import placeholder from '@/assets/images/photos/placeholder.png'
-import {ref, watchEffect} from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useProviderStore } from '@/stores/providers'
 import { useRoute } from 'vue-router'
+import Editor from '@/components/providerComponents/ProviderEditor.vue'
 
-const route = useRoute();
-const providerStore = useProviderStore();
-const images = ref();
+const route = useRoute()
+const providerStore = useProviderStore()
+const images = ref()
 
-watchEffect(async () =>
-  images.value = await providerStore.getProviderImages(Number.parseInt(route.params.provider_id))
+watchEffect(
+  async () =>
+    (images.value = await providerStore.getProviderImages(
+      Number.parseInt(route.params.provider_id),
+    )),
 )
 
 const responsiveOptions = ref([
@@ -68,23 +72,25 @@ const goToActivity = () => {
       </div>
 
       <div class="card-presentation-wrapper">
-        <Card class="card-presentation">
-          <template #content>
-            <div>
-              <img :src="placeholder" alt="presentation card" />
-            </div>
+        <Editor />
 
-            <div>
-              <h2>Qui sommes-nous ?</h2>
-              <p class="m-0">
-                Nous sommes une troupe de théâtre représentant l'association
-                <i>"Troubadours Modernes"</i>. Nous proposons deux activités durant cet évènement :
-                spectacle pour enfants sur une petite scène, et un concert médiéval uniquement joué
-                avec des instruments d'époque.
-              </p>
-            </div>
-          </template>
-        </Card>
+        <!--        <Card class="card-presentation">-->
+        <!--          <template #content>-->
+        <!--            <div>-->
+        <!--              <img :src="placeholder" alt="presentation card" />-->
+        <!--            </div>-->
+
+        <!--            <div>-->
+        <!--              <h2>Qui sommes-nous ?</h2>-->
+        <!--              <p class="m-0">-->
+        <!--                Nous sommes une troupe de théâtre représentant l'association-->
+        <!--                <i>"Troubadours Modernes"</i>. Nous proposons deux activités durant cet évènement :-->
+        <!--                spectacle pour enfants sur une petite scène, et un concert médiéval uniquement joué-->
+        <!--                avec des instruments d'époque.-->
+        <!--              </p>-->
+        <!--            </div>-->
+        <!--          </template>-->
+        <!--        </Card>-->
       </div>
     </div>
 

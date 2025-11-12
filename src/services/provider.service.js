@@ -14,6 +14,10 @@ async function getAllNewProvidersFromLocalSource() {
   return LocalSource.getAllNewProviders()
 }
 
+async function getProvidersDescriptionFromLocalSource(id) {
+  return LocalSource.getProviderDescription(id)
+}
+
 async function removeNewProviderFromLocalSource(id) {
   const providerStore = useProviderStore()
   providerStore.newProviders = providerStore.newProviders.filter((p) => p.id != id)
@@ -109,6 +113,16 @@ async function validateNewProviders(data) {
   return response
 }
 
+async function getProviderDescription(id) {
+  let response = null
+  try {
+    response = await getProvidersDescriptionFromLocalSource(id)
+  } catch {
+    return networkErrResponse
+  }
+  return response
+}
+
 export default {
   getAllProviders,
   getAllNewProviders,
@@ -116,4 +130,5 @@ export default {
   addNewProvider,
   removeNewProvider,
   validateNewProviders,
+  getProviderDescription,
 }
