@@ -46,6 +46,8 @@ const activities = [
 const goToActivity = () => {
   window.location.href = '/provider/activity'
 }
+
+// TODO : Aspect texte différent (non modifiable) par le visiteur
 </script>
 
 <template>
