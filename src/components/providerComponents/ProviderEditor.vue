@@ -1,6 +1,5 @@
 <template>
-  <h1>Modifier votre texte de présentation : </h1>
-  <Editor v-model="description">
+  <Editor v-model="description" style="width: 220%">
     <template v-slot:toolbar>
       <span class="ql-formats">
         <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
