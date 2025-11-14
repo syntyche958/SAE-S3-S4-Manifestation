@@ -1,5 +1,5 @@
 <template>
-  <Editor v-model="description" style="width: 220%">
+  <Editor v-model="descriptionStore.description" style="width: 220%">
     <template v-slot:toolbar>
       <span class="ql-formats">
         <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
@@ -16,31 +16,30 @@
     </template>
   </Editor>
   <div style="margin-top: 12px">
+
     <Button
       :label="$t('message.save')"
       icon="pi pi-save"
 
-      @click="descriptionStore.updateProviderDescription(description)"
+      @click="descriptionStore.updateProviderDescription(descriptionStore.description)"
     />
   </div>
 </template>
 
 <script setup>
-import {ref, watchEffect} from 'vue'
+import {watchEffect} from 'vue'
 import Editor from 'primevue/editor'
 import { Button } from 'primevue'
 import { useDescriptionStore } from '@/stores/providerDescription.js'
 import {useRoute} from "vue-router";
 
 const route = useRoute()
-const description = ref('')
 const descriptionStore = useDescriptionStore()
 
-watchEffect(
-  async () =>
-    (description.value = await descriptionStore.getProviderDescription(
-      Number.parseInt(route.params.provider_id),
-    )),
-)
+watchEffect(async () => {
+  descriptionStore.description = await descriptionStore.getProviderDescriptionFromService(
+    Number.parseInt(route.params.provider_id)
+  )
+})
 
 </script>

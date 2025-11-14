@@ -7,7 +7,7 @@ import { useProviderStore } from '@/stores/providers'
 import { useRoute } from 'vue-router'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-
+import { useDescriptionStore } from '@/stores/providerDescription.js'
 import Editor from '@/components/providerComponents/ProviderEditor.vue'
 
 const route = useRoute()
@@ -16,6 +16,7 @@ const images = ref()
 const visibleCarrousel = ref(false);
 const visibleDescription = ref(false);
 const visibleActivity = ref(false);
+const providerDescription = useDescriptionStore();
 
 
 watchEffect(
@@ -104,12 +105,7 @@ const goToActivity = () => {
 
             <div>
               <h2>Qui sommes-nous ?</h2>
-              <p class="m-0">
-                Nous sommes une troupe de théâtre représentant l'association
-                <i>"Troubadours Modernes"</i>. Nous proposons deux activités durant cet évènement :
-                spectacle pour enfants sur une petite scène, et un concert médiéval uniquement joué
-                avec des instruments d'époque.
-              </p>
+              <div class="description-content" v-html="providerDescription.description"></div>
             </div>
           </template>
         </Card>
