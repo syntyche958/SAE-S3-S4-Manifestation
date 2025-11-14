@@ -9,14 +9,18 @@ import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import { useDescriptionStore } from '@/stores/providerDescription.js'
 import Editor from '@/components/providerComponents/ProviderEditor.vue'
+import { UserTypeEnum } from '@/enums/User.enum.js'
+import { useAuthStore } from '@/stores/auth.js'
+
+const authStore = useAuthStore()
 
 const route = useRoute()
 const providerStore = useProviderStore()
 const images = ref()
-const visibleCarrousel = ref(false);
-const visibleDescription = ref(false);
-const visibleActivity = ref(false);
-const providerDescription = useDescriptionStore();
+const visibleCarrousel = ref(false)
+const visibleDescription = ref(false)
+const visibleActivity = ref(false)
+const providerDescription = useDescriptionStore()
 
 watchEffect(() => {
   if (providerDescription.closeDialog) {
@@ -68,7 +72,6 @@ const goToActivity = () => {
   <div>
     <div class="content">
       <div class="card" style="max-width: 400px">
-
         <Galleria
           :value="images"
           :responsiveOptions="responsiveOptions"
@@ -86,28 +89,36 @@ const goToActivity = () => {
             <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
           </template>
         </Galleria>
-        <div class="card flex justify-center" style="margin-top: 25px">
-          <Button label="✎" style="font-size: 25px; padding: 0 6px;" @click="visibleCarrousel = true" />
-          <Dialog
-            v-model:visible="visibleCarrousel"
-            modal
-            header="Modification des images : "
-            :style="{ width: '50vw' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-          >
-            <Editor />
-          </Dialog>
+        <div
+          v-if="
+            authStore.user?.type === UserTypeEnum.ADMIN ||
+            (authStore.user?.type === UserTypeEnum.PROVIDER &&
+              Number.parseInt(route.params.provider_id) === authStore.user?.id)
+          "
+        >
+          <div class="card flex justify-center" style="margin-top: 25px">
+            <Button
+              label="✎"
+              style="font-size: 25px; padding: 0 6px"
+              @click="visibleCarrousel = true"
+            />
+            <Dialog
+              v-model:visible="visibleCarrousel"
+              modal
+              header="Modification des images : "
+              :style="{ width: '50vw' }"
+              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+            >
+              <Editor />
+            </Dialog>
+          </div>
         </div>
       </div>
-
-
 
       <div>
         <Card class="card-presentation">
           <template #content>
-            <div>
-              <img :src="placeholder" alt="presentation card" /><br>
-            </div>
+            <div><img :src="placeholder" alt="presentation card" /><br /></div>
 
             <div>
               <h2>Qui sommes-nous ?</h2>
@@ -115,18 +126,29 @@ const goToActivity = () => {
             </div>
           </template>
         </Card>
-
-        <div class="card flex justify-center" style="margin-top: 25px">
-          <Button label="✎" style="font-size: 25px; padding: 0 6px;" @click="visibleDescription = true" />
-          <Dialog
-            v-model:visible="visibleDescription"
-            modal
-            header="Modification du texte de présentation : "
-            :style="{ width: '50vw' }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-          >
-            <Editor />
-          </Dialog>
+        <div
+          v-if="
+            authStore.user?.type === UserTypeEnum.ADMIN ||
+            (authStore.user?.type === UserTypeEnum.PROVIDER &&
+              Number.parseInt(route.params.provider_id) === authStore.user?.id)
+          "
+        >
+          <div class="card flex justify-center" style="margin-top: 25px">
+            <Button
+              label="✎"
+              style="font-size: 25px; padding: 0 6px"
+              @click="visibleDescription = true"
+            />
+            <Dialog
+              v-model:visible="visibleDescription"
+              modal
+              header="Modification du texte de présentation : "
+              :style="{ width: '50vw' }"
+              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+            >
+              <Editor />
+            </Dialog>
+          </div>
         </div>
       </div>
     </div>
@@ -150,17 +172,29 @@ const goToActivity = () => {
               </p>
             </template>
           </Card>
-          <div class="card flex justify-center" style="margin-top: 25px">
-            <Button label="✎" style="font-size: 25px; padding: 0 6px;" @click="visibleActivity = true" />
-            <Dialog
-              v-model:visible="visibleActivity"
-              modal
-              header="Modification des activités : "
-              :style="{ width: '50vw' }"
-              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-            >
-              <Editor v-for="(item2, index2) in activities" :key="index2" />
-            </Dialog>
+          <div
+            v-if="
+            authStore.user?.type === UserTypeEnum.ADMIN ||
+            (authStore.user?.type === UserTypeEnum.PROVIDER &&
+              Number.parseInt(route.params.provider_id) === authStore.user?.id)
+          "
+          >
+            <div class="card flex justify-center" style="margin-top: 25px">
+              <Button
+                label="✎"
+                style="font-size: 25px; padding: 0 6px"
+                @click="visibleActivity = true"
+              />
+              <Dialog
+                v-model:visible="visibleActivity"
+                modal
+                header="Modification des activités : "
+                :style="{ width: '50vw' }"
+                :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+              >
+                <Editor v-for="(item2, index2) in activities" :key="index2" />
+              </Dialog>
+            </div>
           </div>
         </div>
       </div>
