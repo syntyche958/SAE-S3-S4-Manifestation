@@ -21,7 +21,7 @@
       :label="$t('message.save')"
       icon="pi pi-save"
 
-      @click="descriptionStore.updateProviderDescription(descriptionStore.description)"
+      @click="saveDescription()"
     />
   </div>
 </template>
@@ -35,6 +35,11 @@ import {useRoute} from "vue-router";
 
 const route = useRoute()
 const descriptionStore = useDescriptionStore()
+
+function saveDescription(){
+  descriptionStore.updateProviderDescription(descriptionStore.description)
+  descriptionStore.closeDescriptionProvider()
+}
 
 watchEffect(async () => {
   descriptionStore.description = await descriptionStore.getProviderDescriptionFromService(

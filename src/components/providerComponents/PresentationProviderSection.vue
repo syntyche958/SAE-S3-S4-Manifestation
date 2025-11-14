@@ -18,6 +18,12 @@ const visibleDescription = ref(false);
 const visibleActivity = ref(false);
 const providerDescription = useDescriptionStore();
 
+watchEffect(() => {
+  if (providerDescription.closeDialog) {
+    visibleDescription.value = false
+    providerDescription.closeDialog = false
+  }
+})
 
 watchEffect(
   async () =>

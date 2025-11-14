@@ -4,6 +4,11 @@ import { defineStore } from 'pinia'
 import ProviderService from '@/services/provider.service.js'
 export const useDescriptionStore = defineStore('providerDescription', () => {
   const description = ref("")
+  const closeDialog = ref(false)
+
+  function closeDescriptionProvider() {
+    closeDialog.value = true
+  }
 
   async function getProviderDescriptionFromService(idProvider) {
     let response = await ProviderService.getProviderDescription(idProvider)
@@ -27,5 +32,5 @@ export const useDescriptionStore = defineStore('providerDescription', () => {
     description.value = descriptionText
   }
 
-  return { description, getProviderDescriptionFromService, updateProviderDescription }
+  return { description, closeDialog, closeDescriptionProvider, getProviderDescriptionFromService, updateProviderDescription }
 })
