@@ -1,21 +1,15 @@
   <script setup>
-  import { ref, watchEffect } from 'vue'
-  import { useRoute } from 'vue-router'
   import providerActivities from '@/components/providerComponents/ProviderActivities.vue'
   import providerDescription from '@/components/providerComponents/ProviderDescription.vue'
   import providerGalleria from '@/components/providerComponents/ProviderGalleria.vue'
-
   </script>
 
   <template>
     <div>
       <div class="content">
         <providerGalleria />
-
         <providerDescription />
       </div>
-
-
       <providerActivities />
     </div>
   </template>
