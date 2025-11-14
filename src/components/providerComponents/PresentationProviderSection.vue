@@ -5,11 +5,18 @@ import placeholder from '@/assets/images/photos/placeholder.png'
 import { ref, watchEffect } from 'vue'
 import { useProviderStore } from '@/stores/providers'
 import { useRoute } from 'vue-router'
+import Button from 'primevue/button'
+import Dialog from 'primevue/dialog'
+
 import Editor from '@/components/providerComponents/ProviderEditor.vue'
 
 const route = useRoute()
 const providerStore = useProviderStore()
 const images = ref()
+const visibleCarrousel = ref(false);
+const visibleDescription = ref(false);
+const visibleActivity = ref(false);
+
 
 watchEffect(
   async () =>
@@ -54,6 +61,7 @@ const goToActivity = () => {
   <div>
     <div class="content">
       <div class="card" style="max-width: 400px">
+
         <Galleria
           :value="images"
           :responsiveOptions="responsiveOptions"
@@ -71,28 +79,53 @@ const goToActivity = () => {
             <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
           </template>
         </Galleria>
+        <div class="card flex justify-center" style="margin-top: 25px">
+          <Button label="✎" style="font-size: 25px; padding: 0 6px;" @click="visibleCarrousel = true" />
+          <Dialog
+            v-model:visible="visibleCarrousel"
+            modal
+            header="Modification des images : "
+            :style="{ width: '50vw' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+          >
+            <Editor />
+          </Dialog>
+        </div>
       </div>
 
-      <div class="card-presentation-wrapper">
-        <Editor />
 
-        <!--        <Card class="card-presentation">-->
-        <!--          <template #content>-->
-        <!--            <div>-->
-        <!--              <img :src="placeholder" alt="presentation card" />-->
-        <!--            </div>-->
 
-        <!--            <div>-->
-        <!--              <h2>Qui sommes-nous ?</h2>-->
-        <!--              <p class="m-0">-->
-        <!--                Nous sommes une troupe de théâtre représentant l'association-->
-        <!--                <i>"Troubadours Modernes"</i>. Nous proposons deux activités durant cet évènement :-->
-        <!--                spectacle pour enfants sur une petite scène, et un concert médiéval uniquement joué-->
-        <!--                avec des instruments d'époque.-->
-        <!--              </p>-->
-        <!--            </div>-->
-        <!--          </template>-->
-        <!--        </Card>-->
+      <div>
+        <Card class="card-presentation">
+          <template #content>
+            <div>
+              <img :src="placeholder" alt="presentation card" /><br>
+            </div>
+
+            <div>
+              <h2>Qui sommes-nous ?</h2>
+              <p class="m-0">
+                Nous sommes une troupe de théâtre représentant l'association
+                <i>"Troubadours Modernes"</i>. Nous proposons deux activités durant cet évènement :
+                spectacle pour enfants sur une petite scène, et un concert médiéval uniquement joué
+                avec des instruments d'époque.
+              </p>
+            </div>
+          </template>
+        </Card>
+
+        <div class="card flex justify-center" style="margin-top: 25px">
+          <Button label="✎" style="font-size: 25px; padding: 0 6px;" @click="visibleDescription = true" />
+          <Dialog
+            v-model:visible="visibleDescription"
+            modal
+            header="Modification du texte de présentation : "
+            :style="{ width: '50vw' }"
+            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+          >
+            <Editor />
+          </Dialog>
+        </div>
       </div>
     </div>
 
@@ -115,6 +148,18 @@ const goToActivity = () => {
               </p>
             </template>
           </Card>
+          <div class="card flex justify-center" style="margin-top: 25px">
+            <Button label="✎" style="font-size: 25px; padding: 0 6px;" @click="visibleActivity = true" />
+            <Dialog
+              v-model:visible="visibleActivity"
+              modal
+              header="Modification des activités : "
+              :style="{ width: '50vw' }"
+              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+            >
+              <Editor v-for="(item2, index2) in activities" :key="index2" />
+            </Dialog>
+          </div>
         </div>
       </div>
     </section>

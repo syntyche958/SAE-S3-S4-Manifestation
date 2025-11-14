@@ -22,35 +22,18 @@
 
       @click="descriptionStore.updateProviderDescription(description)"
     />
-    <Button
-      :label="$t('message.preview')"
-      variant="outlined"
-      severity="secondary"
-      @click="descriptionPreviewVisible = true"
-    ></Button>
   </div>
-
-  <Dialog
-    v-model:visible="descriptionPreviewVisible"
-    maximizable
-    modal
-    header="Apercu page de présentation"
-    :style="{ width: '90%' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
-  </Dialog>
 </template>
 
 <script setup>
 import {ref, watchEffect} from 'vue'
 import Editor from 'primevue/editor'
-import { Button, Dialog } from 'primevue'
+import { Button } from 'primevue'
 import { useDescriptionStore } from '@/stores/providerDescription.js'
 import {useRoute} from "vue-router";
 
 const route = useRoute()
 const description = ref('')
-const descriptionPreviewVisible = ref(false)
 const descriptionStore = useDescriptionStore()
 
 watchEffect(
