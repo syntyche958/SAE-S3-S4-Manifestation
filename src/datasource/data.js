@@ -58,19 +58,7 @@ const providerImages = [
         thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria3s.jpg',
         alt: 'Description for Image 3',
         title: 'Title 3',
-      },
-      {
-        itemImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria4.jpg',
-        thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria4s.jpg',
-        alt: 'Description for Image 4',
-        title: 'Title 4',
-      },
-      {
-        itemImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria5.jpg',
-        thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria5s.jpg',
-        alt: 'Description for Image 5',
-        title: 'Title 5',
-      },
+      }
     ],
   },
   {
