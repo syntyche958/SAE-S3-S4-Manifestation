@@ -14,6 +14,9 @@ import Ripple from 'primevue/ripple'
 import App from './App.vue'
 import router from './router'
 import { messages } from './datasource/lang'
+import Toast from 'primevue/toast'
+import FileUpload from 'primevue/fileupload'
+
 
 const app = createApp(App)
 app.directive('tooltip', Tooltip)
@@ -39,5 +42,7 @@ app.use(PrimeVue, {
 app.use(router)
 app.use(ToastService)
 app.use(ConfirmationService)
+app.component('PrimeToast', Toast)
+app.component('PrimeFileUpload', FileUpload)
 
 app.mount('#app')

@@ -7,7 +7,7 @@ import { UserTypeEnum } from '@/enums/User.enum.js'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Galleria from 'primevue/galleria'
-import Editor from '@/components/providerComponents/ProviderEditor.vue'
+import UploadImages from '@/components/providerComponents/ProviderUploadImages.vue'
 
 const authStore = useAuthStore()
 const visibleCarrousel = ref(false)
@@ -72,7 +72,7 @@ watchEffect(
           :style="{ width: '50vw' }"
           :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
         >
-          <Editor />
+          <UploadImages />
         </Dialog>
       </div>
     </div>
