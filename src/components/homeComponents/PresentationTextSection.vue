@@ -1,6 +1,6 @@
 <template>
-  <section class="h-screen w-screen flex items-center justify-center bg-white px-6">
-    <div class="max-w-3xl text-justify">
+  <section class="h-screen w-full flex items-center justify-center bg-white px-6">
+    <div class="max-w-6xl text-justify">
       <h1 class="text-3xl font-bold mb-6">
         Carcassonne Autrefois : l’événement médiéval immersif au cœur de la cité fortifiée
       </h1>
