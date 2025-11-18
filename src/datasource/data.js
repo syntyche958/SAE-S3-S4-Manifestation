@@ -9,24 +9,24 @@ const providers = [
 ]
 
 const presentation = {
-  small: "<p>Petite de description de l'envent familiale et tout et tout ! Venez nombreux</p>",
+  small:
+    '<p>Plongez dans l’univers médiéval de Carcassonne grâce à un événement unique mêlant animations, spectacles et activités accessibles à tous.</p>',
 }
 
 const providerDescription = [
   {
     id: 1,
-    description: "Petite description de provider 1",
+    description: 'Petite description de provider 1',
   },
   {
     id: 2,
-    description: "Petite description de provider 2",
+    description: 'Petite description de provider 2',
   },
   {
     id: 3,
-    description: "Petite description de provider 3",
-  }
-  ]
-
+    description: 'Petite description de provider 3',
+  },
+]
 
 const newProviders = [
   {
@@ -58,7 +58,7 @@ const providerImages = [
         thumbnailImageSrc: 'https://primefaces.org/cdn/primevue/images/galleria/galleria3s.jpg',
         alt: 'Description for Image 3',
         title: 'Title 3',
-      }
+      },
     ],
   },
   {
@@ -185,7 +185,7 @@ const activities = [
     description: 'Description de la balade à cheval',
     presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
   {
     id: 2,
@@ -194,7 +194,7 @@ const activities = [
     description: 'Activité pratique artistique',
     presentationContent: "<h1>L'art c'est génial !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
   {
     id: 3,
@@ -203,7 +203,7 @@ const activities = [
     description: 'Spectacle pour enfant',
     presentationContent: "<h1>Le spectacle c'est génial !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
   {
     id: 4,
@@ -212,7 +212,7 @@ const activities = [
     description: 'Activité physique de précision',
     presentationContent: "<h1>Le tir à l'arc c'est génial !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
   {
     id: 5,
@@ -221,7 +221,7 @@ const activities = [
     description: "Instruments liés à l'époque",
     presentationContent: "<h1>Le concert c'est génial !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
   {
     id: 6,
@@ -230,7 +230,7 @@ const activities = [
     description: 'Activité physique',
     presentationContent: "<h1>La compétition c'est génial !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
   {
     id: 7,
@@ -239,7 +239,7 @@ const activities = [
     description: 'Spectacle',
     presentationContent: "<h1>Le spectacle c'est génial !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
   {
     id: 8,
@@ -248,22 +248,21 @@ const activities = [
     description: 'Restaurant de spécialités de l’époque',
     presentationContent: "<h1>Bien manger c'est important !</h1>",
     locationId: undefined,
-    canRegister:false,
+    canRegister: false,
   },
 ]
 
-const session =[
+const session = [
   {
-    id:1,
-    activitiesId:1,
-    beginingDate:"2025-11-15",
-    duration:30,
-  }
+    id: 1,
+    activitiesId: 1,
+    beginingDate: '2025-11-15',
+    duration: 30,
+  },
 ]
 
-
-// const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
-const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
+const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
+// const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
 // const user = [{ id: 3 ,type: UserTypeEnum.VISITOR }]
 
 export {
