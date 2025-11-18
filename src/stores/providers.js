@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import placeholder from '@/assets/images/photos/placeholder.png'
+import placeholder from '@/assets/images/photos/placeholder.jpg'
 import ProviderService from '@/services/provider.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 

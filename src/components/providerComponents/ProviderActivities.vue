@@ -7,7 +7,7 @@ import Card from 'primevue/card'
 import Editor from '@/components/providerComponents/ProviderEditor.vue'
 import { useAuthStore } from '@/stores/auth.js'
 import { ref } from 'vue'
-import placeholder from '@/assets/images/photos/placeholder.png'
+import placeholder from '@/assets/images/photos/placeholder.jpg'
 
 const route = useRoute()
 const visibleActivity = ref(false)

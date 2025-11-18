@@ -1,6 +1,4 @@
 <script setup>
-import placeholder from '@/assets/images/photos/placeholder.png'
-
 import { UserTypeEnum } from '@/enums/User.enum.js'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
