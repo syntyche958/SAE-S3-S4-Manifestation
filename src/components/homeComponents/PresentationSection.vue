@@ -14,8 +14,11 @@
       >Carcassonne autrefois</span
     >
     <div id="small-presentation" v-html="presentationStore.small" />
-    <a v-if="props.isPreview" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
-    <a v-else href="#map" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
+    <div id="button-container">
+      <!-- <a href="#presentation-text" class="p-button p-component">Plus d'informations</a> -->
+      <a v-if="props.isPreview" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
+      <a v-else href="#map" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
+    </div>
   </div>
 
   <div class="relative h-screen"></div>
@@ -57,7 +60,7 @@ a {
   pointer-events: none;
 }
 
-a {
+#button-container {
   position: absolute;
   z-index: 1;
   top: 90%;
