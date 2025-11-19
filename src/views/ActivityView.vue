@@ -3,12 +3,12 @@
     v-if="
       authStore.user?.type === UserTypeEnum.VISITOR ||
       (authStore.user?.type === UserTypeEnum.PROVIDER &&
-        route.params.provider_id != authStore.user?.id) ||
+        route.params.provider_id !== authStore.user?.id) ||
       authStore.user?.type === UserTypeEnum.ADMIN
     "
   >
     <div v-if="currentActivity">
-      <h1>Presentation de l'activité</h1>
+      <div v-html="currentActivity.name"></div>
       <div v-html="currentActivity.presentationContent"></div>
       <div style="margin-top: 1rem">
         <Button label="S'inscrire" icon="pi pi-user-plus" />
@@ -26,7 +26,7 @@
       <TabPanels>
         <TabPanel value="0">
           <div v-if="currentActivity">
-            <h1>Presentation de l'activité</h1>
+            <div v-html="currentActivity.name"></div>
             <div v-html="currentActivity.presentationContent"></div>
             <div style="margin-top: 1rem">
               <Button label="S'inscrire" icon="pi pi-user-plus" />
