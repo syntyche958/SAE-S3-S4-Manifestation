@@ -1,36 +1,35 @@
 <script setup>
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import router from '@/router/index.js'
 import { UserTypeEnum } from '@/enums/User.enum.js'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Card from 'primevue/card'
 import Editor from '@/components/providerComponents/ProviderEditor.vue'
 import { useAuthStore } from '@/stores/auth.js'
+import { useActivityStore } from '@/stores/activities'
 import { ref } from 'vue'
 import placeholder from '@/assets/images/photos/placeholder.jpg'
 
 const route = useRoute()
 const visibleActivity = ref(false)
 const authStore = useAuthStore()
+const activityStore = useActivityStore()
 
-const activities = [
-  {
-    image: placeholder,
-    text: 'photo1',
-    name: 'Concert médiéval',
-    description_text:
-      "Concert médiéval mettant en scène des chanteurs et des musiciens spécialisés dans la musique d'époque",
-  },
-  {
-    image: placeholder,
-    text: 'photo2',
-    name: 'Chasse à la sorcière',
-    description_text: 'Spectacle humoristique de chasse à la sorcière réservé aux moins de 12 ans',
-  },
-]
+const activities = computed(() => {
+  const providerId = Number.parseInt(route.params.provider_id)
+  return activityStore.activities.filter((a) => a.providerId === providerId)
+})
 
-const goToActivity = () => {
-  window.location.href = '/provider/activity'
+function goToActivity(activityId) {
+  router.push({
+    name: 'activity_page',
+    params: {
+      provider_id: route.params.provider_id,
+      activity_id: activityId,
+    },
+  })
 }
 </script>
 
@@ -42,15 +41,15 @@ const goToActivity = () => {
         <Card
           class="activity-card"
           style="width: 250px; overflow: hidden; cursor: pointer"
-          @click="goToActivity"
+          @click="goToActivity(item.id)"
         >
           <template #header>
-            <img style="object-fit: cover" alt="user header" :src="item.image" />
+            <img style="object-fit: cover" alt="user header" :src="placeholder" />
           </template>
           <template #title>{{ item.name }}</template>
           <template #content>
             <p class="m-0">
-              {{ item.description_text }}
+              {{ item.description }}
             </p>
           </template>
         </Card>
