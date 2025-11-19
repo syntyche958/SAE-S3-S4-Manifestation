@@ -256,7 +256,7 @@ const session = [
 ]
 
 // const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
-const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
+ const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
 // const user = [{ id: 3 ,type: UserTypeEnum.VISITOR }]
 
 export {
