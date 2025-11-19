@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import Card from 'primevue/card'
 import { displayLocations, setupMap } from '@/utils/map.utils'
 
@@ -16,10 +16,12 @@ const props = defineProps({
   class: { type: String, required: false },
 })
 
+const emit = defineEmits(['changeSelectedLocation'])
+
 onMounted(async () => {
   // Map setup
   const map = setupMap('map')
-  await displayLocations(map, props.displayMode)
+  await displayLocations(map, props.displayMode, emit)
 
   /* Fix :
     As TheMap is in a Tab component, map is first mounted with null size

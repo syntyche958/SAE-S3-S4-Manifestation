@@ -33,11 +33,11 @@ export function setupMap(mapId) {
   return map
 }
 
-export async function displayLocations(map, mapMode) {
+export async function displayLocations(map, mapMode, emit) {
   if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map)
   } else {
-    displayAreas(map)
+    displayAreas(map, emit)
   }
 }
 
@@ -82,16 +82,36 @@ function displayPinPoints(map) {
   }
 }
 
-function displayAreas(map) {
+function displayAreas(map, emit) {
   const polygons = ref([])
   const locationStore = useLocationStore()
   const activityStore = useActivityStore()
+
+  const defaultPolygonWeight = 2
 
   for (let location of locationStore.locations) {
     const locationId = location.id
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
-    let polygon = L.polygon(location['area'], { color: isAssigned ? 'blue' : 'orange' }).addTo(map)
+    let polygon = L.polygon(location['area'], {
+      color: isAssigned ? 'blue' : 'orange',
+      weight: defaultPolygonWeight,
+    }).addTo(map)
+
+    polygon.on('click', () => {
+      emit('changeSelectedLocation', locationId)
+
+      // Reset all polygons weights
+      map.eachLayer(function (layer) {
+        if (layer instanceof L.Polygon) {
+          layer.setStyle({
+            weight: defaultPolygonWeight,
+          })
+        }
+      })
+
+      polygon.setStyle({ weight: defaultPolygonWeight + 4 })
+    })
     polygons.value.push(polygon)
   }
 }
