@@ -17,7 +17,7 @@
 
       <TabPanel value="1">
         <h1>Carte interactive</h1>
-        <div class="flex">
+        <div class="flex gap-2.5">
           <TheMap
             :displayMode="MapModeEnum.ADMIN"
             @change-selected-location="
