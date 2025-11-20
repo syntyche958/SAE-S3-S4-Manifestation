@@ -36,9 +36,15 @@ export function setupMap(mapId) {
 export async function displayLocations(map, mapMode, emit) {
   if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map)
-  } else {
+  } else if (mapMode === MapModeEnum.ADMIN) {
     displayAreas(map, emit)
     displayLegends(map)
+  } else {
+    /* TODO :
+    - Afficher les areas
+    - Mettre en place les popup avec bouton pour demander l'emplacement
+        + caractéristiques de l'emplacement
+    */
   }
 }
 

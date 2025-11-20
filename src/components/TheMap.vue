@@ -1,7 +1,7 @@
 <template>
   <Card :class="props?.class ? props.class : ''">
     <template #content>
-      <div id="map"></div>
+      <div id="map" class="h-[90vh] w-[90vw] sm:h-[80vh] sm:w-[50vw]"></div>
     </template>
   </Card>
 </template>
@@ -44,17 +44,3 @@ onMounted(async () => {
   observer.observe(document.getElementById('map'))
 })
 </script>
-
-<style scoped>
-#map {
-  height: 80vh;
-  width: 50vw;
-}
-
-@media only screen and (max-width: 950px) {
-  #map {
-    height: 90vh;
-    width: 90vw;
-  }
-}
-</style>
