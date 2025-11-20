@@ -41,8 +41,8 @@ export async function displayLocations(map, mapMode, emit) {
     displayLegends(map)
   } else {
     /* TODO :
-    - Afficher les areas
-    - Mettre en place les popup avec bouton pour demander l'emplacement
+    - Afficher les areas (couleur différentes selon déjà occupé, libre, déjà demandé)
+    - Mettre en place les popup avec bouton pour demander l'emplacement (reprendre l'algo fait pour la page visitor)
         + caractéristiques de l'emplacement
     */
   }
@@ -57,6 +57,8 @@ export async function refreshLocations(map, emit, mapMode) {
       }
     })
     displayAreas(map, emit)
+  } else if (mapMode === MapModeEnum.PROVIDER) {
+    // TODO
   }
 }
 
