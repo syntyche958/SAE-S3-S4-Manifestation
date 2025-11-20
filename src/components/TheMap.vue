@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import Card from 'primevue/card'
 import { displayLocations, setupMap } from '@/utils/map.utils'
 

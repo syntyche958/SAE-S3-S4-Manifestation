@@ -17,17 +17,39 @@
 
       <TabPanel value="1">
         <h1>Carte interactive</h1>
-        <TheMap
-          :displayMode="MapModeEnum.ADMIN"
-          v-model="selectedLocation"
-          @change-selected-location="
-            (sl) => {
-              selectedLocation = sl
-            }
-          "
-        />
-        <div v-if="selectedLocation == undefined">Aucun emplacement séléctionné</div>
-        <div v-else>Emplacement {{ selectedLocation }} séléctionné</div>
+        <div class="flex">
+          <TheMap
+            :displayMode="MapModeEnum.ADMIN"
+            v-model="selectedLocation"
+            @change-selected-location="
+              (sl) => {
+                selectedLocation = sl
+              }
+            "
+            class="w-fit"
+          />
+          <div v-if="selectedLocation == undefined">Aucun emplacement séléctionné</div>
+          <div v-else>
+            <div>Emplacement {{ selectedLocation }} séléctionné</div>
+            <div class="card flex justify-center">
+              <Select
+                v-model="selectedActivity"
+                :options="filteredActivities"
+                optionLabel="name"
+                placeholder="Select an activity"
+                class="w-full md:w-56"
+              />
+            </div>
+            <Button
+              type="button"
+              label="Enregistrer"
+              icon="pi pi-save"
+              :loading="loading"
+              @click="setActivityLocation"
+              :disabled="selectedActivity == undefined"
+            />
+          </div>
+        </div>
       </TabPanel>
 
       <TabPanel value="2">
@@ -57,7 +79,20 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useActivityStore } from '@/stores/activities'
+import { Button, Select } from 'primevue'
 
 const selectedLocation = ref()
+const selectedActivity = ref()
+const activityStore = useActivityStore()
+
+const filteredActivities = computed(() =>
+  activityStore.activities.filter((a) => a.locationId == undefined),
+)
+
+const setActivityLocation = () => {
+  // TODO : mettre en place un activity.updateLocation()
+  // activityStore.activities.find((a) => a.id == selectedActivity.value.id)
+}
 </script>
