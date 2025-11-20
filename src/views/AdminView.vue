@@ -1,6 +1,5 @@
 <script setup>
-import MenuTabs from '@/components/adminComponents/MenuTabs.vue'
-
+import MenuTabs from '@/components/adminComponents/AdminMenuTabs.vue'
 </script>
 
 <template>

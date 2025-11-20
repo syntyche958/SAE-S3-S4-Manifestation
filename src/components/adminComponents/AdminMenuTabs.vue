@@ -27,26 +27,10 @@
             "
             class="w-fit"
           />
-          <div v-if="selectedLocationId == undefined">Aucun emplacement séléctionné</div>
-          <div v-else>
-            <div>Emplacement {{ selectedLocationId }} séléctionné</div>
-            <div class="card flex justify-center">
-              <Select
-                v-model="selectedActivity"
-                :options="filteredActivities"
-                optionLabel="name"
-                placeholder="Select an activity"
-                class="w-full md:w-56"
-              />
-            </div>
-            <Button
-              type="button"
-              label="Enregistrer"
-              icon="pi pi-save"
-              @click="setActivityLocation"
-              :disabled="selectedActivity == undefined"
-            />
-          </div>
+          <MapMenuTabs
+            :selectedLocationId="selectedLocationId"
+            @update-selected-location-id="(value) => (selectedLocationId = value)"
+          />
         </div>
       </TabPanel>
 
@@ -77,21 +61,8 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import { computed, ref } from 'vue'
-import { useActivityStore } from '@/stores/activities'
-import { Button, Select } from 'primevue'
+import { ref } from 'vue'
+import MapMenuTabs from './MapMenuTabs.vue'
 
 const selectedLocationId = ref()
-const selectedActivity = ref()
-const activityStore = useActivityStore()
-
-const filteredActivities = computed(() =>
-  activityStore.activities.filter((a) => a.locationId == undefined),
-)
-
-const setActivityLocation = () => {
-  activityStore.updateLocationId(selectedActivity.value.id, selectedLocationId.value)
-  selectedLocationId.value = undefined
-  selectedActivity.value = undefined
-}
 </script>
