@@ -38,6 +38,19 @@ export async function displayLocations(map, mapMode, emit) {
     displayPinPoints(map)
   } else {
     displayAreas(map, emit)
+    displayLegends(map)
+  }
+}
+
+export async function refreshLocations(map, emit, mapMode) {
+  // Remove all previous polygons on map
+  if (mapMode === MapModeEnum.ADMIN) {
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Polygon) {
+        map.removeLayer(layer)
+      }
+    })
+    displayAreas(map, emit)
   }
 }
 
@@ -93,6 +106,7 @@ function displayAreas(map, emit) {
     const locationId = location.id
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
+
     let polygon = L.polygon(location['area'], {
       color: isAssigned ? 'blue' : 'orange',
       weight: defaultPolygonWeight,
@@ -114,8 +128,9 @@ function displayAreas(map, emit) {
     })
     polygons.value.push(polygon)
   }
+}
 
-  // Display legends
+function displayLegends(map) {
   var legend = L.control({ position: 'bottomright' })
 
   legend.onAdd = function () {

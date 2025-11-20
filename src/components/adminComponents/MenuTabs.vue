@@ -43,7 +43,6 @@
               type="button"
               label="Enregistrer"
               icon="pi pi-save"
-              :loading="loading"
               @click="setActivityLocation"
               :disabled="selectedActivity == undefined"
             />
@@ -94,6 +93,5 @@ const setActivityLocation = () => {
   activityStore.updateLocationId(selectedActivity.value.id, selectedLocationId.value)
   selectedLocationId.value = undefined
   selectedActivity.value = undefined
-  // TODO : Change the color of the specific area on the map
 }
 </script>

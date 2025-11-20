@@ -7,9 +7,12 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import Card from 'primevue/card'
-import { displayLocations, setupMap } from '@/utils/map.utils'
+import { displayLocations, refreshLocations, setupMap } from '@/utils/map.utils'
+import { useActivityStore } from '@/stores/activities'
+
+const activityStore = useActivityStore()
 
 const props = defineProps({
   displayMode: { type: String, required: true },
@@ -22,6 +25,13 @@ onMounted(async () => {
   // Map setup
   const map = setupMap('map')
   await displayLocations(map, props.displayMode, emit)
+
+  watch(
+    () => activityStore.activities,
+    () => {
+      refreshLocations(map, emit, props.displayMode)
+    },
+  )
 
   /* Fix :
     As TheMap is in a Tab component, map is first mounted with null size
