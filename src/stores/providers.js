@@ -20,6 +20,22 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
+  async function getDescription(providerId) {
+    return providers.value.find((p) => p.id == providerId).description
+  }
+
+  async function updateProviderDescription(providerId, newDescription) {
+    let response = await ProviderService.updateProviderDescription(providerId, newDescription)
+
+    if (response.error === 0) {
+      providers.value = providers.value.filter((p) => p.id != providerId)
+      providers.value.push(response.data)
+      providers.value = providers.value.sort((a, b) => a.id - b.id) // To have consistent order display (ex: navbar)
+    } else {
+      console.log(response.data)
+    }
+  }
+
   async function getProviderImages(idProvider) {
     let response = await ProviderService.getProviderImages(idProvider)
 
@@ -92,6 +108,8 @@ export const useProviderStore = defineStore('provider', () => {
     newProviders,
     providerImages,
     providerDescription,
+    getDescription,
+    updateProviderDescription,
     getAllProviders,
     getAllNewProviders,
     getProviderImages,

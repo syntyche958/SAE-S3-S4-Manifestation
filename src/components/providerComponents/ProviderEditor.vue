@@ -1,5 +1,5 @@
 <template>
-  <Editor v-model="descriptionStore.description" style="width: 220%">
+  <Editor v-model="description" style="width: 220%">
     <template v-slot:toolbar>
       <span class="ql-formats">
         <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
@@ -16,35 +16,36 @@
     </template>
   </Editor>
   <div style="margin-top: 12px">
-
-    <Button
-      :label="$t('message.save')"
-      icon="pi pi-save"
-
-      @click="saveDescription()"
-    />
+    <Button :label="$t('message.save')" icon="pi pi-save" @click="saveDescription()" />
   </div>
 </template>
 
 <script setup>
-import {watchEffect} from 'vue'
+import { ref, watch } from 'vue'
 import Editor from 'primevue/editor'
 import { Button } from 'primevue'
-import { useDescriptionStore } from '@/stores/providerDescription.js'
-import {useRoute} from "vue-router";
+import { useRoute } from 'vue-router'
+import { useProviderStore } from '@/stores/providers'
 
+const providerStore = useProviderStore()
 const route = useRoute()
-const descriptionStore = useDescriptionStore()
 
-function saveDescription(){
-  descriptionStore.updateProviderDescription(descriptionStore.description)
-  descriptionStore.closeDescriptionProvider()
+const description = ref()
+
+const providerId = Number.parseInt(route.params.provider_id)
+
+const emit = defineEmits(['hide-dialog'])
+
+watch(
+  providerStore.providers,
+  async () => {
+    description.value = await providerStore.getDescription(providerId)
+  },
+  { immediate: true },
+)
+
+const saveDescription = () => {
+  providerStore.updateProviderDescription(providerId, description)
+  emit('hide-dialog')
 }
-
-watchEffect(async () => {
-  descriptionStore.description = await descriptionStore.getProviderDescriptionFromService(
-    Number.parseInt(route.params.provider_id)
-  )
-})
-
 </script>

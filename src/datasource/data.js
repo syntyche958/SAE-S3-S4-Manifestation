@@ -1,32 +1,37 @@
 import { UserTypeEnum } from '@/enums/User.enum'
 
 const providers = [
-  { id: 1, userId: 2, name: 'Centre équestre' },
-  { id: 2, userId: 4, name: 'Ville de carcassonne' },
-  { id: 3, userId: 5, name: 'Remparts et lumière' },
-  { id: 4, userId: 6, name: 'Troubadours moderne' },
-  { id: 5, userId: 7, name: 'Camion de restauration' },
+  { id: 1, userId: 2, name: 'Centre équestre', description: 'Petite description de provider 1' },
+  {
+    id: 2,
+    userId: 4,
+    name: 'Ville de carcassonne',
+    description: 'Petite description de provider 2',
+  },
+  {
+    id: 3,
+    userId: 5,
+    name: 'Remparts et lumière',
+    description: 'Petite description de provider 3',
+  },
+  {
+    id: 4,
+    userId: 6,
+    name: 'Troubadours moderne',
+    description: 'Petite description de provider 4',
+  },
+  {
+    id: 5,
+    userId: 7,
+    name: 'Camion de restauration',
+    description: 'Petite description de provider 5',
+  },
 ]
 
 const presentation = {
   small:
     '<p>Plongez dans l’univers médiéval de Carcassonne grâce à un événement unique mêlant animations, spectacles et activités accessibles à tous.</p>',
 }
-
-const providerDescription = [
-  {
-    id: 1,
-    description: 'Petite description de provider 1',
-  },
-  {
-    id: 2,
-    description: 'Petite description de provider 2',
-  },
-  {
-    id: 3,
-    description: 'Petite description de provider 3',
-  },
-]
 
 const newProviders = [
   {
@@ -257,7 +262,7 @@ const session = [
 
 const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
 // const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
-// const user = [{ id: 3 ,type: UserTypeEnum.VISITOR }]
+// const user = [{ id: 3, type: UserTypeEnum.VISITOR }]
 
 export {
   contacts,
@@ -267,7 +272,6 @@ export {
   newProviders,
   providerImages,
   presentation,
-  providerDescription,
   activities,
   session,
 }

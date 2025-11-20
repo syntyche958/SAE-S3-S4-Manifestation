@@ -24,6 +24,10 @@ async function removeNewProviderFromLocalSource(id) {
   return { error: 0, status: 200, data: 'done' }
 }
 
+async function updateProviderDescriptionFromLocalSource(providerId, providerDesc) {
+  return LocalSource.updateProviderDescription(providerId, providerDesc)
+}
+
 async function addNewProvidersToLocalSource(providerName, providerDesc) {
   const providerStore = useProviderStore()
   let lastId = 0
@@ -123,10 +127,21 @@ async function getProviderDescription(id) {
   return response
 }
 
+async function updateProviderDescription(providerId, newDescription) {
+  let response = null
+  try {
+    response = await updateProviderDescriptionFromLocalSource(providerId, newDescription)
+  } catch {
+    return networkErrResponse
+  }
+  return response
+}
+
 export default {
   getAllProviders,
   getAllNewProviders,
   getProviderImages,
+  updateProviderDescription,
   addNewProvider,
   removeNewProvider,
   validateNewProviders,

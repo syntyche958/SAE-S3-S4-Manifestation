@@ -8,7 +8,6 @@ import {
   contacts,
   activities,
   session,
-  providerDescription,
 } from '@/datasource/data'
 
 /**
@@ -31,8 +30,8 @@ function getAllActivities() {
  * Get all sessions
  * @return {{error:number, status:number, data:{id:number, activitiesId:number, beginingDate:date, duration:number}}}
  */
-function getAllSessions(){
-  return {error:0, status:200, data:session}
+function getAllSessions() {
+  return { error: 0, status: 200, data: session }
 }
 
 /**
@@ -94,15 +93,19 @@ function getPresentationContent() {
 }
 
 /**
- * Get provider Description content
- * @returns {{error: number, status: number, data: {id: number, description: string}}}
+ * Update provider description
+ * @returns {{error:number, status: number, data:string} | {error:number, status:number, data: {id: number, name:string, description: String}}}
  */
-function getProviderDescription(id) {
-  return { error: 0, status: 200, data: providerDescription.find((pi) => pi.id === id) }
+async function updateProviderDescription(providerId, providerDesc) {
+  return {
+    error: 0,
+    status: 200,
+    data: { ...providers.find((p) => p.id === providerId), description: providerDesc },
+  }
 }
 
-
 export default {
+  updateProviderDescription,
   getAllProviders,
   getAllActivities,
   getAllNewProviders,
@@ -113,5 +116,4 @@ export default {
   getAllContacts,
   getAllContactsById,
   getAllSessions,
-  getProviderDescription,
 }

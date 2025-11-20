@@ -62,7 +62,7 @@ function goToActivity(activityId) {
         >
           <div class="card flex justify-center" style="margin-top: 25px">
             <Button
-              label="✎"
+              icon="pi pi-pencil"
               style="font-size: 25px; padding: 0 6px"
               @click="visibleActivity = true"
             />
@@ -83,7 +83,6 @@ function goToActivity(activityId) {
 </template>
 
 <style scoped>
-
 .list-activity-cards {
   display: flex;
   justify-content: flex-start;
