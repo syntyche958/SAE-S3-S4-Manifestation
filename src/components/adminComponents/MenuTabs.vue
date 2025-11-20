@@ -20,17 +20,16 @@
         <div class="flex">
           <TheMap
             :displayMode="MapModeEnum.ADMIN"
-            v-model="selectedLocation"
             @change-selected-location="
               (sl) => {
-                selectedLocation = sl
+                selectedLocationId = sl
               }
             "
             class="w-fit"
           />
-          <div v-if="selectedLocation == undefined">Aucun emplacement séléctionné</div>
+          <div v-if="selectedLocationId == undefined">Aucun emplacement séléctionné</div>
           <div v-else>
-            <div>Emplacement {{ selectedLocation }} séléctionné</div>
+            <div>Emplacement {{ selectedLocationId }} séléctionné</div>
             <div class="card flex justify-center">
               <Select
                 v-model="selectedActivity"
@@ -83,7 +82,7 @@ import { computed, ref } from 'vue'
 import { useActivityStore } from '@/stores/activities'
 import { Button, Select } from 'primevue'
 
-const selectedLocation = ref()
+const selectedLocationId = ref()
 const selectedActivity = ref()
 const activityStore = useActivityStore()
 
@@ -92,7 +91,9 @@ const filteredActivities = computed(() =>
 )
 
 const setActivityLocation = () => {
-  // TODO : mettre en place un activity.updateLocation()
-  // activityStore.activities.find((a) => a.id == selectedActivity.value.id)
+  activityStore.updateLocationId(selectedActivity.value.id, selectedLocationId.value)
+  selectedLocationId.value = undefined
+  selectedActivity.value = undefined
+  // TODO : Change the color of the specific area on the map
 }
 </script>

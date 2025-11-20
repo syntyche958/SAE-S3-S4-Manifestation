@@ -13,9 +13,15 @@ export const useActivityStore = defineStore('activity', () => {
     if (response.error === 0) activities.value = response.data
     else console.log(response.data)
   }
+  async function updateLocationId(activity_id, locationId) {
+    let response = await activityService.updateLocationIdLocalSource(activity_id, locationId)
+    if (response.error === 0) activities.value = response.data
+    else console.log(response.data)
+  }
 
   return {
     getAllActivities,
+    updateLocationId,
     activities,
   }
 })

@@ -114,4 +114,25 @@ function displayAreas(map, emit) {
     })
     polygons.value.push(polygon)
   }
+
+  // Display legends
+  var legend = L.control({ position: 'bottomright' })
+
+  legend.onAdd = function () {
+    let div = L.DomUtil.create('div', 'info legend')
+    div.style.padding = '15px'
+    div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
+    div.style.borderRadius = '5px'
+
+    let labels = ['Emplacement libre', 'Emplacement occupé']
+    let colors = ['orange', 'blue']
+
+    for (let i = 0; i < labels.length; i++) {
+      div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`
+    }
+
+    return div
+  }
+
+  legend.addTo(map)
 }
