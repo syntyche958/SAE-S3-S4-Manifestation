@@ -9,9 +9,11 @@
     <div v-if="currentActivity">
       <div v-html="currentActivity.name"></div>
       <div v-html="currentActivity.presentationContent"></div>
-      <div style="margin-top: 1rem">
+      <div style="margin-top: 1rem" v-if="currentActivity?.canRegister">
         <Button label="S'inscrire" icon="pi pi-user-plus" />
       </div>
+
+
     </div>
   </div>
 
@@ -27,19 +29,22 @@
           <div v-if="currentActivity">
             <div v-html="currentActivity.name"></div>
             <div v-html="currentActivity.presentationContent"></div>
-            <div style="margin-top: 1rem">
+            <div style="margin-top: 1rem" v-if="currentActivity?.canRegister">
               <Button label="S'inscrire" icon="pi pi-user-plus" />
             </div>
+
           </div>
         </TabPanel>
-
         <TabPanel value="1">
           <TheMap :display-mode="MapModeEnum.VISITOR" />
         </TabPanel>
-
         <TabPanel value="2">
           <div>
             <h2>Configuration de l'activité</h2>
+            <div class="flex align-items-center gap-2" v-if="currentActivity">
+              <Checkbox v-model="currentActivity.canRegister" inputId="can-register" :binary="true" />
+              <label for="can-register">Activer l'inscription</label>
+            </div>
           </div>
         </TabPanel>
       </TabPanels>
@@ -52,14 +57,13 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
-
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import Button from 'primevue/button'
-
+import Checkbox from 'primevue/checkbox'
 import TheMap from '@/components/TheMap.vue'
 import { useActivityStore } from '@/stores/activities'
 import { MapModeEnum } from '@/enums/Map.enums'
