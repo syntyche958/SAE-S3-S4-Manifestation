@@ -14,6 +14,8 @@ const providerDescription = useDescriptionStore()
 const authStore = useAuthStore()
 const route = useRoute()
 
+providerDescription.getProviderDescriptionFromService(Number.parseInt(route.params.provider_id))
+
 watchEffect(() => {
   if (providerDescription.closeDialog) {
     visibleDescription.value = false
@@ -67,5 +69,4 @@ watchEffect(() => {
 .all {
   width: 50%;
 }
-
 </style>
