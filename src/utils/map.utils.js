@@ -3,6 +3,7 @@ import { useLocationStore } from '@/stores/locations'
 import { ref } from 'vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import { useActivityStore } from '@/stores/activities'
+import { useRoute } from 'vue-router'
 
 export function setupMap(mapId) {
   // Map setup
@@ -37,7 +38,7 @@ export async function displayLocations(map, mapMode, emit) {
   if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map)
   } else if (mapMode === MapModeEnum.ADMIN) {
-    displayAreas(map, emit)
+    displayAreasAdmin(map, emit)
     displayLegends(map)
   } else {
     /* TODO :
@@ -56,7 +57,7 @@ export async function refreshLocations(map, emit, mapMode) {
         map.removeLayer(layer)
       }
     })
-    displayAreas(map, emit)
+    displayAreasAdmin(map, emit)
   } else if (mapMode === MapModeEnum.PROVIDER) {
     // TODO
   }
@@ -103,7 +104,50 @@ function displayPinPoints(map) {
   }
 }
 
-function displayAreas(map, emit) {
+function displayAreasProvider(map, emit) {
+  const polygons = ref([])
+  const locationStore = useLocationStore()
+  const activityStore = useActivityStore()
+  const route = useRoute()
+  const currentActivity = Number(route.params.activity_id)
+
+  const defaultPolygonWeight = 2
+
+  for (let location of locationStore.locations) {
+    const locationId = location.id
+    const isAssignedToCurrentActivity =
+      activityStore.activities.filter(
+        (a) => a.locationId === locationId && a.locationId === currentActivity,
+      ).length === 1
+
+    const isAssigned =
+      activityStore.activities.filter((a) => a.locationId === locationId).length === 1
+
+    let polygon = L.polygon(location['area'], {
+      color: isAssignedToCurrentActivity ? 'green' : isAssigned ? 'blue' : 'orange',
+      weight: defaultPolygonWeight,
+    }).addTo(map)
+
+    // TODO : Bind popup
+    // polygon.on('click', () => {
+    //   emit('changeSelectedLocation', locationId)
+
+    //   // Reset all polygons weights
+    //   map.eachLayer(function (layer) {
+    //     if (layer instanceof L.Polygon) {
+    //       layer.setStyle({
+    //         weight: defaultPolygonWeight,
+    //       })
+    //     }
+    //   })
+
+    //   polygon.setStyle({ weight: defaultPolygonWeight + 4 })
+    // })
+    polygons.value.push(polygon)
+  }
+}
+
+function displayAreasAdmin(map, emit) {
   const polygons = ref([])
   const locationStore = useLocationStore()
   const activityStore = useActivityStore()
