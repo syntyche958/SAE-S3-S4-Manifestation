@@ -33,7 +33,36 @@
           </div>
         </TabPanel>
         <TabPanel value="1">
-          <TheMap :display-mode="MapModeEnum.PROVIDER" />
+          <div class="flex gap-6">
+            <TheMap
+              :display-mode="MapModeEnum.PROVIDER"
+              @change-selected-location="
+                (sl) => {
+                  selectedLocationId = sl
+                }
+              "
+              class="w-fit"
+            />
+            <Card v-if="selectedLocation != null">
+              <template #title>Caractéritiques de l'emplacement séléctionné</template>
+              <template #content>
+                <div>Surface : {{ selectedLocation.surfaceArea }}</div>
+                <div>Electricité: {{ selectedLocation.electricity == true ? 'oui' : 'non' }}</div>
+                <div>Eau: {{ selectedLocation.water == true ? 'oui' : 'non' }}</div>
+                <!-- TODO : Ajouter requested à locations dans data.js -->
+                <!-- TODO : Bien faire attention: une seule demande possible par activité -->
+                <!-- Donc si une autre demande existe déjà, le supprimer ! -->
+                <!-- TODO : Afficher les demandes dans la partie admin en enlevant le tabs juste tout mettre en colonne avec un tableau liste des demandes avec un bouton 'accepter' -->
+                <Button label="Demander l'emplacement"></Button
+              ></template>
+            </Card>
+            <Card v-else
+              ><template #title> Aucun emplacement séléctionné</template
+              ><template #content
+                >Cliquer sur un emplacement sur la carte pour le séléctionner</template
+              ></Card
+            >
+          </div>
         </TabPanel>
         <TabPanel value="2">
           <div>
@@ -54,10 +83,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { UserTypeEnum } from '@/enums/User.enum'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
@@ -65,13 +92,23 @@ import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import Button from 'primevue/button'
 import Checkbox from 'primevue/checkbox'
+import { useAuthStore } from '@/stores/auth'
+import { UserTypeEnum } from '@/enums/User.enum'
 import TheMap from '@/components/TheMap.vue'
 import { useActivityStore } from '@/stores/activities'
 import { MapModeEnum } from '@/enums/Map.enums'
+import { useLocationStore } from '@/stores/locations'
+import { Card } from 'primevue'
 
 const authStore = useAuthStore()
 const activityStore = useActivityStore()
+const locationStore = useLocationStore()
 const route = useRoute()
+
+const selectedLocationId = ref()
+const selectedLocation = computed(() =>
+  locationStore.locations.find((l) => l.id === selectedLocationId.value),
+)
 
 const currentActivity = computed(() => {
   const activityId = Number.parseInt(route.params.activity_id)

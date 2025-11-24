@@ -5,6 +5,8 @@ import { MapModeEnum } from '@/enums/Map.enums'
 import { useActivityStore } from '@/stores/activities'
 import { useRoute } from 'vue-router'
 
+const defaultPolygonWeight = 2
+
 export function setupMap(mapId) {
   // Map setup
   let southWestBoundsCoords = L.latLng(43.203642, 2.3594)
@@ -94,36 +96,6 @@ function bindPopupVisitor(map, marker) {
   })
 }
 
-// TODO : Afficher les caractéristiques de l'emplacement et mettre un bouton qui emet l'événement chooseLocation
-function bindPopupProvider(map, marker) {
-  var mouseOnPopUp = false
-  var mouseOneMarker = false
-  // Add popup with needed event to open and close it
-  marker.on('mouseover', () => {
-    map.closePopup()
-    mouseOneMarker = true
-    marker
-      .bindPopup(
-        // TODO : Use real values (different depending on the display mode)
-        "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
-      )
-      .openPopup()
-
-    let markerElement = marker.getPopup().getElement()
-    markerElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
-    markerElement.addEventListener('mouseleave', () => {
-      mouseOnPopUp = false
-      marker.closePopup()
-    })
-    marker.on('mouseout', () => {
-      mouseOneMarker = false
-      setTimeout(() => {
-        if (!mouseOnPopUp && !mouseOneMarker) marker.closePopup()
-      }, 200)
-    })
-  })
-}
-
 function displayPinPoints(map) {
   const markers = ref([])
   const locationStore = useLocationStore()
@@ -136,15 +108,14 @@ function displayPinPoints(map) {
   }
 }
 
+// TODO : Refactor with displayAreasAdmin
+// TODO : Afficher differements l'emplacement qui à notre demande en attente
 function displayAreasProvider(map, emit) {
   const polygons = ref([])
   const locationStore = useLocationStore()
   const activityStore = useActivityStore()
   const route = useRoute()
   const currentActivity = Number(route.params.activity_id)
-  console.log('currentActivity =>', currentActivity)
-
-  const defaultPolygonWeight = 2
 
   for (let location of locationStore.locations) {
     const locationId = location.id
@@ -152,8 +123,6 @@ function displayAreasProvider(map, emit) {
       activityStore.activities.filter(
         (a) => a.locationId === locationId && a.id === currentActivity,
       ).length === 1
-
-    console.log('isAssignedToCurrentActivity =>', isAssignedToCurrentActivity)
 
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
@@ -163,21 +132,20 @@ function displayAreasProvider(map, emit) {
       weight: defaultPolygonWeight,
     }).addTo(map)
 
-    // TODO : Bind popup
-    // polygon.on('click', () => {
-    //   emit('changeSelectedLocation', locationId)
+    polygon.on('click', () => {
+      emit('changeSelectedLocation', locationId)
 
-    //   // Reset all polygons weights
-    //   map.eachLayer(function (layer) {
-    //     if (layer instanceof L.Polygon) {
-    //       layer.setStyle({
-    //         weight: defaultPolygonWeight,
-    //       })
-    //     }
-    //   })
+      // Reset all polygons weights
+      map.eachLayer(function (layer) {
+        if (layer instanceof L.Polygon) {
+          layer.setStyle({
+            weight: defaultPolygonWeight,
+          })
+        }
+      })
 
-    //   polygon.setStyle({ weight: defaultPolygonWeight + 4 })
-    // })
+      polygon.setStyle({ weight: defaultPolygonWeight + 4 })
+    })
     polygons.value.push(polygon)
   }
 }
@@ -186,8 +154,6 @@ function displayAreasAdmin(map, emit) {
   const polygons = ref([])
   const locationStore = useLocationStore()
   const activityStore = useActivityStore()
-
-  const defaultPolygonWeight = 2
 
   for (let location of locationStore.locations) {
     const locationId = location.id
