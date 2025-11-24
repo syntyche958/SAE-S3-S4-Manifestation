@@ -39,13 +39,15 @@ export async function displayLocations(map, mapMode, emit) {
     displayPinPoints(map)
   } else if (mapMode === MapModeEnum.ADMIN) {
     displayAreasAdmin(map, emit)
-    displayLegends(map)
+    displayLegendsAdmin(map)
   } else {
     /* TODO :
     - Afficher les areas (couleur différentes selon déjà occupé, libre, déjà demandé)
     - Mettre en place les popup avec bouton pour demander l'emplacement (reprendre l'algo fait pour la page visitor)
         + caractéristiques de l'emplacement
     */
+    displayAreasProvider(map, emit)
+    displayLegendsProvider(map)
   }
 }
 
@@ -63,7 +65,37 @@ export async function refreshLocations(map, emit, mapMode) {
   }
 }
 
-function bindPopup(map, marker) {
+function bindPopupVisitor(map, marker) {
+  var mouseOnPopUp = false
+  var mouseOneMarker = false
+  // Add popup with needed event to open and close it
+  marker.on('mouseover', () => {
+    map.closePopup()
+    mouseOneMarker = true
+    marker
+      .bindPopup(
+        // TODO : Use real values (different depending on the display mode)
+        "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
+      )
+      .openPopup()
+
+    let markerElement = marker.getPopup().getElement()
+    markerElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
+    markerElement.addEventListener('mouseleave', () => {
+      mouseOnPopUp = false
+      marker.closePopup()
+    })
+    marker.on('mouseout', () => {
+      mouseOneMarker = false
+      setTimeout(() => {
+        if (!mouseOnPopUp && !mouseOneMarker) marker.closePopup()
+      }, 200)
+    })
+  })
+}
+
+// TODO : Afficher les caractéristiques de l'emplacement et mettre un bouton qui emet l'événement chooseLocation
+function bindPopupProvider(map, marker) {
   var mouseOnPopUp = false
   var mouseOneMarker = false
   // Add popup with needed event to open and close it
@@ -99,7 +131,7 @@ function displayPinPoints(map) {
   for (let location of locationStore.locations) {
     let marker = L.marker(location['coord']).addTo(map)
 
-    bindPopup(map, marker)
+    bindPopupVisitor(map, marker)
     markers.value.push(marker)
   }
 }
@@ -110,6 +142,7 @@ function displayAreasProvider(map, emit) {
   const activityStore = useActivityStore()
   const route = useRoute()
   const currentActivity = Number(route.params.activity_id)
+  console.log('currentActivity =>', currentActivity)
 
   const defaultPolygonWeight = 2
 
@@ -117,8 +150,10 @@ function displayAreasProvider(map, emit) {
     const locationId = location.id
     const isAssignedToCurrentActivity =
       activityStore.activities.filter(
-        (a) => a.locationId === locationId && a.locationId === currentActivity,
+        (a) => a.locationId === locationId && a.id === currentActivity,
       ).length === 1
+
+    console.log('isAssignedToCurrentActivity =>', isAssignedToCurrentActivity)
 
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
@@ -182,7 +217,8 @@ function displayAreasAdmin(map, emit) {
   }
 }
 
-function displayLegends(map) {
+// TODO : Améliorer le visuel de la légende
+function displayLegendsAdmin(map) {
   var legend = L.control({ position: 'bottomright' })
 
   legend.onAdd = function () {
@@ -193,6 +229,29 @@ function displayLegends(map) {
 
     let labels = ['Emplacement libre', 'Emplacement occupé']
     let colors = ['orange', 'blue']
+
+    for (let i = 0; i < labels.length; i++) {
+      div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`
+    }
+
+    return div
+  }
+
+  legend.addTo(map)
+}
+
+// TODO : Améliorer le visuel de la légende
+function displayLegendsProvider(map) {
+  var legend = L.control({ position: 'bottomright' })
+
+  legend.onAdd = function () {
+    let div = L.DomUtil.create('div', 'info legend')
+    div.style.padding = '15px'
+    div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
+    div.style.borderRadius = '5px'
+
+    let labels = ['Emplacement libre', 'Emplacement occupé', 'Emplacement choisi']
+    let colors = ['orange', 'blue', 'green']
 
     for (let i = 0; i < labels.length; i++) {
       div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`

@@ -12,8 +12,6 @@
       <div style="margin-top: 1rem" v-if="currentActivity?.canRegister">
         <Button label="S'inscrire" icon="pi pi-user-plus" />
       </div>
-
-
     </div>
   </div>
 
@@ -32,17 +30,20 @@
             <div style="margin-top: 1rem" v-if="currentActivity?.canRegister">
               <Button label="S'inscrire" icon="pi pi-user-plus" />
             </div>
-
           </div>
         </TabPanel>
         <TabPanel value="1">
-          <TheMap :display-mode="MapModeEnum.VISITOR" />
+          <TheMap :display-mode="MapModeEnum.PROVIDER" />
         </TabPanel>
         <TabPanel value="2">
           <div>
             <h2>Configuration de l'activité</h2>
             <div class="flex align-items-center gap-2" v-if="currentActivity">
-              <Checkbox v-model="currentActivity.canRegister" inputId="can-register" :binary="true" />
+              <Checkbox
+                v-model="currentActivity.canRegister"
+                inputId="can-register"
+                :binary="true"
+              />
               <label for="can-register">Activer l'inscription</label>
             </div>
           </div>
