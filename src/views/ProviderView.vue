@@ -18,7 +18,6 @@
       <TabList>
         <Tab value="0"><i class="pi pi-file-edit"></i><span> Apparence de la page</span></Tab>
         <Tab value="1"><i class="pi pi-file-edit"></i><span> Choix des services</span></Tab>
-        <Tab value="2"><i class="pi pi-map"></i><span> Emplacement</span></Tab>
         <Tab disabled><i class="pi pi-file-edit"></i><span> Regarder les statistiques</span></Tab>
       </TabList>
 
@@ -29,10 +28,6 @@
 
         <TabPanel value="1">
           <ServicesProviderSection />
-        </TabPanel>
-
-        <TabPanel value="2">
-          <TheMap :display-mode="MapModeEnum.PROVIDER" class="w-fit" />
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -53,8 +48,6 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
-import TheMap from '@/components/TheMap.vue'
-import { MapModeEnum } from '@/enums/Map.enums'
 
 const authStore = useAuthStore()
 const route = useRoute()
