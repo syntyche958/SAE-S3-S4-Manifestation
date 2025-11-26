@@ -26,7 +26,19 @@ async function updateLocationIdLocalSource(activityId, locationId) {
   }
 }
 
+async function updateRequestedLocationIdLocalSource(activityId, requestedLocationId) {
+  const activityStore = useActivityStore()
+  return {
+    error: 0,
+    status: 200,
+    data: activityStore.activities.value.map((a) =>
+      a.id === activityId ? { ...a, requestedLocationId: requestedLocationId } : a,
+    ),
+  }
+}
+
 export default {
   getAllActivities,
   updateLocationIdLocalSource,
+  updateRequestedLocationIdLocalSource,
 }

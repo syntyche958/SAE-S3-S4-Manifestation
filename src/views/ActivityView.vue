@@ -49,7 +49,6 @@
                 <div>Surface : {{ selectedLocation.surfaceArea }}</div>
                 <div>Electricité: {{ selectedLocation.electricity == true ? 'oui' : 'non' }}</div>
                 <div>Eau: {{ selectedLocation.water == true ? 'oui' : 'non' }}</div>
-                <!-- TODO : Ajouter requested à locations dans data.js -->
                 <!-- TODO : Bien faire attention: une seule demande possible par activité -->
                 <!-- Donc si une autre demande existe déjà, le supprimer ! -->
                 <!-- TODO : Afficher les demandes dans la partie admin en enlevant le tabs juste tout mettre en colonne avec un tableau liste des demandes avec un bouton 'accepter' -->

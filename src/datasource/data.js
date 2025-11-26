@@ -185,6 +185,7 @@ const activities = [
     presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
   {
     id: 2,
@@ -194,6 +195,7 @@ const activities = [
     presentationContent: "<h1>L'art c'est génial !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
   {
     id: 3,
@@ -203,6 +205,7 @@ const activities = [
     presentationContent: "<h1>Le spectacle c'est génial !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
   {
     id: 4,
@@ -212,6 +215,7 @@ const activities = [
     presentationContent: "<h1>Le tir à l'arc c'est génial !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
   {
     id: 5,
@@ -221,6 +225,7 @@ const activities = [
     presentationContent: "<h1>Le concert c'est génial !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
   {
     id: 6,
@@ -230,6 +235,7 @@ const activities = [
     presentationContent: "<h1>La compétition c'est génial !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
   {
     id: 7,
@@ -239,6 +245,7 @@ const activities = [
     presentationContent: "<h1>Le spectacle c'est génial !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
   {
     id: 8,
@@ -248,6 +255,7 @@ const activities = [
     presentationContent: "<h1>Bien manger c'est important !</h1>",
     locationId: undefined,
     canRegister: false,
+    requestedLocationId: undefined,
   },
 ]
 
