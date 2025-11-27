@@ -264,7 +264,9 @@ const session = [
     id: 1,
     activitiesId: 1,
     beginingDate: '2025-11-15',
+    beginingHour: '14:30',
     duration: 30,
+    nbPlace:10,
   },
 ]
 

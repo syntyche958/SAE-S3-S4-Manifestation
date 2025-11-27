@@ -28,7 +28,7 @@ function getAllActivities() {
 
 /**
  * Get all sessions
- * @return {{error:number, status:number, data:{id:number, activitiesId:number, beginingDate:date, duration:number}}}
+ * @return {{error: number, status: number, data: [{id: number, activitiesId: number, beginingDate: string, beginingHour: string, duration: number, nbPlace: number}]}}
  */
 function getAllSessions() {
   return { error: 0, status: 200, data: session }
