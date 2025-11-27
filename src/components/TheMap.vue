@@ -11,6 +11,7 @@ import { onMounted, watch } from 'vue'
 import Card from 'primevue/card'
 import { displayLocations, refreshLocations, setupMap } from '@/utils/map.utils'
 import { useActivityStore } from '@/stores/activities'
+import { useRoute } from 'vue-router'
 
 const activityStore = useActivityStore()
 
@@ -22,14 +23,15 @@ const props = defineProps({
 const emit = defineEmits(['changeSelectedLocation'])
 
 onMounted(async () => {
+  const route = useRoute()
   // Map setup
   const map = setupMap('map')
-  await displayLocations(map, props.displayMode, emit)
+  await displayLocations(map, props.displayMode, emit, route)
 
   watch(
     () => activityStore.activities,
     () => {
-      refreshLocations(map, emit, props.displayMode)
+      refreshLocations(map, emit, props.displayMode, route)
     },
   )
 

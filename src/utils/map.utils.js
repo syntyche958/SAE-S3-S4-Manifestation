@@ -3,7 +3,6 @@ import { useLocationStore } from '@/stores/locations'
 import { ref } from 'vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import { useActivityStore } from '@/stores/activities'
-import { useRoute } from 'vue-router'
 
 const defaultPolygonWeight = 2
 
@@ -36,29 +35,30 @@ export function setupMap(mapId) {
   return map
 }
 
-export async function displayLocations(map, mapMode, emit) {
+export async function displayLocations(map, mapMode, emit, route) {
   if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map)
   } else if (mapMode === MapModeEnum.ADMIN) {
     displayAreasAdmin(map, emit)
     displayLegendsAdmin(map)
   } else {
-    displayAreasProvider(map, emit)
+    displayAreasProvider(map, emit, route)
     displayLegendsProvider(map)
   }
 }
 
-export async function refreshLocations(map, emit, mapMode) {
+export async function refreshLocations(map, emit, mapMode, route) {
   // Remove all previous polygons on map
+  map.eachLayer((layer) => {
+    if (layer instanceof L.Polygon) {
+      map.removeLayer(layer)
+    }
+  })
+
   if (mapMode === MapModeEnum.ADMIN) {
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Polygon) {
-        map.removeLayer(layer)
-      }
-    })
     displayAreasAdmin(map, emit)
   } else if (mapMode === MapModeEnum.PROVIDER) {
-    // TODO
+    displayAreasProvider(map, emit, route)
   }
 }
 
@@ -104,11 +104,10 @@ function displayPinPoints(map) {
 }
 
 // TODO : Refactor with displayAreasAdmin
-async function displayAreasProvider(map, emit) {
+async function displayAreasProvider(map, emit, route) {
   const polygons = ref([])
   const locationStore = useLocationStore()
   const activityStore = useActivityStore()
-  const route = useRoute()
   const currentActivityId = Number(route.params.activity_id)
 
   for (let location of locationStore.locations) {
@@ -215,8 +214,13 @@ function displayLegendsProvider(map) {
     div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
     div.style.borderRadius = '5px'
 
-    let labels = ['Emplacement libre', 'Emplacement occupé', 'Emplacement choisi']
-    let colors = ['orange', 'blue', 'green']
+    let labels = [
+      'Emplacement libre',
+      'Emplacement demandé',
+      'Emplacement assigné',
+      'Emplacement occupé',
+    ]
+    let colors = ['orange', 'yellow', 'green', 'blue']
 
     for (let i = 0; i < labels.length; i++) {
       div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`
