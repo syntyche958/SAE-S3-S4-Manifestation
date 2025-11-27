@@ -6,13 +6,7 @@
         route.params.provider_id != authStore.user?.id)
     "
   >
-    <div v-if="currentActivity">
-      <div v-html="currentActivity.name"></div>
-      <div v-html="currentActivity.presentationContent"></div>
-      <div style="margin-top: 1rem" v-if="currentActivity?.canRegister">
-        <Button label="S'inscrire" icon="pi pi-user-plus" />
-      </div>
-    </div>
+    <ActivityPresentation />
   </div>
 
   <div v-else>
@@ -24,13 +18,7 @@
       </TabList>
       <TabPanels>
         <TabPanel value="0">
-          <div v-if="currentActivity">
-            <div v-html="currentActivity.name"></div>
-            <div v-html="currentActivity.presentationContent"></div>
-            <div style="margin-top: 1rem" v-if="currentActivity?.canRegister">
-              <Button label="S'inscrire" icon="pi pi-user-plus" />
-            </div>
-          </div>
+          <ActivityPresentation />
         </TabPanel>
         <TabPanel value="1">
           <div class="flex gap-6">
@@ -64,17 +52,7 @@
           </div>
         </TabPanel>
         <TabPanel value="2">
-          <div>
-            <h2>Configuration de l'activité</h2>
-            <div class="flex align-items-center gap-2" v-if="currentActivity">
-              <Checkbox
-                v-model="currentActivity.canRegister"
-                inputId="can-register"
-                :binary="true"
-              />
-              <label for="can-register">Activer l'inscription</label>
-            </div>
-          </div>
+          <ActivityConfiguration />
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -90,17 +68,16 @@ import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import Button from 'primevue/button'
-import Checkbox from 'primevue/checkbox'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
 import TheMap from '@/components/TheMap.vue'
-import { useActivityStore } from '@/stores/activities'
 import { MapModeEnum } from '@/enums/Map.enums'
 import { useLocationStore } from '@/stores/locations'
 import { Card } from 'primevue'
+import ActivityPresentation from '@/components/providerComponents/ActivityPresentation.vue'
+import ActivityConfiguration from '@/components/providerComponents/ActivityConfiguration.vue'
 
 const authStore = useAuthStore()
-const activityStore = useActivityStore()
 const locationStore = useLocationStore()
 const route = useRoute()
 
@@ -108,9 +85,4 @@ const selectedLocationId = ref()
 const selectedLocation = computed(() =>
   locationStore.locations.find((l) => l.id === selectedLocationId.value),
 )
-
-const currentActivity = computed(() => {
-  const activityId = Number.parseInt(route.params.activity_id)
-  return activityStore.activities.find((a) => a.id === activityId)
-})
 </script>
