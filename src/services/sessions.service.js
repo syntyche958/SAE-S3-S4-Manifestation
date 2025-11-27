@@ -5,6 +5,10 @@ async function getAllSessionsFromLocalSource(){
   return LocalSource.getAllSessions()
 }
 
+async function getSessionsByActivityIdFromLocalSource(activityId) {
+  return LocalSource.getSessionsByActivityId(activityId)
+}
+
 async function getAllSessions(){
   let response=null
   try {
@@ -15,6 +19,16 @@ async function getAllSessions(){
 
 }
 
+async function getSessionsByActivityId(activityId) {
+  let response=null
+  try {
+    response= await getSessionsByActivityIdFromLocalSource(activityId)
+  }catch {
+  return networkErrResponse}
+  return response
+}
+
 export default {
   getAllSessions,
+  getSessionsByActivityId,
 }
