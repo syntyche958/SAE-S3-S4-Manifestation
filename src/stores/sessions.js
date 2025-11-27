@@ -33,10 +33,21 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
+  async function addSession(activityId,beginningDate,beginingHour,duration,nbPlace){
+    let response=await SessionsService.addSession(activityId,beginningDate,beginingHour,duration,nbPlace)
+    if (response.error === 0) {
+      sessions.value= response.data
+    }
+    else{
+      console.log(response.data)
+    }
+  }
+
   return {
     sessions,
     getAllSessions,
     getSessionsByActivityId,
     removeSession,
+    addSession,
   }
 })

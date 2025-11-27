@@ -17,6 +17,18 @@ async function removeSessionFromLocalSource(sessionId){
   return { error: 0, status: 200, data: 'done' }
 }
 
+async function addSessionToLocalSource(activityId, beginningDate,beginingHour, duration,nbPlace) {
+  const sessionStore=useSessionStore()
+  let lastId = 0
+  sessionStore.sessions.forEach((s) => {lastId = Math.max(lastId, s.id)})
+  return{
+    error: 0,
+    status: 200,
+    data:{id: lastId + 1,activitiesId:activityId,beginningDate:beginningDate,beginingHour:beginingHour,duration:duration,nbPlace:nbPlace},
+  }
+}
+
+
 async function getAllSessions(){
   let response=null
   try {
@@ -47,8 +59,21 @@ async function removeSession(sessionID){
   return response
 }
 
+async function addSession(activityId,beginningDate,beginingHour,duration,nbPlace){
+  let response = null
+  try{
+    response = await addSessionToLocalSource(activityId,beginningDate,beginingHour,duration,nbPlace)
+  }
+  catch{
+    return networkErrResponse
+  }
+  return response
+}
+
+
 export default {
   getAllSessions,
   getSessionsByActivityId,
   removeSession,
+  addSession,
 }
