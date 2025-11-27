@@ -22,7 +22,9 @@ async function updateLocationIdLocalSource(activityId, locationId) {
   return {
     error: 0,
     status: 200,
-    data: activityStore.activities.map((a) => (a.id != activityId ? a : { ...a, locationId })),
+    data: activityStore.activities.map((a) =>
+      a.id != activityId ? a : { ...a, locationId, requestedLocationId: undefined },
+    ),
   }
 }
 
@@ -31,8 +33,8 @@ async function updateRequestedLocationIdLocalSource(activityId, requestedLocatio
   return {
     error: 0,
     status: 200,
-    data: activityStore.activities.value.map((a) =>
-      a.id === activityId ? { ...a, requestedLocationId: requestedLocationId } : a,
+    data: activityStore.activities.map((a) =>
+      a.id === activityId ? { ...a, requestedLocationId } : a,
     ),
   }
 }
