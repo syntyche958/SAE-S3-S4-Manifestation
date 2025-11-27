@@ -56,6 +56,7 @@ import { useActivityStore } from '@/stores/activities'
 const route = useRoute()
 const { t } = useI18n()
 
+
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
 const activityStore = useActivityStore()
