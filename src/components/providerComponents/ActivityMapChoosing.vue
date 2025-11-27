@@ -3,8 +3,8 @@
     <TheMap
       :display-mode="MapModeEnum.PROVIDER"
       @change-selected-location="
-        (sl) => {
-          selectedLocationId = sl
+        (locationId) => {
+          selectedLocationId = locationId
         }
       "
       class="w-fit"
@@ -18,7 +18,7 @@
         <!-- TODO : Bien faire attention: une seule demande possible par activité -->
         <!-- Donc si une autre demande existe déjà, le supprimer ! -->
         <!-- TODO : Afficher les demandes dans la partie admin en enlevant le tabs juste tout mettre en colonne avec un tableau liste des demandes avec un bouton 'accepter' -->
-        <Button label="Demander l'emplacement"></Button
+        <Button label="Demander l'emplacement" @click="askLocation"></Button
       ></template>
     </Card>
     <Card v-else
@@ -36,10 +36,20 @@ import { MapModeEnum } from '@/enums/Map.enums'
 import TheMap from '@/components/TheMap.vue'
 import { computed, ref } from 'vue'
 import { useLocationStore } from '@/stores/locations'
+import { useActivityStore } from '@/stores/activities'
+import { useRoute } from 'vue-router'
 
 const locationStore = useLocationStore()
+const activityStore = useActivityStore()
+const route = useRoute()
+
 const selectedLocationId = ref()
 const selectedLocation = computed(() =>
   locationStore.locations.find((l) => l.id === selectedLocationId.value),
 )
+
+function askLocation() {
+  const currentActivityId = Number(route.params.activity_id)
+  activityStore.updateRequestedLocationId(currentActivityId, selectedLocationId.value)
+}
 </script>

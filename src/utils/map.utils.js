@@ -43,11 +43,6 @@ export async function displayLocations(map, mapMode, emit) {
     displayAreasAdmin(map, emit)
     displayLegendsAdmin(map)
   } else {
-    /* TODO :
-    - Afficher les areas (couleur différentes selon déjà occupé, libre, déjà demandé)
-    - Mettre en place les popup avec bouton pour demander l'emplacement (reprendre l'algo fait pour la page visitor)
-        + caractéristiques de l'emplacement
-    */
     displayAreasProvider(map, emit)
     displayLegendsProvider(map)
   }
@@ -109,26 +104,30 @@ function displayPinPoints(map) {
 }
 
 // TODO : Refactor with displayAreasAdmin
-// TODO : Afficher differements l'emplacement qui à notre demande en attente
-function displayAreasProvider(map, emit) {
+async function displayAreasProvider(map, emit) {
   const polygons = ref([])
   const locationStore = useLocationStore()
   const activityStore = useActivityStore()
   const route = useRoute()
-  const currentActivity = Number(route.params.activity_id)
+  const currentActivityId = Number(route.params.activity_id)
 
   for (let location of locationStore.locations) {
     const locationId = location.id
-    const isAssignedToCurrentActivity =
-      activityStore.activities.filter(
-        (a) => a.locationId === locationId && a.id === currentActivity,
-      ).length === 1
 
+    const isAskedByCurrentActivity =
+      activityStore.get(currentActivityId).requestedLocationId == locationId
+    const isAssignedToCurrentActivity =
+      activityStore.get(currentActivityId).locationId == locationId
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
 
+    var areaColor = 'orange'
+    if (isAssignedToCurrentActivity) areaColor = 'green'
+    else if (isAskedByCurrentActivity) areaColor = 'yellow'
+    else if (isAssigned) areaColor = 'green'
+
     let polygon = L.polygon(location['area'], {
-      color: isAssignedToCurrentActivity ? 'green' : isAssigned ? 'blue' : 'orange',
+      color: areaColor,
       weight: defaultPolygonWeight,
     }).addTo(map)
 
