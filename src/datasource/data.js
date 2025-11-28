@@ -268,6 +268,18 @@ const session = [
     duration: 30,
     nbPlace:10,
   },
+  {
+    id: 2,
+    activitiesId: 2,
+    beginingDate: '2025-11-16',
+    duration: 25,
+  },
+  {
+    id: 3,
+    activitiesId: 3,
+    beginingDate: '2025-11-20',
+    duration: 40,
+  },
 ]
 
 const user = [{ id: 1, type: UserTypeEnum.ADMIN }]

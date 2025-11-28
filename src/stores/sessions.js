@@ -13,7 +13,8 @@ export const useSessionStore = defineStore('session', () => {
     }
     else {
       console.log(response.data)
-    }}
+    }
+  }
 
   async function getSessionsByActivityId(activityId) {
     let response = await SessionsService.getSessionsByActivityId(activityId)
