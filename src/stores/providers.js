@@ -20,6 +20,10 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
+  function get(providerId) {
+    return providers.value.find((p) => p.id === providerId)
+  }
+
   async function getDescription(providerId) {
     return providers.value.find((p) => p.id == providerId).description
   }
@@ -108,6 +112,7 @@ export const useProviderStore = defineStore('provider', () => {
     newProviders,
     providerImages,
     providerDescription,
+    get,
     getDescription,
     updateProviderDescription,
     getAllProviders,
