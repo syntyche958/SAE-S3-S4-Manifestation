@@ -18,12 +18,15 @@
       </TabList>
       <TabPanels>
         <TabPanel value="0">
+          <!-- TODO : Ajouter le nom de l'activité comme rappel visuel -->
           <ActivityPresentation />
         </TabPanel>
         <TabPanel value="1">
+          <!-- TODO : Ajouter le nom de l'activité comme rappel visuel -->
           <ActivityMapChoosing />
         </TabPanel>
         <TabPanel value="2">
+          <!-- TODO : Ajouter le nom de l'activité comme rappel visuel -->
           <ActivityConfiguration />
         </TabPanel>
       </TabPanels>

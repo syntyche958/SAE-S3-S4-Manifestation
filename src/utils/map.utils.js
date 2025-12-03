@@ -105,6 +105,7 @@ function displayPinPoints(map) {
 
 // TODO : Refactor with displayAreasAdmin
 async function displayAreasProvider(map, emit, route) {
+  console.log('called')
   const polygons = ref([])
   const locationStore = useLocationStore()
   const activityStore = useActivityStore()
@@ -115,6 +116,11 @@ async function displayAreasProvider(map, emit, route) {
 
     const isAskedByCurrentActivity =
       activityStore.get(currentActivityId).requestedLocationId == locationId
+    console.log('current activity : ' + currentActivityId)
+    console.log('current locationId : ' + locationId)
+    console.log('activity locationId : ' + activityStore.get(currentActivityId).locationId)
+
+    // TODO : Fix => must only apply to location assigned to the current activity !
     const isAssignedToCurrentActivity =
       activityStore.get(currentActivityId).locationId == locationId
     const isAssigned =

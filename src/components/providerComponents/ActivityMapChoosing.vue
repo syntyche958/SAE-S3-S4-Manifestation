@@ -12,9 +12,14 @@
       <template #title>Caractéristiques de l'emplacement séléctionné</template>
       <template #content>
         <LocationCharacteristics :selected-location="selectedLocation" />
-        <!-- TODO : Empecher de demander un emplacement quand un lui est déjà assigné ! -->
         <Button
-          v-if="isAlreadyAsked"
+          v-if="isActivyLocationAlreadySet"
+          label="Votre activité a déjà un emplacement reservé"
+          severity="info"
+          variant="text"
+          disabled />
+        <Button
+          v-else-if="isAlreadyAsked"
           label="Demande déjà enregistré"
           severity="info"
           variant="text"
@@ -65,6 +70,11 @@ const isAlreadyTaken = computed(() => {
   return (
     activityStore.activities.filter((a) => a.locationId === selectedLocationId.value).length != 0
   )
+})
+
+const isActivyLocationAlreadySet = computed(() => {
+  const currentActivityId = Number(route.params.activity_id)
+  return activityStore.get(currentActivityId).locationId != undefined
 })
 
 const onChangeSelectedLocation = (locationId) => {
