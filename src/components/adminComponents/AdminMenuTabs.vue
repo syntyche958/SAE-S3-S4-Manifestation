@@ -27,7 +27,7 @@
             "
             class="w-fit"
           />
-          <MapMenuTabs
+          <AdminMapChoosing
             :selectedLocationId="selectedLocationId"
             @update-selected-location-id="(value) => (selectedLocationId = value)"
           />
@@ -62,7 +62,7 @@ import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import { ref } from 'vue'
-import MapMenuTabs from './MapMenuTabs.vue'
+import AdminMapChoosing from './AdminMapChoosing.vue'
 
 const selectedLocationId = ref()
 </script>

@@ -11,10 +11,7 @@
     <Card v-if="selectedLocation != null">
       <template #title>Caractéristiques de l'emplacement séléctionné</template>
       <template #content>
-        <div>Surface : {{ selectedLocation.surfaceArea }}</div>
-        <div>Electricité: {{ selectedLocation.electricity == true ? 'oui' : 'non' }}</div>
-        <div>Eau: {{ selectedLocation.water == true ? 'oui' : 'non' }}</div>
-        <!-- TODO : Afficher les demandes dans la partie admin en enlevant le tabs juste tout mettre en colonne avec un tableau liste des demandes avec un bouton 'accepter' -->
+        <LocationCharacteristics :selected-location="selectedLocation" />
         <!-- TODO : Empecher de demander un emplacement quand un lui est déjà assigné ! -->
         <Button
           v-if="isAlreadyAsked"
@@ -48,6 +45,7 @@ import { computed, ref } from 'vue'
 import { useLocationStore } from '@/stores/locations'
 import { useActivityStore } from '@/stores/activities'
 import { useRoute } from 'vue-router'
+import LocationCharacteristics from '../LocationCharacteristics.vue'
 
 const locationStore = useLocationStore()
 const activityStore = useActivityStore()

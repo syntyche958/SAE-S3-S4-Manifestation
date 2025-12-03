@@ -6,7 +6,7 @@
       <div v-else>
         <h1>Emplacement {{ selectedLocationId }} séléctionné</h1>
         <h2>Caractéristiques de l'emplacement :</h2>
-        <!-- TODO : Afficher les caracteritiques de l'emplacement (de facon sommaire) -->
+        <LocationCharacteristics :selectedLocation="selectedLocation" />
         <div v-if="locationRequestedBy.length > 0">
           <h2>Demande en attente :</h2>
           <DataTable :value="locationRequestedBy" paginator :rows="10" dataKey="id">
@@ -57,9 +57,11 @@
 
 <script setup>
 import { useActivityStore } from '@/stores/activities'
+import { useLocationStore } from '@/stores/locations'
 import { useProviderStore } from '@/stores/providers'
 import { Button, Card, Column, DataTable, Select } from 'primevue'
 import { computed, ref } from 'vue'
+import LocationCharacteristics from '../LocationCharacteristics.vue'
 
 const providerStore = useProviderStore()
 
@@ -72,6 +74,11 @@ const emit = defineEmits(['update-selected-location-id'])
 const selectedActivity = ref()
 // TODO : Reset selectedActivity value when onmap selected location changes !
 const activityStore = useActivityStore()
+const locationStore = useLocationStore()
+
+const selectedLocation = computed(() =>
+  locationStore.locations.find((l) => l.id == props.selectedLocationId),
+)
 
 const filteredActivities = computed(() =>
   activityStore.activities.filter((a) => a.locationId == undefined),
