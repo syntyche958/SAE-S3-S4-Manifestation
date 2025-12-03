@@ -157,9 +157,15 @@ function displayAreasAdmin(map, emit) {
     const locationId = location.id
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
+    const isAskedByProviders =
+      activityStore.activities.filter((a) => a.requestedLocationId == locationId).length > 0
+
+    var areaColor = 'orange'
+    if (isAssigned) areaColor = 'blue'
+    else if (isAskedByProviders) areaColor = 'yellow'
 
     let polygon = L.polygon(location['area'], {
-      color: isAssigned ? 'blue' : 'orange',
+      color: areaColor,
       weight: defaultPolygonWeight,
     }).addTo(map)
 
@@ -191,8 +197,8 @@ function displayLegendsAdmin(map) {
     div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
     div.style.borderRadius = '5px'
 
-    let labels = ['Emplacement libre', 'Emplacement occupé']
-    let colors = ['orange', 'blue']
+    let labels = ['Emplacement libre', 'Emplacement demandé', 'Emplacement occupé']
+    let colors = ['orange', 'yellow', 'blue']
 
     for (let i = 0; i < labels.length; i++) {
       div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`
