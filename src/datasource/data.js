@@ -30,7 +30,7 @@ const providers = [
 
 const presentation = {
   small:
-    '<p>Plongez dans l’univers médiéval de Carcassonne grâce à un événement unique mêlant animations, spectacles et activités accessibles à tous.</p>',
+    '<p>Durant le weekend du 28 au 29 mai 2026, plongez dans l’univers médiéval de Carcassonne grâce à un événement unique mêlant animations, spectacles et activités accessibles à tous.</p>',
 }
 
 const newProviders = [
