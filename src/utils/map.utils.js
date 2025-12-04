@@ -39,17 +39,17 @@ export async function displayLocations(map, mapMode, emit, route) {
   if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map)
   } else if (mapMode === MapModeEnum.ADMIN) {
-    displayAreasAdmin(map, emit)
+    displayAreas(map, emit, mapMode, route)
     displayLegendsAdmin(map)
     displayUnselectPanel(map, emit, mapMode, route)
   } else {
-    displayAreasProvider(map, emit, route)
+    displayAreas(map, emit, mapMode, route)
     displayLegendsProvider(map)
     displayUnselectPanel(map, emit, mapMode, route)
   }
 }
 
-export async function refreshLocations(map, emit, mapMode, route) {
+export function refreshLocations(map, emit, mapMode, route) {
   // Remove all previous polygons on map
   map.eachLayer((layer) => {
     if (layer instanceof L.Polygon) {
@@ -58,9 +58,9 @@ export async function refreshLocations(map, emit, mapMode, route) {
   })
 
   if (mapMode === MapModeEnum.ADMIN) {
-    displayAreasAdmin(map, emit)
+    displayAreas(map, emit, mapMode, route)
   } else if (mapMode === MapModeEnum.PROVIDER) {
-    displayAreasProvider(map, emit, route)
+    displayAreas(map, emit, mapMode, route)
   }
 }
 
@@ -105,69 +105,46 @@ function displayPinPoints(map) {
   }
 }
 
-// TODO : Refactor with displayAreasAdmin
-async function displayAreasProvider(map, emit, route) {
-  console.log('called')
-  const polygons = ref([])
-  const locationStore = useLocationStore()
+function getAreaColor(locationId, mapMode, route) {
   const activityStore = useActivityStore()
-  const currentActivityId = Number(route.params.activity_id)
 
-  for (let location of locationStore.locations) {
-    const locationId = location.id
-
+  if (mapMode == MapModeEnum.PROVIDER) {
+    const currentActivityId = Number(route.params.activity_id)
     const isAskedByCurrentActivity =
       activityStore.get(currentActivityId).requestedLocationId == locationId
 
-    // TODO : Fix => must only apply to location assigned to the current activity !
     const isAssignedToCurrentActivity =
       activityStore.get(currentActivityId).locationId == locationId
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
 
-    var areaColor = 'orange'
+    let areaColor = 'orange'
     if (isAssignedToCurrentActivity) areaColor = 'green'
     else if (isAskedByCurrentActivity) areaColor = 'yellow'
     else if (isAssigned) areaColor = 'blue'
 
-    let polygon = L.polygon(location['area'], {
-      color: areaColor,
-      weight: defaultPolygonWeight,
-    }).addTo(map)
-
-    polygon.on('click', () => {
-      emit('changeSelectedLocation', locationId)
-
-      // Reset all polygons weights
-      map.eachLayer(function (layer) {
-        if (layer instanceof L.Polygon) {
-          layer.setStyle({
-            weight: defaultPolygonWeight,
-          })
-        }
-      })
-
-      polygon.setStyle({ weight: defaultPolygonWeight + 4 })
-    })
-    polygons.value.push(polygon)
-  }
-}
-
-function displayAreasAdmin(map, emit) {
-  const polygons = ref([])
-  const locationStore = useLocationStore()
-  const activityStore = useActivityStore()
-
-  for (let location of locationStore.locations) {
-    const locationId = location.id
+    return areaColor
+  } else {
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
     const isAskedByProviders =
       activityStore.activities.filter((a) => a.requestedLocationId == locationId).length > 0
 
-    var areaColor = 'orange'
+    let areaColor = 'orange'
     if (isAssigned) areaColor = 'blue'
     else if (isAskedByProviders) areaColor = 'yellow'
+    return areaColor
+  }
+}
+
+function displayAreas(map, emit, mapMode, route) {
+  const polygons = ref([])
+  const locationStore = useLocationStore()
+
+  for (let location of locationStore.locations) {
+    const locationId = location.id
+
+    var areaColor = getAreaColor(locationId, mapMode, route)
 
     let polygon = L.polygon(location['area'], {
       color: areaColor,

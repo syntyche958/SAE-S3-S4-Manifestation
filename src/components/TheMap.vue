@@ -24,6 +24,7 @@ const emit = defineEmits(['changeSelectedLocation'])
 
 onMounted(async () => {
   // watchers must stay before all await keyWord in onMounted
+  const route = useRoute()
   watch(
     () => activityStore.activities,
     () => {
@@ -31,8 +32,6 @@ onMounted(async () => {
     },
   )
 
-  const route = useRoute()
-  // Map setup
   const map = setupMap('map')
   await displayLocations(map, props.displayMode, emit, route)
 
