@@ -1,11 +1,5 @@
 <template>
-  <div
-    v-if="
-      authStore.user?.type === UserTypeEnum.VISITOR ||
-      (authStore.user?.type === UserTypeEnum.PROVIDER &&
-        route.params.provider_id != authStore.user?.id)
-    "
-  >
+  <div v-if="isProviderAdminPanelToHide()">
     <ActivityPresentation />
   </div>
 
@@ -35,18 +29,13 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import { useAuthStore } from '@/stores/auth'
-import { UserTypeEnum } from '@/enums/User.enum'
 import ActivityPresentation from '@/components/providerComponents/ActivityPresentation.vue'
 import ActivityConfiguration from '@/components/providerComponents/ActivityConfiguration.vue'
 import ActivityMapChoosing from '@/components/providerComponents/ActivityMapChoosing.vue'
-
-const authStore = useAuthStore()
-const route = useRoute()
+import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 </script>
