@@ -28,6 +28,7 @@
         <TabPanel value="2">
           <!-- TODO : Ajouter le nom de l'activité comme rappel visuel -->
           <ActivityConfiguration />
+          <SessionCRUD />
         </TabPanel>
       </TabPanels>
     </Tabs>
@@ -35,6 +36,7 @@
 </template>
 
 <script setup>
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
@@ -46,6 +48,7 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import ActivityPresentation from '@/components/providerComponents/ActivityPresentation.vue'
 import ActivityConfiguration from '@/components/providerComponents/ActivityConfiguration.vue'
 import ActivityMapChoosing from '@/components/providerComponents/ActivityMapChoosing.vue'
+import SessionCRUD from '@/components/providerComponents/SessionCRUD.vue'
 
 const authStore = useAuthStore()
 const route = useRoute()
