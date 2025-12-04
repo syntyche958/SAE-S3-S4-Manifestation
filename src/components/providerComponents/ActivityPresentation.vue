@@ -1,5 +1,7 @@
 <template>
   <div v-if="currentActivity">
+    <div v-html="currentActivity.name"></div>
+    <div v-html="currentActivity.presentationContent"></div>
     <div class="card" style="margin-top: 2rem">
       <DataView :value="sessions" :sortOrder="triOrder" :sortField="triField">
         <template #header>
@@ -23,11 +25,14 @@
                   <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                     <div>
                       <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">
-                        {{ item.beginingDate }}
+                        {{ item.beginingDate }}    {{item.beginingHour}}
                       </span>
                       <div class="text-lg font-medium mt-2">Session #{{ item.id }}</div>
                       <div class="text-sm text-surface-600 mt-1">
                         Durée: {{ item.duration }} minutes
+                      </div>
+                      <div class="text-sm text-surface-600 mt-1">
+                        Place: {{item.nbPlace}}
                       </div>
                     </div>
                   </div>

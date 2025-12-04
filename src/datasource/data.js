@@ -272,13 +272,17 @@ const session = [
     id: 2,
     activitiesId: 2,
     beginingDate: '2025-11-16',
+    beginingHour: '14:30',
     duration: 25,
+    nbPlace:10,
   },
   {
     id: 3,
     activitiesId: 3,
     beginingDate: '2025-11-20',
+    beginingHour: '14:30',
     duration: 40,
+    nbPlace:10,
   },
 ]
 
