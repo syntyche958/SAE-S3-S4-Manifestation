@@ -19,10 +19,21 @@ async function getAllActivities() {
 
 async function updateLocationIdLocalSource(activityId, locationId) {
   const activityStore = useActivityStore()
+  // Vérifie que cet emplacement a pas déjà été assigné
+  let activities = activityStore.activities
+  activities = activities.map((a) =>
+    a.locationId === locationId ? { ...a, locationId: undefined } : a,
+  )
+  // Vérifie que cet emplacement est pas dans d'autre demandes
+  activities = activities.map((a) =>
+    a.requestedLocationId === locationId ? { ...a, requestedLocationId: undefined } : a,
+  )
+
+  // assigner l'emplacement
   return {
     error: 0,
     status: 200,
-    data: activityStore.activities.map((a) =>
+    data: activities.map((a) =>
       a.id != activityId ? a : { ...a, locationId, requestedLocationId: undefined },
     ),
   }

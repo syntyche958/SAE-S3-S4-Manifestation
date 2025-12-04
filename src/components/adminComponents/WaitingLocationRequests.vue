@@ -1,6 +1,6 @@
 <template>
-  <div v-if="locationRequestedBy.length > 0">
-    <h2>Demande en attente :</h2>
+  <div v-if="locationRequestedBy.length > 0" class="mt-6 flex flex-col gap-3">
+    <h2 class="mb-0!">Demande en attente :</h2>
     <DataTable :value="locationRequestedBy" paginator :rows="10" dataKey="id">
       <!-- Columns -->
       <Column field="name" header="Activité" sortable style="min-width: 12rem">

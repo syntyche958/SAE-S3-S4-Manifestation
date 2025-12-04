@@ -11,6 +11,7 @@
           @set-activity-location="(activityId) => acceptActivityLocation(activityId)"
         />
         <ManuallySetActivityLocation
+          :selectedLocation="selectedLocation"
           @set-activity-location="(activityId) => acceptActivityLocation(activityId)"
         />
       </div>
@@ -19,7 +20,6 @@
 </template>
 
 <script setup>
-// TODO : Si emplacement déjà assigner => modifier = enlever l'assignation precedante d'abord !
 import { Card } from 'primevue'
 import { computed } from 'vue'
 import { useActivityStore } from '@/stores/activities'
