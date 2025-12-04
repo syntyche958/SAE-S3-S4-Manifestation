@@ -192,30 +192,52 @@ function displayLegends(map, mapMode) {
   const legend = L.control({ position: 'bottomright' })
   let labels
   let colors
+  let colorsRGBA
   if (mapMode === MapModeEnum.PROVIDER) {
-    labels = [
-      'Emplacement libre',
-      'Emplacement demandé',
-      'Emplacement assigné',
-      'Emplacement occupé',
-    ]
+    labels = ['Libre', 'Demande en attente', 'Votre emplacement', 'Occupé']
     colors = ['orange', 'yellow', 'green', 'blue']
+    colorsRGBA = [
+      'rgba(255, 165, 0, 0.5)',
+      'rgba(255, 255, 0, 0.5)',
+      'rgba(0, 255, 0, 0.5)',
+      'rgba(0, 0, 255, 0.5)',
+    ]
   } else {
-    labels = ['Emplacement libre', 'Emplacement demandé', 'Emplacement occupé']
+    labels = ['Libre', 'Demande en attente', 'Occupé']
     colors = ['orange', 'yellow', 'blue']
+    colorsRGBA = ['rgba(255, 165, 0, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(0, 0, 255, 0.5)']
   }
 
   legend.onAdd = function () {
-    let div = L.DomUtil.create('div', 'info legend')
-    div.style.padding = '15px'
-    div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
-    div.style.borderRadius = '5px'
+    let legendContainer = L.DomUtil.create('div', 'info-legend')
+    L.DomEvent.disableClickPropagation(legendContainer)
+    legendContainer.style.padding = '15px'
+    legendContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.97)'
+    legendContainer.style.borderRadius = '5px'
+    legendContainer.style.display = 'flex'
+    legendContainer.style.flexDirection = 'column'
+    legendContainer.style.gap = '10px'
 
     for (let i = 0; i < labels.length; i++) {
-      div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`
+      let lineContainer = L.DomUtil.create('div', '', legendContainer)
+      lineContainer.style.display = 'flex'
+      lineContainer.style.gap = '10px'
+
+      let colorBox = L.DomUtil.create('div', '', lineContainer)
+      colorBox.style.background = colorsRGBA[i]
+      colorBox.style.width = '20px'
+      colorBox.style.height = '20px'
+      colorBox.style.borderStyle = 'solid'
+      colorBox.style.borderWidth = '2px'
+      colorBox.style.borderColor = colors[i]
+
+      let span = L.DomUtil.create('span', '', lineContainer)
+      span.innerText = labels[i]
+      span.style.cursor = 'default'
+      span.style.userSelect = 'none'
     }
 
-    return div
+    return legendContainer
   }
 
   legend.addTo(map)
@@ -226,7 +248,7 @@ function displayUnselectPanel(map, emit, mapMode, route) {
   customControl.onAdd = function () {
     const container = L.DomUtil.create('div', 'custom-panel')
     container.style.padding = '15px'
-    container.style.backgroundColor = 'rgba(31, 189, 136, 0.95)'
+    container.style.backgroundColor = 'rgba(31, 189, 136, 0.97)'
     container.style.borderRadius = '5px'
     container.style.black = 'black'
     container.style.cursor = 'pointer'
@@ -235,7 +257,7 @@ function displayUnselectPanel(map, emit, mapMode, route) {
       refreshLocations(map, emit, mapMode, route)
     }
 
-    const label = L.DomUtil.create('div', 'custom-button', container)
+    const label = L.DomUtil.create('b', 'custom-button', container)
     label.innerHTML = 'Déselectionner'
 
     // Empêche la carte de zoomer/déplacer lorsqu’on clique
