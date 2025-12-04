@@ -40,11 +40,11 @@ export async function displayLocations(map, mapMode, emit, route) {
     displayPinPoints(map)
   } else if (mapMode === MapModeEnum.ADMIN) {
     displayAreas(map, emit, mapMode, route)
-    displayLegendsAdmin(map)
+    displayLegends(map, mapMode)
     displayUnselectPanel(map, emit, mapMode, route)
   } else {
     displayAreas(map, emit, mapMode, route)
-    displayLegendsProvider(map)
+    displayLegends(map, mapMode)
     displayUnselectPanel(map, emit, mapMode, route)
   }
 }
@@ -169,46 +169,28 @@ function displayAreas(map, emit, mapMode, route) {
   }
 }
 
-// TODO : Améliorer le visuel de la légende
-function displayLegendsAdmin(map) {
+function displayLegends(map, mapMode) {
   const legend = L.control({ position: 'bottomright' })
-
-  legend.onAdd = function () {
-    let div = L.DomUtil.create('div', 'info legend')
-    div.style.padding = '15px'
-    div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
-    div.style.borderRadius = '5px'
-
-    let labels = ['Emplacement libre', 'Emplacement demandé', 'Emplacement occupé']
-    let colors = ['orange', 'yellow', 'blue']
-
-    for (let i = 0; i < labels.length; i++) {
-      div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`
-    }
-
-    return div
-  }
-
-  legend.addTo(map)
-}
-
-// TODO : Améliorer le visuel de la légende
-function displayLegendsProvider(map) {
-  const legend = L.control({ position: 'bottomright' })
-
-  legend.onAdd = function () {
-    let div = L.DomUtil.create('div', 'info legend')
-    div.style.padding = '15px'
-    div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
-    div.style.borderRadius = '5px'
-
-    let labels = [
+  let labels
+  let colors
+  if (mapMode === MapModeEnum.PROVIDER) {
+    labels = [
       'Emplacement libre',
       'Emplacement demandé',
       'Emplacement assigné',
       'Emplacement occupé',
     ]
-    let colors = ['orange', 'yellow', 'green', 'blue']
+    colors = ['orange', 'yellow', 'green', 'blue']
+  } else {
+    labels = ['Emplacement libre', 'Emplacement demandé', 'Emplacement occupé']
+    colors = ['orange', 'yellow', 'blue']
+  }
+
+  legend.onAdd = function () {
+    let div = L.DomUtil.create('div', 'info legend')
+    div.style.padding = '15px'
+    div.style.backgroundColor = 'rgba(255, 255, 255, 0.8)'
+    div.style.borderRadius = '5px'
 
     for (let i = 0; i < labels.length; i++) {
       div.innerHTML += `<span style="background:${colors[i]}">${labels[i]}</span><br>`
