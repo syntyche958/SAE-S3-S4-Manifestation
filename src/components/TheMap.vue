@@ -23,17 +23,18 @@ const props = defineProps({
 const emit = defineEmits(['changeSelectedLocation'])
 
 onMounted(async () => {
-  const route = useRoute()
-  // Map setup
-  const map = setupMap('map')
-  await displayLocations(map, props.displayMode, emit, route)
-
+  // watchers must stay before all await keyWord in onMounted
   watch(
     () => activityStore.activities,
     () => {
       refreshLocations(map, emit, props.displayMode, route)
     },
   )
+
+  const route = useRoute()
+  // Map setup
+  const map = setupMap('map')
+  await displayLocations(map, props.displayMode, emit, route)
 
   /* Fix :
     As TheMap is in a Tab component, map is first mounted with null size
