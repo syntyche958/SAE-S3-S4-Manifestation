@@ -5,7 +5,9 @@
     v-if="
       authStore.user?.type === UserTypeEnum.VISITOR ||
       (authStore.user?.type === UserTypeEnum.PROVIDER &&
-        route.params.provider_id !== authStore.user?.id)
+        // TODO : FIX
+        route.params.provider_id !==
+          providerStore.providers.find((p) => p.userId === authStore.user.id).id)
     "
   >
     .
@@ -48,7 +50,9 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
+import { useProviderStore } from '@/stores/providers.js'
 
 const authStore = useAuthStore()
+const providerStore = useProviderStore()
 const route = useRoute()
 </script>

@@ -20,9 +20,11 @@ const items = computed(() => {
 })
 
 function login(userType, id = undefined) {
-  console.log(id)
   if (userType === UserTypeEnum.ADMIN) {
     authStore.login({ id: 1, type: userType })
+  } else if (userType === UserTypeEnum.PROVIDER) {
+    const userId = providerStore.get(id).userId
+    authStore.login({ id: userId, type: userType })
   }
   emit('hide-dialog')
 }
@@ -39,12 +41,12 @@ function login(userType, id = undefined) {
     </li>
 
     <li>
-      <!-- @change="goToProvider" à activer si nécessaire -->
       <Dropdown
         v-model="selectedProvider"
         :options="items"
         optionLabel="label"
         placeholder="Prestataire"
+        @change="(e) => login(UserTypeEnum.PROVIDER, e.value.id)"
       />
     </li>
 
