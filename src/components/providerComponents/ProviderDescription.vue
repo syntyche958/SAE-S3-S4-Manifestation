@@ -6,13 +6,7 @@
         <div class="description-content" v-html="description"></div>
       </template>
     </Card>
-    <div
-      v-if="
-        authStore.user?.type === UserTypeEnum.ADMIN ||
-        (authStore.user?.type === UserTypeEnum.PROVIDER &&
-          Number.parseInt(route.params.provider_id) === authStore.user?.id)
-      "
-    >
+    <div v-if="!isProviderAdminPanelToHide()">
       <div class="card flex justify-center" style="margin-top: 25px">
         <Button
           icon="pi pi-pen-to-square"
@@ -34,18 +28,16 @@
 </template>
 
 <script setup>
-import { UserTypeEnum } from '@/enums/User.enum.js'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Card from 'primevue/card'
 import ProviderEditor from '@/components/providerComponents/ProviderEditor.vue'
 import { ref, watchEffect } from 'vue'
-import { useAuthStore } from '@/stores/auth.js'
 import { useRoute } from 'vue-router'
 import { useProviderStore } from '@/stores/providers'
+import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 
 const providerStore = useProviderStore()
-const authStore = useAuthStore()
 const route = useRoute()
 
 const displayDialog = ref(false)

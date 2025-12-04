@@ -1,16 +1,7 @@
 <template>
   <BreadcrumbNav />
   <!-- Visitor -->
-  <div
-    v-if="
-      authStore.user?.type === UserTypeEnum.VISITOR ||
-      (authStore.user?.type === UserTypeEnum.PROVIDER &&
-        // TODO : FIX
-        route.params.provider_id !==
-          providerStore.providers.find((p) => p.userId === authStore.user.id).id)
-    "
-  >
-    .
+  <div v-if="isProviderAdminPanelToHide()">
     <PresentationProviderSection />
   </div>
 
@@ -37,22 +28,14 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
-
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 
-import { useAuthStore } from '@/stores/auth'
-import { UserTypeEnum } from '@/enums/User.enum'
 import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
 import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
-import { useProviderStore } from '@/stores/providers.js'
-
-const authStore = useAuthStore()
-const providerStore = useProviderStore()
-const route = useRoute()
+import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 </script>
