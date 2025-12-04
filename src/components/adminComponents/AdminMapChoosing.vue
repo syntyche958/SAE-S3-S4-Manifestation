@@ -56,6 +56,7 @@
 </template>
 
 <script setup>
+// TODO : Si emplacement déjà assigner => modifier = enlever l'assignation precedante d'abord !
 import { useActivityStore } from '@/stores/activities'
 import { useLocationStore } from '@/stores/locations'
 import { useProviderStore } from '@/stores/providers'

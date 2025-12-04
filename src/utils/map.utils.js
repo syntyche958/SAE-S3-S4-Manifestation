@@ -116,9 +116,6 @@ async function displayAreasProvider(map, emit, route) {
 
     const isAskedByCurrentActivity =
       activityStore.get(currentActivityId).requestedLocationId == locationId
-    console.log('current activity : ' + currentActivityId)
-    console.log('current locationId : ' + locationId)
-    console.log('activity locationId : ' + activityStore.get(currentActivityId).locationId)
 
     // TODO : Fix => must only apply to location assigned to the current activity !
     const isAssignedToCurrentActivity =
@@ -129,7 +126,7 @@ async function displayAreasProvider(map, emit, route) {
     var areaColor = 'orange'
     if (isAssignedToCurrentActivity) areaColor = 'green'
     else if (isAskedByCurrentActivity) areaColor = 'yellow'
-    else if (isAssigned) areaColor = 'green'
+    else if (isAssigned) areaColor = 'blue'
 
     let polygon = L.polygon(location['area'], {
       color: areaColor,
