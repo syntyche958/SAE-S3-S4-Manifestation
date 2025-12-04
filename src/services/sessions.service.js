@@ -24,7 +24,7 @@ async function addSessionToLocalSource(activityId, beginningDate,beginingHour, d
   return{
     error: 0,
     status: 200,
-    data:{id: lastId + 1,activitiesId:activityId,beginningDate:beginningDate,beginingHour:beginingHour,duration:duration,nbPlace:nbPlace},
+    data:{id: lastId + 1,activitiesId:activityId,beginingDate:beginningDate,beginingHour:beginingHour,duration:duration,nbPlace:nbPlace},
   }
 }
 

@@ -113,6 +113,11 @@ function getAllSurveys(){
   return{error: 0, status:200,data:surveys}
 }
 
+function getSessionsByActivityId(activityId) {
+  const data = session.filter((s) => s.activitiesId === activityId)
+  return { error: 0, status: 200, data }
+}
+
 export default {
   updateProviderDescription,
   getAllProviders,
@@ -125,5 +130,6 @@ export default {
   getAllContacts,
   getAllContactsById,
   getAllSessions,
+  getSessionsByActivityId,
   getAllSurveys,
 }
