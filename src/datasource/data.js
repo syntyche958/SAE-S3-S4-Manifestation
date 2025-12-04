@@ -1,32 +1,44 @@
 import { UserTypeEnum } from '@/enums/User.enum'
 
 const providers = [
-  { id: 1, userId: 2, name: 'Centre équestre', description: 'Petite description de provider 1' },
+  {
+    id: 1,
+    userId: 2,
+    name: 'Centre équestre',
+    description:
+      'Un espace dédié aux amoureux des chevaux, où petits et grands découvrent des balades en poney encadrées par une équipe passionnée. Chaque sortie est pensée pour offrir un moment doux, rassurant et immersif dans l’univers équestre.',
+  },
   {
     id: 2,
     userId: 4,
     name: 'Ville de carcassonne',
-    description: 'Petite description de provider 2',
+    description:
+      'L’équipe officielle qui fait vivre la cité médiévale. Entre gestion des animations, mise en valeur du patrimoine et accueil chaleureux, elle veille à offrir une expérience authentique et mémorable à chaque visiteur.',
   },
   {
     id: 3,
     userId: 5,
     name: 'Remparts et lumière',
-    description: 'Petite description de provider 3',
+    description:
+      'Les créateurs du spectacle nocturne emblématique : un voyage visuel et sonore qui illumine les remparts et plonge le public dans les légendes de Carcassonne. Une expérience féerique, incontournable et chargée d’émotion.',
   },
   {
     id: 4,
     userId: 6,
     name: 'Troubadours moderne',
-    description: 'Petite description de provider 4',
+    description:
+      'Une troupe d’artistes qui réinvente l’art des troubadours. Musiciens, conteurs et comédiens transportent les visiteurs avec énergie, humour et poésie, créant une ambiance vivante et chaleureuse dans toute la cité.',
   },
   {
     id: 5,
     userId: 7,
     name: 'Camion de restauration',
-    description: 'Petite description de provider 5',
+    description:
+      'Un food-truck convivial qui revisite les saveurs médiévales. Plats généreux, recettes inspirées d’antan et produits locaux : une pause gourmande qui réchauffe et rassemble les visiteurs autour d’une cuisine authentique.',
   },
 ]
+
+
 
 const presentation = {
   small:
@@ -270,7 +282,7 @@ const session = [
   },
   {
     id: 2,
-    activitiesId: 2,
+    activitiesId: 1,
     beginingDate: '2025-11-16',
     beginingHour: '14:30',
     duration: 25,
@@ -278,7 +290,7 @@ const session = [
   },
   {
     id: 3,
-    activitiesId: 3,
+    activitiesId: 1,
     beginingDate: '2025-11-20',
     beginingHour: '14:30',
     duration: 40,
@@ -286,7 +298,7 @@ const session = [
   },
 ]
 
-const user = [{ id: 1, type: UserTypeEnum.ADMIN }]
+const user = [{ type: UserTypeEnum.VISITOR }]
 // const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
 // const user = [{ id: 3, type: UserTypeEnum.VISITOR }]
 
