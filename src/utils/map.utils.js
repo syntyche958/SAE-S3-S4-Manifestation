@@ -3,6 +3,7 @@ import { useLocationStore } from '@/stores/locations'
 import { ref } from 'vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import { useActivityStore } from '@/stores/activities'
+import { useProviderStore } from '@/stores/providers'
 
 const defaultPolygonWeight = 2
 
@@ -64,17 +65,25 @@ export function refreshLocations(map, emit, mapMode, route) {
   }
 }
 
-function bindPopupVisitor(map, marker) {
+function bindPopupVisitor(map, marker, locationId) {
+  const activityStore = useActivityStore()
+  const providerStore = useProviderStore()
+
   let mouseOnPopUp = false
   let mouseOneMarker = false
+
+  let activity = activityStore.activities.find((a) => a.locationId === locationId)
+  let activityName = activity.name
+  let providerName = providerStore.get(activity.providerId).name
   // Add popup with needed event to open and close it
   marker.on('mouseover', () => {
     map.closePopup()
     mouseOneMarker = true
+    // TODO : A plus haut niveau ne pas afficher le pinpoints si pas d'activité liée !
+    // TODO : Add onclick
     marker
       .bindPopup(
-        // TODO : Use real values (different depending on the display mode)
-        "<b>Nom de l'activité</b><br><span>Quelques informations</span><br><button>Plus d'informations</button>",
+        `<b>Prestataire : </b><span>${providerName}</span><br><b>Activité : </b><span>${activityName}</span>`,
       )
       .openPopup()
 
@@ -100,7 +109,7 @@ function displayPinPoints(map) {
   for (let location of locationStore.locations) {
     let marker = L.marker(location['coord']).addTo(map)
 
-    bindPopupVisitor(map, marker)
+    bindPopupVisitor(map, marker, location.id)
     markers.value.push(marker)
   }
 }
@@ -216,8 +225,8 @@ function displayUnselectPanel(map, emit, mapMode, route) {
       refreshLocations(map, emit, mapMode, route)
     }
 
-    const button = L.DomUtil.create('div', 'custom-button', container)
-    button.innerHTML = 'Déselectionner'
+    const label = L.DomUtil.create('div', 'custom-button', container)
+    label.innerHTML = 'Déselectionner'
 
     // Empêche la carte de zoomer/déplacer lorsqu’on clique
     L.DomEvent.disableClickPropagation(container)
