@@ -41,9 +41,11 @@ export async function displayLocations(map, mapMode, emit, route) {
   } else if (mapMode === MapModeEnum.ADMIN) {
     displayAreasAdmin(map, emit)
     displayLegendsAdmin(map)
+    displayUnselectPanel(map, emit, mapMode, route)
   } else {
     displayAreasProvider(map, emit, route)
     displayLegendsProvider(map)
+    displayUnselectPanel(map, emit, mapMode, route)
   }
 }
 
@@ -239,4 +241,29 @@ function displayLegendsProvider(map) {
   }
 
   legend.addTo(map)
+}
+
+function displayUnselectPanel(map, emit, mapMode, route) {
+  var customControl = L.control({ position: 'topright' })
+  customControl.onAdd = function () {
+    const container = L.DomUtil.create('div', 'custom-panel')
+    container.style.padding = '15px'
+    container.style.backgroundColor = 'rgba(31, 189, 136, 0.95)'
+    container.style.borderRadius = '5px'
+    container.style.black = 'black'
+    container.style.cursor = 'pointer'
+    container.onclick = function () {
+      emit('changeSelectedLocation', undefined)
+      refreshLocations(map, emit, mapMode, route)
+    }
+
+    const button = L.DomUtil.create('div', 'custom-button', container)
+    button.innerHTML = 'Déselectionner'
+
+    // Empêche la carte de zoomer/déplacer lorsqu’on clique
+    L.DomEvent.disableClickPropagation(container)
+
+    return container
+  }
+  customControl.addTo(map)
 }
