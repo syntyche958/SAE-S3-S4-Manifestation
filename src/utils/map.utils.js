@@ -12,10 +12,10 @@ export function setupMap(mapId) {
   let northEastBoundsCoords = L.latLng(43.209367, 2.368358)
   let bounds = new L.LatLngBounds(southWestBoundsCoords, northEastBoundsCoords)
   let options = { maxBounds: bounds, minZoom: 17 }
-  var map = L.map(mapId, options).setView([43.206496, 2.363834], 17)
+  const map = L.map(mapId, options).setView([43.206496, 2.363834], 17)
 
   // Define tile layer
-  var geoportailFranceTileLayer = L.tileLayer(
+  const geoportailFranceTileLayer = L.tileLayer(
     'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
     {
       attribution:
@@ -65,8 +65,8 @@ export function refreshLocations(map, emit, mapMode, route) {
 }
 
 function bindPopupVisitor(map, marker) {
-  var mouseOnPopUp = false
-  var mouseOneMarker = false
+  let mouseOnPopUp = false
+  let mouseOneMarker = false
   // Add popup with needed event to open and close it
   marker.on('mouseover', () => {
     map.closePopup()
@@ -108,13 +108,13 @@ function displayPinPoints(map) {
 function getAreaColor(locationId, mapMode, route) {
   const activityStore = useActivityStore()
 
-  if (mapMode == MapModeEnum.PROVIDER) {
+  if (mapMode === MapModeEnum.PROVIDER) {
     const currentActivityId = Number(route.params.activity_id)
     const isAskedByCurrentActivity =
-      activityStore.get(currentActivityId).requestedLocationId == locationId
+      activityStore.get(currentActivityId).requestedLocationId === locationId
 
     const isAssignedToCurrentActivity =
-      activityStore.get(currentActivityId).locationId == locationId
+      activityStore.get(currentActivityId).locationId === locationId
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
 
@@ -128,7 +128,7 @@ function getAreaColor(locationId, mapMode, route) {
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
     const isAskedByProviders =
-      activityStore.activities.filter((a) => a.requestedLocationId == locationId).length > 0
+      activityStore.activities.filter((a) => a.requestedLocationId === locationId).length > 0
 
     let areaColor = 'orange'
     if (isAssigned) areaColor = 'blue'
@@ -144,7 +144,7 @@ function displayAreas(map, emit, mapMode, route) {
   for (let location of locationStore.locations) {
     const locationId = location.id
 
-    var areaColor = getAreaColor(locationId, mapMode, route)
+    const areaColor = getAreaColor(locationId, mapMode, route)
 
     let polygon = L.polygon(location['area'], {
       color: areaColor,
@@ -171,7 +171,7 @@ function displayAreas(map, emit, mapMode, route) {
 
 // TODO : Améliorer le visuel de la légende
 function displayLegendsAdmin(map) {
-  var legend = L.control({ position: 'bottomright' })
+  const legend = L.control({ position: 'bottomright' })
 
   legend.onAdd = function () {
     let div = L.DomUtil.create('div', 'info legend')
@@ -194,7 +194,7 @@ function displayLegendsAdmin(map) {
 
 // TODO : Améliorer le visuel de la légende
 function displayLegendsProvider(map) {
-  var legend = L.control({ position: 'bottomright' })
+  const legend = L.control({ position: 'bottomright' })
 
   legend.onAdd = function () {
     let div = L.DomUtil.create('div', 'info legend')
@@ -221,7 +221,7 @@ function displayLegendsProvider(map) {
 }
 
 function displayUnselectPanel(map, emit, mapMode, route) {
-  var customControl = L.control({ position: 'topright' })
+  const customControl = L.control({ position: 'topright' })
   customControl.onAdd = function () {
     const container = L.DomUtil.create('div', 'custom-panel')
     container.style.padding = '15px'
