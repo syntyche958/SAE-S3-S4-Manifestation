@@ -37,9 +37,9 @@
     header="Apercu page de présentation"
     :style="{ width: '90%' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-  >
-    <PresentationSection :isPreview="true" />
-  </Dialog>
+    ><div class="relative">
+      <PresentationSection :isPreview="true" /></div
+  ></Dialog>
 </template>
 
 <script setup>

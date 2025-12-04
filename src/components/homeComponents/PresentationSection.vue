@@ -1,10 +1,5 @@
 <template>
   <div class="absolute top-0 left-0 w-full h-full">
-    <!-- <img
-      src="@/assets/images/main_bg.jpg.avif"
-      alt="Carcassonne castle"
-      class="w-full h-full object-cover"
-    /> -->
     <video class="w-full h-full object-cover" autoplay loop muted>
       <source src="@/assets/drone_video.mp4" />
     </video>
