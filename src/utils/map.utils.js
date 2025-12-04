@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import { useActivityStore } from '@/stores/activities'
 import { useProviderStore } from '@/stores/providers'
+import { useRouter } from 'vue-router'
 
 const defaultPolygonWeight = 2
 
@@ -68,37 +69,43 @@ export function refreshLocations(map, emit, mapMode, route) {
 function bindPopupVisitor(map, marker, locationId) {
   const activityStore = useActivityStore()
   const providerStore = useProviderStore()
+  const router = useRouter()
 
   let mouseOnPopUp = false
   let mouseOneMarker = false
 
   let activity = activityStore.activities.find((a) => a.locationId === locationId)
   let activityName = activity.name
-  let providerName = providerStore.get(activity.providerId).name
+  let provider = providerStore.get(activity.providerId)
+  let providerName = provider.name
+
   // Add popup with needed event to open and close it
   marker.on('mouseover', () => {
-    map.closePopup()
-    mouseOneMarker = true
-    // TODO : A plus haut niveau ne pas afficher le pinpoints si pas d'activité liée !
-    // TODO : Add onclick
-    marker
-      .bindPopup(
-        `<b>Prestataire : </b><span>${providerName}</span><br><b>Activité : </b><span>${activityName}</span>`,
-      )
-      .openPopup()
-
-    let markerElement = marker.getPopup().getElement()
-    markerElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
-    markerElement.addEventListener('mouseleave', () => {
-      mouseOnPopUp = false
-      marker.closePopup()
-    })
     marker.on('mouseout', () => {
       mouseOneMarker = false
       setTimeout(() => {
         if (!mouseOnPopUp && !mouseOneMarker) marker.closePopup()
       }, 200)
     })
+
+    map.closePopup()
+    mouseOneMarker = true
+    marker
+      .bindPopup(
+        `<b>Prestataire : </b><span>${providerName}</span><br><b>Activité : </b><span>${activityName}</span>`,
+      )
+      .openPopup()
+
+    let popupElement = marker.getPopup().getElement()
+    popupElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
+    popupElement.addEventListener('mouseleave', () => {
+      mouseOnPopUp = false
+      marker.closePopup()
+    })
+    popupElement.style.cursor = 'pointer'
+    popupElement.onclick = function () {
+      router.push(`/provider/${provider.id}/activity/${activity.id}`)
+    }
   })
 }
 
