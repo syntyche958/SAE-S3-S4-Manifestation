@@ -105,11 +105,14 @@ function bindPopupVisitor(map, marker, locationId) {
 function displayPinPoints(map) {
   const markers = ref([])
   const locationStore = useLocationStore()
+  const activityStore = useActivityStore()
 
   for (let location of locationStore.locations) {
-    let marker = L.marker(location['coord']).addTo(map)
+    // Do not display if no activity assigned to location
+    if (!activityStore.activities.find((a) => a.locationId === location.id)) continue
 
-    bindPopupVisitor(map, marker, location.id)
+    let marker = L.marker(location['coord']).addTo(map)
+    bindPopupVisitor(map, marker)
     markers.value.push(marker)
   }
 }
