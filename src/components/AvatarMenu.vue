@@ -44,7 +44,7 @@
       <Column field="id" header="Actions">
         <template #body="{ data }"
           ><div class="flex">
-            <Button label="Répondre" icon="pi pi-envelope" @click="() => envoyerMail(data.mail)" />
+            <Button label="Répondre" icon="pi pi-envelope" @click="() => sendMail(data.mail)" />
             <Button
               label="Marqué comme terminé"
               icon="pi pi-check-circle"
@@ -72,7 +72,9 @@ import { useContactStore } from '@/stores/contact'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const contactStore = useContactStore()
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
@@ -117,13 +119,16 @@ const items = computed(() => {
   res.push({
     label: 'Se déconnecter',
     icon: 'pi pi-sign-out',
-    command: () => authStore.logout(),
+    command: () => {
+      authStore.logout()
+      router.push('/')
+    },
   })
 
   return res
 })
 
-const envoyerMail = (mail) => {
+const sendMail = (mail) => {
   window.location.href = `mailto:${mail}`
 }
 </script>
