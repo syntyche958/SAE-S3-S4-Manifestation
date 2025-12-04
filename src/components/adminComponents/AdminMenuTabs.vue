@@ -1,13 +1,23 @@
 <template>
   <Tabs value="0">
     <TabList>
-      <Tab value="0"><i class="pi pi-file-edit"></i><span> Gérer la manifestation</span></Tab>
-      <Tab value="1"><i class="pi pi-map"></i><span> Carte interactive</span></Tab>
-      <Tab value="2"
-        ><i class="pi pi-users"></i><span> Gerer les demandes de prestataires</span></Tab
+      <Tab value="0"
+        ><i class="pi pi-file-edit mr-2"></i
+        ><span>{{ $t('message.administerTheEvent') }}</span></Tab
       >
-      <Tab value="3"><i class="pi pi-home"></i><span> Espace Prestataire</span></Tab>
-      <Tab value="4"><i class="pi pi-chart-bar"></i><span> Statistiques</span></Tab>
+      <Tab value="1"
+        ><i class="pi pi-map mr-2"></i><span>{{ $t('message.interactiveMap') }}</span></Tab
+      >
+      <Tab value="2"
+        ><i class="pi pi-users mr-2"></i
+        ><span>{{ $t('message.manageProviderRequests') }}</span></Tab
+      >
+      <Tab value="3"
+        ><i class="pi pi-home mr-2"></i><span>{{ $t('message.providerDashboard') }}</span></Tab
+      >
+      <Tab value="4"
+        ><i class="pi pi-chart-bar mr-2"></i><span>{{ $t('message.statistics') }}</span></Tab
+      >
     </TabList>
 
     <TabPanels>
@@ -16,7 +26,7 @@
       </TabPanel>
 
       <TabPanel value="1">
-        <h1>Carte interactive</h1>
+        <h1>{{ $t('message.interactiveMap') }}</h1>
         <div class="flex gap-2.5">
           <TheMap
             :displayMode="MapModeEnum.ADMIN"
@@ -39,7 +49,7 @@
       </TabPanel>
 
       <TabPanel value="3">
-        <h1>Espace prestaire</h1>
+        <h1>{{ $t('message.providerDashboard') }}</h1>
       </TabPanel>
 
       <TabPanel value="4">

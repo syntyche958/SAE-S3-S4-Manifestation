@@ -15,14 +15,14 @@
             </div>
             <div v-else class="card flex justify-center">
               <Button
-                label="Se connecter"
+                :label="$t('message.login')"
                 style="font-size: 16px; padding: 2px 6px"
                 @click="displayDialog = true"
               />
               <Dialog
                 v-model:visible="displayDialog"
                 modal
-                header="Se connecter en tant que : "
+                :header="$t('message.loginAs') + ' '"
                 :style="{ width: '50vw' }"
                 :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
               >

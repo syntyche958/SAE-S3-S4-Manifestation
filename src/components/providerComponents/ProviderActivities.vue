@@ -35,7 +35,7 @@ function goToActivity(activityId) {
 
 <template>
   <section style="margin: 3rem">
-    <h1>Activités</h1>
+    <h1>{{ $t('message.activities') }}</h1>
     <div class="list-activity-cards">
       <div v-for="(item, index) in activities" :key="index">
         <Card

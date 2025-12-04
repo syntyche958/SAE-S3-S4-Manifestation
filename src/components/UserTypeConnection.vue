@@ -1,37 +1,29 @@
 <template>
-  <ul style="display: flex; flex-direction: row; gap: 20px; align-items: center">
-    <li>
-      <Button
-        label="Administrateur"
-        style="font-size: 20px; padding: 3px 8px"
-        @click="
-          () => {
-            login(UserTypeEnum.ADMIN)
-            router.push('/admin')
-          }
-        "
-      />
-    </li>
-
-    <li>
-      <Select
-        v-model="selectedProvider"
-        :options="items"
-        optionLabel="label"
-        placeholder="Prestataire"
-        @change="
-          (e) => {
-            const providerId = e.value.id
-            login(UserTypeEnum.PROVIDER, providerId)
-            router.push(`/provider/${providerId}`)
-          }
-        "
-      />
-    </li>
-
-    <li><Button label="Visiteur" style="font-size: 20px; padding: 3px 8px" /></li>
-    <li><Button label="Rester déconnecté" style="font-size: 20px; padding: 3px 8px" /></li>
-  </ul>
+  <div class="flex justify-evenly">
+    <Button
+      :label="$t('message.admin')"
+      style="font-size: 20px; padding: 3px 8px"
+      @click="
+        () => {
+          login(UserTypeEnum.ADMIN)
+          router.push('/admin')
+        }
+      "
+    />
+    <Select
+      v-model="selectedProvider"
+      :options="items"
+      optionLabel="label"
+      :placeholder="$t('message.provider')"
+      @change="
+        (e) => {
+          const providerId = e.value.id
+          login(UserTypeEnum.PROVIDER, providerId)
+          router.push(`/provider/${providerId}`)
+        }
+      "
+    /><Button :label="$t('message.visitor')" style="font-size: 20px; padding: 3px 8px" />
+  </div>
 </template>
 
 <script setup>

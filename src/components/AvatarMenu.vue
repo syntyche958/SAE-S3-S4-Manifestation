@@ -35,9 +35,9 @@
     :modal="true"
     :draggable="false"
   >
-    <span v-if="contacts.length === 0" class="text-surface-500 dark:text-surface-400 block mb-8"
-      >Pas de nouveau message</span
-    >
+    <span v-if="contacts.length === 0" class="text-surface-500 dark:text-surface-400 block mb-8">{{
+      $t('message.noNewMessage')
+    }}</span>
     <DataTable v-if="contacts.length !== 0" :value="contacts" tableStyle="min-width: 50rem">
       <Column field="activityId" header="Activité"></Column>
       <Column field="message" header="Message"></Column>
@@ -73,6 +73,9 @@ import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const router = useRouter()
 const contactStore = useContactStore()
@@ -117,7 +120,7 @@ const items = computed(() => {
     })
   }
   res.push({
-    label: 'Se déconnecter',
+    label: t('message.logout'),
     icon: 'pi pi-sign-out',
     command: () => {
       authStore.logout()

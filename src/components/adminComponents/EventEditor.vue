@@ -1,5 +1,5 @@
 <template>
-  <h1>Modifier le texte de présentation de l'évenement</h1>
+  <h1>{{ $t('message.modifyPresentationText') }}</h1>
   <Editor v-model="smallText">
     <template v-slot:toolbar>
       <span class="ql-formats">

@@ -2,7 +2,7 @@
   <div class="w-1/2">
     <Card class="card-presentation">
       <template #content>
-        <h2>Qui sommes-nous ?</h2>
+        <h2>{{ $t('message.whoAreWe') }}</h2>
         <div class="description-content" v-html="description"></div>
       </template>
     </Card>
