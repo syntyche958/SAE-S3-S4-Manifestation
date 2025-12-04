@@ -11,7 +11,7 @@
     <Card v-if="selectedLocation != null">
       <template #title>Caractéristiques de l'emplacement séléctionné</template>
       <template #content>
-        <LocationCharacteristics :selected-location="selectedLocation" />
+        <LocationCharacteristics :selected-location="selectedLocation" :display-title="false" />
         <Button
           v-if="isActivyLocationAlreadySet"
           label="Votre activité a déjà un emplacement reservé"

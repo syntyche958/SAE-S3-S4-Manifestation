@@ -5,36 +5,12 @@
 
       <div v-else>
         <h1>Emplacement {{ selectedLocationId }} séléctionné</h1>
-        <h2>Caractéristiques de l'emplacement :</h2>
-        <LocationCharacteristics :selectedLocation="selectedLocation" />
-        <div v-if="locationRequestedBy.length > 0">
-          <h2>Demande en attente :</h2>
-          <DataTable :value="locationRequestedBy" paginator :rows="10" dataKey="id">
-            <!-- Columns -->
-            <Column field="name" header="Activité" sortable style="min-width: 12rem">
-              <template #body="{ data }">
-                {{ data.name }}
-              </template>
-            </Column>
-            <Column field="providerId" header="Prestataire" sortable style="min-width: 12rem">
-              <template #body="{ data }">
-                {{ providerStore.get(data.providerId).name }}
-              </template>
-            </Column>
-
-            <!-- Column « go to page »  -->
-            <Column field="id" header="" style="min-width: 12rem">
-              <template #body="{ data }">
-                <Button
-                  type="button"
-                  label="Accepter la demande"
-                  @click="acceptActivityLocation(data.id)"
-                  size="small"
-                />
-              </template>
-            </Column>
-          </DataTable>
-        </div>
+        <LocationCharacteristics :selectedLocation="selectedLocation" :displayTitle="true" />
+        <WaitingLocationRequests
+          :selectedLocationId="selectedLocationId"
+          @set-activity-location="(activityId) => acceptActivityLocation(activityId)"
+        />
+        <!-- TODO : Refactor dans un composant -->
         <h2>Choisir manuellement :</h2>
         <Select
           v-model="selectedActivity"
@@ -59,12 +35,10 @@
 // TODO : Si emplacement déjà assigner => modifier = enlever l'assignation precedante d'abord !
 import { useActivityStore } from '@/stores/activities'
 import { useLocationStore } from '@/stores/locations'
-import { useProviderStore } from '@/stores/providers'
-import { Button, Card, Column, DataTable, Select } from 'primevue'
+import { Button, Card, Select } from 'primevue'
 import { computed, ref } from 'vue'
 import LocationCharacteristics from '../LocationCharacteristics.vue'
-
-const providerStore = useProviderStore()
+import WaitingLocationRequests from './WaitingLocationRequests.vue'
 
 const props = defineProps({
   selectedLocationId: { type: Number },
@@ -84,10 +58,6 @@ const selectedLocation = computed(() =>
 const filteredActivities = computed(() =>
   activityStore.activities.filter((a) => a.locationId == undefined),
 )
-
-const locationRequestedBy = computed(() => {
-  return activityStore.activities.filter((a) => a.requestedLocationId == props.selectedLocationId)
-})
 
 const setActivityLocation = () => {
   acceptActivityLocation(selectedActivity.value.id)
