@@ -51,12 +51,14 @@ import { useI18n } from 'vue-i18n'
 import TheAvatar from './AvatarMenu.vue'
 import UserTypeConnection from '@/components/UserTypeConnection.vue'
 import Dialog from 'primevue/dialog'
+import { useActivityStore } from '@/stores/activities'
 
 const route = useRoute()
 const { t } = useI18n()
 
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
+const activityStore = useActivityStore()
 
 const displayDialog = ref(false)
 
@@ -88,11 +90,24 @@ const items = computed(() => {
     })
   }
 
+  let activitiesItem = {
+    label: t('message.activities'),
+    items: [],
+  }
+  for (let activity of activityStore.activities) {
+    activitiesItem.items.push({
+      label: activity.name,
+      command: () => {
+        router.push(`/provider/${activity.providerId}/activity/${activity.id}`)
+      },
+    })
+  }
+
   switch (authStore.user?.type) {
     case UserTypeEnum.ADMIN:
-      return [homeItem, providersItem, adminItem]
+      return [homeItem, providersItem, activitiesItem, adminItem]
     default:
-      return [homeItem, providersItem]
+      return [homeItem, providersItem, activitiesItem]
   }
 })
 </script>
