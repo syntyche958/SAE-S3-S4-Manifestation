@@ -11,7 +11,7 @@ const authStore = useAuthStore()
 const providerStore = useProviderStore()
 
 const selectedProvider = ref(null)
-
+const emit = defineEmits(['hide-dialog'])
 const items = computed(() => {
   return providerStore.providers.map((provider) => ({
     label: provider.name,
@@ -24,6 +24,7 @@ function login(userType, id = undefined) {
   if (userType === UserTypeEnum.ADMIN) {
     authStore.login({ id: 1, type: userType })
   }
+  emit('hide-dialog')
 }
 </script>
 

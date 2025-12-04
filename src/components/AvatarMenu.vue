@@ -117,7 +117,7 @@ const items = computed(() => {
   res.push({
     label: 'Se déconnecter',
     icon: 'pi pi-sign-out',
-    command: () => console.log('TODO'),
+    command: () => authStore.logout(),
   })
 
   return res

@@ -26,7 +26,7 @@
                 :style="{ width: '50vw' }"
                 :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
               >
-                <UserTypeConnection />
+                <UserTypeConnection @hide-dialog="displayDialog = false" />
               </Dialog>
             </div>
           </div>
@@ -72,8 +72,6 @@ const adminItem = {
     router.push('/admin')
   },
 }
-
-
 
 const items = computed(() => {
   let providersItem = {
