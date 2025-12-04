@@ -34,7 +34,7 @@
     v-model:visible="smallTextPreviewVisible"
     maximizable
     modal
-    header="Apercu page de présentation"
+    :header="$t('message.homePagePreview')"
     :style="{ width: '90%' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     ><div class="relative">

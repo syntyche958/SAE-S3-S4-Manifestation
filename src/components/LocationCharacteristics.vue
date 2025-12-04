@@ -1,8 +1,14 @@
 <template>
-  <h2 v-if="displayTitle">Caractéristiques de l'emplacement :</h2>
+  <h2 v-if="displayTitle">{{ $t('message.characteristicsOfTheLocation') + ' :' }}</h2>
   <div><b>Surface</b> : {{ selectedLocation.surfaceArea }}</div>
-  <div><b>Eau</b> : {{ selectedLocation.water ? 'Oui' : 'Non' }}</div>
-  <div><b>Electricité</b> : {{ selectedLocation.electricity ? 'Oui' : 'Non' }}</div>
+  <div>
+    <b>{{ $t('message.water') }}</b> :
+    {{ selectedLocation.water ? $t('message.yes') : $t('message.no') }}
+  </div>
+  <div>
+    <b>{{ $t('message.electricity') }}</b> :
+    {{ selectedLocation.electricity ? $t('message.yes') : $t('message.no') }}
+  </div>
 </template>
 
 <script setup>

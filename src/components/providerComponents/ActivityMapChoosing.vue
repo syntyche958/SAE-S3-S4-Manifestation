@@ -9,35 +9,33 @@
 
     <!-- Right panel -->
     <Card v-if="selectedLocation != null">
-      <template #title>Caractéristiques de l'emplacement séléctionné</template>
+      <template #title>{{ $t('message.characteristicsOfTheSelectedLocation') }}</template>
       <template #content>
         <LocationCharacteristics :selected-location="selectedLocation" :display-title="false" />
         <Button
           v-if="isActivyLocationAlreadySet"
-          label="Votre activité a déjà un emplacement reservé"
+          :label="t('message.alreadyReservedSpot')"
           severity="info"
           variant="text"
           disabled />
         <Button
           v-else-if="isAlreadyAsked"
-          label="Demande déjà enregistré"
+          :label="t('message.requestAlreadyRegistered')"
           severity="info"
           variant="text"
           disabled />
         <Button
           v-else-if="isAlreadyTaken"
-          label="Emplacement déjà réservé"
+          :label="t('message.locationAlreadyReserved')"
           severity="danger"
           variant="text"
           disabled />
-        <Button v-else label="Demander l'emplacement" @click="askLocation"></Button
+        <Button v-else :label="$t('message.requestLocation')" @click="askLocation"></Button
       ></template>
     </Card>
     <Card v-else
-      ><template #title> Aucun emplacement séléctionné</template
-      ><template #content
-        >Cliquer sur un emplacement sur la carte pour le séléctionner</template
-      ></Card
+      ><template #title>{{ $t('message.noLocationSelected') }}</template
+      ><template #content>{{ $t('message.clickOnLocation') }}</template></Card
     >
   </div>
 </template>
@@ -51,7 +49,9 @@ import { useLocationStore } from '@/stores/locations'
 import { useActivityStore } from '@/stores/activities'
 import { useRoute } from 'vue-router'
 import LocationCharacteristics from '../LocationCharacteristics.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const locationStore = useLocationStore()
 const activityStore = useActivityStore()
 const route = useRoute()

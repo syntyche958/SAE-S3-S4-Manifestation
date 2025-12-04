@@ -5,6 +5,7 @@ import { MapModeEnum } from '@/enums/Map.enums'
 import { useActivityStore } from '@/stores/activities'
 import { useProviderStore } from '@/stores/providers'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 const defaultPolygonWeight = 2
 
@@ -244,6 +245,8 @@ function displayLegends(map, mapMode) {
 }
 
 function displayUnselectPanel(map, emit, mapMode, route) {
+  const { t } = useI18n()
+
   const customControl = L.control({ position: 'topright' })
   customControl.onAdd = function () {
     const container = L.DomUtil.create('div', 'custom-panel')
@@ -258,7 +261,7 @@ function displayUnselectPanel(map, emit, mapMode, route) {
     }
 
     const label = L.DomUtil.create('b', 'custom-button', container)
-    label.innerHTML = 'Déselectionner'
+    label.innerHTML = t('message.deselect')
 
     // Empêche la carte de zoomer/déplacer lorsqu’on clique
     L.DomEvent.disableClickPropagation(container)

@@ -1,10 +1,10 @@
 <template>
   <Card class="w-full">
     <template #content>
-      <h1 v-if="selectedLocationId == undefined">Aucun emplacement séléctionné</h1>
+      <h1 v-if="selectedLocationId == undefined">{{ $t('message.noLocationSelected') }}</h1>
 
       <div v-else>
-        <h1>Emplacement {{ selectedLocationId }} séléctionné</h1>
+        <h1>{{ $t('message.selectedLocation', { id: selectedLocationId }) }}</h1>
         <LocationCharacteristics :selectedLocation="selectedLocation" :displayTitle="true" />
         <WaitingLocationRequests
           :selectedLocationId="selectedLocationId"
