@@ -17,8 +17,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // TODO : temporaire
+  function login(_user){
+    user.value = _user;
+  }
+
   return {
     user,
     getUser,
+    login,
   }
 })

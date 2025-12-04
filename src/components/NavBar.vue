@@ -13,7 +13,22 @@
             >
               <TheAvatar />
             </div>
-            <Button v-else label="Se connecter" class="p-button-outlined" />
+            <div v-else class="card flex justify-center">
+              <Button
+                label="Se connecter"
+                style="font-size: 16px; padding: 2px 6px"
+                @click="displayDialog = true"
+              />
+              <Dialog
+                v-model:visible="displayDialog"
+                modal
+                header="Se connecter en tant que : "
+                :style="{ width: '50vw' }"
+                :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+              >
+                <UserTypeConnection />
+              </Dialog>
+            </div>
           </div>
         </template>
       </Menubar>
@@ -26,7 +41,7 @@
 import { useRoute } from 'vue-router'
 import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import LocaleChanger from '@/components/LocaleChanger.vue'
 import router from '@/router'
@@ -34,12 +49,16 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useI18n } from 'vue-i18n'
 import TheAvatar from './AvatarMenu.vue'
+import UserTypeConnection from '@/components/UserTypeConnection.vue'
+import Dialog from 'primevue/dialog'
 
 const route = useRoute()
 const { t } = useI18n()
 
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
+
+const displayDialog = ref(false)
 
 const homeItem = {
   label: computed(() => t('message.home')),
@@ -53,6 +72,8 @@ const adminItem = {
     router.push('/admin')
   },
 }
+
+
 
 const items = computed(() => {
   let providersItem = {

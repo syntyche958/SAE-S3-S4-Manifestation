@@ -62,7 +62,7 @@ function goToActivity(activityId) {
         >
           <div class="card flex justify-center" style="margin-top: 25px">
             <Button
-              icon="pi pi-pencil"
+              icon="pi pi-pen-to-square"
               style="font-size: 25px; padding: 0 6px"
               @click="visibleActivity = true"
             />
