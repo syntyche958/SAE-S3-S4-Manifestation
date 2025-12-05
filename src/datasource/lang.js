@@ -49,6 +49,10 @@ const messages = {
       locationAlreadyReservedTo: 'Location already reserved to the activity',
       deselect: 'Deselect',
       requestLocation: 'Request location',
+      available: 'Available',
+      pendingRequest: 'Pending request',
+      occupied: 'Occupied',
+      yourLocation: 'Your location',
     },
   },
   fr: {
@@ -101,6 +105,10 @@ const messages = {
       locationAlreadyReservedTo: "Cet emplacement est déjà assigné à l'activité",
       deselect: 'Désélectionner',
       requestLocation: "Demander l'emplacement",
+      available: 'Libre',
+      pendingRequest: 'Demande en attente',
+      occupied: 'Occupé',
+      yourLocation: 'Votre emplacement',
     },
   },
 }

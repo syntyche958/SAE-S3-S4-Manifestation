@@ -1,11 +1,11 @@
-import * as L from 'leaflet'
-import { useLocationStore } from '@/stores/locations'
 import { ref } from 'vue'
-import { MapModeEnum } from '@/enums/Map.enums'
-import { useActivityStore } from '@/stores/activities'
-import { useProviderStore } from '@/stores/providers'
+import * as L from 'leaflet'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useLocationStore } from '@/stores/locations'
+import { useActivityStore } from '@/stores/activities'
+import { useProviderStore } from '@/stores/providers'
+import { MapModeEnum } from '@/enums/Map.enums'
 
 const defaultPolygonWeight = 2
 
@@ -68,6 +68,8 @@ export function refreshLocations(map, emit, mapMode, route) {
 }
 
 function bindPopupVisitor(map, marker, locationId) {
+  const { t } = useI18n()
+
   const activityStore = useActivityStore()
   const providerStore = useProviderStore()
   const router = useRouter()
@@ -93,7 +95,7 @@ function bindPopupVisitor(map, marker, locationId) {
     mouseOneMarker = true
     marker
       .bindPopup(
-        `<b>Prestataire : </b><span>${providerName}</span><br><b>Activité : </b><span>${activityName}</span>`,
+        `<b>${t('message.provider')} : </b><span>${providerName}</span><br><b>${t('message.activity')} : </b><span>${activityName}</span>`,
       )
       .openPopup()
 
@@ -190,12 +192,19 @@ function displayAreas(map, emit, mapMode, route) {
 }
 
 function displayLegends(map, mapMode) {
+  const { t } = useI18n()
+
   const legend = L.control({ position: 'bottomright' })
   let labels
   let colors
   let colorsRGBA
   if (mapMode === MapModeEnum.PROVIDER) {
-    labels = ['Libre', 'Demande en attente', 'Votre emplacement', 'Occupé']
+    labels = [
+      t('message.available'),
+      t('message.pendingRequest'),
+      t('message.yourLocation'),
+      t('message.occupied'),
+    ]
     colors = ['orange', 'yellow', 'green', 'blue']
     colorsRGBA = [
       'rgba(255, 165, 0, 0.5)',
@@ -204,7 +213,7 @@ function displayLegends(map, mapMode) {
       'rgba(0, 0, 255, 0.5)',
     ]
   } else {
-    labels = ['Libre', 'Demande en attente', 'Occupé']
+    labels = [t('message.available'), t('message.pendingRequest'), t('message.occupied')]
     colors = ['orange', 'yellow', 'blue']
     colorsRGBA = ['rgba(255, 165, 0, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(0, 0, 255, 0.5)']
   }
