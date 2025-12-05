@@ -53,6 +53,7 @@ const messages = {
       pendingRequest: 'Pending request',
       occupied: 'Occupied',
       yourLocation: 'Your location',
+      appearanceOfThePage: 'Appearance of the page',
     },
   },
   fr: {
@@ -109,6 +110,7 @@ const messages = {
       pendingRequest: 'Demande en attente',
       occupied: 'Occupé',
       yourLocation: 'Votre emplacement',
+      appearanceOfThePage: 'Apparence de la page',
     },
   },
 }
