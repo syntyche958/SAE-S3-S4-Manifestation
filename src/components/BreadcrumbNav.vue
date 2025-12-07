@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <Breadcrumb :home="home" :model="activity" />
 </template>
 
@@ -24,4 +24,4 @@ function updateBreadcrumb() {
 }
 
 watch(() => route.path, updateBreadcrumb, { immediate: true })
-</script>
+</script> -->

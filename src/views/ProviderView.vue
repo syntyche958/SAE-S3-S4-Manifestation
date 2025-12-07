@@ -1,5 +1,5 @@
 <template>
-  <BreadcrumbNav />
+  <!-- <BreadcrumbNav /> -->
   <!-- Visitor -->
   <div v-if="isProviderAdminPanelToHide()">
     <PresentationProviderSection />
@@ -42,6 +42,6 @@ import TabPanel from 'primevue/tabpanel'
 
 import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
-import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
+// import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 </script>
