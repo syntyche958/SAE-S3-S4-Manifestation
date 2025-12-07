@@ -10,7 +10,9 @@
         <Tab value="0"
           ><i class="pi pi-file-edit"></i><span>{{ $t('message.appearanceOfThePage') }}</span></Tab
         >
-        <Tab value="1"><i class="pi pi-file-edit"></i><span> Choix de l'emplacement</span></Tab>
+        <Tab value="1"
+          ><i class="pi pi-file-edit"></i><span>{{ $t('message.choiceOfLocation') }}</span></Tab
+        >
         <Tab value="2"><i class="pi pi-cog"></i><span> Configuration</span></Tab>
       </TabList>
       <TabPanels>

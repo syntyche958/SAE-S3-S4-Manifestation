@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2>Configuration de l'activité</h2>
+    <h2>{{ $t('message.configurationOfTheActivity') }}</h2>
     <div class="flex align-items-center gap-2" v-if="currentActivity">
       <Checkbox v-model="currentActivity.canRegister" inputId="can-register" :binary="true" />
-      <label for="can-register">Activer l'inscription</label>
+      <label for="can-register">{{ $t('message.enableRegistration') }}</label>
     </div>
   </div>
 </template>

@@ -41,7 +41,7 @@
                     >
                       <Button
                         icon="pi pi-user-plus"
-                        label="S'inscrire"
+                        :label="$t('message.signUp')"
                         @click="inscription(item)"
                         class="flex-auto md:flex-initial whitespace-nowrap"
                       ></Button>
