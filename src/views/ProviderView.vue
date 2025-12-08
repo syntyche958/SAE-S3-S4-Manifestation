@@ -1,5 +1,4 @@
 <template>
-  <!-- <BreadcrumbNav /> -->
   <!-- Visitor -->
   <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
     <Card class="main-section-container"
