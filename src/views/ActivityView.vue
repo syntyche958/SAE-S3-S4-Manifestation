@@ -1,10 +1,17 @@
 <template>
-  <div v-if="isProviderAdminPanelToHide()">
-    <ActivityPresentation />
+  <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
+    <Card class="main-section-container"
+      ><template #content
+        ><h1 class="text-center">
+          {{ activityStore.get(Number($route.params.activity_id)).name }}
+        </h1>
+        <ActivityPresentation />
+      </template>
+    </Card>
   </div>
 
   <div v-else class="flex justify-center">
-    <Card class="w-[95%] mt-[1vh] min-h-[80vh] z-0">
+    <Card class="main-section-container">
       <template #content>
         <Tabs value="0">
           <!-- TODO : Mettre dans le main css le margin rigth pour toutes les Tab entre icon et texte (avec une classe !? ou faire plus automatique ?) -->
@@ -43,4 +50,7 @@ import ActivityPresentation from '@/components/providerComponents/ActivityPresen
 import ActivityConfiguration from '@/components/providerComponents/ActivityConfiguration.vue'
 import ActivityMapChoosing from '@/components/providerComponents/ActivityMapChoosing.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
+import { useActivityStore } from '@/stores/activities'
+
+const activityStore = useActivityStore()
 </script>

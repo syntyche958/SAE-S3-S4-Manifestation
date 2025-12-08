@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-center">
-    <Card class="w-[95%] mt-[1vh] min-h-[80vh]">
+    <Card class="main-section-container">
       <template #content>
         <h1 class="text-center">{{ $t('message.adminPage') }}</h1>
         <Tabs value="0">

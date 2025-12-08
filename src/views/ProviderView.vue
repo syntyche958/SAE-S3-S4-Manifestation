@@ -2,7 +2,7 @@
   <!-- <BreadcrumbNav /> -->
   <!-- Visitor -->
   <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
-    <Card class="w-[95%] mt-[1vh] min-h-[80vh]"
+    <Card class="main-section-container"
       ><template #content>
         <h1 class="text-center">{{ providerStore.get(Number($route.params.provider_id)).name }}</h1>
         <PresentationProviderSection
@@ -12,7 +12,7 @@
 
   <!-- Provider / Admin -->
   <div v-else class="flex justify-center">
-    <Card class="w-[95%] mt-[1vh] min-h-[80vh]">
+    <Card class="main-section-container">
       <template #content>
         <Tabs value="0">
           <TabList>
