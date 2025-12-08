@@ -13,7 +13,7 @@
   <div v-else class="flex justify-center">
     <Card class="main-section-container">
       <template #content>
-        <h1 class="text-center">
+        <h1 class="text-center texturina-title">
           {{ activityStore.get(Number($route.params.activity_id)).name }}
         </h1>
         <Tabs value="0">
