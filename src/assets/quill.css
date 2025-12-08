@@ -1,0 +1,5 @@
+/* TODO : Fix pour conserver les espaces avec quill */
+.quill-content-display p {
+  margin-bottom: 1em !important;
+  margin-top: 0 !important;
+}

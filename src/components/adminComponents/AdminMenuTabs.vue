@@ -28,6 +28,7 @@
           <TabPanels>
             <TabPanel value="0">
               <EventEditor />
+              <EventEditorBig />
             </TabPanel>
 
             <TabPanel value="1">
@@ -76,6 +77,7 @@ import ManageProviders from './ManageNewProviders.vue'
 import { Tabs, TabList, Tab, TabPanel, TabPanels, Card } from 'primevue'
 import { ref } from 'vue'
 import AdminMapChoosing from './AdminMapChoosing.vue'
+import EventEditorBig from './EventEditorBig.vue'
 
 const selectedLocationId = ref()
 </script>

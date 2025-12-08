@@ -6,12 +6,14 @@ import PresentationService from '@/services/presentation.service'
 export const usePresentationStore = defineStore('presentation', () => {
   // STATE
   const small = ref('')
+  const big = ref('')
 
   // ACTIONS
   async function getPresentationContent() {
     let response = await PresentationService.getPresentationContent()
     if (response.error === 0) {
       small.value = response.data.small
+      big.value = response.data.big
     } else {
       console.log(response.data)
     }
@@ -21,5 +23,9 @@ export const usePresentationStore = defineStore('presentation', () => {
     small.value = smallTextHtml
   }
 
-  return { small, getPresentationContent, updateSmallText }
+  async function updateBigText(bigTextHtml) {
+    big.value = bigTextHtml
+  }
+
+  return { small, big, getPresentationContent, updateSmallText, updateBigText }
 })
