@@ -9,6 +9,6 @@
 
 <script setup>
 import NewProviderForm from '@/components/homeComponents/molecule/NewProviderForm.vue'
-import ContactForm from '@/components/providerComponents/ContactForm.vue'
+import ContactForm from '@/components/activityComponents/molecule/ContactForm.vue'
 import SatisfactionForm from '@/components/homeComponents/molecule/SatisfactionForm.vue'
 </script>

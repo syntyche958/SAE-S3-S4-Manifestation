@@ -26,7 +26,7 @@
 
 <script setup>
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primevue'
-import ActivityPresentation from '@/components/providerComponents/ActivityPresentation.vue'
-import ActivityConfiguration from '@/components/providerComponents/ActivityConfiguration.vue'
-import ActivityMapChoosing from '@/components/providerComponents/ActivityMapChoosing.vue'
+import ActivityPresentation from '@/components/activityComponents/molecule/ActivityPresentation.vue'
+import ActivityConfiguration from '@/components/activityComponents/molecule/ActivityConfiguration.vue'
+import ActivityMapChoosing from '@/components/activityComponents/organism/ActivityMapChoosing.vue'
 </script>

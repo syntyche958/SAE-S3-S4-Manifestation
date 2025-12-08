@@ -6,7 +6,7 @@ import router from '@/router/index.js'
 import { useActivityStore } from '@/stores/activities'
 import placeholder from '@/assets/images/photos/placeholder.jpg'
 import ProviderActivityEditor from '@/components/providerComponents/ProviderActivityEditor.vue'
-import AddActivity from '@/components/providerComponents/AddActivity.vue'
+import AddActivity from '@/components/activityComponents/molecule/AddActivity.vue'
 
 const route = useRoute()
 const activityStore = useActivityStore()
