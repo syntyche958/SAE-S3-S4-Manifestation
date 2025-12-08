@@ -1,8 +1,7 @@
 <template>
   <div
     v-if="!isProviderAdminPanelToHide()"
-    class="flex justify-center absolute top-0 right-5 z-10"
-    style="margin-top: 25px"
+    class="flex justify-center absolute top-0 right-0 mt-5 mr-5 z-10"
   >
     <Button
       icon="pi pi-pen-to-square"
