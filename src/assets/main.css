@@ -2,6 +2,7 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @import './font.css';
+@import './primevue.css';
 
 html {
   scroll-behavior: smooth;

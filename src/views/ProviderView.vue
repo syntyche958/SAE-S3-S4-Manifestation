@@ -15,7 +15,10 @@
   <!-- Provider / Admin -->
   <div v-else class="flex justify-center">
     <Card class="main-section-container">
-      <template #content>
+      <template #content
+        ><h1 class="text-center">
+          {{ providerStore.get(Number($route.params.provider_id)).name }}
+        </h1>
         <Tabs value="0">
           <TabList>
             <Tab value="0"

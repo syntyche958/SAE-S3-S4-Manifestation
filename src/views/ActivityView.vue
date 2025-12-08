@@ -13,6 +13,9 @@
   <div v-else class="flex justify-center">
     <Card class="main-section-container">
       <template #content>
+        <h1 class="text-center">
+          {{ activityStore.get(Number($route.params.activity_id)).name }}
+        </h1>
         <Tabs value="0">
           <!-- TODO : Mettre dans le main css le margin rigth pour toutes les Tab entre icon et texte (avec une classe !? ou faire plus automatique ?) -->
           <TabList>

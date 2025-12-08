@@ -1,0 +1,3 @@
+.p-tablist-tab-list {
+  @apply flex justify-center border-0!;
+}
