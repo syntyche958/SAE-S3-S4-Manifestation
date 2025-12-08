@@ -58,7 +58,7 @@ import { onMounted, ref } from 'vue'
 import Editor from 'primevue/editor'
 import { Button, Dialog } from 'primevue'
 import { usePresentationStore } from '@/stores/presentation'
-import PresentationTextSection from '@/components/homeComponents/PresentationTextSection.vue'
+import PresentationTextSection from '@/components/homeComponents/organism/PresentationTextSection.vue'
 
 const bigText = ref('')
 const bigTextPreviewVisible = ref(false)

@@ -54,7 +54,7 @@ import { onMounted, ref } from 'vue'
 import Editor from 'primevue/editor'
 import { Button, Dialog } from 'primevue'
 import { usePresentationStore } from '@/stores/presentation'
-import PresentationSection from '@/components/homeComponents/PresentationSection.vue'
+import PresentationSection from '@/components/homeComponents/organism/PresentationSection.vue'
 
 const smallText = ref('')
 const smallTextPreviewVisible = ref(false)

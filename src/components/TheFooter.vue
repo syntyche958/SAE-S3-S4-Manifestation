@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import NewProviderForm from '@/components/homeComponents/NewProviderForm.vue'
+import NewProviderForm from '@/components/homeComponents/molecule/NewProviderForm.vue'
 import ContactForm from '@/components/providerComponents/ContactForm.vue'
-import SatisfactionForm from './homeComponents/SatisfactionForm.vue'
+import SatisfactionForm from '@/components/homeComponents/molecule/SatisfactionForm.vue'
 </script>
