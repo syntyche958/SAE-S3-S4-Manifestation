@@ -3,13 +3,17 @@
     <template #content>
       <DataTable
         v-model:filters="filters"
-        :value="providers"
+        :value="activity"
+        rowGroupMode="rowspan"
+        groupRowsBy="provider.name"
         paginator
         :rows="10"
         dataKey="id"
         filterDisplay="menu"
         :loading="loading"
-        :globalFilterFields="['name']"
+        :globalFilterFields="['name', 'provider.name']"
+        sortMode="single"
+        sortField="provider.name"
       >
         <!-- Header -->
         <template #header>
@@ -34,28 +38,42 @@
           </div>
         </template>
 
-        <template #empty>No providers found.</template>
-        <template #loading>Loading data. Please wait...</template>
+        <template #empty>{{ $t('message.noActivityFound') }}</template>
+        <template #loading>{{ $t('message.loadingPlsWait') }}</template>
 
-        <!-- Column name -->
-        <Column field="name" header="Name" sortable style="min-width: 12rem">
+        <!-- Column provider -->
+        <Column field="provider.name" :header="$t('message.provider')" style="min-width: 12rem">
           <template #body="{ data }">
-            {{ data.name }}
+            <span>{{ data.provider.name }}</span
+            ><Button
+              icon="pi pi-info-circle"
+              label=""
+              size="small"
+              rounded
+              variant="link"
+              @click="$router.push(`/provider/${data.providerId}`)"
+            />
           </template>
           <template #filter="{ filterModel }">
             <InputText v-model="filterModel.value" placeholder="Search by name" />
           </template>
         </Column>
 
-        <!-- Column « go to page »  -->
-        <Column field="id" header="" style="min-width: 12rem">
+        <!-- Column activity -->
+        <Column field="name" :header="$t('message.activity')" sortable style="min-width: 12rem">
           <template #body="{ data }">
-            <Button
-              type="button"
-              :label="$t('message.goToPage')"
-              @click="goToPage(data.id)"
+            <span>{{ data.name }}</span
+            ><Button
+              icon="pi pi-info-circle"
+              label=""
               size="small"
+              rounded
+              variant="link"
+              @click="$router.push(`/provider/${data.providerId}/activity/${data.id}`)"
             />
+          </template>
+          <template #filter="{ filterModel }">
+            <InputText v-model="filterModel.value" placeholder="Search by name" />
           </template>
         </Column>
       </DataTable>
@@ -68,17 +86,23 @@ import { computed, ref, watch } from 'vue'
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api'
 import { InputText, Button, DataTable, Column, IconField, InputIcon, Card } from 'primevue'
 import { useProviderStore } from '@/stores/providers'
-import router from '@/router/index.js'
+import { useActivityStore } from '@/stores/activities'
 
 const providerStore = useProviderStore()
-const providers = computed(() => providerStore.providers)
+const activityStore = useActivityStore()
+
+const activity = computed(() =>
+  activityStore.activities.map((a) => {
+    return { ...a, provider: providerStore.get(a.providerId) }
+  }),
+)
 const filters = ref({})
 const loading = ref(true)
 
 watch(
-  providers,
+  activity,
   () => {
-    if (providers.value != null) {
+    if (activity.value != null) {
       loading.value = false
     }
   },
@@ -92,6 +116,10 @@ const initFilters = () => {
       operator: FilterOperator.AND,
       constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
     },
+    'provider.name': {
+      operator: FilterOperator.AND,
+      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+    },
   }
 }
 
@@ -99,9 +127,5 @@ initFilters()
 
 const clearFilter = () => {
   initFilters()
-}
-
-const goToPage = (providerId) => {
-  router.push({ name: 'provider_page', params: { provider_id: providerId } })
 }
 </script>

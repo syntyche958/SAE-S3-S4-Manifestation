@@ -66,6 +66,8 @@ const messages = {
       adminPage: 'Administrator page',
       giveFeedback: 'Give a feedback',
       addActivity: 'Add activity',
+      noActivityFound: 'No activities found',
+      loadingPlsWait: 'Loading data. Please wait...',
     },
   },
   fr: {
@@ -135,6 +137,8 @@ const messages = {
       adminPage: 'Page administrateur',
       giveFeedback: 'Donner mon avis',
       addActivity: 'Ajouter une activité',
+      noActivityFound: 'Aucune activité',
+      loadingPlsWait: 'Chargement, veuiller patienter ...',
     },
   },
 }
