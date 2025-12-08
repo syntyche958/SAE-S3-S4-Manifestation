@@ -48,8 +48,8 @@
 <script setup>
 import { Card, Tabs, Tab, TabPanel, TabPanels, TabList } from 'primevue'
 
-import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
-import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
+import PresentationProviderSection from '@/components/providerComponents/organism/PresentationProviderSection.vue'
+import ServicesProviderSection from '@/components/providerComponents/organism/ServicesProviderSection.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { useProviderStore } from '@/stores/providers'
 

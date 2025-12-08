@@ -23,7 +23,7 @@
 <script setup>
 import { Button, Dialog } from 'primevue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
-import ProviderEditor from '@/components/providerComponents/ProviderEditor.vue'
+import ProviderEditor from '@/components/providerComponents/molecule/ProviderEditor.vue'
 import { useRoute } from 'vue-router'
 import { computed, ref } from 'vue'
 import { useActivityStore } from '@/stores/activities'

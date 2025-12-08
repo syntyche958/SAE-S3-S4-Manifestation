@@ -22,7 +22,7 @@
 
 <script setup>
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
-import ProviderEditor from '@/components/providerComponents/ProviderEditor.vue'
+import ProviderEditor from '@/components/providerComponents/molecule/ProviderEditor.vue'
 import { ref } from 'vue'
 import { Dialog, Button } from 'primevue'
 

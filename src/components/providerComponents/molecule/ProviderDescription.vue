@@ -14,7 +14,7 @@
 
 <script setup>
 import Card from 'primevue/card'
-import ProviderDescEditor from '@/components/providerComponents/ProviderDescEditor.vue'
+import ProviderDescEditor from '@/components/providerComponents/molecule/ProviderDescEditor.vue'
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProviderStore } from '@/stores/providers'

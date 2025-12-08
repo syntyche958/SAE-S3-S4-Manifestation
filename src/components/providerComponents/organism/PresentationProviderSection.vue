@@ -1,7 +1,7 @@
 <script setup>
-import ProviderActivities from '@/components/providerComponents/ProviderActivities.vue'
-import ProviderDescription from '@/components/providerComponents/ProviderDescription.vue'
-import ProviderGalleria from '@/components/providerComponents/ProviderGalleria.vue'
+import ProviderActivities from '@/components/providerComponents/organism/ProviderActivities.vue'
+import ProviderDescription from '@/components/providerComponents/molecule/ProviderDescription.vue'
+import ProviderGalleria from '@/components/providerComponents/molecule/ProviderGalleria.vue'
 </script>
 
 <template>

@@ -5,7 +5,7 @@ import { Card } from 'primevue'
 import router from '@/router/index.js'
 import { useActivityStore } from '@/stores/activities'
 import placeholder from '@/assets/images/photos/placeholder.jpg'
-import ProviderActivityEditor from '@/components/providerComponents/ProviderActivityEditor.vue'
+import ProviderActivityEditor from '@/components/providerComponents/molecule/ProviderActivityEditor.vue'
 import AddActivity from '@/components/activityComponents/molecule/AddActivity.vue'
 
 const route = useRoute()
