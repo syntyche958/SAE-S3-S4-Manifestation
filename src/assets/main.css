@@ -1,7 +1,7 @@
 @import 'primeicons/primeicons.css';
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
-/* @import './base.css'; */
+@import './font.css';
 
 html {
   scroll-behavior: smooth;

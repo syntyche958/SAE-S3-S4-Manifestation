@@ -4,7 +4,9 @@
   <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
     <Card class="main-section-container"
       ><template #content>
-        <h1 class="text-center">{{ providerStore.get(Number($route.params.provider_id)).name }}</h1>
+        <h1 class="text-center">
+          {{ providerStore.get(Number($route.params.provider_id)).name }}
+        </h1>
         <PresentationProviderSection
       /></template>
     </Card>
