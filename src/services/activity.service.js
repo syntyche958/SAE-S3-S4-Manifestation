@@ -50,8 +50,26 @@ async function updateRequestedLocationIdLocalSource(activityId, requestedLocatio
   }
 }
 
+async function addToLocalSource(providerId, name, desc) {
+  const activityStore = useActivityStore()
+  const lastId = activityStore.activities.map((a) => a.id).sort((a, b) => b - a)[0]
+  const newActivity = {
+    id: lastId + 1,
+    providerId,
+    name,
+    description: desc,
+    presentationContent: `<h1>${name}!</h1>`,
+    locationId: undefined,
+    canRegister: false,
+    requestedLocationId: undefined,
+  }
+
+  return { error: 0, status: 200, data: newActivity }
+}
+
 export default {
   getAllActivities,
   updateLocationIdLocalSource,
   updateRequestedLocationIdLocalSource,
+  addToLocalSource,
 }

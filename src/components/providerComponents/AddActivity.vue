@@ -59,6 +59,11 @@ import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { Form } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
+import { useActivityStore } from '@/stores/activities'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const activityStore = useActivityStore()
 
 const visible = ref(false)
 const initialValues = ref({
@@ -80,6 +85,6 @@ const onFormSubmit = ({ valid, values }) => {
 
   visible.value = false
   console.log('TODO : ', values)
-  // contactStore.addContact(values.email, values.provider.id, null, values.message)
+  activityStore.add(Number(route.params.provider_id), values.name, values.desc)
 }
 </script>
