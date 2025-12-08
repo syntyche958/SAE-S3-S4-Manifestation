@@ -5,7 +5,7 @@
     </video>
     <div class="absolute top-0 left-0 w-full h-full bg-black/50"></div>
     <span
-      class="absolute z-1 top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 text-white text-center pointer-events-none [text-shadow:0_0_10px_rgba(0,0,0,0.7)] text-5xl sm:text-8xl"
+      class="texturina-title absolute z-1 top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 text-white text-center pointer-events-none [text-shadow:0_0_10px_rgba(0,0,0,0.7)] text-5xl sm:text-8xl"
       >Carcassonne autrefois</span
     >
     <div id="small-presentation" v-html="presentationStore.small" />

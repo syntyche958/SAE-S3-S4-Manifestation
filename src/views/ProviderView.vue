@@ -4,7 +4,7 @@
   <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
     <Card class="main-section-container"
       ><template #content>
-        <h1 class="text-center">
+        <h1 class="text-center texturina-title">
           {{ providerStore.get(Number($route.params.provider_id)).name }}
         </h1>
         <PresentationProviderSection

@@ -63,6 +63,7 @@ const messages = {
       signUp: 'Sign up',
       newProviders: 'New providers',
       adminPage: 'Administrator page',
+      giveFeedback: 'Give a feedback',
     },
   },
   fr: {
@@ -129,6 +130,7 @@ const messages = {
       signUp: "S'inscire",
       newProviders: 'Nouveau prestataires',
       adminPage: 'Page administrateur',
+      giveFeedback: 'Donner mon avis',
     },
   },
 }

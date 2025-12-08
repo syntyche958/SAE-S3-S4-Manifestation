@@ -1,6 +1,6 @@
 <template>
   <Button
-    label="Donner mon avis"
+    :label="$t('message.giveFeedback')"
     icon="pi pi-star"
     @click="openModal"
     severity="secondary"
@@ -20,7 +20,9 @@
         <div>
           <label class="font-semibold">Note globale *</label>
           <Rating v-model="form.rating" :cancel="false" />
-          <Message v-if="errors.rating" severity="error" size="small" variant="simple">{{ errors.rating }}</Message>
+          <Message v-if="errors.rating" severity="error" size="small" variant="simple">{{
+            errors.rating
+          }}</Message>
         </div>
 
         <div>
@@ -66,7 +68,9 @@
       <div>
         <label class="font-semibold">Commentaire / Suggestions</label>
         <Textarea v-model="form.comment" rows="4" />
-        <Message v-if="errors.comment" severity="error" size="small" variant="simple">{{ errors.comment }}</Message>
+        <Message v-if="errors.comment" severity="error" size="small" variant="simple">{{
+          errors.comment
+        }}</Message>
       </div>
 
       <div class="flex gap-2">
@@ -78,10 +82,14 @@
         <Checkbox v-model="form.consent" :binary="true" inputId="consent" />
         <label for="consent">J'accepte que mes réponses soient utilisées (anonymisées) *</label>
       </div>
-      <Message v-if="errors.consent" severity="error" size="small" variant="simple">{{ errors.consent }}</Message>
+      <Message v-if="errors.consent" severity="error" size="small" variant="simple">{{
+        errors.consent
+      }}</Message>
 
       <div class="flex justify-between items-center">
-        <small class="text-sm text-600">Merci — vos retours nous aident à améliorer l'événement.</small>
+        <small class="text-sm text-600"
+          >Merci — vos retours nous aident à améliorer l'événement.</small
+        >
         <div class="flex justify-end gap-2">
           <Button type="button" label="Annuler" severity="secondary" @click="visible = false" />
           <Button type="submit" label="Envoyer" />
@@ -117,13 +125,13 @@ const form = reactive({
   ratings: {
     organisation: 0,
     animations: 0,
-    accessibility: 0
+    accessibility: 0,
   },
   activities: [],
   comment: '',
   name: '',
   email: '',
-  consent: false
+  consent: false,
 })
 
 const errors = reactive({})
@@ -135,8 +143,9 @@ function clearErrors() {
 function validate() {
   clearErrors()
   if (!form.rating || form.rating < 1) errors.rating = 'Veuillez donner une note globale.'
-  if (!form.consent) errors.consent = "Le consentement est requis."
-  if (form.comment && form.comment.length > 2000) errors.comment = 'Commentaire trop long (max 2000).'
+  if (!form.consent) errors.consent = 'Le consentement est requis.'
+  if (form.comment && form.comment.length > 2000)
+    errors.comment = 'Commentaire trop long (max 2000).'
   return Object.keys(errors).length === 0
 }
 
@@ -152,19 +161,37 @@ async function submit() {
     name: form.name,
     email: form.email,
     consent: form.consent,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   }
 
   try {
     await saveSurvey(payload)
     visible.value = false
-    toast.add({ severity: 'success', summary: 'Merci', detail: 'Votre avis a bien été enregistré.', life: 3000 })
+    toast.add({
+      severity: 'success',
+      summary: 'Merci',
+      detail: 'Votre avis a bien été enregistré.',
+      life: 3000,
+    })
     // reset form
-    form.rating = 0; form.recommend = ''; form.ratings.organisation = 0; form.ratings.animations = 0; form.ratings.accessibility = 0
-    form.activities = []; form.comment = ''; form.name = ''; form.email = ''; form.consent = false
+    form.rating = 0
+    form.recommend = ''
+    form.ratings.organisation = 0
+    form.ratings.animations = 0
+    form.ratings.accessibility = 0
+    form.activities = []
+    form.comment = ''
+    form.name = ''
+    form.email = ''
+    form.consent = false
   } catch (e) {
     console.error(e)
-    toast.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible d\'enregistrer votre avis.', life: 4000 })
+    toast.add({
+      severity: 'error',
+      summary: 'Erreur',
+      detail: "Impossible d'enregistrer votre avis.",
+      life: 4000,
+    })
   }
 }
 </script>
@@ -173,6 +200,6 @@ async function submit() {
 /* petits ajustements pour la largeur / responsive */
 .p-dialog .p-dialog-content {
   overflow: auto;
-  height : 80px;
+  height: 80px;
 }
 </style>
