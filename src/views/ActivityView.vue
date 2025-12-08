@@ -2,28 +2,7 @@
   <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
     <Card class="main-section-container"
       ><template #content>
-        <div class="relative">
-          <h1 class="text-center texturina-title">
-            {{ activityStore.get(Number($route.params.activity_id)).name }}
-          </h1>
-          <div class="absolute top-0 left-0">
-            <Button
-              :label="
-                providerStore.get(activityStore.get(Number($route.params.activity_id)).providerId)
-                  .name
-              "
-              @click="
-                $router.push(
-                  `/provider/${activityStore.get(Number($route.params.activity_id)).providerId}`,
-                )
-              "
-              icon="pi pi-angle-left"
-              severity="contrast"
-              size="small"
-              variant="outlined"
-            />
-          </div>
-        </div>
+        <ActivityCardTitle />
         <ActivityPresentation />
       </template>
     </Card>
@@ -32,9 +11,7 @@
   <div v-else class="flex justify-center">
     <Card class="main-section-container">
       <template #content>
-        <h1 class="text-center texturina-title">
-          {{ activityStore.get(Number($route.params.activity_id)).name }}
-        </h1>
+        <ActivityCardTitle />
         <Tabs value="0">
           <!-- TODO : Mettre dans le main css le margin rigth pour toutes les Tab entre icon et texte (avec une classe !? ou faire plus automatique ?) -->
           <TabList>
@@ -49,15 +26,12 @@
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <!-- TODO : Ajouter le nom de l'activité comme rappel visuel -->
               <ActivityPresentation />
             </TabPanel>
             <TabPanel value="1">
-              <!-- TODO : Ajouter le nom de l'activité comme rappel visuel -->
               <ActivityMapChoosing />
             </TabPanel>
             <TabPanel value="2">
-              <!-- TODO : Ajouter le nom de l'activité comme rappel visuel -->
               <ActivityConfiguration />
             </TabPanel>
           </TabPanels> </Tabs
@@ -67,14 +41,10 @@
 </template>
 
 <script setup>
-import { Card, Tabs, TabList, Tab, TabPanels, TabPanel, Button } from 'primevue'
+import { Card, Tabs, TabList, Tab, TabPanels, TabPanel } from 'primevue'
 import ActivityPresentation from '@/components/providerComponents/ActivityPresentation.vue'
 import ActivityConfiguration from '@/components/providerComponents/ActivityConfiguration.vue'
 import ActivityMapChoosing from '@/components/providerComponents/ActivityMapChoosing.vue'
+import ActivityCardTitle from '@/components/activityComponents/ActivityCardTitle.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
-import { useActivityStore } from '@/stores/activities'
-import { useProviderStore } from '@/stores/providers'
-
-const activityStore = useActivityStore()
-const providerStore = useProviderStore()
 </script>
