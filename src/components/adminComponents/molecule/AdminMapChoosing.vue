@@ -25,8 +25,8 @@ import { computed } from 'vue'
 import { useActivityStore } from '@/stores/activities'
 import { useLocationStore } from '@/stores/locations'
 import LocationCharacteristics from '@/components/LocationCharacteristics.vue'
-import WaitingLocationRequests from '@/components/adminComponents/WaitingLocationRequests.vue'
-import ManuallySetActivityLocation from '@/components/adminComponents/ManuallySetActivityLocation.vue'
+import WaitingLocationRequests from '@/components/adminComponents/molecule/WaitingLocationRequests.vue'
+import ManuallySetActivityLocation from '@/components/adminComponents/molecule/ManuallySetActivityLocation.vue'
 
 const props = defineProps({
   selectedLocationId: { type: Number },

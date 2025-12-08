@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import AdminMenuTabs from '@/components/adminComponents/AdminMenuTabs.vue'
+import AdminMenuTabs from '@/components/adminComponents/organism/AdminMenuTabs.vue'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useAuthStore } from '@/stores/auth'
 import { onMounted } from 'vue'

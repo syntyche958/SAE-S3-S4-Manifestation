@@ -73,10 +73,10 @@ import EventEditorSmall from '@/components/adminComponents/molecule/EventEditorS
 import TheMap from '@/components/TheMap.vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import AdminStats from '@/components/adminComponents/organism/AdminStats.vue'
-import ManageNewProviders from '@/components/adminComponents/ManageNewProviders.vue'
+import ManageNewProviders from '@/components/adminComponents/molecule/ManageNewProviders.vue'
 import { Tabs, TabList, Tab, TabPanel, TabPanels, Card } from 'primevue'
 import { ref } from 'vue'
-import AdminMapChoosing from '@/components/adminComponents/AdminMapChoosing.vue'
+import AdminMapChoosing from '@/components/adminComponents/molecule/AdminMapChoosing.vue'
 import EventEditorBig from '@/components/adminComponents/molecule/EventEditorBig.vue'
 
 const selectedLocationId = ref()
