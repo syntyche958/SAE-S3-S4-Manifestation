@@ -11,7 +11,7 @@
                 authStore.user?.type === UserTypeEnum.PROVIDER
               "
             >
-              <TheAvatar />
+              <AvatarMenu />
             </div>
             <div v-else class="card flex justify-center">
               <Button
@@ -43,19 +43,18 @@ import Menubar from 'primevue/menubar'
 import Button from 'primevue/button'
 import { computed, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import LocaleChanger from '@/components/LocaleChanger.vue'
+import LocaleChanger from '@/components/globalComponents/atom/LocaleChanger.vue'
 import router from '@/router'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useI18n } from 'vue-i18n'
-import TheAvatar from './AvatarMenu.vue'
-import UserTypeConnection from '@/components/UserTypeConnection.vue'
+import AvatarMenu from '@/components/globalComponents/molecule/AvatarMenu.vue'
+import UserTypeConnection from '@/components/globalComponents/molecule/UserTypeConnection.vue'
 import Dialog from 'primevue/dialog'
 import { useActivityStore } from '@/stores/activities'
 
 const route = useRoute()
 const { t } = useI18n()
-
 
 const authStore = useAuthStore()
 const providerStore = useProviderStore()

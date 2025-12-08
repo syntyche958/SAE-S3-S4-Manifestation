@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-import NavBar from '@/components/NavBar.vue'
+import NavBar from '@/components/globalComponents/molecule/NavBar.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useLocationStore } from '@/stores/locations'
 import { useProviderStore } from '@/stores/providers'
@@ -9,11 +9,11 @@ import { usePresentationStore } from '@/stores/presentation'
 import { UserTypeEnum } from '@/enums/User.enum'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue'
-import { setToast } from './utils/toast.utils'
-import TheFooter from './components/TheFooter.vue'
-import { useContactStore } from './stores/contact'
-import { useActivityStore } from './stores/activities'
-import AnimatedBackground from './components/AnimatedBackground.vue'
+import { setToast } from '@/utils/toast.utils'
+import TheFooter from '@/components/globalComponents/molecule/TheFooter.vue'
+import { useContactStore } from '@/stores/contact'
+import { useActivityStore } from '@/stores/activities'
+import AnimatedBackground from '@/components/globalComponents/molecule/AnimatedBackground.vue'
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()

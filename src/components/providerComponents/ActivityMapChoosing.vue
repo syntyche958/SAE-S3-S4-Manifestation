@@ -44,12 +44,12 @@
 <script setup>
 import { Button, Card } from 'primevue'
 import { MapModeEnum } from '@/enums/Map.enums'
-import TheMap from '@/components/TheMap.vue'
+import TheMap from '@/components/globalComponents/molecule/TheMap.vue'
 import { computed, ref } from 'vue'
 import { useLocationStore } from '@/stores/locations'
 import { useActivityStore } from '@/stores/activities'
 import { useRoute } from 'vue-router'
-import LocationCharacteristics from '../LocationCharacteristics.vue'
+import LocationCharacteristics from '@/components/globalComponents/molecule/LocationCharacteristics.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

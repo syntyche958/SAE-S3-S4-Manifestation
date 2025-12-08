@@ -70,7 +70,7 @@
 
 <script setup>
 import EventEditorSmall from '@/components/adminComponents/molecule/EventEditorSmall.vue'
-import TheMap from '@/components/TheMap.vue'
+import TheMap from '@/components/globalComponents/molecule/TheMap.vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import AdminStats from '@/components/adminComponents/organism/AdminStats.vue'
 import ManageNewProviders from '@/components/adminComponents/molecule/ManageNewProviders.vue'

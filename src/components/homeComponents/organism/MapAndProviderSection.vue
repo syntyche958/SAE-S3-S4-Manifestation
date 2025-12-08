@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import TheMap from '@/components/TheMap.vue'
+import TheMap from '@/components/globalComponents/molecule/TheMap.vue'
 import ProviderTable from '@/components/homeComponents/molecule/ProviderTable.vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 </script>
