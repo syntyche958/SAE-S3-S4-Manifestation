@@ -3,6 +3,13 @@
   <Editor v-model="smallText">
     <template v-slot:toolbar>
       <span class="ql-formats">
+        <select class="ql-header">
+          <option value="1">Titre 1</option>
+          <option value="2">Titre 2</option>
+          <option selected></option>
+        </select>
+      </span>
+      <span class="ql-formats">
         <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
         <button v-tooltip.bottom="'Italic'" class="ql-italic"></button>
         <button v-tooltip.bottom="'Underline'" class="ql-underline"></button>
