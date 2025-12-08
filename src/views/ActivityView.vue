@@ -22,7 +22,7 @@
 import { Card } from 'primevue'
 
 import ActivityPresentation from '@/components/providerComponents/ActivityPresentation.vue'
-import ActivityCardTitle from '@/components/activityComponents/ActivityCardTitle.vue'
-import ActivityMenuTabs from '@/components/activityComponents/ActivityMenuTabs.vue'
+import ActivityCardTitle from '@/components/activityComponents/molecule/ActivityCardTitle.vue'
+import ActivityMenuTabs from '@/components/activityComponents/organism/ActivityMenuTabs.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <h2>{{ $t('message.modifyPresentationText') }}</h2>
-  <Editor v-model="smallText">
+  <h2 class="mt-10">{{ $t('message.modifyPresentationTextBig') }}</h2>
+  <Editor v-model="bigText">
     <template v-slot:toolbar>
       <span class="ql-formats">
         <select class="ql-header">
@@ -15,6 +15,10 @@
         <button v-tooltip.bottom="'Underline'" class="ql-underline"></button>
       </span>
       <span class="ql-formats">
+        <button v-tooltip.bottom="'Liste à puces'" class="ql-list" value="bullet"></button>
+        <button v-tooltip.bottom="'Liste numérotée'" class="ql-list" value="ordered"></button>
+      </span>
+      <span class="ql-formats">
         <select class="ql-color"></select>
         <select class="ql-background"></select>
       </span>
@@ -27,25 +31,25 @@
     <Button
       :label="$t('message.save')"
       icon="pi pi-save"
-      @click="presentationStore.updateSmallText(smallText)"
+      @click="presentationStore.updateBigText(bigText)"
     />
     <Button
       :label="$t('message.preview')"
       variant="outlined"
       severity="secondary"
-      @click="smallTextPreviewVisible = true"
+      @click="bigTextPreviewVisible = true"
     ></Button>
   </div>
 
   <Dialog
-    v-model:visible="smallTextPreviewVisible"
+    v-model:visible="bigTextPreviewVisible"
     maximizable
     modal
     :header="$t('message.homePagePreview')"
     :style="{ width: '90%' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     ><div class="relative">
-      <PresentationSection :isPreview="true" /></div
+      <PresentationTextSection :isPreview="true" /></div
   ></Dialog>
 </template>
 
@@ -54,13 +58,13 @@ import { onMounted, ref } from 'vue'
 import Editor from 'primevue/editor'
 import { Button, Dialog } from 'primevue'
 import { usePresentationStore } from '@/stores/presentation'
-import PresentationSection from '../homeComponents/PresentationSection.vue'
+import PresentationTextSection from '@/components/homeComponents/PresentationTextSection.vue'
 
-const smallText = ref('')
-const smallTextPreviewVisible = ref(false)
+const bigText = ref('')
+const bigTextPreviewVisible = ref(false)
 const presentationStore = usePresentationStore()
 
 onMounted(() => {
-  smallText.value = presentationStore.small
+  bigText.value = presentationStore.big
 })
 </script>

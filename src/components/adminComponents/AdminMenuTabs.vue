@@ -27,7 +27,7 @@
 
           <TabPanels>
             <TabPanel value="0">
-              <EventEditor />
+              <EventEditorSmall />
               <EventEditorBig />
             </TabPanel>
 
@@ -52,7 +52,7 @@
             </TabPanel>
 
             <TabPanel value="2">
-              <ManageProviders />
+              <ManageNewProviders />
             </TabPanel>
 
             <TabPanel value="3">
@@ -69,15 +69,15 @@
 </template>
 
 <script setup>
-import EventEditor from './EventEditor.vue'
-import TheMap from '../TheMap.vue'
+import EventEditorSmall from '@/components/adminComponents/molecule/EventEditorSmall.vue'
+import TheMap from '@/components/TheMap.vue'
 import { MapModeEnum } from '@/enums/Map.enums'
-import AdminStats from './AdminStats.vue'
-import ManageProviders from './ManageNewProviders.vue'
+import AdminStats from '@/components/adminComponents/organism/AdminStats.vue'
+import ManageNewProviders from '@/components/adminComponents/ManageNewProviders.vue'
 import { Tabs, TabList, Tab, TabPanel, TabPanels, Card } from 'primevue'
 import { ref } from 'vue'
-import AdminMapChoosing from './AdminMapChoosing.vue'
-import EventEditorBig from './EventEditorBig.vue'
+import AdminMapChoosing from '@/components/adminComponents/AdminMapChoosing.vue'
+import EventEditorBig from '@/components/adminComponents/molecule/EventEditorBig.vue'
 
 const selectedLocationId = ref()
 </script>
