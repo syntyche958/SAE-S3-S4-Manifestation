@@ -1,6 +1,6 @@
 <template>
   <!-- <Divider type="solid" /> -->
-  <div class="w-full bg-transparent flex justify-center gap-2 h-[10vh] items-center">
+  <div class="w-full bg-transparent flex justify-center gap-2 h-[6vh] items-center">
     <ContactForm />
     <NewProviderForm />
     <SatisfactionForm />

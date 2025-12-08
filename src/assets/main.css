@@ -20,5 +20,5 @@ h2 {
 }
 
 .main-section-container {
-  @apply w-[95%] mt-[1vh] min-h-[80vh];
+  @apply w-[95%] mt-[1vh] min-h-[85vh];
 }
