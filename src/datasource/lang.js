@@ -1,6 +1,7 @@
 const messages = {
   en: {
     message: {
+      name: 'Name',
       modify: 'Modify',
       yes: 'Yes',
       no: 'No',
@@ -64,10 +65,12 @@ const messages = {
       newProviders: 'New providers',
       adminPage: 'Administrator page',
       giveFeedback: 'Give a feedback',
+      addActivity: 'Add activity',
     },
   },
   fr: {
     message: {
+      name: 'Nom',
       modify: 'Modifier',
       yes: 'Oui',
       no: 'Non',
@@ -131,6 +134,7 @@ const messages = {
       newProviders: 'Nouveau prestataires',
       adminPage: 'Page administrateur',
       giveFeedback: 'Donner mon avis',
+      addActivity: 'Ajouter une activité',
     },
   },
 }

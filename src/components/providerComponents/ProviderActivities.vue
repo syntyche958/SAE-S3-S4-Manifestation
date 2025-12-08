@@ -5,7 +5,8 @@ import { Card } from 'primevue'
 import router from '@/router/index.js'
 import { useActivityStore } from '@/stores/activities'
 import placeholder from '@/assets/images/photos/placeholder.jpg'
-import ProviderActivityEditor from './ProviderActivityEditor.vue'
+import ProviderActivityEditor from '@/components/providerComponents/ProviderActivityEditor.vue'
+import AddActivity from '@/components/providerComponents/AddActivity.vue'
 
 const route = useRoute()
 const activityStore = useActivityStore()
@@ -28,7 +29,10 @@ function goToActivity(activityId) {
 
 <template>
   <section style="margin: 3rem">
-    <h1 class="text-center texturina-title">{{ $t('message.activities') }}</h1>
+    <div class="flex justify-center items-center">
+      <h1 class="text-center texturina-title mr-3">{{ $t('message.activities') }}</h1>
+      <AddActivity />
+    </div>
     <div class="flex justify-center">
       <div v-for="(item, index) in activities" :key="index">
         <Card
