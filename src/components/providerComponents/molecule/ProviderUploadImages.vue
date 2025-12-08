@@ -1,21 +1,28 @@
-
 <template>
   <div class="card">
-    <PrimeToast />
-    <PrimeFileUpload name="demo[]" url="/api/upload" @upload="onAdvancedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
+    <FileUpload
+      name="demo[]"
+      url="/api/upload"
+      @upload="onAdvancedUpload($event)"
+      :multiple="true"
+      accept="image/*"
+      :maxFileSize="1000000"
+    >
       <template #empty>
-        <span>Déposez ici (drag and drop) les images que vous souhaitez rendre visibles dans le caroussel</span>
+        <span
+          >Déposez ici (drag and drop) les images que vous souhaitez rendre visibles dans le
+          caroussel</span
+        >
       </template>
-    </PrimeFileUpload>
+    </FileUpload>
   </div>
 </template>
 
 <script setup>
-import { useToast } from "primevue/usetoast";
-const toast = useToast();
+import { displaySuccessToast } from '@/utils/toast.utils'
+import { FileUpload } from 'primevue'
 
 const onAdvancedUpload = () => {
-  toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-};
+  displaySuccessToast('File uploaded')
+}
 </script>
-
