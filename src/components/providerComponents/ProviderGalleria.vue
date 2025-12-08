@@ -1,11 +1,14 @@
 <template>
-  <div class="card" style="max-width: 400px">
+  <div class="card relative" style="max-width: 400px">
     <Galleria
       :value="images"
       :responsiveOptions="responsiveOptions"
       :numVisible="5"
       containerStyle="max-width: 640px"
     >
+      <template #header>
+        <ProviderImageModifier />
+      </template>
       <template #item="slotProps">
         <img
           :src="slotProps.item.itemImageSrc"
@@ -17,24 +20,6 @@
         <img :src="slotProps.item.thumbnailImageSrc" :alt="slotProps.item.alt" />
       </template>
     </Galleria>
-    <div v-if="!isProviderAdminPanelToHide()">
-      <div class="card flex justify-center" style="margin-top: 25px">
-        <Button
-          icon="pi pi-pen-to-square"
-          style="font-size: 25px; padding: 0 6px"
-          @click="visibleCarrousel = true"
-        />
-        <Dialog
-          v-model:visible="visibleCarrousel"
-          modal
-          header="Modification des images : "
-          :style="{ width: '50vw' }"
-          :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-        >
-          <UploadImages />
-        </Dialog>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -42,13 +27,9 @@
 import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProviderStore } from '@/stores/providers.js'
-import Button from 'primevue/button'
-import Dialog from 'primevue/dialog'
 import Galleria from 'primevue/galleria'
-import UploadImages from '@/components/providerComponents/ProviderUploadImages.vue'
-import { isProviderAdminPanelToHide } from '@/utils/user.utils'
+import ProviderImageModifier from './ProviderImageModifier.vue'
 
-const visibleCarrousel = ref(false)
 const route = useRoute()
 const images = ref()
 const providerStore = useProviderStore()
