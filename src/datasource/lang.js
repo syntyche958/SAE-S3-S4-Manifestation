@@ -61,6 +61,7 @@ const messages = {
       enableRegistration: 'Enable registration',
       signUp: 'Sign up',
       newProviders: 'New providers',
+      adminPage: 'Administrator page',
     },
   },
   fr: {
@@ -125,6 +126,7 @@ const messages = {
       enableRegistration: "Activer l'inscription",
       signUp: "S'inscire",
       newProviders: 'Nouveau prestataires',
+      adminPage: 'Page administrateur',
     },
   },
 }

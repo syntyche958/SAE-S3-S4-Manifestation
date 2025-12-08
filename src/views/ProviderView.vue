@@ -1,13 +1,18 @@
 <template>
   <!-- <BreadcrumbNav /> -->
   <!-- Visitor -->
-  <div v-if="isProviderAdminPanelToHide()">
-    <PresentationProviderSection />
+  <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
+    <Card class="w-[95%] mt-[1vh] min-h-[80vh]"
+      ><template #content>
+        <h1 class="text-center">{{ providerStore.get(Number($route.params.provider_id)).name }}</h1>
+        <PresentationProviderSection
+      /></template>
+    </Card>
   </div>
 
   <!-- Provider / Admin -->
   <div v-else class="flex justify-center">
-    <Card class="w-[95%] mt-[1vh] min-h-[80vh] z-0">
+    <Card class="w-[95%] mt-[1vh] min-h-[80vh]">
       <template #content>
         <Tabs value="0">
           <TabList>
@@ -41,6 +46,8 @@ import { Card, Tabs, Tab, TabPanel, TabPanels, TabList } from 'primevue'
 
 import PresentationProviderSection from '@/components/providerComponents/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/ServicesProviderSection.vue'
-// import BreadcrumbNav from '@/components/BreadcrumbNav.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
+import { useProviderStore } from '@/stores/providers'
+
+const providerStore = useProviderStore()
 </script>

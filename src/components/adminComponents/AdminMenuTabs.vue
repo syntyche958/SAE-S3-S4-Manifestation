@@ -2,7 +2,7 @@
   <div class="flex justify-center">
     <Card class="w-[95%] mt-[1vh] min-h-[80vh]">
       <template #content>
-        <h1 class="text-center">Page administrateur</h1>
+        <h1 class="text-center">{{ $t('message.adminPage') }}</h1>
         <Tabs value="0">
           <TabList>
             <Tab value="0"
