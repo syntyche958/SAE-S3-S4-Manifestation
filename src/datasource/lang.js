@@ -60,6 +60,7 @@ const messages = {
       configurationOfTheActivity: 'Configuration of the activity',
       enableRegistration: 'Enable registration',
       signUp: 'Sign up',
+      newProviders: 'New providers',
     },
   },
   fr: {
@@ -123,6 +124,7 @@ const messages = {
       configurationOfTheActivity: "Configuration de l'activité",
       enableRegistration: "Activer l'inscription",
       signUp: "S'inscire",
+      newProviders: 'Nouveau prestataires',
     },
   },
 }

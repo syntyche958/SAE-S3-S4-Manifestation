@@ -1,7 +1,7 @@
 <template>
   <Card :class="props?.class ? props.class : ''">
     <template #content>
-      <div id="map" class="h-[90vh] w-[90vw] sm:h-[80vh] sm:w-[50vw]"></div>
+      <div id="map" :class="'h-[90vh] w-[90vw] ' + classSize"></div>
     </template>
   </Card>
 </template>
@@ -18,6 +18,7 @@ const activityStore = useActivityStore()
 const props = defineProps({
   displayMode: { type: String, required: true },
   class: { type: String, required: false },
+  classSize: { type: String, required: true },
 })
 
 const emit = defineEmits(['changeSelectedLocation'])

@@ -5,6 +5,7 @@
       :display-mode="MapModeEnum.PROVIDER"
       @change-selected-location="onChangeSelectedLocation"
       class="w-fit"
+      classSize="sm:h-[50vh] sm:w-[70vh]"
     />
 
     <!-- Right panel -->

@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ $t('message.modifyPresentationText') }}</h1>
+  <h2>{{ $t('message.modifyPresentationText') }}</h2>
   <Editor v-model="smallText">
     <template v-slot:toolbar>
       <span class="ql-formats">

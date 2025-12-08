@@ -13,6 +13,7 @@ import { setToast } from './utils/toast.utils'
 import TheFooter from './components/TheFooter.vue'
 import { useContactStore } from './stores/contact'
 import { useActivityStore } from './stores/activities'
+import AnimatedBackground from './components/AnimatedBackground.vue'
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
@@ -40,6 +41,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <AnimatedBackground v-if="$route.path != '/'" />
   <Toast position="top-center" />
   <NavBar />
 

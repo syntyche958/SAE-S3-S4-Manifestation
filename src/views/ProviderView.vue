@@ -6,31 +6,29 @@
   </div>
 
   <!-- Provider / Admin -->
-  <div v-else>
-    <Tabs value="0">
-      <TabList>
-        <Tab value="0"
-          ><i class="pi pi-file-edit"></i><span>{{ $t('message.appearanceOfThePage') }}</span></Tab
-        >
-        <Tab value="1"
-          ><i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span></Tab
-        >
-        <Tab disabled
-          ><i class="pi pi-file-edit"></i><span> {{ $t('message.seeStatistics') }}</span></Tab
-        >
-      </TabList>
+  <Tabs v-else value="0">
+    <TabList>
+      <Tab value="0"
+        ><i class="pi pi-file-edit"></i><span>{{ $t('message.appearanceOfThePage') }}</span></Tab
+      >
+      <Tab value="1"
+        ><i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span></Tab
+      >
+      <Tab disabled
+        ><i class="pi pi-file-edit"></i><span> {{ $t('message.seeStatistics') }}</span></Tab
+      >
+    </TabList>
 
-      <TabPanels>
-        <TabPanel value="0">
-          <PresentationProviderSection />
-        </TabPanel>
+    <TabPanels>
+      <TabPanel value="0">
+        <PresentationProviderSection />
+      </TabPanel>
 
-        <TabPanel value="1">
-          <ServicesProviderSection />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-  </div>
+      <TabPanel value="1">
+        <ServicesProviderSection />
+      </TabPanel>
+    </TabPanels>
+  </Tabs>
 </template>
 
 <script setup>

@@ -1,7 +1,7 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
   <div class="card">
-    <h1 class="m-0">Demande de nouveau prestataires</h1>
+    <h2 class="m-0">{{ $t('message.newProviders') }}</h2>
     <DataTable :value="providerStore.newProviders" dataKey="id">
       <Column field="name" header="Nom" sortable style="min-width: 16rem" />
       <Column field="description" header="Description" sortable style="min-width: 20rem" />
