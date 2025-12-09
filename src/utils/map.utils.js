@@ -122,7 +122,7 @@ function displayPinPoints(map) {
     if (!activityStore.activities.find((a) => a.locationId === location.id)) continue
 
     let marker = L.marker(location['coord']).addTo(map)
-    bindPopupVisitor(map, marker)
+    bindPopupVisitor(map, marker, location.id)
     markers.value.push(marker)
   }
 }
