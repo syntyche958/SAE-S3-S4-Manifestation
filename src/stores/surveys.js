@@ -5,7 +5,7 @@ import SurveyService from '@/services/survey.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
 export const useSurveyStore = defineStore('survey', () => {
-  // STATE
+
   const surveys = ref([])
 
   // ACTIONS

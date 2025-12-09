@@ -8,6 +8,7 @@ import {
   contacts,
   activities,
   session,
+  surveys,
 } from '@/datasource/data'
 
 /**
@@ -104,6 +105,14 @@ async function updateProviderDescription(providerId, providerDesc) {
   }
 }
 
+/**
+ * Get all surveys
+ * @returns {{error:number,status:number,data:array}}
+ */
+function getAllSurveys(){
+  return{error: 0, status:200,data:surveys}
+}
+
 export default {
   updateProviderDescription,
   getAllProviders,
@@ -116,4 +125,5 @@ export default {
   getAllContacts,
   getAllContactsById,
   getAllSessions,
+  getAllSurveys,
 }

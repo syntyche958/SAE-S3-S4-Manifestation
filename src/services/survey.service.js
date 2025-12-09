@@ -1,17 +1,60 @@
-const STORAGE_KEY = 'app_surveys'
+import LocalSource from '@/services/localsource.service.js'
+import { useSurveyStore } from '@/stores/surveys'
+import { networkErrResponse } from '@/utils/network.utils'
 
-export async function saveSurvey(survey) {
-  const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  const entry = { ...survey, id: Date.now() }
-  list.push(entry)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-  return Promise.resolve(entry)
+async function getAllSurveysFromLocalSource() {
+  return LocalSource.getAllSurveys()
 }
 
-export function getAllSurveys() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+async function addSurveyToLocalSource(surveyData) {
+  const surveyStore = useSurveyStore()
+
+  let lastId = 0
+  surveyStore.surveys.forEach((s) => {
+    lastId = Math.max(lastId, s.id)
+  })
+
+  return {
+    error: 0,
+    status: 200,
+    data: {
+      ...surveyData,
+      id: lastId + 1,
+      createdAt: new Date().toISOString(),
+    },
+  }
 }
 
-export function clearSurveys() {
-  localStorage.removeItem(STORAGE_KEY)
+async function clearSurveysFromLocalSource() {
+  return { error: 0, status: 200, data: [] }
+}
+
+async function getAllSurveys() {
+  try {
+    return await getAllSurveysFromLocalSource()
+  } catch {
+    return networkErrResponse
+  }
+}
+
+async function addSurvey(surveyData) {
+  try {
+    return await addSurveyToLocalSource(surveyData)
+  } catch {
+    return networkErrResponse
+  }
+}
+
+async function clearSurveys() {
+  try {
+    return await clearSurveysFromLocalSource()
+  } catch {
+    return networkErrResponse
+  }
+}
+
+export default {
+  getAllSurveys,
+  addSurvey,
+  clearSurveys,
 }

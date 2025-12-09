@@ -109,11 +109,9 @@ import Message from 'primevue/message'
 import RadioButton from 'primevue/radiobutton'
 import Checkbox from 'primevue/checkbox'
 import Rating from 'primevue/rating'
-import { useToast } from 'primevue/usetoast'
+import { useSurveyStore }from '@/stores/surveys'
 
-import { saveSurvey } from '@/services/survey.service'
-
-const toast = useToast()
+const surveyStore = useSurveyStore()
 const visible = ref(false)
 const openModal = () => (visible.value = true)
 
@@ -165,7 +163,7 @@ async function submit() {
   }
 
   try {
-    await saveSurvey(payload)
+    await surveyStore.addSurvey(payload)
     visible.value = false
     toast.add({
       severity: 'success',
