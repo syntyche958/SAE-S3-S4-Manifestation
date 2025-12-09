@@ -68,6 +68,7 @@ const messages = {
       addActivity: 'Add activity',
       noActivityFound: 'No activities found',
       loadingPlsWait: 'Loading data. Please wait...',
+      noNewRequest: 'No new request',
     },
   },
   fr: {
@@ -139,6 +140,7 @@ const messages = {
       addActivity: 'Ajouter une activité',
       noActivityFound: 'Aucune activité',
       loadingPlsWait: 'Chargement, veuiller patienter ...',
+      noNewRequest: 'Pas de nouvelles demandes',
     },
   },
 }

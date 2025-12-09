@@ -3,6 +3,8 @@
   <div class="card">
     <h2 class="m-0">{{ $t('message.newProviders') }}</h2>
     <DataTable :value="providerStore.newProviders" dataKey="id">
+      <template #empty>{{ $t('message.noNewRequest') }}</template>
+
       <Column field="name" header="Nom" sortable style="min-width: 16rem" />
       <Column field="description" header="Description" sortable style="min-width: 20rem" />
       <Column style="min-width: 12rem" header="Actions">
