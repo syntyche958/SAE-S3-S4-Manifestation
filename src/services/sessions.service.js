@@ -97,10 +97,21 @@ async function addSession(activityId,beginningDate,beginingHour,duration,nbPlace
   return response
 }
 
+async function updateSession(sessionId, updatedData) {
+  let response = null
+  try {
+    response = await updateSessionFromLocalSource(sessionId, updatedData)
+  } catch {
+    return networkErrResponse
+  }
+  return response
+}
+
 
 export default {
   getAllSessions,
   getSessionsByActivityId,
   removeSession,
   addSession,
+  updateSession,
 }
