@@ -1,7 +1,7 @@
 import {
   providers,
   locations,
-  user,
+  users,
   newProviders,
   providerImages,
   presentation,
@@ -65,8 +65,8 @@ function getAllLocations() {
  * Get user informations
  * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id:string, type:string}}}
  */
-function getUser() {
-  return { error: 0, status: 200, data: user }
+function getUsers() {
+  return { error: 0, status: 200, data: users }
 }
 
 /**
@@ -109,8 +109,17 @@ async function updateProviderDescription(providerId, providerDesc) {
  * Get all surveys
  * @returns {{error:number,status:number,data:array}}
  */
-function getAllSurveys(){
-  return{error: 0, status:200,data:surveys}
+function getAllSurveys() {
+  return { error: 0, status: 200, data: surveys }
+}
+
+function login(mail, password) {
+  const user = users.find((u) => u.mail == mail && u.passwword == password)
+  if (user) {
+    return { error: 0, status: 200, data: user }
+  } else {
+    return { error: 1, status: 400, data: null }
+  }
 }
 
 
@@ -130,11 +139,12 @@ export default {
   getAllNewProviders,
   getProviderImages,
   getAllLocations,
-  getUser,
+  getUsers,
   getPresentationContent,
   getAllContacts,
   getAllContactsById,
   getAllSessions,
   getSessionsByActivityId,
   getAllSurveys,
+  login,
 }

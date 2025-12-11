@@ -69,6 +69,10 @@ const messages = {
       noActivityFound: 'No activities found',
       loadingPlsWait: 'Loading data. Please wait...',
       noNewRequest: 'No new request',
+      password: 'Password',
+      signIn: 'Sign in',
+      logedIn: 'Loged in',
+      loginFail: 'Login failed',
     },
   },
   fr: {
@@ -141,6 +145,10 @@ const messages = {
       noActivityFound: 'Aucune activité',
       loadingPlsWait: 'Chargement, veuiller patienter ...',
       noNewRequest: 'Pas de nouvelles demandes',
+      password: 'Mot de passe',
+      signIn: "S'enregistrer",
+      logedIn: 'Connecté',
+      loginFail: "Echec de l'authentification",
     },
   },
 }
