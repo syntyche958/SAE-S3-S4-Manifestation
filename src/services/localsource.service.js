@@ -113,6 +113,11 @@ function getAllSurveys(){
   return{error: 0, status:200,data:surveys}
 }
 
+
+/**
+ * Get provider images
+ * @returns {{error:number, status: number, data: [{id: number, activitiesId: number, beginingDate: string, beginingHour: string, duration: number, nbPlace: number}]}}
+ */
 function getSessionsByActivityId(activityId) {
   const data = session.filter((s) => s.activitiesId === activityId)
   return { error: 0, status: 200, data }
