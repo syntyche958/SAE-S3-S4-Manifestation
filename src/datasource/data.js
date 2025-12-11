@@ -342,6 +342,7 @@ const session = [
     beginingHour: '14:30',
     duration: 30,
     nbPlace: 10,
+    registersUsers: [1, 4, 9],
   },
   {
     id: 2,
@@ -350,6 +351,7 @@ const session = [
     beginingHour: '14:30',
     duration: 25,
     nbPlace: 10,
+    registersUsers: [1, 4, 9],
   },
   {
     id: 3,
@@ -358,6 +360,7 @@ const session = [
     beginingHour: '14:30',
     duration: 40,
     nbPlace: 10,
+    registersUsers: [1, 4, 9],
   },
 ]
 

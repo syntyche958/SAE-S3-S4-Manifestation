@@ -31,7 +31,9 @@
                       <div class="text-sm text-surface-600 mt-1">
                         Durée: {{ item.duration }} minutes
                       </div>
-                      <div class="text-sm text-surface-600 mt-1">Place: {{ item.nbPlace }}</div>
+                      <div class="text-sm text-surface-600 mt-1">
+                        Places: {{ item.nbPlace - item.registersUsers.length }} / {{ item.nbPlace }}
+                      </div>
                     </div>
                   </div>
                   <div class="flex flex-col md:items-end gap-8">
@@ -43,6 +45,7 @@
                         icon="pi pi-user-plus"
                         :label="$t('message.signUp')"
                         @click="inscription(item)"
+                        :disabled="item.nbPlace <= item.registersUsers.length"
                         class="flex-auto md:flex-initial whitespace-nowrap"
                       ></Button>
                     </div>
@@ -61,19 +64,21 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Button, DataView, Select } from 'primevue'
-import { useToast } from 'primevue/usetoast'
+// import { useToast } from 'primevue/usetoast'
 import { useActivityStore } from '@/stores/activities'
 import { useSessionStore } from '@/stores/sessions.js'
+import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils.js'
 
 const route = useRoute()
 const activityStore = useActivityStore()
 const sessionsStore = useSessionStore()
-const toast = useToast()
+// const toast = useToast()
 
 const sessions = ref()
 const triKey = ref()
 const triOrder = ref()
 const triField = ref()
+const selectedSession = ref(null) // the session which have been clicked to register
 
 const triOptions = ref([
   { label: 'Date croissante', nom: 'beginingDate' },
@@ -97,7 +102,7 @@ const onSortChange = (event) => {
 
   if (value.indexOf('!') === 0) {
     triOrder.value = -1
-    triField.value = value.slice(1) // enleve le 1er caractere (plus moderne que substring)
+    triField.value = value.slice(1)
     triKey.value = triValue
   } else {
     triOrder.value = 1
@@ -106,12 +111,30 @@ const onSortChange = (event) => {
   }
 }
 
-function inscription(session) {
-  toast.add({
-    severity: 'success',
-    summary: 'Inscription réussie',
-    detail: `Vous êtes désormais inscrit à la séance numéro ${session.id}`,
-    life: 3000, // 3sec
-  })
+async function inscription(session) {
+  selectedSession.value = session // the good session
+  const placesRestantes = session.nbPlace - session.registersUsers.length
+
+  if (placesRestantes <= 0) {
+    displayErrToast('Plus de places disponibles pour cette session')
+    return
+  }
+
+  const userId = 15 // user connected id
+  // TODO : Ne plus la mettre en dur
+
+  // copie l'ancien tableau et ajoute le nouvel user
+  const updatedData = {
+    registersUsers: session.registersUsers.concat(userId),
+  }
+  console.log(updatedData)
+  await sessionsStore.updateSession(session.id, updatedData)
+
+  await sessionsStore.getAllSessions()
+  sessions.value = sessionsStore.sessions.filter((s) => s.activitiesId === currentActivity.value.id)
+  console.log()
+  const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
+
+  displaySuccessToast(`Vous êtes inscrit à la session #${session.id}. Places restantes : ${nouvellesPlacesRestantes}/${session.nbPlace}`)
 }
 </script>

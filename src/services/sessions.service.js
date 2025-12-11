@@ -20,11 +20,38 @@ async function removeSessionFromLocalSource(sessionId){
 async function addSessionToLocalSource(activityId, beginningDate,beginingHour, duration,nbPlace) {
   const sessionStore=useSessionStore()
   let lastId = 0
-  sessionStore.sessions.forEach((s) => {lastId = Math.max(lastId, s.id)})
-  return{
+  sessionStore.sessions.forEach((s) => {
+    lastId = Math.max(lastId, s.id)
+  })
+  return {
     error: 0,
     status: 200,
-    data:{id: lastId + 1,activitiesId:activityId,beginingDate:beginningDate,beginingHour:beginingHour,duration:duration,nbPlace:nbPlace},
+    data: {
+      id: lastId + 1,
+      activitiesId: activityId,
+      beginningDate: beginningDate,
+      beginingHour: beginingHour,
+      duration: duration,
+      nbPlace: nbPlace,
+    },
+  }
+}
+
+async function updateSessionFromLocalSource(sessionId, updatedData) {
+  const sessionStore = useSessionStore()
+
+  const sessionIndex = sessionStore.sessions.findIndex((s) => s.id === sessionId)
+
+  // (...) garde toutes les propriétés existantes et écrase uniquement celles présentes dans updatedData -> donné par claude
+  sessionStore.sessions[sessionIndex] = {
+    ...sessionStore.sessions[sessionIndex],
+    ...updatedData,
+  }
+
+  return {
+    error: 0,
+    status: 200,
+    data: sessionStore.sessions[sessionIndex],
   }
 }
 

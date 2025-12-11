@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import SessionsService from '@/services/sessions.service'
 
-
 export const useSessionStore = defineStore('session', () => {
   const sessions = ref()
 
@@ -44,11 +43,22 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
+  async function updateSession(sessionId, updatedData) {
+    let response = await SessionsService.updateSession(sessionId, updatedData)
+
+    if (response.error === 0) {
+      await getAllSessions()
+    } else {
+      console.log(response.data)
+    }
+  }
+
   return {
     sessions,
     getAllSessions,
     getSessionsByActivityId,
     removeSession,
     addSession,
+    updateSession,
   }
 })
