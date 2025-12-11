@@ -33,13 +33,13 @@ onMounted(async () => {
   await providerStore.getAllProviders()
   await activityStore.getAllActivities()
   // TODO : Appeler seulement quand necessaire, dans AdminView quand le composant concerné est affiché !
-  if (authStore.user.type === UserTypeEnum.ADMIN) {
-    await providerStore.getAllNewProviders()
-    await contactStore.getAllContacts()
-    await surveyStore.getAllSurveys()
-  } else if (authStore.user.type === UserTypeEnum.PROVIDER) {
-    await contactStore.getAllContactsById(authStore.user.id)
-  }
+  // TODO : Mettre un watch la dessus !!!
+  // if (authStore.user.type === UserTypeEnum.ADMIN) {
+  //   await providerStore.getAllNewProviders()
+  //   await contactStore.getAllContacts()
+  // } else if (authStore.user.type === UserTypeEnum.PROVIDER) {
+  //   await contactStore.getAllContactsById(authStore.user.id)
+  // }
 })
 </script>
 

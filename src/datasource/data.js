@@ -364,8 +364,16 @@ const session = [
   },
 ]
 
-
-const user = [{ type: UserTypeEnum.VISITOR }]
+// const user = [{ type: UserTypeEnum.VISITOR }]
+const users = [
+  { id: 1, type: UserTypeEnum.ADMIN, mail: 'admin@gmail.com', passwword: 'admin' },
+  { id: 2, type: UserTypeEnum.PROVIDER, mail: 'provider1@gmail.com', passwword: 'provider' },
+  { id: 4, type: UserTypeEnum.PROVIDER, mail: 'provider2@gmail.com', passwword: 'provider' },
+  { id: 5, type: UserTypeEnum.PROVIDER, mail: 'provider3@gmail.com', passwword: 'provider' },
+  { id: 6, type: UserTypeEnum.PROVIDER, mail: 'provider4@gmail.com', passwword: 'provider' },
+  { id: 7, type: UserTypeEnum.PROVIDER, mail: 'provider5@gmail.com', passwword: 'provider' },
+  { id: 3, type: UserTypeEnum.VISITOR, mail: 'visitor1@gmail.com', passwword: 'visitor' },
+]
 // const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
 //const user = [{ id: 3, type: UserTypeEnum.VISITOR }]
 
@@ -374,7 +382,7 @@ export {
   surveys,
   providers,
   locations,
-  user,
+  users,
   newProviders,
   providerImages,
   presentation,
