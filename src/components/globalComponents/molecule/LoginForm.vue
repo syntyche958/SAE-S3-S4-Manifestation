@@ -24,6 +24,8 @@ import { useAuthStore } from '@/stores/auth'
 import { InputText, Button } from 'primevue'
 import { ref } from 'vue'
 
+// TODO : Ajouter les verifs zod pour le format du mail
+
 const authStore = useAuthStore()
 
 const mail = ref()
