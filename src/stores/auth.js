@@ -10,31 +10,14 @@ export const useAuthStore = defineStore('auth', () => {
   // STATE
   const user = ref()
 
-  // ACTION
-  // async function getUser() {
-  //   let response = await AuthService.getUser()
-  //   if (response.error === 0) {
-  //     user.value = response.data[0]
-  //   } else {
-  //     console.log(response.data)
-  //   }
-  // }
-
   function getUser() {
     return user.value
   }
 
-  // TODO : temporaire
-  // function login(_user) {
-  //   user.value = _user
-  // }
-  // TODO : Afficher les toasts
   async function login(mail, password) {
-    //const { t } = useI18n()
-
     let response = await AuthService.login(mail, password)
     if (response.error === 0) {
-      user.value = response.data[0]
+      user.value = response.data
       displaySuccessToast('Connecté avec succés')
       return true
     } else {
