@@ -25,6 +25,46 @@ async function addSurveyToLocalSource(surveyData) {
   }
 }
 
+async function addReactionToLocalSource(surveyId, emoji) {
+  const surveyStore = useSurveyStore()
+  const survey = surveyStore.surveys.find(s => s.id === surveyId)
+
+  if(!survey) {
+    return {error: 1, status:404, data: 'Survey not found'}
+  }
+
+  if (!survey.reactions) {
+    survey.reactions = []
+  }
+
+  survey.reactions.push(emoji)
+
+  return {
+    error: 0,
+    status: 200,
+    data: {...survey},
+  }
+  
+}
+
+async function addAdminResponseToLocalSource(surveyId, responseText) {
+  const surveyStore = useSurveyStore()
+  const survey = surveyStore.surveys.find(s => s.id === surveyId)
+
+  if(!survey) {
+    return {error: 1, status:404, data: 'Survey not found'}
+  }
+
+  survey.adminResponse = responseText
+
+  return {
+    error: 0,
+    status: 200,
+    data: {...survey},
+  }
+  
+}
+
 async function clearSurveysFromLocalSource() {
   return { error: 0, status: 200, data: [] }
 }
@@ -45,6 +85,22 @@ async function addSurvey(surveyData) {
   }
 }
 
+async function addReaction(surveyId,emoji) {
+  try {
+    return await addReactionToLocalSource(surveyId, emoji)
+  } catch {
+    return networkErrResponse
+  }
+}
+
+async function addAdminResponse(surveyId,responseText) {
+  try {
+    return await addAdminResponseToLocalSource(surveyId, responseText)
+  } catch {
+    return networkErrResponse
+  }
+}
+
 async function clearSurveys() {
   try {
     return await clearSurveysFromLocalSource()
@@ -56,5 +112,7 @@ async function clearSurveys() {
 export default {
   getAllSurveys,
   addSurvey,
+  addReaction,
+  addAdminResponse,
   clearSurveys,
 }

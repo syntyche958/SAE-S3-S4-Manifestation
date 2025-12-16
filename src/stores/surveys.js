@@ -29,6 +29,35 @@ export const useSurveyStore = defineStore('survey', () => {
     }
   }
 
+  async function addReaction(surveyId,amoji){
+    let response = await SurveyService.addReaction(surveyId, emoji)
+    if (response.error === 0) {
+      const surveyIndex = surveys.value.findIndex(s => s.id === surveyId)
+      if (surveyIndex !== -1) {
+        surveys.value[surveyIndex] = response.data
+      }
+      displaySuccessToast('Réaction ajoutée')
+    }else {
+      console.log(response.data)
+      displayErrToast("Impossible d'ajouter la réaction")
+    }
+  }
+
+  async function addAdminResponse(surveyId, responseText) {
+    let response = await SurveyService.addAdminResponse(surveyId, responseText)
+    if (response.error === 0) {
+      const surveyIndex = surveys.value.findIndex(s => s.id === surveyId)
+      if (surveyIndex !== -1) {
+        surveys.value[surveyIndex] = response.data
+      }
+      displaySuccessToast('Reponse envoyée')
+    }else {
+      console.log(response.data)
+      displayErrToast("Impossible d'envoyer la reponse")
+    }
+    
+  }
+
   async function clearSurveys() {
     let response = await SurveyService.clearSurveys()
     if (response.error === 0) {
@@ -44,6 +73,8 @@ export const useSurveyStore = defineStore('survey', () => {
     surveys,
     getAllSurveys,
     addSurvey,
+    addReaction,
+    addAdminResponse,
     clearSurveys,
   }
 })

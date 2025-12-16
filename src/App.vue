@@ -14,6 +14,7 @@ import TheFooter from '@/components/globalComponents/molecule/TheFooter.vue'
 import { useContactStore } from '@/stores/contact'
 import { useActivityStore } from '@/stores/activities'
 import AnimatedBackground from '@/components/globalComponents/molecule/AnimatedBackground.vue'
+import { useSurveyStore } from './stores/surveys'
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
@@ -21,6 +22,7 @@ const providerStore = useProviderStore()
 const presentationStore = usePresentationStore()
 const contactStore = useContactStore()
 const activityStore = useActivityStore()
+const surveyStore = useSurveyStore()
 
 setToast(useToast())
 
@@ -34,6 +36,7 @@ onMounted(async () => {
   if (authStore.user.type === UserTypeEnum.ADMIN) {
     await providerStore.getAllNewProviders()
     await contactStore.getAllContacts()
+    await surveyStore.getAllSurveys()
   } else if (authStore.user.type === UserTypeEnum.PROVIDER) {
     await contactStore.getAllContactsById(authStore.user.id)
   }
