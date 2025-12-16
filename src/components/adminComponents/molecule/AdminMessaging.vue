@@ -8,15 +8,23 @@
     </div>
 
     <div v-else class="flex flex-col gap-3">
-      <Card v-for="survey in sortedSurveys" :key="survey.id" class="shadow-md">
+      <Card v-for="survey in sortedSurveys" :key="survey.id" class="shadow-md" :class="{'opacity-60': survey.isDeleted}">
         <template #header>
           <div class="flex justify-between items-center px-4 pt-4">
             <div class="flex items-center gap-3">
               <Avatar :label="getInitials(survey.name)" shape="circle" size="large" />
               <div>
                 <p class="font-semibold text-lg">{{ survey.name || $t('Anonyme') }}</p>
-                <p class="text-sm text-gray-500">{{ formatDate(survey.createdAt) }}</p>
+
+                <!--Pour voir si il a repondu: essaie -->
+                <Badge 
+                  v-if="survey.adminResponse"
+                  value="Repondu"
+                  severity="warning"
+                  icon="pi pi-exclamation-circle"
+                />
               </div>
+              <p class="text-sm text-gray-500">{{ formatDate(survey.createdAt) }}</p>
             </div>
             <div class="flex items-center gap-2">
               <Rating :modelValue="survey.rating" readonly :cancel="false" />
@@ -109,6 +117,14 @@
               severity="primary"
               text
             />
+
+            <!--Bouton poubelle pour supprimer-->
+            <Button
+              icon="pi pi-trash"
+              @click="confirmDelete(survey.id)"
+              severity="danger"
+              text v-tooltip.top = "'supprimer ce message'"
+            />
           </div>
         </template>
       </Card>
@@ -154,6 +170,8 @@ import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Textarea from 'primevue/textarea'
 import { useI18n } from 'vue-i18n'
+import { messages } from '@/datasource/lang'
+import { icon } from 'leaflet'
 
 const { t } = useI18n()
 const surveyStore = useSurveyStore()
@@ -231,5 +249,19 @@ async function submitResponse() {
   responseDialogVisible.value = false
   responseText.value = ''
   selectedSurvey.value = null
+}
+
+function confirmDelete(surveyId){
+  confirm.require({
+    message: 'Etes-vous sur de vouloir supprimer ce message ?',
+    header:'Confirmation',
+    icon:'pi pi-exclamation-triangle',
+    accept() {
+      surveyStore.deleteSurvey(surveyId)
+    },
+    reject(){
+
+    },
+  })
 }
 </script>

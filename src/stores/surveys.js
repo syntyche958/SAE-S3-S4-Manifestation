@@ -58,6 +58,17 @@ export const useSurveyStore = defineStore('survey', () => {
     
   }
 
+  async function deleteSurvey(surveyId) {
+    let response = await SurveyService.deleteSurvey()
+    if (response.error === 0) {
+      surveys.value = []
+      displaySuccessToast('Message supprimé')
+    } else {
+      console.log(response.data)
+      displayErrToast('Impossible de supprimer le message')
+    }
+  }
+
   async function clearSurveys() {
     let response = await SurveyService.clearSurveys()
     if (response.error === 0) {
@@ -75,6 +86,7 @@ export const useSurveyStore = defineStore('survey', () => {
     addSurvey,
     addReaction,
     addAdminResponse,
+    deleteSurvey,
     clearSurveys,
   }
 })

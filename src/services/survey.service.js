@@ -69,6 +69,23 @@ async function clearSurveysFromLocalSource() {
   return { error: 0, status: 200, data: [] }
 }
 
+async function deleteSurveyFromLocalSource(surveyId) {
+  const surveyStore = useSurveyStore()
+  const surveyIndex = surveyStore.surveys.findIndex(s => s.id === surveyId)
+  
+  if (surveyIndex === -1) {
+    return { error: 1, status: 404, data: 'Survey not found' }
+  }
+
+  surveyStore.surveys.splice(surveyIndex, 1)
+
+  return {
+    error: 0,
+    status: 200,
+    data: { success: true },
+  }
+}
+
 async function getAllSurveys() {
   try {
     return await getAllSurveysFromLocalSource()
@@ -101,6 +118,14 @@ async function addAdminResponse(surveyId,responseText) {
   }
 }
 
+async function deleteSurvey(surveyId) {
+   try {
+    return await deleteSurveyFromLocalSource(surveyId)
+  } catch {
+    return networkErrResponse
+  }
+}
+
 async function clearSurveys() {
   try {
     return await clearSurveysFromLocalSource()
@@ -114,5 +139,6 @@ export default {
   addSurvey,
   addReaction,
   addAdminResponse,
+  deleteSurvey,
   clearSurveys,
 }
