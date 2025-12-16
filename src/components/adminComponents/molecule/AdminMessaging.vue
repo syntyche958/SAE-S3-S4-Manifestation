@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col gap-4">
-    <h2 class="text-2xl font-bold">{{ $t('Messages') }}</h2>
+    <h2 class="text-2xl font-bold">{{ $t('Messages des avis') }}</h2>
     
     <div v-if="surveyStore.surveys.length === 0" class="text-center py-8 text-gray-500">
       <i class="pi pi-inbox text-4xl mb-2"></i>
-      <p>{{ $t("Aucun commentaire pour l'instant.") }}</p>
+      <p>{{ $t("Aucun avis pour le moment.") }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-3">
@@ -40,14 +40,14 @@
               <Rating :modelValue="survey.ratings.animations" readonly :cancel="false" size="small" />
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm text-gray-600 mb-1">{{ $t('Accesibilitée') }}</span>
+              <span class="text-sm text-gray-600 mb-1">{{ $t('Accesibilité') }}</span>
               <Rating :modelValue="survey.ratings.accessibility" readonly :cancel="false" size="small" />
             </div>
           </div>
 
           <!-- Activités suivies -->
           <div v-if="survey.activities && survey.activities.length > 0" class="mb-4">
-            <p class="text-sm font-semibold mb-2">{{ $t('Activités suivis') }} :</p>
+            <p class="text-sm font-semibold mb-2">{{ $t('Activités suivies') }} :</p>
             <div class="flex gap-2 flex-wrap">
               <Chip v-for="act in survey.activities" :key="act" :label="act" />
             </div>
@@ -55,7 +55,7 @@
 
           <!-- Commentaire -->
           <div v-if="survey.comment" class="mb-4 p-3 bg-gray-50 rounded">
-            <p class="text-sm font-semibold mb-1">{{ $t('Commentaires') }} :</p>
+            <p class="text-sm font-semibold mb-1">{{ $t('Commentaire') }} :</p>
             <p class="whitespace-pre-wrap">{{ survey.comment }}</p>
           </div>
 
@@ -74,7 +74,7 @@
           <!-- Réponse de l'admin -->
           <div v-if="survey.adminResponse" class="mt-3 p-3 bg-blue-50 border-l-4 border-blue-500">
             <p class="text-sm font-semibold mb-1">
-              <i class="pi pi-reply mr-2"></i>{{ $t('Votre Reponse') }}
+              <i class="pi pi-reply mr-2"></i>{{ $t('Votre réponse') }}
             </p>
             <p class="whitespace-pre-wrap">{{ survey.adminResponse }}</p>
           </div>
@@ -86,24 +86,24 @@
               @click="addReaction(survey.id, '❤️')"
               severity="secondary"
               text
-              v-tooltip.top="$t('ajoutReaction')"
+              v-tooltip.top="$t('Ajouter une réaction')"
             />
             <Button
               icon="pi pi-thumbs-up"
               @click="addReaction(survey.id, '👍')"
               severity="secondary"
               text
-              v-tooltip.top="$t('ajoutReaction')"
+              v-tooltip.top="$t('Ajouter une réaction')"
             />
             <Button
               icon="pi pi-star"
               @click="addReaction(survey.id, '⭐')"
               severity="secondary"
               text
-              v-tooltip.top="$t('ajoutReaction')"
+              v-tooltip.top="$t('Ajouter une réaction')"
             />
             <Button
-              :label="$t('Repondre')"
+              :label="$t('Répondre')"
               icon="pi pi-reply"
               @click="openResponseDialog(survey)"
               severity="primary"
@@ -117,7 +117,7 @@
     <!-- Dialog pour répondre -->
     <Dialog
       v-model:visible="responseDialogVisible"
-      :header="$t('Repondre aux commentaires')"
+      :header="$t('Repondre à l\'avis')"
       :style="{ width: '600px' }"
       :modal="true"
     >
