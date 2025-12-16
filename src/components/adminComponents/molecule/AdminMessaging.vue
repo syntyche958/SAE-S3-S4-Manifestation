@@ -1,11 +1,10 @@
-<!-- src/components/adminComponents/molecule/AdminMessaging.vue -->
 <template>
   <div class="flex flex-col gap-4">
-    <h2 class="text-2xl font-bold">{{ $t('message.feedbackMessages') }}</h2>
+    <h2 class="text-2xl font-bold">{{ $t('Messages') }}</h2>
     
     <div v-if="surveyStore.surveys.length === 0" class="text-center py-8 text-gray-500">
       <i class="pi pi-inbox text-4xl mb-2"></i>
-      <p>{{ $t('message.noFeedbackYet') }}</p>
+      <p>{{ $t("Aucun commentaire pour l'instant.") }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-3">
@@ -15,7 +14,7 @@
             <div class="flex items-center gap-3">
               <Avatar :label="getInitials(survey.name)" shape="circle" size="large" />
               <div>
-                <p class="font-semibold text-lg">{{ survey.name || $t('message.anonymous') }}</p>
+                <p class="font-semibold text-lg">{{ survey.name || $t('Anonyme') }}</p>
                 <p class="text-sm text-gray-500">{{ formatDate(survey.createdAt) }}</p>
               </div>
             </div>
@@ -33,22 +32,22 @@
           <!-- Ratings détaillés -->
           <div class="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
             <div class="flex flex-col items-center">
-              <span class="text-sm text-gray-600 mb-1">{{ $t('message.organisation') }}</span>
+              <span class="text-sm text-gray-600 mb-1">{{ $t('Organisation') }}</span>
               <Rating :modelValue="survey.ratings.organisation" readonly :cancel="false" size="small" />
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm text-gray-600 mb-1">{{ $t('message.animations') }}</span>
+              <span class="text-sm text-gray-600 mb-1">{{ $t('Animations') }}</span>
               <Rating :modelValue="survey.ratings.animations" readonly :cancel="false" size="small" />
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm text-gray-600 mb-1">{{ $t('message.accessibility') }}</span>
+              <span class="text-sm text-gray-600 mb-1">{{ $t('Accesibilitée') }}</span>
               <Rating :modelValue="survey.ratings.accessibility" readonly :cancel="false" size="small" />
             </div>
           </div>
 
           <!-- Activités suivies -->
           <div v-if="survey.activities && survey.activities.length > 0" class="mb-4">
-            <p class="text-sm font-semibold mb-2">{{ $t('message.attendedActivities') }} :</p>
+            <p class="text-sm font-semibold mb-2">{{ $t('Activités suivis') }} :</p>
             <div class="flex gap-2 flex-wrap">
               <Chip v-for="act in survey.activities" :key="act" :label="act" />
             </div>
@@ -56,7 +55,7 @@
 
           <!-- Commentaire -->
           <div v-if="survey.comment" class="mb-4 p-3 bg-gray-50 rounded">
-            <p class="text-sm font-semibold mb-1">{{ $t('message.comment') }} :</p>
+            <p class="text-sm font-semibold mb-1">{{ $t('Commentaires') }} :</p>
             <p class="whitespace-pre-wrap">{{ survey.comment }}</p>
           </div>
 
@@ -75,7 +74,7 @@
           <!-- Réponse de l'admin -->
           <div v-if="survey.adminResponse" class="mt-3 p-3 bg-blue-50 border-l-4 border-blue-500">
             <p class="text-sm font-semibold mb-1">
-              <i class="pi pi-reply mr-2"></i>{{ $t('message.yourResponse') }}
+              <i class="pi pi-reply mr-2"></i>{{ $t('Votre Reponse') }}
             </p>
             <p class="whitespace-pre-wrap">{{ survey.adminResponse }}</p>
           </div>
@@ -87,24 +86,24 @@
               @click="addReaction(survey.id, '❤️')"
               severity="secondary"
               text
-              v-tooltip.top="$t('message.addReaction')"
+              v-tooltip.top="$t('ajoutReaction')"
             />
             <Button
               icon="pi pi-thumbs-up"
               @click="addReaction(survey.id, '👍')"
               severity="secondary"
               text
-              v-tooltip.top="$t('message.addReaction')"
+              v-tooltip.top="$t('ajoutReaction')"
             />
             <Button
               icon="pi pi-star"
               @click="addReaction(survey.id, '⭐')"
               severity="secondary"
               text
-              v-tooltip.top="$t('message.addReaction')"
+              v-tooltip.top="$t('ajoutReaction')"
             />
             <Button
-              :label="$t('message.respond')"
+              :label="$t('Repondre')"
               icon="pi pi-reply"
               @click="openResponseDialog(survey)"
               severity="primary"
@@ -118,24 +117,24 @@
     <!-- Dialog pour répondre -->
     <Dialog
       v-model:visible="responseDialogVisible"
-      :header="$t('message.respondToFeedback')"
+      :header="$t('Repondre aux commentaires')"
       :style="{ width: '600px' }"
       :modal="true"
     >
       <div class="flex flex-col gap-4">
         <Textarea
           v-model="responseText"
-          :placeholder="$t('message.writeYourResponse')"
+          :placeholder="$t('Écrivez votre réponse')"
           rows="5"
           class="w-full"
         />
         <div class="flex justify-end gap-2">
           <Button
-            :label="$t('message.cancel')"
+            :label="$t('Annuler')"
             severity="secondary"
             @click="responseDialogVisible = false"
           />
-          <Button :label="$t('message.send')" @click="submitResponse" />
+          <Button :label="$t('Envoyer')" @click="submitResponse" />
         </div>
       </div>
     </Dialog>
@@ -192,11 +191,11 @@ function formatDate(dateStr) {
 function getRecommendLabel(recommend) {
   switch (recommend) {
     case 'yes':
-      return t('message.yes')
+      return t('Oui')
     case 'no':
-      return t('message.no')
+      return t('Non')
     case 'maybe':
-      return t('message.maybe')
+      return t('Peut-etre')
     default:
       return '-'
   }

@@ -6,7 +6,7 @@
     <SatisfactionForm v-if="authStore.user?.type !== UserTypeEnum.ADMIN" />
     <Button 
       v-else
-      :label="$t('Reception de avis')"
+      :label="$t('Reception des avis')"
       icon="pi pi-comments"
       @click="openMessagingDialog"
       severity="secondary"
@@ -18,7 +18,7 @@
   <!--Dialog de messagerie pour l'admin-->
   <Dialog
     v-model:visible="messagingDialogVisible"
-    :header="$t('message.feedbackMessages')"
+    :header="$t('Formulaire de satisfaction')"
     :style="{ width: '90vw', maxWidth: '1200px', height: '85vh' }"
     :modal="true"
     :draggable="false"
