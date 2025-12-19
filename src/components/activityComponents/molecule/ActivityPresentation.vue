@@ -74,7 +74,12 @@ const activityStore = useActivityStore()
 const sessionsStore = useSessionStore()
 // const toast = useToast()
 
-const sessions = ref()
+const sessions = computed(() => {
+  const activityId = Number.parseInt(route.params.activity_id)
+  if (!sessionsStore.sessions) return []
+  return sessionsStore.sessions.filter((s) => s.activitiesId === activityId)
+})
+
 const triKey = ref()
 const triOrder = ref()
 const triField = ref()
@@ -92,8 +97,6 @@ const currentActivity = computed(() => {
 
 onMounted(async () => {
   await sessionsStore.getAllSessions()
-  const activityId = Number.parseInt(route.params.activity_id)
-  sessions.value = sessionsStore.sessions.filter((s) => s.activitiesId === activityId)
 })
 
 const onSortChange = (event) => {
@@ -131,7 +134,7 @@ async function inscription(session) {
   await sessionsStore.updateSession(session.id, updatedData)
 
   await sessionsStore.getAllSessions()
-  sessions.value = sessionsStore.sessions.filter((s) => s.activitiesId === currentActivity.value.id)
+  // sessions.value = sessionsStore.sessions.filter((s) => s.activitiesId === currentActivity.value.id) // Removed: computed property handles this
   console.log()
   const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
 

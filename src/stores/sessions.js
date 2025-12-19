@@ -21,24 +21,22 @@ export const useSessionStore = defineStore('session', () => {
       sessions.value = response.data
     } else {
       console.log(response.data)
-    }}
-
-  async function removeSession(sessionID){
-    let response=await SessionsService.removeSession(sessionID)
-    if (response.error === 0) {
-      sessions.value= response.data
     }
-    else{
+  }
+
+  async function removeSession(sessionID) {
+    let response = await SessionsService.removeSession(sessionID)
+    if (response.error !== 0) {
       console.log(response.data)
     }
   }
 
-  async function addSession(activityId,beginningDate,beginingHour,duration,nbPlace){
-    let response=await SessionsService.addSession(activityId,beginningDate,beginingHour,duration,nbPlace)
+  async function addSession(activityId, beginningDate, beginingHour, duration, nbPlace) {
+    let response = await SessionsService.addSession(activityId, beginningDate, beginingHour, duration, nbPlace)
     if (response.error === 0) {
-      sessions.value= response.data
+      sessions.value = response.data
     }
-    else{
+    else {
       console.log(response.data)
     }
   }
