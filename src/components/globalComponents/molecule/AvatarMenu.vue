@@ -14,7 +14,7 @@
   <Menu v-if="visible" :model="items" class="absolute transform -translate-x-[75%]">
     <template #start>
       <div class="flex justify-center my-2">
-        <b>{{ providerName }}</b>
+        <b>{{ profileName }}</b>
       </div>
     </template>
 
@@ -93,13 +93,13 @@ const contacts = computed(() => {
     : []
 })
 
-const providerName = computed(() => {
+const profileName = computed(() => {
   if (authStore.user.type === UserTypeEnum.ADMIN) return 'ADMIN'
   if (authStore.user.type === UserTypeEnum.PROVIDER) {
     return providerStore.providers.find((p) => p.userId == authStore.user.id).name
   }
 
-  return authStore.user.username
+  return authStore.user.mail
 })
 
 const visible = ref(false)

@@ -8,7 +8,7 @@ import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
 export const useAuthStore = defineStore('auth', () => {
   // STATE
-  const user = ref()
+  const user = ref({ type: UserTypeEnum.NOTCONNECTED })
 
   function getUser() {
     return user.value
@@ -28,7 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout() {
-    user.value = { type: UserTypeEnum.VISITOR }
+    user.value = { type: UserTypeEnum.NOTCONNECTED }
   }
 
   return {

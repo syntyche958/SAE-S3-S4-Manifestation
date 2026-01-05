@@ -5,12 +5,7 @@
         <template #end>
           <div style="display: flex">
             <LocaleChanger />
-            <div
-              v-if="
-                authStore.user?.type === UserTypeEnum.ADMIN ||
-                authStore.user?.type === UserTypeEnum.PROVIDER
-              "
-            >
+            <div v-if="authStore.user?.type !== UserTypeEnum.NOTCONNECTED">
               <AvatarMenu />
             </div>
             <div v-else class="card flex justify-center">
