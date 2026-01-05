@@ -34,8 +34,7 @@
       </template>
     </Column>
   </DataTable>
-
-  <div class="mt-4">
+  <div class="mt-4 flex justify-end">
     <Button
       icon="pi pi-plus"
       label="Ajouter une session"
