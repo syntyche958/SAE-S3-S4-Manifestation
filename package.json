@@ -19,6 +19,7 @@
     "@primeuix/themes": "^1.2.5",
     "@primevue/forms": "^4.5.0",
     "@tailwindcss/vite": "^4.1.14",
+    "chart.js": "^4.5.1",
     "i": "^0.3.7",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.3",

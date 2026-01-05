@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <h2 class="text-2xl font-bold">{{ $t('Messages des avis') }}</h2>
-    
+
     <div v-if="surveyStore.surveys.length === 0" class="text-center py-8 text-gray-500">
       <i class="pi pi-inbox text-4xl mb-2"></i>
       <p>{{ $t("Aucun avis pour le moment.") }}</p>
@@ -17,7 +17,7 @@
                 <p class="font-semibold text-lg">{{ survey.name || $t('Anonyme') }}</p>
 
                 <!--Pour voir si il a repondu: essaie -->
-                <Badge 
+                <Badge
                   v-if="survey.adminResponse"
                   value="Repondu"
                   severity="warning"
@@ -87,43 +87,13 @@
             <p class="whitespace-pre-wrap">{{ survey.adminResponse }}</p>
           </div>
 
-          <!-- Zone pour ajouter réaction/réponse -->
           <div class="flex gap-2 mt-4 pt-4 border-t">
-            <Button
-              icon="pi pi-heart"
-              @click="addReaction(survey.id, '❤️')"
-              severity="secondary"
-              text
-              v-tooltip.top="$t('Ajouter une réaction')"
-            />
-            <Button
-              icon="pi pi-thumbs-up"
-              @click="addReaction(survey.id, '👍')"
-              severity="secondary"
-              text
-              v-tooltip.top="$t('Ajouter une réaction')"
-            />
-            <Button
-              icon="pi pi-star"
-              @click="addReaction(survey.id, '⭐')"
-              severity="secondary"
-              text
-              v-tooltip.top="$t('Ajouter une réaction')"
-            />
             <Button
               :label="$t('Répondre')"
               icon="pi pi-reply"
               @click="openResponseDialog(survey)"
               severity="primary"
               text
-            />
-
-            <!--Bouton poubelle pour supprimer-->
-            <Button
-              icon="pi pi-trash"
-              @click="confirmDelete(survey.id)"
-              severity="danger"
-              text v-tooltip.top = "'supprimer ce message'"
             />
           </div>
         </template>
@@ -232,10 +202,6 @@ function getRecommendSeverity(recommend) {
   }
 }
 
-function addReaction(surveyId, emoji) {
-  surveyStore.addReaction(surveyId, emoji)
-}
-
 function openResponseDialog(survey) {
   selectedSurvey.value = survey
   responseText.value = survey.adminResponse || ''
@@ -249,19 +215,5 @@ async function submitResponse() {
   responseDialogVisible.value = false
   responseText.value = ''
   selectedSurvey.value = null
-}
-
-function confirmDelete(surveyId){
-  confirm.require({
-    message: 'Etes-vous sur de vouloir supprimer ce message ?',
-    header:'Confirmation',
-    icon:'pi pi-exclamation-triangle',
-    accept() {
-      surveyStore.deleteSurvey(surveyId)
-    },
-    reject(){
-
-    },
-  })
 }
 </script>
