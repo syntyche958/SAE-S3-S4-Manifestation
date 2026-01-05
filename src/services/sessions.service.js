@@ -1,5 +1,4 @@
 import LocalSource from '@/services/localsource.service.js'
-import { useSessionStore } from '@/stores/sessions'
 import { networkErrResponse } from '@/utils/network.utils'
 
 async function getAllSessionsFromLocalSource() {
@@ -10,20 +9,17 @@ async function getSessionsByActivityIdFromLocalSource(activityId) {
   return LocalSource.getSessionsByActivityId(activityId)
 }
 
-async function removeSessionFromLocalSource(sessionId) {
-  const storeSessions = useSessionStore()
-  if (storeSessions.sessions) {
-    storeSessions.sessions = storeSessions.sessions.filter((s) => s.id !== sessionId)
-  }
+async function removeSessionFromLocalSource() {
   return { error: 0, status: 200, data: 'done' }
 }
 
-async function addSessionToLocalSource(activityId, beginningDate, beginingHour, duration, nbPlace) {
-  const sessionStore = useSessionStore()
+async function addSessionToLocalSource(activityId, beginningDate, beginingHour, duration, nbPlace, existingSessions = []) {
   let lastId = 0
-  sessionStore.sessions.forEach((s) => {
-    lastId = Math.max(lastId, s.id)
-  })
+  if (existingSessions && existingSessions.length > 0) {
+    existingSessions.forEach((s) => {
+      lastId = Math.max(lastId, s.id)
+    })
+  }
   return {
     error: 0,
     status: 200,
@@ -34,24 +30,16 @@ async function addSessionToLocalSource(activityId, beginningDate, beginingHour, 
       beginingHour: beginingHour,
       duration: duration,
       nbPlace: nbPlace,
+      registersUsers: [],
     },
   }
 }
 
 async function updateSessionFromLocalSource(sessionId, updatedData) {
-  const sessionStore = useSessionStore()
-
-  const sessionIndex = sessionStore.sessions.findIndex((s) => s.id === sessionId)
-
-  sessionStore.sessions[sessionIndex] = {
-    ...sessionStore.sessions[sessionIndex],
-    ...updatedData,
-  }
-
   return {
     error: 0,
     status: 200,
-    data: sessionStore.sessions[sessionIndex],
+    data: { id: sessionId, ...updatedData },
   }
 }
 
@@ -87,10 +75,10 @@ async function removeSession(sessionID) {
   return response
 }
 
-async function addSession(activityId, beginningDate, beginingHour, duration, nbPlace) {
+async function addSession(activityId, beginningDate, beginingHour, duration, nbPlace, existingSessions = []) {
   let response = null
   try {
-    response = await addSessionToLocalSource(activityId, beginningDate, beginingHour, duration, nbPlace)
+    response = await addSessionToLocalSource(activityId, beginningDate, beginingHour, duration, nbPlace, existingSessions)
   }
   catch {
     return networkErrResponse

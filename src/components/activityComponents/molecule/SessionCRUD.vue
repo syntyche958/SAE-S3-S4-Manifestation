@@ -34,6 +34,15 @@
       </template>
     </Column>
   </DataTable>
+
+  <div class="mt-4">
+    <Button
+      icon="pi pi-plus"
+      label="Ajouter une session"
+      severity="secondary"
+      @click="addNewSession"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -47,6 +56,10 @@ const sessionStore = useSessionStore()
 
 const activityId = computed(() => Number.parseInt(route.params.activity_id))
 const sessions = computed(() => sessionStore.sessions)
+
+async function addNewSession() {
+  await sessionStore.addSession(activityId.value, '', '', 0, 0)
+}
 
 onMounted(async () => {
   await sessionStore.getSessionsByActivityId(activityId.value)

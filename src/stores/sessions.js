@@ -26,17 +26,30 @@ export const useSessionStore = defineStore('session', () => {
 
   async function removeSession(sessionID) {
     let response = await SessionsService.removeSession(sessionID)
-    if (response.error !== 0) {
+    if (response.error === 0) {
+      if (sessions.value) {
+        sessions.value = sessions.value.filter((s) => s.id !== sessionID)
+      }
+    } else {
       console.log(response.data)
     }
   }
 
   async function addSession(activityId, beginningDate, beginingHour, duration, nbPlace) {
-    let response = await SessionsService.addSession(activityId, beginningDate, beginingHour, duration, nbPlace)
+    let response = await SessionsService.addSession(
+      activityId,
+      beginningDate,
+      beginingHour,
+      duration,
+      nbPlace,
+      sessions.value,
+    )
     if (response.error === 0) {
-      sessions.value = response.data
-    }
-    else {
+      if (!sessions.value) {
+        sessions.value = []
+      }
+      sessions.value.push(response.data)
+    } else {
       console.log(response.data)
     }
   }
@@ -45,7 +58,12 @@ export const useSessionStore = defineStore('session', () => {
     let response = await SessionsService.updateSession(sessionId, updatedData)
 
     if (response.error === 0) {
-      await getAllSessions()
+      if (sessions.value) {
+        const index = sessions.value.findIndex((s) => s.id === sessionId)
+        if (index !== -1) {
+          sessions.value[index] = { ...sessions.value[index], ...updatedData }
+        }
+      }
     } else {
       console.log(response.data)
     }
