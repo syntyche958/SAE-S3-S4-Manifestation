@@ -1,11 +1,13 @@
 <template>
   <!-- <Divider type="solid" /> -->
   <div class="w-full bg-transparent flex justify-center gap-2 h-[6vh] items-center">
-    <ContactForm />
-    <NewProviderForm />
-    <SatisfactionForm v-if="authStore.user?.type !== UserTypeEnum.ADMIN" />
-    <Button 
-      v-else
+    <template v-if="authStore.user?.type === UserTypeEnum.VISITOR">
+      <ContactForm />
+      <NewProviderForm />
+      <SatisfactionForm />
+    </template>
+    <Button
+      v-if="authStore.user?.type === UserTypeEnum.ADMIN"
       :label="$t('Reception des avis')"
       icon="pi pi-comments"
       @click="openMessagingDialog"
