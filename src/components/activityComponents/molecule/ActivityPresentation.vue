@@ -79,7 +79,7 @@ const authStore = useAuthStore()
 // const toast = useToast()
 
 const currentUserId = computed(() => {
-  return authStore.user?.id || 15 // garder le 15 en dur pour le momentmais le virer plus tard
+  return authStore.user?.id
 })
 
 const isUserConnected = computed(() => {
@@ -87,7 +87,7 @@ const isUserConnected = computed(() => {
 })
 
 function isRegistered(session) {
-  return session.registersUsers.includes(currentUserId.value) || session.registersUsers.includes(15)
+  return session.registersUsers.includes(currentUserId.value)
 }
 
 const sessions = computed(() => {
@@ -141,8 +141,12 @@ async function inscription(session) {
     return
   }
 
-  const userId = 15 // user connected id
-  // TODO : Ne plus la mettre en dur
+  if (!isUserConnected.value) {
+    displayErrToast('Vous devez être connecté pour vous inscrire')
+    return
+  }
+
+  const userId = currentUserId.value
 
   if (isRegistered(session)) {
     displayErrToast('Vous êtes déjà inscrit à cette session')
