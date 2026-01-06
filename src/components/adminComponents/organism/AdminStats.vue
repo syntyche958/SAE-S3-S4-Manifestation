@@ -1,9 +1,12 @@
 <template>
   <div class="statistics-container">
-    <h2 class="text-2xl font-bold mb-6">{{ $t('message.statistics') }}</h2>
-    <p class="text-gray-600 mb-8">
-      Graphiques et visualisations basés sur les données publiées par les prestataires.
-    </p>
+    <!-- Header centré -->
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold mb-3">{{ $t('message.statistics') }}</h2>
+      <p class="text-gray-600 text-lg">
+        Graphiques et visualisations basés sur les données des sondages de satisfaction.
+      </p>
+    </div>
 
     <!-- Loading state -->
     <div v-if="statsStore.loading" class="flex justify-center items-center h-64">
@@ -11,57 +14,52 @@
     </div>
 
     <!-- No data -->
-    <div v-else-if="statsStore.totalSurveys === 0" class="text-center py-8">
-      <p class="text-gray-500">Aucune donnée de sondage disponible pour afficher les statistiques.</p>
+    <div v-else-if="statsStore.totalSurveys === 0" class="text-center py-12">
+      <div class="text-6xl mb-4">📊</div>
+      <p class="text-gray-500 text-lg">Aucune donnée de sondage disponible pour afficher les statistiques.</p>
+      <p class="text-gray-400 text-sm mt-2">Les graphiques apparaîtront une fois que des visiteurs auront rempli le formulaire de satisfaction.</p>
     </div>
 
-    <!-- Stats cards -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      <Card class="text-center">
-        <template #content>
-          <div class="text-3xl font-bold text-blue-600">{{ statsStore.totalSurveys }}</div>
-          <div class="text-gray-600 mt-2">Sondages totaux</div>
-        </template>
-      </Card>
+    <!-- Stats content -->
+    <div v-else>
+      <!-- Stats cards -->
+      <div class="flex justify-center mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl w-full">
+          <Card class="text-center shadow-lg hover:shadow-xl transition-shadow">
+            <template #content>
+              <div class="py-4">
+                <div class="text-5xl font-bold text-blue-600 mb-2">{{ statsStore.totalSurveys }}</div>
+                <div class="text-gray-600 text-lg">Sondages totaux</div>
+              </div>
+            </template>
+          </Card>
 
-      <Card class="text-center">
-        <template #content>
-          <div class="text-3xl font-bold text-green-600">{{ statsStore.averageSatisfaction }}</div>
-          <div class="text-gray-600 mt-2">Satisfaction moyenne (/ 5)</div>
-        </template>
-      </Card>
+          <Card class="text-center shadow-lg hover:shadow-xl transition-shadow">
+            <template #content>
+              <div class="py-4">
+                <div class="text-5xl font-bold text-green-600 mb-2">{{ statsStore.averageSatisfaction }}</div>
+                <div class="text-gray-600 text-lg">Satisfaction moyenne <span class="text-sm text-gray-400">(sur 5)</span></div>
+              </div>
+            </template>
+          </Card>
+        </div>
+      </div>
 
-      <Card class="text-center">
-        <template #content>
-          <div class="text-3xl font-bold text-purple-600">
-            {{ Object.keys(statsStore.surveyStats?.reactionStats || {}).length }}
-          </div>
-          <div class="text-gray-600 mt-2">Types de réactions</div>
-        </template>
-      </Card>
-    </div>
-
-    <!-- Charts -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Satisfaction Distribution Chart -->
-      <Card>
-        <template #title>Distribution de la satisfaction</template>
-        <template #content>
-          <div style="position: relative; height: 300px">
-            <canvas id="satisfactionChart"></canvas>
-          </div>
-        </template>
-      </Card>
-
-      <!-- Reactions Chart -->
-      <Card>
-        <template #title>Réactions des visiteurs</template>
-        <template #content>
-          <div style="position: relative; height: 300px">
-            <canvas id="reactionsChart"></canvas>
-          </div>
-        </template>
-      </Card>
+      <!-- Chart centré -->
+      <div class="flex justify-center">
+        <div class="w-full max-w-4xl">
+          <Card class="shadow-lg">
+            <template #title>
+              <div class="text-center text-2xl">Distribution de la satisfaction</div>
+            </template>
+            <template #content>
+              <div style="position: relative; height: 400px" class="px-4">
+                <canvas id="satisfactionChart"></canvas>
+              </div>
+            </template>
+          </Card>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -80,7 +78,6 @@ const statsStore = useStatisticsStore()
 const surveyStore = useSurveyStore()
 
 let satisfactionChart = null
-let reactionsChart = null
 
 onMounted(async () => {
   // Charger les statistiques
@@ -103,16 +100,12 @@ watch(
 function drawCharts() {
   if (!statsStore.surveyStats) return
 
-  // Détruire les anciens graphiques s'ils existent
+  // Détruire l'ancien graphique s'il existe
   if (satisfactionChart) {
     satisfactionChart.destroy()
   }
-  if (reactionsChart) {
-    reactionsChart.destroy()
-  }
 
   const distribution = statsStore.surveyStats.ratingsDistribution || { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
-  const reactions = statsStore.surveyStats.reactionStats || {}
 
   // Graphique 1: Distribution de satisfaction
   const satisfactionCtx = document.getElementById('satisfactionChart')
@@ -157,51 +150,20 @@ function drawCharts() {
       },
     })
   }
-
-  // Graphique 2: Réactions
-  const reactionsCtx = document.getElementById('reactionsChart')
-  if (reactionsCtx && Object.keys(reactions).length > 0) {
-    const reactionLabels = Object.keys(reactions)
-    const reactionCounts = Object.values(reactions)
-
-    reactionsChart = new Chart(reactionsCtx, {
-      type: 'doughnut',
-      data: {
-        labels: reactionLabels.map((r) => `${r} (${reactions[r]})`),
-        datasets: [
-          {
-            data: reactionCounts,
-            backgroundColor: [
-              '#ff6b6b',
-              '#4ecdc4',
-              '#45b7d1',
-              '#96ceb4',
-              '#ffeaa7',
-              '#dfe6e9',
-              '#a29bfe',
-              '#fd79a8',
-            ],
-            borderColor: '#fff',
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          },
-        },
-      },
-    })
-  }
 }
 </script>
 
 <style scoped>
 .statistics-container {
-  padding: 2rem;
+  padding: 3rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .statistics-container {
+    padding: 2rem 1rem;
+  }
 }
 </style>

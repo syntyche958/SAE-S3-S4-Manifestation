@@ -84,6 +84,18 @@ const messages = {
       logedIn: 'Loged in',
       loginFail: 'Login failed',
     },
+    'Formulaire de satisfaction': 'Satisfaction form',
+    'Reception des avis': 'Receive feedback',
+    'Messages des avis': 'Feedback messages',
+    'Repondre à l\'avis': 'Reply to feedback',
+    'Organisation': 'Organisation',
+    'Animations': 'Animations',
+    'Accesibilité': 'Accessibility',
+    'Activités suivies': 'Followed activities',
+    'Commentaire': 'Comment',
+    'Répondre': 'Reply',
+    'Oui': 'Yes',
+    'Non': 'No',
 
   },
   fr: {
@@ -171,6 +183,19 @@ const messages = {
       logedIn: 'Connecté',
       loginFail: "Echec de l'authentification",
     },
+    'Formulaire de satisfaction': 'Formulaire de satisfaction',
+    'Reception des avis': 'Réception des avis',
+    'Messages des avis': 'Messages des avis',
+    'Repondre à l\'avis': 'Répondre à l\'avis',
+    'Organisation': 'Organisation',
+    'Animations': 'Animations',
+    'Accesibilité': 'Accessibilité',
+    'Activités suivies': 'Activités suivies',
+    'Commentaire': 'Commentaire',
+    'Répondre': 'Répondre',
+    'Oui': 'Oui',
+    'Non': 'Non',
+
   },
 }
 

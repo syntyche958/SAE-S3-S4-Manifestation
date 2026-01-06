@@ -74,11 +74,6 @@
             </p>
           </div>
 
-          <!-- Réactions existantes -->
-          <div v-if="survey.reactions && survey.reactions.length > 0" class="flex gap-2 mb-3">
-            <Tag v-for="(reaction, idx) in survey.reactions" :key="idx" :value="reaction" />
-          </div>
-
           <!-- Réponse de l'admin -->
           <div v-if="survey.adminResponse" class="mt-3 p-3 bg-blue-50 border-l-4 border-blue-500">
             <p class="text-sm font-semibold mb-1">

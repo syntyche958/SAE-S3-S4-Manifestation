@@ -137,7 +137,6 @@ async function clearSurveys() {
 export default {
   getAllSurveys,
   addSurvey,
-  addReaction,
   addAdminResponse,
   deleteSurvey,
   clearSurveys,
