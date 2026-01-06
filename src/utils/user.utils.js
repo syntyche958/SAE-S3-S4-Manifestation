@@ -9,7 +9,11 @@ export function isProviderAdminPanelToHide() {
   const providerStore = useProviderStore()
 
   // Visitor
-  if (authStore.user?.type === UserTypeEnum.VISITOR) return true
+  if (
+    authStore.user?.type === UserTypeEnum.VISITOR ||
+    authStore.user?.type === UserTypeEnum.NOTCONNECTED
+  )
+    return true
 
   // Not the corresponding provider
   const pageProviderId = Number(route.params.provider_id)
