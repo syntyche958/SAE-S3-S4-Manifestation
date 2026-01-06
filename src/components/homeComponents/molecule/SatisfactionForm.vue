@@ -10,7 +10,7 @@
 
   <Dialog
     v-model:visible="visible"
-    :header="$t('Formulaire de satisfaction')"
+    :header="$t('message.satisfactionForm')"
     :style="{ width: '1100px', height: '80vh' }"
     :modal="true"
     :draggable="false"
@@ -18,7 +18,7 @@
     <form @submit.prevent="submit" class="flex flex-col gap-4 w-full">
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="font-semibold">{{ $t('globalRating') }} *</label>
+          <label class="font-semibold">{{ $t('message.globalRating') }} *</label>
           <Rating v-model="form.rating" :cancel="false" />
           <Message v-if="errors.rating" severity="error" size="small" variant="simple">{{
             errors.rating
@@ -26,37 +26,37 @@
         </div>
 
         <div>
-          <label class="font-semibold">{{ $t('wouldRecommend') }}</label>
+          <label class="font-semibold">{{ $t('message.wouldRecommend') }}</label>
           <div class="flex gap-4 items-center mt-2">
             <RadioButton inputId="rec-yes" v-model="form.recommend" value="yes" />
-            <label for="rec-yes">{{ $t('Oui') }}</label>
+            <label for="rec-yes">{{ $t('message.yes') }}</label>
 
             <RadioButton inputId="rec-no" v-model="form.recommend" value="no" />
-            <label for="rec-no">{{ $t('Non') }}</label>
+            <label for="rec-no">{{ $t('message.no') }}</label>
 
             <RadioButton inputId="rec-maybe" v-model="form.recommend" value="maybe" />
-            <label for="rec-maybe">{{ $t('maybe') }}</label>
+            <label for="rec-maybe">{{ $t('message.maybe') }}</label>
           </div>
         </div>
       </div>
 
       <div class="grid grid-cols-3 gap-4">
         <div>
-          <label class="font-semibold">{{ $t('Organisation') }}</label>
+          <label class="font-semibold">{{ $t('message.organisation') }}</label>
           <Rating v-model="form.ratings.organisation" :cancel="false" />
         </div>
         <div>
-          <label class="font-semibold">{{ $t('Animations') }}</label>
+          <label class="font-semibold">{{ $t('message.animations') }}</label>
           <Rating v-model="form.ratings.animations" :cancel="false" />
         </div>
         <div>
-          <label class="font-semibold">{{ $t('Accesibilité') }}</label>
+          <label class="font-semibold">{{ $t('message.accessibility') }}</label>
           <Rating v-model="form.ratings.accessibility" :cancel="false" />
         </div>
       </div>
 
       <div>
-        <label class="font-semibold">{{ $t('whichActivities') }}</label>
+        <label class="font-semibold">{{ $t('message.whichActivities') }}</label>
         <div class="flex gap-3 flex-wrap mt-2">
           <div v-for="act in activitiesOptions" :key="act" class="flex items-center gap-2">
             <Checkbox :inputId="act" :value="act" v-model="form.activities" />
@@ -66,7 +66,7 @@
       </div>
 
       <div>
-        <label class="font-semibold">{{ $t('commentSuggestions') }}</label>
+        <label class="font-semibold">{{ $t('message.commentSuggestions') }}</label>
         <Textarea v-model="form.comment" rows="4" />
         <Message v-if="errors.comment" severity="error" size="small" variant="simple">{{
           errors.comment
@@ -74,20 +74,20 @@
       </div>
 
       <div class="flex gap-2">
-        <InputText v-model="form.name" :placeholder="$t('nameOptional')" />
-        <InputText v-model="form.email" :placeholder="$t('emailOptional')" type="email" />
+        <InputText v-model="form.name" :placeholder="$t('message.nameOptional')" />
+        <InputText v-model="form.email" :placeholder="$t('message.emailOptional')" type="email" />
       </div>
 
       <div class="flex items-center gap-2">
         <Checkbox v-model="form.consent" :binary="true" inputId="consent" />
-        <label for="consent">{{ $t('consentText') }}</label>
+        <label for="consent">{{ $t('message.consentText') }}</label>
       </div>
       <Message v-if="errors.consent" severity="error" size="small" variant="simple">{{
         errors.consent
       }}</Message>
 
       <div class="flex justify-between items-center">
-        <small class="text-sm text-600">{{ $t('thankYouMessage') }}</small>
+        <small class="text-sm text-600">{{ $t('message.thankYouMessage') }}</small>
         <div class="flex justify-end gap-2">
           <Button type="button" :label="$t('message.cancel')" severity="secondary" @click="visible = false" />
           <Button type="submit" :label="$t('message.send')" />
@@ -181,7 +181,6 @@ async function submit() {
 </script>
 
 <style scoped>
-/* petits ajustements pour la largeur / responsive */
 .p-dialog .p-dialog-content {
   overflow: auto;
   height: 80px;
