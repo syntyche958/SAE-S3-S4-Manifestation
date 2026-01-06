@@ -14,7 +14,7 @@
     />
     <Button
       type="button"
-      :label="alreadySetActivity ? t('message.modiffy') : t('message.save')"
+      :label="alreadySetActivity ? t('message.modify') : t('message.save')"
       icon="pi pi-save"
       @click="setActivityLocation"
       :disabled="selectedActivity == undefined"

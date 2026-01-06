@@ -28,6 +28,14 @@ async function updateProviderDescriptionFromLocalSource(providerId, providerDesc
   return LocalSource.updateProviderDescription(providerId, providerDesc)
 }
 
+async function uploadProviderImageFromLocalSource(providerId, imageData) {
+  return LocalSource.uploadProviderImage(providerId, imageData)
+}
+
+async function deleteProviderImageFromLocalSource(providerId, imageId) {
+  return LocalSource.deleteProviderImage(providerId, imageId)
+}
+
 async function addNewProvidersToLocalSource(providerName, providerDesc) {
   const providerStore = useProviderStore()
   let lastId = 0
@@ -137,6 +145,26 @@ async function updateProviderDescription(providerId, newDescription) {
   return response
 }
 
+async function uploadProviderImage(providerId, imageData) {
+  let response = null
+  try {
+    response = await uploadProviderImageFromLocalSource(providerId, imageData)
+  } catch {
+    return networkErrResponse
+  }
+  return response
+}
+
+async function deleteProviderImage(providerId, imageId) {
+  let response = null
+  try {
+    response = await deleteProviderImageFromLocalSource(providerId, imageId)
+  } catch {
+    return networkErrResponse
+  }
+  return response
+}
+
 export default {
   getAllProviders,
   getAllNewProviders,
@@ -146,4 +174,6 @@ export default {
   removeNewProvider,
   validateNewProviders,
   getProviderDescription,
+  uploadProviderImage,
+  deleteProviderImage,
 }

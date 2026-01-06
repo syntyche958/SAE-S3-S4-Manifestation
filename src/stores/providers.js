@@ -50,17 +50,21 @@ export const useProviderStore = defineStore('provider', () => {
       response.data.id === idProvider &&
       response.data.images?.length
     ) {
+      providerImages.value = response.data.images // ← Ajoute cette ligne
       return response.data.images
     }
-    return Array(5)
+
+    const placeholders = Array(5)
       .fill(0)
       .map((_, i) => ({
-        // .map = parcourt chaque case et crée un nouvel objet pour chaque élément et transforme chaque case en objet image pr le caroussel
         itemImageSrc: placeholder,
         thumbnailImageSrc: placeholder,
         alt: `Placeholder ${i + 1}`,
         title: `Placeholder ${i + 1}`,
       }))
+
+    providerImages.value = placeholders // ← Ajoute cette ligne aussi
+    return placeholders
   }
 
   async function getAllNewProviders() {
@@ -107,6 +111,33 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
+  async function uploadProviderImage(providerId, imageData) {
+    let response = await ProviderService.uploadProviderImage(providerId, imageData)
+
+    if (response.error === 0) {
+      displaySuccessToast('Image uploadée avec succès')
+      providerImages.value = await getProviderImages(providerId)
+    } else {
+      displayErrToast("Erreur lors de l'upload")
+      console.log(response.data)
+    }
+
+    return response
+  }
+
+  async function deleteProviderImage(providerId, imageId) {
+    let response = await ProviderService.deleteProviderImage(providerId, imageId)
+
+    if (response.error === 0) {
+      displaySuccessToast('Image supprimée avec succès')
+    } else {
+      displayErrToast('Erreur lors de la suppression')
+      console.log(response.data)
+    }
+
+    return response
+  }
+
   return {
     providers,
     newProviders,
@@ -121,5 +152,7 @@ export const useProviderStore = defineStore('provider', () => {
     addNewProvider,
     removeNewProvider,
     validateNewProviders,
+    uploadProviderImage,
+    deleteProviderImage,
   }
 })
