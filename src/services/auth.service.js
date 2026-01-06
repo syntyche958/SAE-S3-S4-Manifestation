@@ -4,6 +4,10 @@ async function loginFromLocalSource(mail, password) {
   return LocalSource.login(mail, password)
 }
 
+async function signinFromLocalSource(mail, password) {
+  return LocalSource.signin(mail, password)
+}
+
 // async function getUser() {
 //   let response = null
 //   try {
@@ -18,5 +22,8 @@ async function loginFromLocalSource(mail, password) {
 async function login(mail, password) {
   return loginFromLocalSource(mail, password)
 }
+async function signin(mail, password) {
+  return signinFromLocalSource(mail, password)
+}
 
-export default { login }
+export default { login, signin }

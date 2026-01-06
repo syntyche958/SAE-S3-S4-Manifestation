@@ -10,6 +10,7 @@ import {
   session,
   surveys,
 } from '@/datasource/data'
+import { UserTypeEnum } from '@/enums/User.enum'
 
 /**
  * Get all providers
@@ -122,6 +123,19 @@ function login(mail, password) {
   }
 }
 
+function signin(mail, password) {
+  const userWithSameMail = users.find((u) => u.mail == mail)
+  if (userWithSameMail !== undefined) {
+    return { error: 1, status: 400, data: 'Mail already used !' }
+  }
+  const sortedusers = users
+  sortedusers.sort((a, b) => b - a)
+  const id = sortedusers.at(0).id + 1
+  const newUser = { type: UserTypeEnum.VISITOR, mail, password, id }
+  users.push(newUser)
+
+  return { error: 0, status: 200, data: newUser }
+}
 
 /**
  * Get provider images
@@ -147,4 +161,5 @@ export default {
   getSessionsByActivityId,
   getAllSurveys,
   login,
+  signin,
 }

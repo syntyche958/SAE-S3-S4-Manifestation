@@ -27,6 +27,20 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function signin(mail, password) {
+    let response = await AuthService.signin(mail, password)
+    console.log(response)
+    if (response.error === 0) {
+      user.value = response.data
+      displaySuccessToast('Connecté avec succés')
+      return true
+    } else {
+      console.log(response.data)
+      displayErrToast("Echec de l'enregistrement")
+      return false
+    }
+  }
+
   function logout() {
     user.value = { type: UserTypeEnum.NOTCONNECTED }
   }
@@ -36,5 +50,6 @@ export const useAuthStore = defineStore('auth', () => {
     getUser,
     login,
     logout,
+    signin,
   }
 })
