@@ -54,13 +54,18 @@ const route = useRoute()
 const sessionStore = useSessionStore()
 
 const activityId = computed(() => Number.parseInt(route.params.activity_id))
-const sessions = computed(() => sessionStore.sessions)
+const sessions = computed(() => {
+  if (!sessionStore.sessions) return []
+  return sessionStore.sessions.filter((s) => s.activitiesId === activityId.value)
+})
 
 async function addNewSession() {
   await sessionStore.addSession(activityId.value, '', '', 0, 0)
 }
 
 onMounted(async () => {
-  await sessionStore.getSessionsByActivityId(activityId.value)
+  if (!sessionStore.sessions || sessionStore.sessions.length === 0) {
+    await sessionStore.getAllSessions()
+  }
 })
 </script>

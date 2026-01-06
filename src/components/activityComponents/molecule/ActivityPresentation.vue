@@ -96,7 +96,9 @@ const currentActivity = computed(() => {
 })
 
 onMounted(async () => {
-  await sessionsStore.getAllSessions()
+  if (!sessionsStore.sessions || sessionsStore.sessions.length === 0) {
+    await sessionsStore.getAllSessions()
+  }
 })
 
 const onSortChange = (event) => {
@@ -133,7 +135,7 @@ async function inscription(session) {
   console.log(updatedData)
   await sessionsStore.updateSession(session.id, updatedData)
 
-  await sessionsStore.getAllSessions()
+  // await sessionsStore.getAllSessions()
   // sessions.value = sessionsStore.sessions.filter((s) => s.activitiesId === currentActivity.value.id) // Removed: computed property handles this
   console.log()
   const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
