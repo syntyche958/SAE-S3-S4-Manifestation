@@ -19,7 +19,6 @@ async function getSurveyStatistics() {
         subRatingsAnalysis: { organisation: 0, animations: 0, accessibility: 0 },
         recommendationBreakdown: { yes: 0, no: 0, maybe: 0 },
         topActivities: [],
-        reactionStats: {},
       },
     }
   }
@@ -79,16 +78,6 @@ async function getSurveyStatistics() {
     .sort((a, b) => b.count - a.count)
     .slice(0, 5)
 
-  // Compter les réactions (si vous en avez)
-  const reactionStats = {}
-  surveys.forEach((survey) => {
-    if (survey.reactions && Array.isArray(survey.reactions)) {
-      survey.reactions.forEach((emoji) => {
-        reactionStats[emoji] = (reactionStats[emoji] || 0) + 1
-      })
-    }
-  })
-
   return {
     error: 0,
     status: 200,
@@ -100,7 +89,6 @@ async function getSurveyStatistics() {
       subRatingsAnalysis: subRatings,
       recommendationBreakdown,
       topActivities,
-      reactionStats,
     },
   }
 }
