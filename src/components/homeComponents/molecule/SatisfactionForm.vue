@@ -165,12 +165,7 @@ async function submit() {
   try {
     await surveyStore.addSurvey(payload)
     visible.value = false
-    toast.add({
-      severity: 'success',
-      summary: 'Merci',
-      detail: 'Votre avis a bien été enregistré.',
-      life: 3000,
-    })
+
     // reset form
     form.rating = 0
     form.recommend = ''
