@@ -42,10 +42,11 @@
                       class="flex flex-row-reverse md:flex-row gap-2"
                     >
                       <Button
-                        icon="pi pi-user-plus"
-                        :label="$t('message.signUp')"
+                        :icon="isRegistered(item) ? 'pi pi-check' : 'pi pi-user-plus'"
+                        :label="isRegistered(item) ? 'Déjà inscrit' : $t('message.signUp')"
                         @click="inscription(item)"
-                        :disabled="item.nbPlace <= item.registersUsers.length"
+                        :disabled="item.nbPlace <= item.registersUsers.length || isRegistered(item) || !isUserConnected"
+                        :severity="isRegistered(item) ? 'success' : 'primary'"
                         class="flex-auto md:flex-initial whitespace-nowrap"
                       ></Button>
                     </div>
@@ -67,12 +68,27 @@ import { Button, DataView, Select } from 'primevue'
 // import { useToast } from 'primevue/usetoast'
 import { useActivityStore } from '@/stores/activities'
 import { useSessionStore } from '@/stores/sessions.js'
+import { useAuthStore } from '@/stores/auth'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils.js'
+import { UserTypeEnum } from '@/enums/User.enum'
 
 const route = useRoute()
 const activityStore = useActivityStore()
 const sessionsStore = useSessionStore()
+const authStore = useAuthStore()
 // const toast = useToast()
+
+const currentUserId = computed(() => {
+  return authStore.user?.id || 15 // garder le 15 en dur pour le momentmais le virer plus tard
+})
+
+const isUserConnected = computed(() => {
+  return authStore.user?.type !== UserTypeEnum.NOTCONNECTED
+})
+
+function isRegistered(session) {
+  return session.registersUsers.includes(currentUserId.value) || session.registersUsers.includes(15)
+}
 
 const sessions = computed(() => {
   const activityId = Number.parseInt(route.params.activity_id)
@@ -127,6 +143,11 @@ async function inscription(session) {
 
   const userId = 15 // user connected id
   // TODO : Ne plus la mettre en dur
+
+  if (isRegistered(session)) {
+    displayErrToast('Vous êtes déjà inscrit à cette session')
+    return
+  }
 
   // copie l'ancien tableau et ajoute le nouvel user
   const updatedData = {
