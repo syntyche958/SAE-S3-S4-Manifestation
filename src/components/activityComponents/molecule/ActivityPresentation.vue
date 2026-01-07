@@ -21,46 +21,15 @@
                 class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
                 :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
               >
-                <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
-                  <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-                    <div>
-                      <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">
-                        {{ item.beginingDate }} {{ item.beginingHour }}
-                      </span>
-                      <div class="text-lg font-medium mt-2">Session #{{ item.id }}</div>
-                      <div class="text-sm text-surface-600 mt-1">
-                        Durée: {{ item.duration }} minutes
-                      </div>
-                      <div class="text-sm text-surface-600 mt-1">
-                        Places: {{ item.nbPlace - item.registersUsers.length }} / {{ item.nbPlace }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex flex-col md:items-end gap-8">
-                    <div
-                      v-if="currentActivity?.canRegister"
-                      class="flex flex-row-reverse md:flex-row gap-2"
-                    >
-                      <Button 
-                        v-if="isCurrentProviderOwner"
-                        icon="pi pi-users"
-                        label="Voir les inscrits"
-                        severity="info"
-                        outlined
-                        @click="showRegistrants(item)"
-                        class="flex-auto md:flex-initial whitespace-nowrap"
-                      />
-                      <Button
-                        :icon="isRegistered(item) ? 'pi pi-check' : 'pi pi-user-plus'"
-                        :label="isRegistered(item) ? 'Déjà inscrit' : $t('message.signUp')"
-                        @click="inscription(item)"
-                        :disabled="item.nbPlace <= item.registersUsers.length || isRegistered(item) || !isUserConnected"
-                        :severity="isRegistered(item) ? 'success' : 'primary'"
-                        class="flex-auto md:flex-initial whitespace-nowrap"
-                      ></Button>
-                    </div>
-                  </div>
-                </div>
+               <SessionItem 
+                 :item="item"
+                 :is-current-provider-owner="isCurrentProviderOwner"
+                 :is-registered="isRegistered(item)"
+                 :is-user-connected="isUserConnected"
+                 :can-register="currentActivity?.canRegister"
+                 @inscription="inscription"
+                 @show-registrants="showRegistrants"
+               />
               </div>
             </div>
           </div>
@@ -69,34 +38,20 @@
     </div>
   </div>
 
-  <Dialog
+  <RegistrantsListDialog 
     v-model:visible="displayRegistrantsDialog"
-    modal
-    header="Utilisateurs inscrits"
-    :style="{ width: '50vw' }"
-  >
-    <div v-if="loadingRegistrants" class="flex justify-center">
-      <i class="pi pi-spin pi-spinner text-2xl"></i>
-    </div>
-    <div v-else-if="registrantsList.length === 0">
-      <p>Aucun inscrit pour cette session.</p>
-    </div>
-    <div v-else>
-      <ul class="list-none p-0 m-0">
-        <li v-for="user in registrantsList" :key="user.id" class="p-3 border-b surface-border flex align-items-center gap-2">
-            <i class="pi pi-user text-primary"></i>
-            <span>{{ user.mail }}</span>
-        </li>
-      </ul>
-    </div>
-  </Dialog>
+    :loading="loadingRegistrants"
+    :registrants="registrantsList"
+  />
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Button, DataView, Select, Dialog } from 'primevue'
+import { Button, DataView, Select } from 'primevue'
 import AuthService from '@/services/auth.service'
+import SessionItem from '@/components/activityComponents/molecule/SessionItem.vue'
+import RegistrantsListDialog from '@/components/activityComponents/molecule/RegistrantsListDialog.vue'
 // import { useToast } from 'primevue/usetoast'
 import { useActivityStore } from '@/stores/activities'
 import { useSessionStore } from '@/stores/sessions.js'

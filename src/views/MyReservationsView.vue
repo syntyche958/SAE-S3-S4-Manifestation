@@ -23,33 +23,11 @@
             <div class="flex flex-col gap-4">
               <div v-for="(item, index) in slotProps.items" :key="item.id" class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 dark:bg-surface-900 rounded-border border border-surface-200 dark:border-surface-700">
                 
-                <div class="flex-1">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="font-bold text-lg">{{ getActivityName(item.activitiesId) }}</span>
-                    <Tag :value="'Session #' + item.id" severity="info"></Tag>
-                  </div>
-                  
-                  <div class="flex flex-col gap-1 text-sm text-surface-600 dark:text-surface-300">
-                    <div class="flex items-center gap-2">
-                      <i class="pi pi-calendar"></i>
-                      <span>{{ item.beginingDate }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                       <i class="pi pi-clock"></i>
-                       <span>{{ item.beginingHour }} ({{ item.duration }} min)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="flex sm:flex-col gap-2 mt-2 sm:mt-0">
-                  <Button 
-                    icon="pi pi-eye" 
-                    text 
-                    rounded 
-                    v-tooltip.top="'Voir l\'activité'"
-                    @click="goToActivity(item.activitiesId)" 
-                  />
-                </div>
+                <ReservationItem 
+                  :item="item" 
+                  :activity-name="getActivityName(item.activitiesId)"
+                  @go-to-activity="goToActivity"
+                />
                 
               </div>
             </div>
@@ -69,7 +47,7 @@ import { useActivityStore } from '@/stores/activities'
 import Card from 'primevue/card'
 import DataView from 'primevue/dataview'
 import Button from 'primevue/button'
-import Tag from 'primevue/tag'
+import ReservationItem from '@/components/globalComponents/molecule/ReservationItem.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
