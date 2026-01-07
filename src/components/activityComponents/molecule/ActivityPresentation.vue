@@ -41,6 +41,15 @@
                       v-if="currentActivity?.canRegister"
                       class="flex flex-row-reverse md:flex-row gap-2"
                     >
+                      <Button 
+                        v-if="isCurrentProviderOwner"
+                        icon="pi pi-users"
+                        label="Voir les inscrits"
+                        severity="info"
+                        outlined
+                        @click="showRegistrants(item)"
+                        class="flex-auto md:flex-initial whitespace-nowrap"
+                      />
                       <Button
                         :icon="isRegistered(item) ? 'pi pi-check' : 'pi pi-user-plus'"
                         :label="isRegistered(item) ? 'Déjà inscrit' : $t('message.signUp')"
@@ -59,23 +68,48 @@
       </DataView>
     </div>
   </div>
+
+  <Dialog
+    v-model:visible="displayRegistrantsDialog"
+    modal
+    header="Utilisateurs inscrits"
+    :style="{ width: '50vw' }"
+  >
+    <div v-if="loadingRegistrants" class="flex justify-center">
+      <i class="pi pi-spin pi-spinner text-2xl"></i>
+    </div>
+    <div v-else-if="registrantsList.length === 0">
+      <p>Aucun inscrit pour cette session.</p>
+    </div>
+    <div v-else>
+      <ul class="list-none p-0 m-0">
+        <li v-for="user in registrantsList" :key="user.id" class="p-3 border-b surface-border flex align-items-center gap-2">
+            <i class="pi pi-user text-primary"></i>
+            <span>{{ user.mail }}</span>
+        </li>
+      </ul>
+    </div>
+  </Dialog>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Button, DataView, Select } from 'primevue'
+import { Button, DataView, Select, Dialog } from 'primevue'
+import AuthService from '@/services/auth.service'
 // import { useToast } from 'primevue/usetoast'
 import { useActivityStore } from '@/stores/activities'
 import { useSessionStore } from '@/stores/sessions.js'
 import { useAuthStore } from '@/stores/auth'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils.js'
 import { UserTypeEnum } from '@/enums/User.enum'
+import { useProviderStore } from '@/stores/providers'
 
 const route = useRoute()
 const activityStore = useActivityStore()
 const sessionsStore = useSessionStore()
 const authStore = useAuthStore()
+const providerStore = useProviderStore()
 // const toast = useToast()
 
 const currentUserId = computed(() => {
@@ -115,6 +149,9 @@ onMounted(async () => {
   if (!sessionsStore.sessions || sessionsStore.sessions.length === 0) {
     await sessionsStore.getAllSessions()
   }
+  if (!providerStore.providers || providerStore.providers.length === 0) {
+    await providerStore.getAllProviders()
+  }
 })
 
 const onSortChange = (event) => {
@@ -131,6 +168,39 @@ const onSortChange = (event) => {
     triKey.value = triValue
   }
 }
+
+  const displayRegistrantsDialog = ref(false)
+  const loadingRegistrants = ref(false)
+  const registrantsList = ref([])
+
+  // Logic to show registrants for provider
+  async function showRegistrants(session) {
+      displayRegistrantsDialog.value = true
+      loadingRegistrants.value = true
+      registrantsList.value = []
+
+      try {
+          // Fetch all users (simulated via AuthService/LocalSource)
+          const response = await AuthService.getUsers()
+          if (response.error === 0) {
+              const allUsers = response.data
+              // Filter users who are in the registersUsers list
+              registrantsList.value = allUsers.filter(u => session.registersUsers.includes(u.id))
+          }
+      } catch (e) {
+          console.error(e)
+          displayErrToast('Erreur lors du chargement des inscrits')
+      } finally {
+          loadingRegistrants.value = false
+      }
+  }
+
+  const isCurrentProviderOwner = computed(() => {
+      if (authStore.user?.type !== UserTypeEnum.PROVIDER) return false
+      // Find provider associated with current user
+      const provider = providerStore.providers.find(p => p.userId === authStore.user.id)
+      return provider && provider.id === currentActivity.value?.providerId
+  })
 
 async function inscription(session) {
   selectedSession.value = session // the good session

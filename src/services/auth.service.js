@@ -26,4 +26,8 @@ async function signin(mail, password) {
   return signinFromLocalSource(mail, password)
 }
 
-export default { login, signin }
+async function getUsers() {
+  return LocalSource.getUsers()
+}
+
+export default { login, signin, getUsers }
