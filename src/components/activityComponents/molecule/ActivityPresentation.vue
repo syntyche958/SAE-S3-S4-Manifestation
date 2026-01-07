@@ -128,18 +128,17 @@ const onSortChange = (event) => {
   const loadingRegistrants = ref(false)
   const registrantsList = ref([])
 
-  // Logic to show registrants for provider
+
   async function showRegistrants(session) {
       displayRegistrantsDialog.value = true
       loadingRegistrants.value = true
       registrantsList.value = []
 
       try {
-          // Fetch all users (simulated via AuthService/LocalSource)
           const response = await AuthService.getUsers()
           if (response.error === 0) {
               const allUsers = response.data
-              // Filter users who are in the registersUsers list
+
               registrantsList.value = allUsers.filter(u => session.registersUsers.includes(u.id))
           }
       } catch (e) {
@@ -152,13 +151,13 @@ const onSortChange = (event) => {
 
   const isCurrentProviderOwner = computed(() => {
       if (authStore.user?.type !== UserTypeEnum.PROVIDER) return false
-      // Find provider associated with current user
+
       const provider = providerStore.providers.find(p => p.userId === authStore.user.id)
       return provider && provider.id === currentActivity.value?.providerId
   })
 
 async function inscription(session) {
-  selectedSession.value = session // the good session
+  selectedSession.value = session
   const placesRestantes = session.nbPlace - session.registersUsers.length
 
   if (placesRestantes <= 0) {
@@ -185,9 +184,7 @@ async function inscription(session) {
   console.log(updatedData)
   await sessionsStore.updateSession(session.id, updatedData)
 
-  // await sessionsStore.getAllSessions()
-  // sessions.value = sessionsStore.sessions.filter((s) => s.activitiesId === currentActivity.value.id) // Removed: computed property handles this
-  console.log()
+
   const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
 
   displaySuccessToast(`Vous êtes inscrit à la session #${session.id}. Places restantes : ${nouvellesPlacesRestantes}/${session.nbPlace}`)

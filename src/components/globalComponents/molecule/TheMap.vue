@@ -36,11 +36,7 @@ onMounted(async () => {
   const map = setupMap('map')
   await displayLocations(map, props.displayMode, emit, route)
 
-  /* Fix :
-    As TheMap is in a Tab component, map is first mounted with null size
-    this observer refresh the map when the size changes (when the map
-    is dislpayed)
-  */
+
   const observer = new ResizeObserver(() => {
     map.invalidateSize()
   })
