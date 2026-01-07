@@ -24,9 +24,9 @@
               ><i class="pi pi-file-edit"></i
               ><span>{{ $t('message.appearanceOfThePage') }}</span></Tab
             >
-            <Tab value="1"
+            <!-- <Tab value="1"
               ><i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span></Tab
-            >
+            > -->
             <Tab disabled
               ><i class="pi pi-file-edit"></i><span> {{ $t('message.seeStatistics') }}</span></Tab
             >

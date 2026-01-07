@@ -40,10 +40,6 @@ function goToActivity(activityId) {
           style="width: 250px; overflow: hidden; cursor: pointer"
           @click="goToActivity(item.id)"
         >
-          <template #header>
-            <ProviderActivityEditor />
-            <img style="object-fit: cover" alt="user header" :src="placeholder" />
-          </template>
           <template #title>{{ item.name }}</template>
           <template #content>
             <p class="m-0">

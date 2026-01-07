@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import placeholder from '@/assets/images/photos/placeholder.jpg'
 import ProviderService from '@/services/provider.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
@@ -43,28 +42,20 @@ export const useProviderStore = defineStore('provider', () => {
   async function getProviderImages(idProvider) {
     let response = await ProviderService.getProviderImages(idProvider)
 
+    // Si le provider existe et a des images (même un tableau vide)
     if (
       response &&
       response.error === 0 &&
       response.data &&
       response.data.id === idProvider &&
-      response.data.images?.length
+      Array.isArray(response.data.images)
     ) {
-      providerImages.value = response.data.images // ← Ajoute cette ligne
+      providerImages.value = response.data.images
       return response.data.images
     }
 
-    const placeholders = Array(5)
-      .fill(0)
-      .map((_, i) => ({
-        itemImageSrc: placeholder,
-        thumbnailImageSrc: placeholder,
-        alt: `Placeholder ${i + 1}`,
-        title: `Placeholder ${i + 1}`,
-      }))
-
-    providerImages.value = placeholders // ← Ajoute cette ligne aussi
-    return placeholders
+    providerImages.value = []
+    return []
   }
 
   async function getAllNewProviders() {
