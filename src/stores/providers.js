@@ -107,7 +107,11 @@ export const useProviderStore = defineStore('provider', () => {
 
     if (response.error === 0) {
       displaySuccessToast('Image uploadée avec succès')
-      providerImages.value = await getProviderImages(providerId)
+      // providerImages.value = await getProviderImages(providerId)
+      providerImages.value = providerImages.value.map((p) => {
+        if (p.id !== providerId) return p
+        return { ...p, images: [...p.images, response.data] }
+      })
     } else {
       displayErrToast("Erreur lors de l'upload")
       console.log(response.data)
