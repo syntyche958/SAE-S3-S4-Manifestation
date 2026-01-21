@@ -2,14 +2,47 @@
 
 <template>
   <DataTable :value="sessions" tableStyle="min-width: 50rem">
+    <!-- input de date-->
     <Column field="beginingDate" header="Date">
       <template #body="slotProps">
-        <InputText v-model="slotProps.data.beginingDate" fluid />
+        <div class="flex flex-column gap-2">
+          <div class="flex align-items-center">
+            <RadioButton
+              :inputId="`date-${slotProps.data.id}-2026-05-28`"
+              v-model="slotProps.data.beginingDate"
+              value="2026-05-28"
+            />
+            <label
+              :for="`date-${slotProps.data.id}-2026-05-28`"
+              class="ml-2 cursor-pointer"
+            >
+              28 mai 2026
+            </label>
+          </div>
+          <div class="flex align-items-center">
+            <RadioButton
+              :inputId="`date-${slotProps.data.id}-2026-05-29`"
+              v-model="slotProps.data.beginingDate"
+              value="2026-05-29"
+            />
+            <label
+              :for="`date-${slotProps.data.id}-2026-05-29`"
+              class="ml-2 cursor-pointer"
+            >
+              29 mai 2026
+            </label>
+          </div>
+        </div>
       </template>
     </Column>
+    <!-- input de heure-->
     <Column field="beginingHour" header="Heure">
       <template #body="slotProps">
-        <InputText v-model="slotProps.data.beginingHour" fluid />
+        <input
+          type="time"
+          v-model="slotProps.data.beginingHour"
+          class="p-inputtext p-component w-full"
+        />
       </template>
     </Column>
     <Column field="duration" header="Durée">
@@ -48,7 +81,7 @@
 import { useRoute } from 'vue-router'
 import { useSessionStore } from '@/stores/sessions.js'
 import { computed, onMounted } from 'vue'
-import { InputText, InputNumber, Button, DataTable, Column } from 'primevue'
+import { InputNumber, Button, DataTable, Column, RadioButton } from 'primevue'
 
 const route = useRoute()
 const sessionStore = useSessionStore()
