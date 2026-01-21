@@ -7,6 +7,17 @@
         <button v-tooltip.bottom="'Underline'" class="ql-underline"></button>
       </span>
       <span class="ql-formats">
+        <select class="ql-header" v-tooltip.bottom="'Titre'">
+          <option selected></option>
+          <option value="1">Titre 1</option>
+          <option value="2">Titre 2</option>
+          <option value="3">Titre 3</option>
+          <option value="4">Titre 4</option>
+          <option value="5">Titre 5</option>
+          <option value="6">Titre 6</option>
+        </select>
+      </span>
+      <span class="ql-formats">
         <select class="ql-color"></select>
         <select class="ql-background"></select>
       </span>
