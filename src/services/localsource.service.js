@@ -189,6 +189,12 @@ function signin(mail, password) {
     return { error: 1, status: 404, data: 'Prestataire non trouvé' }
   }
 
+  function updateUserTypeToProvider(userId) {
+    const user = users.find((u) => u.id === userId)
+    user.type = UserTypeEnum.PROVIDER
+    return { error: 0, status: 200, data: user }
+  }
+
   export default {
     updateProviderDescription,
     getAllProviders,
@@ -207,4 +213,5 @@ function signin(mail, password) {
     deleteProviderImage,
     login,
     signin,
+    updateUserTypeToProvider,
   }

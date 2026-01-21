@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 dark:bg-surface-900 rounded-border border border-surface-200 dark:border-surface-700">
-    
+  <div class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 rounded-border border border-surface-200">
+
     <div class="flex-1">
       <div class="flex items-center justify-between mb-2">
         <span class="font-bold text-lg">{{ activityName }}</span>
         <Tag :value="'Session #' + item.id" severity="info"></Tag>
       </div>
-      
+
       <div class="flex flex-col gap-1 text-sm text-surface-600 dark:text-surface-300">
         <div class="flex items-center gap-2">
           <i class="pi pi-calendar"></i>
@@ -20,15 +20,15 @@
     </div>
 
     <div class="flex sm:flex-col gap-2 mt-2 sm:mt-0">
-      <Button 
-        icon="pi pi-eye" 
-        text 
-        rounded 
+      <Button
+        icon="pi pi-eye"
+        text
+        rounded
         v-tooltip.top="'Voir l\'activité'"
-        @click="$emit('go-to-activity', item.activitiesId)" 
+        @click="$emit('go-to-activity', item.activitiesId)"
       />
     </div>
-    
+
   </div>
 </template>
 

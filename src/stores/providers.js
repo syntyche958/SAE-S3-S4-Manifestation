@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import ProviderService from '@/services/provider.service'
+import AuthService from '@/services/auth.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
 export const useProviderStore = defineStore('provider', () => {
@@ -62,13 +63,14 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.getAllNewProviders()
     if (response.error === 0) {
       newProviders.value = response.data
+      console.log("newProviders fetched")
     } else {
       console.log(response.data)
     }
   }
 
-  async function addNewProvider(providerName, providerDesc) {
-    let response = await ProviderService.addNewProvider(providerName, providerDesc)
+  async function addNewProvider(providerName, providerDesc, userId) {
+    let response = await ProviderService.addNewProvider(providerName, providerDesc, userId)
     if (response.error === 0) {
       // TODO : Quand le back-end sera en place, plutôt appeler getAllNewProviders() pour maj le store !
       displaySuccessToast('Votre demande a été enregistré avec succès')
@@ -91,11 +93,14 @@ export const useProviderStore = defineStore('provider', () => {
   }
 
   async function validateNewProviders(data) {
-    let response = await ProviderService.validateNewProviders(data)
+    let response1 = await ProviderService.validateNewProviders(data)
 
     newProviders.value = newProviders.value.filter((p) => p.id != data.id)
-    providers.value.push(response.data)
-    if (response.error === 0) {
+    providers.value.push(response1.data)
+
+    // Update user type to provider
+    let response2 = await AuthService.updateUserTypeToProvider(data.userId)
+    if (response1.error === 0 && response2.error === 0) {
       displaySuccessToast(`La demande de ${data.name} a été validé avec succès`)
     } else {
       displayErrToast(`Échec de la validation de la demande de ${data.name}`)

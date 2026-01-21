@@ -21,14 +21,14 @@
         <DataView v-else :value="userSessions">
           <template #list="slotProps">
             <div class="flex flex-col gap-4">
-              <div v-for="(item, index) in slotProps.items" :key="item.id" class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 dark:bg-surface-900 rounded-border border border-surface-200 dark:border-surface-700">
-                
-                <ReservationItem 
-                  :item="item" 
+              <div v-for="(item, index) in slotProps.items" :key="item.id" class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 rounded-border border border-surface-200">
+
+                <ReservationItem
+                  :item="item"
                   :activity-name="getActivityName(item.activitiesId)"
                   @go-to-activity="goToActivity"
                 />
-                
+
               </div>
             </div>
           </template>
@@ -58,7 +58,7 @@ const loading = ref(true)
 
 const userSessions = computed(() => {
   if (!sessionStore.sessions || !authStore.user) return []
-  return sessionStore.sessions.filter(session => 
+  return sessionStore.sessions.filter(session =>
     session.registersUsers && session.registersUsers.includes(authStore.user.id)
   )
 })

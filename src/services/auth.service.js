@@ -8,6 +8,10 @@ async function signinFromLocalSource(mail, password) {
   return LocalSource.signin(mail, password)
 }
 
+async function updateUserTypeToProviderFromLocalSource(userId) {
+  return LocalSource.updateUserTypeToProvider(userId)
+}
+
 // async function getUser() {
 //   let response = null
 //   try {
@@ -25,9 +29,12 @@ async function login(mail, password) {
 async function signin(mail, password) {
   return signinFromLocalSource(mail, password)
 }
+async function updateUserTypeToProvider(userId) {
+  return updateUserTypeToProviderFromLocalSource(userId)
+}
 
 async function getUsers() {
   return LocalSource.getUsers()
 }
 
-export default { login, signin, getUsers }
+export default { login, signin, getUsers, updateUserTypeToProvider }

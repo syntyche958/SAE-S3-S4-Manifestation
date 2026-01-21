@@ -36,7 +36,7 @@ async function deleteProviderImageFromLocalSource(providerId, imageId) {
   return LocalSource.deleteProviderImage(providerId, imageId)
 }
 
-async function addNewProvidersToLocalSource(providerName, providerDesc) {
+async function addNewProvidersToLocalSource(providerName, providerDesc, userId) {
   const providerStore = useProviderStore()
   let lastId = 0
   providerStore.newProviders.forEach((p) => {
@@ -45,7 +45,7 @@ async function addNewProvidersToLocalSource(providerName, providerDesc) {
   return {
     error: 0,
     status: 200,
-    data: { id: lastId + 1, name: providerName, description: providerDesc },
+    data: { id: lastId + 1, name: providerName, description: providerDesc, userId: userId },
   }
 }
 
@@ -92,10 +92,10 @@ async function getProviderImages(id) {
   return response
 }
 
-async function addNewProvider(providerName, providerDesc) {
+async function addNewProvider(providerName, providerDesc, userId) {
   let response = null
   try {
-    response = await addNewProvidersToLocalSource(providerName, providerDesc)
+    response = await addNewProvidersToLocalSource(providerName, providerDesc, userId)
   } catch {
     return networkErrResponse
   }

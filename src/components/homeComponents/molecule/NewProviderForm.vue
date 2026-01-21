@@ -63,8 +63,10 @@ import { Form } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 
 import { useProviderStore } from '@/stores/providers'
+import { useAuthStore } from '@/stores/auth'
 
 const providerStore = useProviderStore()
+const authStore = useAuthStore()
 
 const visible = ref(false)
 const initialValues = ref({
@@ -80,7 +82,7 @@ const onFormSubmit = ({ valid, values }) => {
   if (!valid) return
 
   visible.value = false
-  providerStore.addNewProvider(values.name, values.description)
+  providerStore.addNewProvider(values.name, values.description, authStore.user.id)
 }
 
 const resolver = ref(

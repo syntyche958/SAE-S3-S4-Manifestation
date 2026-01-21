@@ -109,6 +109,7 @@ const presentation = {
 const newProviders = [
   {
     id: 1,
+    userId: 8,
     name: 'Carcassonne Escrime',
     description:
       "Assocition sportive d'escrime de Carcassonne. Activité proposé : découverte de l'escrime pour tout âge",
@@ -270,8 +271,8 @@ const activities = [
     name: 'Balade à cheval',
     description: 'Description de la balade à cheval',
     presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
-    locationId: undefined,
-    canRegister: false,
+    locationId: 2,
+    canRegister: true,
     requestedLocationId: undefined,
   },
   {
@@ -310,8 +311,8 @@ const activities = [
     name: 'Concert médiéval',
     description: "Instruments liés à l'époque",
     presentationContent: "<h1>Le concert c'est génial !</h1>",
-    locationId: undefined,
-    canRegister: false,
+    locationId: 1,
+    canRegister: true,
     requestedLocationId: undefined,
   },
   {
@@ -374,6 +375,15 @@ const session = [
     nbPlace: 10,
     registersUsers: [1, 4, 9],
   },
+  {
+    id: 4,
+    activitiesId: 5,
+    beginingDate: '2025-11-20',
+    beginingHour: '14:30',
+    duration: 40,
+    nbPlace: 10,
+    registersUsers: [1, 4, 9],
+  },
 ]
 
 // const user = [{ type: UserTypeEnum.VISITOR }]
@@ -385,6 +395,7 @@ const users = [
   { id: 6, type: UserTypeEnum.PROVIDER, mail: 'provider4@gmail.com', passwword: 'provider' },
   { id: 7, type: UserTypeEnum.PROVIDER, mail: 'provider5@gmail.com', passwword: 'provider' },
   { id: 3, type: UserTypeEnum.VISITOR, mail: 'visitor1@gmail.com', passwword: 'visitor' },
+  { id: 8, type: UserTypeEnum.VISITOR, mail: 'claire@gmail.com', passwword: 'claire' },
 ]
 // const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
 //const user = [{ id: 3, type: UserTypeEnum.VISITOR }]
