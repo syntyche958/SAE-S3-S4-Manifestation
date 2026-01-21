@@ -459,7 +459,7 @@ const session = [
   {
     id: 1,
     activitiesId: 1,
-    beginingDate: '2025-11-15',
+    beginingDate: '2026-05-28',
     beginingHour: '14:30',
     duration: 30,
     nbPlace: 10,
@@ -468,7 +468,7 @@ const session = [
   {
     id: 2,
     activitiesId: 1,
-    beginingDate: '2025-11-16',
+    beginingDate: '2026-05-28',
     beginingHour: '14:30',
     duration: 25,
     nbPlace: 10,
@@ -477,7 +477,7 @@ const session = [
   {
     id: 3,
     activitiesId: 1,
-    beginingDate: '2025-11-20',
+    beginingDate: '2026-05-28',
     beginingHour: '14:30',
     duration: 40,
     nbPlace: 10,
@@ -486,7 +486,7 @@ const session = [
   {
     id: 4,
     activitiesId: 5,
-    beginingDate: '2025-11-20',
+    beginingDate: '2026-05-28',
     beginingHour: '14:30',
     duration: 40,
     nbPlace: 10,
