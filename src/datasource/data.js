@@ -441,7 +441,7 @@ const activities = [
     presentationContent: "<h1>Le spectacle c'est génial !</h1>",
     locationId: undefined,
     canRegister: false,
-    requestedLocationId: undefined,
+    requestedLocationId: 8,
   },
   {
     id: 8,
@@ -451,7 +451,7 @@ const activities = [
     presentationContent: "<h1>Bien manger c'est important !</h1>",
     locationId: undefined,
     canRegister: false,
-    requestedLocationId: undefined,
+    requestedLocationId: 7,
   },
 ]
 
