@@ -71,12 +71,12 @@ const adminItem = {
 }
 
 const items = computed(() => {
-  let providersItem = {
+  const providersItem = {
     label: t('message.providers'),
     items: [],
   }
 
-  for (let provider of providerStore.providers) {
+  for (const provider of providerStore.providers) {
     providersItem.items.push({
       label: provider.name,
       command: () => {
@@ -85,11 +85,11 @@ const items = computed(() => {
     })
   }
 
-  let activitiesItem = {
+  const activitiesItem = {
     label: t('message.activities'),
     items: [],
   }
-  for (let activity of activityStore.activities) {
+  for (const activity of activityStore.activities) {
     activitiesItem.items.push({
       label: activity.name,
       command: () => {
@@ -98,9 +98,24 @@ const items = computed(() => {
     })
   }
 
+  let myPageItem = null
+  if (authStore.user?.type === UserTypeEnum.PROVIDER) {
+    const provider = providerStore.providers.find((p) => p.userId === authStore.user.id)
+    myPageItem = {
+      label: 'Ma page',
+      command: () => {
+        router.push(`/provider/${provider.id}`)
+      },
+    }
+  }
+
   switch (authStore.user?.type) {
     case UserTypeEnum.ADMIN:
       return [homeItem, providersItem, activitiesItem, adminItem]
+    case UserTypeEnum.PROVIDER:
+      return myPageItem
+        ? [homeItem, myPageItem, providersItem, activitiesItem]
+        : [homeItem, providersItem, activitiesItem]
     default:
       return [homeItem, providersItem, activitiesItem]
   }
