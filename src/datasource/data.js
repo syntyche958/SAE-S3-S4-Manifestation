@@ -216,6 +216,86 @@ const providerImages = [
       },
     ],
   },
+  {
+    id: 4,
+    images: [
+      {
+        itemImageSrc: '/uploads/troubadours1.png',
+        thumbnailImageSrc: '/uploads/troubadours1.png',
+        alt: 'Description for Image 6',
+        title: 'Title 10',
+        idImage: '4-1',
+      },
+      {
+        itemImageSrc: '/uploads/troubadours2.png',
+        thumbnailImageSrc: '/uploads/troubadours2.png',
+        alt: 'Description for Image 7',
+        title: 'Title 11',
+        idImage: '4-2',
+      },
+      {
+        itemImageSrc: '/uploads/troubadours3.png',
+        thumbnailImageSrc: '/uploads/troubadours3.png',
+        alt: 'Description for Image 8',
+        title: 'Title 12',
+        idImage: '4-3',
+      },
+      {
+        itemImageSrc: '/uploads/troubadours4.png',
+        thumbnailImageSrc: '/uploads/troubadours4.png',
+        alt: 'Description for Image 9',
+        title: 'Title 13',
+        idImage: '4-4',
+      },
+      {
+        itemImageSrc: '/uploads/troubadours5.png',
+        thumbnailImageSrc: '/uploads/troubadours5.png',
+        alt: 'Description for Image 9',
+        title: 'Title 14',
+        idImage: '4-5',
+      },
+    ],
+  },
+  {
+    id: 5,
+    images: [
+      {
+        itemImageSrc: '/uploads/resto1.png',
+        thumbnailImageSrc: '/uploads/resto1.png',
+        alt: 'Photo resto 1',
+        title: 'Title 15',
+        idImage: '5-1',
+      },
+      {
+        itemImageSrc: '/uploads/resto2.png',
+        thumbnailImageSrc: '/uploads/resto2.png',
+        alt: 'Photo resto 2',
+        title: 'Title 16',
+        idImage: '5-2',
+      },
+      {
+        itemImageSrc: '/uploads/resto3.png',
+        thumbnailImageSrc: '/uploads/resto3.png',
+        alt: 'Photo resto 3',
+        title: 'Title 17',
+        idImage: '5-3',
+      },
+      {
+        itemImageSrc: '/uploads/resto4.png',
+        thumbnailImageSrc: '/uploads/resto4.png',
+        alt: 'Photo resto 4',
+        title: 'Title 18',
+        idImage: '5-4',
+      },
+      {
+        itemImageSrc: '/uploads/resto5.png',
+        thumbnailImageSrc: '/uploads/resto5.png',
+        alt: 'Photo resto 5',
+        title: 'Title 19',
+        idImage: '5-5',
+      },
+    ],
+  },
 ]
 
 const locations = [
@@ -424,7 +504,7 @@ const activities = [
       </p>
     `,
     locationId: undefined,
-    canRegister: false,
+    canRegister: true,
     requestedLocationId: undefined,
   },
   {
@@ -452,7 +532,7 @@ const activities = [
       </p>
     `,
     locationId: undefined,
-    canRegister: false,
+    canRegister: true,
     requestedLocationId: undefined,
   },
   {
@@ -479,7 +559,7 @@ const activities = [
       </p>
     `,
     locationId: undefined,
-    canRegister: false,
+    canRegister: true,
     requestedLocationId: undefined,
   },
   {
@@ -534,7 +614,7 @@ const activities = [
       </p>
     `,
     locationId: undefined,
-    canRegister: false,
+    canRegister: true,
     requestedLocationId: undefined,
   },
   {
@@ -561,7 +641,7 @@ const activities = [
       </p>
     `,
     locationId: undefined,
-    canRegister: false,
+    canRegister: true,
     requestedLocationId: 8,
   },
   {
@@ -588,7 +668,7 @@ const activities = [
       </p>
     `,
     locationId: undefined,
-    canRegister: false,
+    canRegister: true,
     requestedLocationId: 7,
   },
 ]
