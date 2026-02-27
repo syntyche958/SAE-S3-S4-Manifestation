@@ -1,28 +1,29 @@
 import LocalSource from '@/services/localsource.service.js'
 import { useProviderStore } from '@/stores/providers'
 import { networkErrResponse } from '@/utils/network.utils'
+import { getRequest, postRequest } from './axios.service'
 
-async function getAllProvidersFromLocalSource() {
-  return LocalSource.getAllProviders()
-}
+// async function getAllProvidersFromLocalSource() {
+//   return LocalSource.getAllProviders()
+// }
 
 async function getProviderImagesFromLocalSource(id) {
   return LocalSource.getProviderImages(id)
 }
 
-async function getAllNewProvidersFromLocalSource() {
-  return LocalSource.getAllNewProviders()
-}
+// async function getAllNewProvidersFromLocalSource() {
+//   return LocalSource.getAllNewProviders()
+// }
 
-async function getProvidersDescriptionFromLocalSource(id) {
-  return LocalSource.getProviderDescription(id)
-}
+// async function getProvidersDescriptionFromLocalSource(id) {
+//   return LocalSource.getProviderDescription(id)
+// }
 
-async function removeNewProviderFromLocalSource(id) {
-  const providerStore = useProviderStore()
-  providerStore.newProviders = providerStore.newProviders.filter((p) => p.id != id)
-  return { error: 0, status: 200, data: 'done' }
-}
+// async function removeNewProviderFromLocalSource(id) {
+//   const providerStore = useProviderStore()
+//   providerStore.newProviders = providerStore.newProviders.filter((p) => p.id != id)
+//   return { error: 0, status: 200, data: 'done' }
+// }
 
 async function updateProviderDescriptionFromLocalSource(providerId, providerDesc) {
   return LocalSource.updateProviderDescription(providerId, providerDesc)
@@ -63,7 +64,8 @@ async function validateNewProvidersFromLocalSource(data) {
 async function getAllProviders() {
   let response = null
   try {
-    response = await getAllProvidersFromLocalSource()
+    //response = await getAllProvidersFromLocalSource()
+    response = await getRequest('/providers')
   } catch {
     return networkErrResponse
   }
@@ -74,7 +76,8 @@ async function getAllProviders() {
 async function getAllNewProviders() {
   let response = null
   try {
-    response = await getAllNewProvidersFromLocalSource()
+    // response = await getAllNewProvidersFromLocalSource()
+    response = await getRequest('/providers/new')
   } catch {
     return networkErrResponse
   }
@@ -103,10 +106,12 @@ async function addNewProvider(providerName, providerDesc, userId) {
   return response
 }
 
+// TODO : Soit le back retourne de nouveau la liste des providers soit le store suppr celui correspondant !
 async function removeNewProvider(id) {
   let response = null
   try {
-    response = await removeNewProviderFromLocalSource(id)
+    // response = await removeNewProviderFromLocalSource(id)
+    response = await postRequest('/providers/new', { id })
   } catch {
     return networkErrResponse
   }
@@ -124,16 +129,17 @@ async function validateNewProviders(data) {
 
   return response
 }
+// TODO : Suppr def si ca faisait rien
 
-async function getProviderDescription(id) {
-  let response = null
-  try {
-    response = await getProvidersDescriptionFromLocalSource(id)
-  } catch {
-    return networkErrResponse
-  }
-  return response
-}
+// async function getProviderDescription(id) {
+//   let response = null
+//   try {
+//     response = await getProvidersDescriptionFromLocalSource(id)
+//   } catch {
+//     return networkErrResponse
+//   }
+//   return response
+// }
 
 async function updateProviderDescription(providerId, newDescription) {
   let response = null
@@ -173,7 +179,7 @@ export default {
   addNewProvider,
   removeNewProvider,
   validateNewProviders,
-  getProviderDescription,
+  // getProviderDescription,
   uploadProviderImage,
   deleteProviderImage,
 }
