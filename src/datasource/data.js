@@ -6,35 +6,35 @@ const providers = [
     userId: 2,
     name: 'Centre équestre',
     description:
-      'Un espace dédié aux amoureux des chevaux, où petits et grands découvrent des balades en poney encadrées par une équipe passionnée. Chaque sortie est pensée pour offrir un moment doux, rassurant et immersif dans l’univers équestre.',
+      'Un espace dédié aux amoureux des chevaux, où petits et grands découvrent des balades en poney encadrées par une équipe passionnée. Chaque sortie est pensée pour offrir un moment doux, rassurant et immersif dans l’univers équestre. Le centre propose également des ateliers de découverte, des séances de pansage et des temps de rencontre avec les animaux pour créer un lien privilégié avec eux.',
   },
   {
     id: 2,
     userId: 4,
     name: 'Ville de carcassonne',
     description:
-      'L’équipe officielle qui fait vivre la cité médiévale. Entre gestion des animations, mise en valeur du patrimoine et accueil chaleureux, elle veille à offrir une expérience authentique et mémorable à chaque visiteur.',
+      'L’équipe officielle qui fait vivre la cité médiévale. Entre gestion des animations, mise en valeur du patrimoine et accueil chaleureux, elle veille à offrir une expérience authentique et mémorable à chaque visiteur. Tout au long de l’événement, elle coordonne les parcours, les visites et les temps forts pour garantir une immersion fluide et accessible à tous.',
   },
   {
     id: 3,
     userId: 5,
     name: 'Remparts et lumière',
     description:
-      'Les créateurs du spectacle nocturne emblématique : un voyage visuel et sonore qui illumine les remparts et plonge le public dans les légendes de Carcassonne. Une expérience féerique, incontournable et chargée d’émotion.',
+      'Les créateurs du spectacle nocturne emblématique : un voyage visuel et sonore qui illumine les remparts et plonge le public dans les légendes de Carcassonne. Une expérience féerique, incontournable et chargée d’émotion. Leur travail mêle projections monumentales, musique originale et mise en scène précise pour sublimer l’architecture médiévale.',
   },
   {
     id: 4,
     userId: 6,
     name: 'Troubadours moderne',
     description:
-      'Une troupe d’artistes qui réinvente l’art des troubadours. Musiciens, conteurs et comédiens transportent les visiteurs avec énergie, humour et poésie, créant une ambiance vivante et chaleureuse dans toute la cité.',
+      'Une troupe d’artistes qui réinvente l’art des troubadours. Musiciens, conteurs et comédiens transportent les visiteurs avec énergie, humour et poésie, créant une ambiance vivante et chaleureuse dans toute la cité. Ils alternent saynètes interactives, concerts en plein air et histoires participatives pour faire vivre le Moyen Âge de manière ludique.',
   },
   {
     id: 5,
     userId: 7,
     name: 'Camion de restauration',
     description:
-      'Un food-truck convivial qui revisite les saveurs médiévales. Plats généreux, recettes inspirées d’antan et produits locaux : une pause gourmande qui réchauffe et rassemble les visiteurs autour d’une cuisine authentique.',
+      'Un food-truck convivial qui revisite les saveurs médiévales. Plats généreux, recettes inspirées d’antan et produits locaux : une pause gourmande qui réchauffe et rassemble les visiteurs autour d’une cuisine authentique. Entre rôtis, tartes rustiques et boissons épicées, chaque recette est pensée pour être à la fois immersive et adaptée aux goûts d’aujourd’hui.',
   },
 ]
 
@@ -377,8 +377,26 @@ const activities = [
     id: 1,
     providerId: 1,
     name: 'Balade à cheval',
-    description: 'Description de la balade à cheval',
-    presentationContent: "<h1>Le cheval c'est <b>fun</b> !</h1>",
+    description:
+      'Une balade à cheval en petit groupe autour des remparts et des plaines environnantes, encadrée par des moniteurs diplômés. Adaptée aux débutants comme aux cavaliers plus à l’aise, l’activité met l’accent sur la découverte en douceur, la sécurité et la complicité avec l’animal.',
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Partez en balade à cheval autour de la cité</h2>
+      <p class="mb-3">
+        En selle pour une balade au rythme du pas du cheval, sur des chemins adaptés à tous les niveaux.
+        Avant de partir, les moniteurs prennent le temps d’expliquer les bases&nbsp;: comment se tenir,
+        guider sa monture et se sentir à l’aise, même pour une première fois.
+      </p>
+      <p class="mb-3">
+        Le parcours longe les remparts et les paysages alentours, offrant des points de vue privilégiés
+        sur la cité fortifiée. L’objectif n’est pas la performance, mais le plaisir et la découverte,
+        dans une ambiance calme et rassurante.
+      </p>
+      <p>
+        Cette activité est idéale pour les familles et les curieux souhaitant vivre une expérience
+        différente, au plus près des animaux et de la nature, tout en restant encadrés par une équipe
+        bienveillante.
+      </p>
+    `,
     locationId: 2,
     canRegister: true,
     requestedLocationId: undefined,
@@ -387,8 +405,24 @@ const activities = [
     id: 2,
     providerId: 2,
     name: "Fabrication d'épée en bois",
-    description: 'Activité pratique artistique',
-    presentationContent: "<h1>L'art c'est génial !</h1>",
+    description:
+      'Un atelier de fabrication d’épée en bois où les enfants, accompagnés d’un animateur, sculptent, poncent et décorent leur propre arme de chevalier. Cette activité manuelle permet de découvrir les techniques de base du travail du bois tout en stimulant l’imagination autour de l’univers médiéval.',
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Créez votre propre épée de chevalier</h2>
+      <p class="mb-3">
+        Dans cet atelier, chaque participant reçoit une ébauche d’épée en bois qu’il va transformer
+        peu à peu en véritable accessoire de chevalier. Guidés par un animateur, les enfants apprennent
+        à poncer, arrondir les bords et personnaliser leur création.
+      </p>
+      <p class="mb-3">
+        Une fois la forme finalisée, place à la décoration&nbsp;: peinture, motifs, symboles de blason,
+        rubans pour le manche… chacun repart avec une épée unique, imaginée et réalisée de ses propres mains.
+      </p>
+      <p>
+        L’atelier met l’accent sur la créativité, le travail manuel et la sécurité. C’est un moment
+        calme et concentré, où l’on fabrique un souvenir durable de l’événement.
+      </p>
+    `,
     locationId: undefined,
     canRegister: false,
     requestedLocationId: undefined,
@@ -397,8 +431,26 @@ const activities = [
     id: 3,
     providerId: 4,
     name: 'Chasse à la sorcière ',
-    description: 'Spectacle pour enfant',
-    presentationContent: "<h1>Le spectacle c'est génial !</h1>",
+    description:
+      'Un spectacle interactif pour enfants où les jeunes spectateurs aident les troubadours à déjouer les tours d’une mystérieuse sorcière. Entre énigmes, saynètes et interventions du public, la représentation alterne humour et frissons tout en restant accessible aux plus jeunes.',
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Participez à la grande chasse à la sorcière</h2>
+      <p class="mb-3">
+        Au cœur de la cité, une étrange sorcière semble semer le trouble… Les troubadours ont besoin
+        de l’aide des enfants pour résoudre des énigmes, retrouver des objets magiques et remettre de
+        l’ordre dans les ruelles.
+      </p>
+      <p class="mb-3">
+        Le spectacle alterne scènes jouées, moments interactifs avec le public et petites épreuves
+        ludiques. Les enfants deviennent de véritables héros de l’histoire, encouragés à participer,
+        réfléchir et coopérer.
+      </p>
+      <p>
+        Pensée pour les jeunes publics, la mise en scène reste légère et drôle, avec juste ce qu’il
+        faut de mystère pour faire frissonner… sans jamais effrayer. Un moment de théâtre vivant,
+        familial et convivial.
+      </p>
+    `,
     locationId: undefined,
     canRegister: false,
     requestedLocationId: undefined,
@@ -407,8 +459,25 @@ const activities = [
     id: 4,
     providerId: 2,
     name: "Tir à l'arc",
-    description: 'Activité physique de précision',
-    presentationContent: "<h1>Le tir à l'arc c'est génial !</h1>",
+    description:
+      "Une initiation au tir à l’arc encadrée par des animateurs formés, avec du matériel adapté à tous les âges. Après quelques explications sur la posture et la sécurité, les participants s’exercent sur des cibles inspirées de l’imaginaire médiéval et tentent de réaliser le meilleur score.",
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Devenez archer le temps d’une séance</h2>
+      <p class="mb-3">
+        Inspirée de l’entraînement des archers d’autrefois, cette activité propose une initiation
+        progressive au tir à l’arc. Après une présentation du matériel et des règles de sécurité,
+        les participants apprennent à se placer, armer leur arc et viser sereinement.
+      </p>
+      <p class="mb-3">
+        Différentes cibles thématiques, plus ou moins éloignées, permettent de progresser à son rythme.
+        Chacun peut tenter de réaliser le meilleur tir, mais l’objectif reste avant tout de partager
+        un moment ludique en famille ou entre amis.
+      </p>
+      <p>
+        Encadrée par des animateurs attentifs, l’activité convient aussi bien aux curieux qu’aux plus
+        sportifs, dans une ambiance détendue et bienveillante.
+      </p>
+    `,
     locationId: undefined,
     canRegister: false,
     requestedLocationId: undefined,
@@ -417,8 +486,25 @@ const activities = [
     id: 5,
     providerId: 4,
     name: 'Concert médiéval',
-    description: "Instruments liés à l'époque",
-    presentationContent: "<h1>Le concert c'est génial !</h1>",
+    description:
+      "Un concert en plein air mêlant vielles, percussions, flûtes et voix pour recréer les ambiances sonores de l’époque médiévale. Les musiciens proposent un voyage musical rythmé, parfois dansant, ponctué d’anecdotes sur les instruments et les chansons d’autrefois.",
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Un concert au son du Moyen Âge</h2>
+      <p class="mb-3">
+        Installez-vous au pied des remparts et laissez-vous porter par les mélodies des instruments
+        anciens&nbsp;: vielles, percussions, flûtes et voix s’entremêlent pour recréer l’ambiance
+        des places et tavernes médiévales.
+      </p>
+      <p class="mb-3">
+        Les musiciens alternent morceaux entraînants, airs plus doux et moments de partage avec le
+        public. Ils expliquent l’origine de certains chants, présentent leurs instruments et
+        invitent parfois les spectateurs à reprendre les refrains.
+      </p>
+      <p>
+        Ce concert est pensé pour être accessible à tous, mélomanes ou simples curieux, et constitue
+        une belle parenthèse musicale au cœur de la fête.
+      </p>
+    `,
     locationId: 1,
     canRegister: true,
     requestedLocationId: undefined,
@@ -427,8 +513,26 @@ const activities = [
     id: 6,
     providerId: 1,
     name: 'Tournois de joute',
-    description: 'Activité physique',
-    presentationContent: "<h1>La compétition c'est génial !</h1>",
+    description:
+      'Une grande démonstration de joute équestre où des cavaliers en armure s’affrontent dans des duels spectaculaires. Le public découvre les codes de ces compétitions historiques, les préparatifs des chevaliers et l’intensité des charges, le tout en toute sécurité.',
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Vibrez au rythme des joutes équestres</h2>
+      <p class="mb-3">
+        Casques, écus et lances se préparent dans le fracas des armures. Sous les yeux du public,
+        les chevaliers montent à cheval et s’élancent sur la lice pour des affrontements spectaculaires,
+        inspirés des tournois d’antan.
+      </p>
+      <p class="mb-3">
+        Avant le début des joutes, les équipes expliquent le déroulé, les règles et les différents
+        types d’épreuves. Le public est invité à encourager son champion favori et à vivre chaque
+        passe comme un véritable moment de bravoure.
+      </p>
+      <p>
+        Derrière le spectacle, la sécurité reste une priorité&nbsp;: le show est minutieusement répété
+        et chorégraphié pour offrir des sensations fortes sans danger pour les cavaliers ni les
+        spectateurs.
+      </p>
+    `,
     locationId: undefined,
     canRegister: false,
     requestedLocationId: undefined,
@@ -437,8 +541,25 @@ const activities = [
     id: 7,
     providerId: 3,
     name: 'Spectacle des lumières',
-    description: 'Spectacle',
-    presentationContent: "<h1>Le spectacle c'est génial !</h1>",
+    description:
+      'Un spectacle nocturne où projections, jeux de lumière et bande-son originale transforment les remparts en décor vivant. Les images retracent les grandes légendes de Carcassonne et plongent les spectateurs dans une atmosphère à la fois poétique et impressionnante.',
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Les remparts s’illuminent à la nuit tombée</h2>
+      <p class="mb-3">
+        Dès que la lumière décline, les remparts se transforment en immense toile de projection.
+        Des jeux de lumière, des couleurs et des images animées viennent épouser la pierre pour
+        raconter les grandes légendes de Carcassonne.
+      </p>
+      <p class="mb-3">
+        La bande-son, spécialement composée pour le spectacle, accompagne chaque tableau&nbsp;:
+        batailles, scènes de vie, moments de paix ou de mystère se succèdent dans une mise en scène
+        poétique et immersive.
+      </p>
+      <p>
+        Ce spectacle en plein air est pensé comme un temps fort de la soirée, accessible à tous,
+        invitant simplement à lever les yeux et à se laisser emporter par la magie des lieux.
+      </p>
+    `,
     locationId: undefined,
     canRegister: false,
     requestedLocationId: 8,
@@ -447,8 +568,25 @@ const activities = [
     id: 8,
     providerId: 5,
     name: "Médievalo Restau'",
-    description: 'Restaurant de spécialités de l’époque',
-    presentationContent: "<h1>Bien manger c'est important !</h1>",
+    description:
+      'Une expérience de restauration immersive où les visiteurs dégustent des plats inspirés des recettes médiévales, revisitées pour le confort moderne. Grandes tablées conviviales, vaisselle rustique et décor chaleureux complètent ce moment gourmand au cœur de la fête.',
+    presentationContent: `
+      <h2 class="text-2xl font-semibold mb-4">Partagez un repas aux saveurs médiévales</h2>
+      <p class="mb-3">
+        À la table du Médievalo Restau’, on s’installe sur de grandes tablées conviviales pour
+        déguster des plats inspirés de recettes anciennes&nbsp;: viandes rôties, légumes mijotés,
+        tartes rustiques et douceurs épicées.
+      </p>
+      <p class="mb-3">
+        La carte revisite ces inspirations avec des produits locaux et une touche de modernité,
+        afin de plaire au plus grand nombre tout en conservant l’esprit de l’époque. Le décor,
+        la vaisselle et l’ambiance sonore complètent l’immersion.
+      </p>
+      <p>
+        Que ce soit pour une pause rapide ou un véritable repas, c’est l’occasion de reprendre des
+        forces et de prolonger l’expérience médiévale autour d’un moment chaleureux et gourmand.
+      </p>
+    `,
     locationId: undefined,
     canRegister: false,
     requestedLocationId: 7,
@@ -485,10 +623,196 @@ const session = [
   },
   {
     id: 4,
+    activitiesId: 2,
+    beginingDate: '2026-05-28',
+    beginingHour: '10:00',
+    duration: 30,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 5,
+    activitiesId: 2,
+    beginingDate: '2026-05-28',
+    beginingHour: '11:00',
+    duration: 25,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 6,
+    activitiesId: 2,
+    beginingDate: '2026-05-28',
+    beginingHour: '15:00',
+    duration: 40,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+
+  {
+    id: 7,
+    activitiesId: 3,
+    beginingDate: '2026-05-28',
+    beginingHour: '10:30',
+    duration: 30,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 8,
+    activitiesId: 3,
+    beginingDate: '2026-05-28',
+    beginingHour: '14:00',
+    duration: 25,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 9,
+    activitiesId: 3,
+    beginingDate: '2026-05-28',
+    beginingHour: '16:30',
+    duration: 40,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+
+  {
+    id: 10,
+    activitiesId: 4,
+    beginingDate: '2026-05-28',
+    beginingHour: '09:30',
+    duration: 30,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 11,
+    activitiesId: 4,
+    beginingDate: '2026-05-28',
+    beginingHour: '13:00',
+    duration: 25,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 12,
+    activitiesId: 4,
+    beginingDate: '2026-05-28',
+    beginingHour: '17:00',
+    duration: 40,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+
+  {
+    id: 13,
     activitiesId: 5,
     beginingDate: '2026-05-28',
-    beginingHour: '14:30',
+    beginingHour: '18:00',
     duration: 40,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 14,
+    activitiesId: 5,
+    beginingDate: '2026-05-28',
+    beginingHour: '20:00',
+    duration: 30,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 15,
+    activitiesId: 5,
+    beginingDate: '2026-05-28',
+    beginingHour: '21:30',
+    duration: 25,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+
+  {
+    id: 16,
+    activitiesId: 6,
+    beginingDate: '2026-05-28',
+    beginingHour: '11:30',
+    duration: 30,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 17,
+    activitiesId: 6,
+    beginingDate: '2026-05-28',
+    beginingHour: '15:30',
+    duration: 25,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 18,
+    activitiesId: 6,
+    beginingDate: '2026-05-28',
+    beginingHour: '17:30',
+    duration: 40,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+
+  {
+    id: 19,
+    activitiesId: 7,
+    beginingDate: '2026-05-28',
+    beginingHour: '21:00',
+    duration: 30,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 20,
+    activitiesId: 7,
+    beginingDate: '2026-05-28',
+    beginingHour: '22:00',
+    duration: 25,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 21,
+    activitiesId: 7,
+    beginingDate: '2026-05-28',
+    beginingHour: '23:00',
+    duration: 40,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+
+  {
+    id: 22,
+    activitiesId: 8,
+    beginingDate: '2026-05-28',
+    beginingHour: '12:00',
+    duration: 60,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 23,
+    activitiesId: 8,
+    beginingDate: '2026-05-28',
+    beginingHour: '19:00',
+    duration: 60,
+    nbPlace: 10,
+    registersUsers: [3],
+  },
+  {
+    id: 24,
+    activitiesId: 8,
+    beginingDate: '2026-05-28',
+    beginingHour: '21:00',
+    duration: 60,
     nbPlace: 10,
     registersUsers: [3],
   },

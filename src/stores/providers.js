@@ -43,7 +43,6 @@ export const useProviderStore = defineStore('provider', () => {
   async function getProviderImages(idProvider) {
     let response = await ProviderService.getProviderImages(idProvider)
 
-    // Si le provider existe et a des images (même un tableau vide)
     if (
       response &&
       response.error === 0 &&
