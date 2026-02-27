@@ -26,6 +26,7 @@ onMounted(async () => {
   await locationStore.getAllLocations()
   await presentationStore.getPresentationContent()
   await providerStore.getAllProviders()
+  console.log(providerStore.providers)
   await providerStore.getAllNewProviders()
   await activityStore.getAllActivities()
   // TODO : Appeler seulement quand necessaire, dans AdminView quand le composant concerné est affiché !
