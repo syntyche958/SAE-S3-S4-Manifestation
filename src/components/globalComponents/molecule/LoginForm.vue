@@ -17,6 +17,15 @@
         @click="login"
       ></Button>
     </div>
+    <div class="flex">
+      <Button
+        label="Se connecter avec Google"
+        icon="pi pi-google"
+        severity="secondary"
+        class="w-full max-w-[17.35rem] mx-auto"
+        @click="loginWithGoogle"
+      ></Button>
+    </div>
   </div>
 </template>
 <script setup>
@@ -38,5 +47,9 @@ async function login() {
   if (logedIn) {
     emit('close-dialog')
   }
+}
+
+function loginWithGoogle() {
+  authStore.loginWithGoogle()
 }
 </script>
