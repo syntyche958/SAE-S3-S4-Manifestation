@@ -21,15 +21,15 @@
                 class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
                 :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
               >
-               <SessionItem 
-                 :item="item"
-                 :is-current-provider-owner="isCurrentProviderOwner"
-                 :is-registered="isRegistered(item)"
-                 :is-user-connected="isUserConnected"
-                 :can-register="currentActivity?.canRegister"
-                 @inscription="inscription"
-                 @show-registrants="showRegistrants"
-               />
+                <SessionItem
+                  :item="item"
+                  :is-current-provider-owner="isCurrentProviderOwner"
+                  :is-registered="isRegistered(item)"
+                  :is-user-connected="isUserConnected"
+                  :can-register="currentActivity?.canRegister"
+                  @inscription="inscription"
+                  @show-registrants="showRegistrants"
+                />
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <RegistrantsListDialog 
+  <RegistrantsListDialog
     v-model:visible="displayRegistrantsDialog"
     :loading="loadingRegistrants"
     :registrants="registrantsList"
@@ -124,37 +124,36 @@ const onSortChange = (event) => {
   }
 }
 
-  const displayRegistrantsDialog = ref(false)
-  const loadingRegistrants = ref(false)
-  const registrantsList = ref([])
+const displayRegistrantsDialog = ref(false)
+const loadingRegistrants = ref(false)
+const registrantsList = ref([])
 
+async function showRegistrants(session) {
+  displayRegistrantsDialog.value = true
+  loadingRegistrants.value = true
+  registrantsList.value = []
 
-  async function showRegistrants(session) {
-      displayRegistrantsDialog.value = true
-      loadingRegistrants.value = true
-      registrantsList.value = []
+  try {
+    const response = await AuthService.getUsers()
+    if (response.error === 0) {
+      const allUsers = response.data
 
-      try {
-          const response = await AuthService.getUsers()
-          if (response.error === 0) {
-              const allUsers = response.data
-
-              registrantsList.value = allUsers.filter(u => session.registersUsers.includes(u.id))
-          }
-      } catch (e) {
-          console.error(e)
-          displayErrToast('Erreur lors du chargement des inscrits')
-      } finally {
-          loadingRegistrants.value = false
-      }
+      registrantsList.value = allUsers.filter((u) => session.registersUsers.includes(u.id))
+    }
+  } catch (e) {
+    console.error(e)
+    displayErrToast('Erreur lors du chargement des inscrits')
+  } finally {
+    loadingRegistrants.value = false
   }
+}
 
-  const isCurrentProviderOwner = computed(() => {
-      if (authStore.user?.type !== UserTypeEnum.PROVIDER) return false
+const isCurrentProviderOwner = computed(() => {
+  if (authStore.user?.type !== UserTypeEnum.PROVIDER) return false
 
-      const provider = providerStore.providers.find(p => p.userId === authStore.user.id)
-      return provider && provider.id === currentActivity.value?.providerId
-  })
+  const provider = providerStore.providers.find((p) => p.userId === authStore.user.id)
+  return provider && provider.id === currentActivity.value?.providerId
+})
 
 async function inscription(session) {
   selectedSession.value = session
@@ -178,15 +177,19 @@ async function inscription(session) {
   }
 
   // copie l'ancien tableau et ajoute le nouvel user
+  const generatedQrCode =
+    Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
   const updatedData = {
     registersUsers: session.registersUsers.concat(userId),
+    qrCodes: { ...(session.qrCodes || {}), [userId]: generatedQrCode },
   }
   console.log(updatedData)
   await sessionsStore.updateSession(session.id, updatedData)
 
-
   const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
 
-  displaySuccessToast(`Vous êtes inscrit à la session #${session.id}. Places restantes : ${nouvellesPlacesRestantes}/${session.nbPlace}`)
+  displaySuccessToast(
+    `Vous êtes inscrit à la session #${session.id}. Places restantes : ${nouvellesPlacesRestantes}/${session.nbPlace}`,
+  )
 }
 </script>

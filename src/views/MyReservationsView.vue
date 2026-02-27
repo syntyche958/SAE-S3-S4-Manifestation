@@ -4,7 +4,9 @@
       <template #title>
         <div class="flex items-center gap-2">
           <i class="pi pi-calendar-check text-2xl text-primary"></i>
-          <span>{{ $t('message.providers') === 'Prestataires' ? 'Vos réservations' : 'Your Reservations' }}</span>
+          <span>{{
+            $t('message.providers') === 'Prestataires' ? 'Vos réservations' : 'Your Reservations'
+          }}</span>
         </div>
       </template>
       <template #content>
@@ -21,14 +23,20 @@
         <DataView v-else :value="userSessions">
           <template #list="slotProps">
             <div class="flex flex-col gap-4">
-              <div v-for="(item, index) in slotProps.items" :key="item.id" class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 rounded-border border border-surface-200">
-
+              <div
+                v-for="item in slotProps.items"
+                :key="item.id"
+                class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 rounded-border border border-surface-200"
+              >
                 <ReservationItem
                   :item="item"
                   :activity-name="getActivityName(item.activitiesId)"
+                  :qr-code="
+                    (item.qrCodes && item.qrCodes[authStore.user?.id]) ||
+                    'qr-' + item.id + '-' + authStore.user?.id
+                  "
                   @go-to-activity="goToActivity"
                 />
-
               </div>
             </div>
           </template>
@@ -58,18 +66,18 @@ const loading = ref(true)
 
 const userSessions = computed(() => {
   if (!sessionStore.sessions || !authStore.user) return []
-  return sessionStore.sessions.filter(session =>
-    session.registersUsers && session.registersUsers.includes(authStore.user.id)
+  return sessionStore.sessions.filter(
+    (session) => session.registersUsers && session.registersUsers.includes(authStore.user.id),
   )
 })
 
 const getActivityName = (activityId) => {
-  const activity = activityStore.activities?.find(a => a.id === activityId)
+  const activity = activityStore.activities?.find((a) => a.id === activityId)
   return activity ? activity.name : 'Activité inconnue'
 }
 
 const goToActivity = (activityId) => {
-  const activity = activityStore.activities?.find(a => a.id === activityId)
+  const activity = activityStore.activities?.find((a) => a.id === activityId)
   if (activity) {
     router.push(`/provider/${activity.providerId}/activity/${activity.id}`)
   }
