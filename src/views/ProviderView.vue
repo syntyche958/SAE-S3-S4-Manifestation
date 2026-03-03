@@ -27,8 +27,8 @@
             <!-- <Tab value="1"
               ><i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span></Tab
             > -->
-            <Tab disabled
-              ><i class="pi pi-file-edit"></i><span> {{ $t('message.seeStatistics') }}</span></Tab
+             <Tab value="1"
+              ><i class="pi pi-chart-bar"></i><span> {{ $t('message.seeStatistics') }}</span></Tab
             >
           </TabList>
 
@@ -38,7 +38,7 @@
             </TabPanel>
 
             <TabPanel value="1">
-              <ServicesProviderSection />
+              <StatisticsProviderSection :provider-id="Number($route.params.provider_id)" />
             </TabPanel>
           </TabPanels> </Tabs></template
     ></Card>
@@ -50,6 +50,7 @@ import { Card, Tabs, Tab, TabPanel, TabPanels, TabList } from 'primevue'
 
 import PresentationProviderSection from '@/components/providerComponents/organism/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/organism/ServicesProviderSection.vue'
+import StatisticsProviderSection from '@/components/providerComponents/organism/StatisticsProviderSection.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { useProviderStore } from '@/stores/providers'
 

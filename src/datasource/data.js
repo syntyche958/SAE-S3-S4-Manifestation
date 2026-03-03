@@ -493,6 +493,15 @@ const session = [
     registersUsers: [3],
   },
 ]
+const registrations = [
+  // Inscriptions basées sur vos sessions existantes
+  { id: 1, activity_id: 1, session_id: 1, user_id: 3, registration_date: '2026-02-15' },
+  { id: 2, activity_id: 1, session_id: 2, user_id: 3, registration_date: '2026-02-16' },
+  { id: 3, activity_id: 1, session_id: 3, user_id: 3, registration_date: '2026-02-17' },
+  { id: 4, activity_id: 5, session_id: 4, user_id: 3, registration_date: '2026-02-20' },
+  { id: 5, activity_id: 1, session_id: 1, user_id: 8, registration_date: '2026-02-18' },
+  { id: 6, activity_id: 5, session_id: 4, user_id: 8, registration_date: '2026-02-21' },
+]
 
 // const user = [{ type: UserTypeEnum.VISITOR }]
 const users = [
@@ -519,4 +528,5 @@ export {
   presentation,
   activities,
   session,
+  registrations,
 }

@@ -9,6 +9,7 @@ import {
   activities,
   session,
   surveys,
+  registrations,
 } from '@/datasource/data'
 import { UserTypeEnum } from '@/enums/User.enum'
 
@@ -195,6 +196,34 @@ function signin(mail, password) {
     return { error: 0, status: 200, data: user }
   }
 
+  /**
+ * Get all registrations
+ * @returns {{error:number, status:number, data:array}}
+ */
+function getAllRegistrations() {
+  return { error: 0, status: 200, data: registrations }
+}
+
+/**
+ * Get registrations by activity
+ * @param {number} activityId
+ * @returns {{error:number, status:number, data:array}}
+ */
+function getRegistrationsByActivity(activityId) {
+  const data = registrations.filter((r) => r.activity_id === activityId)
+  return { error: 0, status: 200, data }
+}
+
+/**
+ * Get registrations by user
+ * @param {number} userId
+ * @returns {{error:number, status:number, data:array}}
+ */
+function getRegistrationsByUser(userId) {
+  const data = registrations.filter((r) => r.user_id === userId)
+  return { error: 0, status: 200, data }
+}
+
   export default {
     updateProviderDescription,
     getAllProviders,
@@ -214,4 +243,7 @@ function signin(mail, password) {
     login,
     signin,
     updateUserTypeToProvider,
+    getAllRegistrations,
+    getRegistrationsByActivity,
+    getRegistrationsByUser,
   }
