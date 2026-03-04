@@ -6,6 +6,9 @@ import PresentationTextSection from '@/components/homeComponents/organism/Presen
 
 <template>
   <PresentationSection />
-  <PresentationTextSection />
+  <br />
+  <br />
+  <br />
   <MapAndProviderSection />
+  <PresentationTextSection />
 </template>

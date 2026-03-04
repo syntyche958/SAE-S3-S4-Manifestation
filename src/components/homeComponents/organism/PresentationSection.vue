@@ -14,6 +14,9 @@
       <a v-if="props.isPreview" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
       <a v-else href="#map" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
     </div>
+
+    <!-- Bottom gradient fade -->
+    <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none"></div>
   </div>
 
   <div class="relative h-screen"></div>

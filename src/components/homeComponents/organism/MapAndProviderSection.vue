@@ -3,7 +3,7 @@
     <TheMap
       :display-mode="MapModeEnum.VISITOR"
       class="sm:ml-4 my-4"
-      classSize="sm:h-[80vh] sm:w-[50vw]"
+      classSize="sm:h-[65vh] sm:w-[40vw]"
     />
     <ProviderTable class="h-full grow" />
   </div>

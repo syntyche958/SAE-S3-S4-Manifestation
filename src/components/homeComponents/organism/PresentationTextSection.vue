@@ -6,7 +6,10 @@
       (isPreview ? 'border-black border-solid border' : '')
     "
   >
-    <div class="max-w-6xl text-justify quill-content-display" v-html="presentationStore.big"></div>
+    <div
+      class="max-w-7xl w-full text-justify quill-content-display"
+      v-html="presentationStore.big"
+    ></div>
   </section>
 </template>
 
