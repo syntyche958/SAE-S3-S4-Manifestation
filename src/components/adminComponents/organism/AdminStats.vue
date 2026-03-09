@@ -4,7 +4,7 @@
     <div class="text-center mb-10">
       <h2 class="text-3xl font-bold mb-3">{{ $t('message.statistics') }}</h2>
       <p class="text-gray-600 text-lg">
-        Graphiques et visualisations basés sur les données des sondages de satisfaction.
+        {{ $t('message.statsDescription') }}
       </p>
     </div>
 
@@ -16,8 +16,8 @@
     <!-- No data -->
     <div v-else-if="statsStore.totalSurveys === 0 && statsStore.totalRegistrations === 0" class="text-center py-12">
       <div class="text-6xl mb-4">📊</div>
-      <p class="text-gray-500 text-lg">Aucune donnée disponible pour afficher les statistiques.</p>
-      <p class="text-gray-400 text-sm mt-2">Les graphiques apparaîtront une fois que des interactions auront eu lieu sur le site.</p>
+      <p class="text-gray-500 text-lg">{{ $t('message.noDataStats') }}</p>
+      <p class="text-gray-400 text-sm mt-2">{{ $t('message.dataAppearanceInfo') }}</p>
     </div>
 
     <!-- Stats content -->
@@ -29,7 +29,7 @@
             <template #content>
               <div class="py-4">
                 <div class="text-5xl font-bold text-emerald-600 mb-2">{{ statsStore.totalSurveys }}</div>
-                <div class="text-gray-600 text-lg">Sondages totaux</div>
+                <div class="text-gray-600 text-lg">{{ $t('message.totalSurveys') }}</div>
               </div>
             </template>
           </Card>
@@ -40,7 +40,7 @@
                 <div class="text-5xl font-bold text-purple-600 mb-2">
                   {{ statsStore.totalRegistrations }}
                 </div>
-                <div class="text-gray-600 text-lg">Inscriptions totales</div>
+                <div class="text-gray-600 text-lg">{{ $t('message.totalRegistrations') }}</div>
               </div>
 
               <!-- Bande déroulante (Marquee) -->
@@ -75,7 +75,7 @@
                   {{ statsStore.averageSatisfaction }}
                 </div>
                 <div class="text-gray-600 text-lg">
-                  Satisfaction moyenne <span class="text-sm text-gray-400">(sur 5)</span>
+                  {{ $t('message.averageSatisfaction') }} <span class="text-sm text-gray-400">{{ $t('message.outOfFive') }}</span>
                 </div>
               </div>
             </template>
@@ -88,14 +88,14 @@
         <!-- Satisfaction Chart -->
         <Card class="shadow-lg">
           <template #title>
-            <div class="text-center text-xl">Distribution de la satisfaction</div>
+            <div class="text-center text-xl">{{ $t('message.satisfactionDistribution') }}</div>
           </template>
           <template #content>
             <div v-if="statsStore.totalSurveys > 0" style="position: relative; height: 350px" class="px-4">
               <canvas id="satisfactionChart"></canvas>
             </div>
             <div v-else class="flex justify-center items-center h-64 text-gray-400">
-              Aucune donnée de satisfaction.
+              {{ $t('message.noActivityFound') }}
             </div>
           </template>
         </Card>
@@ -103,7 +103,7 @@
         <!-- User Distribution Chart -->
         <Card class="shadow-lg">
           <template #title>
-            <div class="text-center text-xl">Utilisateurs inscrits (avec email)</div>
+            <div class="text-center text-xl">{{ $t('message.registeredUsersEmail') }}</div>
           </template>
           <template #content>
             <div style="position: relative; height: 350px" class="px-4">
@@ -118,7 +118,7 @@
         <div class="w-full max-w-3xl">
           <Card class="shadow-lg">
             <template #title>
-              <div class="text-center text-xl">Nombre d'activités par jour</div>
+              <div class="text-center text-xl">{{ $t('message.activitiesPerDay') }}</div>
             </template>
             <template #content>
               <div style="position: relative; height: 350px" class="px-4">
