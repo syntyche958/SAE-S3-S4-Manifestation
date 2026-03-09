@@ -1,30 +1,45 @@
 <template>
-  <div class="w-full md:w-5/12 flex flex-col items-center justify-center gap-3 py-5">
-    <h2>{{ $t('message.login') }}</h2>
-    <div class="flex flex-col gap-2">
-      <label for="login-mail-input">Mail</label>
-      <InputText id="login-mail-input" type="email" v-model="mail" />
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label for="login-mail-input" class="text-xs font-bold text-surface-500 uppercase ml-1">Email</label>
+        <InputText id="login-mail-input" type="email" v-model="mail" fluid class="!rounded-xl border-surface-200 focus:border-emerald-500" placeholder="votre@email.fr" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="login-password-input" class="text-xs font-bold text-surface-500 uppercase ml-1">{{ $t('message.password') }}</label>
+        <InputText id="login-password-input" type="password" v-model="password" fluid class="!rounded-xl border-surface-200 focus:border-emerald-500" placeholder="••••••••" />
+      </div>
     </div>
-    <div class="flex flex-col gap-2">
-      <label for="login-password-input">{{ $t('message.password') }}</label>
-      <InputText id="login-password-input" type="password" v-model="password" />
-    </div>
-    <div class="flex">
+
+    <div class="flex flex-col gap-3 mt-2">
       <Button
-        label="Login"
-        icon="pi pi-user"
-        class="w-full max-w-[17.35rem] mx-auto"
+        label="Connexion"
+        icon="pi pi-sign-in"
+        fluid
+        class="!rounded-xl py-3 font-bold"
+        severity="emerald"
         @click="login"
-      ></Button>
-    </div>
-    <div class="flex">
+        v-ripple
+      />
+
+      <div class="relative flex items-center justify-center py-2">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-surface-100"></div>
+        </div>
+        <span class="relative px-3 text-xs text-surface-400 bg-white font-medium uppercase tracking-widest">Ou continuer avec</span>
+      </div>
+
       <Button
-        label="Se connecter avec Google"
+        label="Google"
         icon="pi pi-google"
         severity="secondary"
-        class="w-full max-w-[17.35rem] mx-auto"
+        variant="outlined"
+        fluid
+        class="!rounded-xl !bg-white !text-surface-700 !border-surface-200 hover:!bg-surface-50"
         @click="loginWithGoogle"
-      ></Button>
+        v-ripple
+      />
     </div>
   </div>
 </template>

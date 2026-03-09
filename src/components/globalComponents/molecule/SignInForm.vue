@@ -1,21 +1,30 @@
 <template>
-  <div class="w-full md:w-5/12 flex flex-col items-center justify-center gap-3 py-5">
-    <h2>{{ $t('message.signIn') }}</h2>
-    <div class="flex flex-col gap-2">
-      <label for="username">Mail</label>
-      <InputText id="username" type="email" v-model="mail" />
+  <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-1.5">
+        <label for="signin-mail-input" class="text-xs font-bold text-surface-500 uppercase ml-1">Email</label>
+        <InputText id="signin-mail-input" type="email" v-model="mail" fluid class="!rounded-xl border-surface-200 focus:border-emerald-500" placeholder="votre@email.fr" />
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label for="signin-password-input" class="text-xs font-bold text-surface-500 uppercase ml-1">{{ $t('message.password') }}</label>
+        <InputText id="signin-password-input" type="password" v-model="password" fluid class="!rounded-xl border-surface-200 focus:border-emerald-500" placeholder="••••••••" />
+      </div>
     </div>
-    <div class="flex flex-col gap-2">
-      <label for="password">{{ $t('message.password') }}</label>
-      <InputText id="password" type="password" v-model="password" />
-    </div>
-    <div class="flex">
+
+    <div class="flex flex-col gap-3 mt-2">
       <Button
-        label="Sign in"
-        icon="pi pi-user"
-        class="w-full max-w-[17.35rem] mx-auto"
+        label="Créer mon compte"
+        icon="pi pi-user-plus"
+        fluid
+        class="!rounded-xl py-3 font-bold"
+        severity="emerald"
         @click="signin"
-      ></Button>
+        v-ripple
+      />
+      <p class="text-[10px] text-surface-400 text-center px-4 leading-relaxed mt-2">
+        En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
+      </p>
     </div>
   </div>
 </template>
