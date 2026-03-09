@@ -5,8 +5,17 @@
 @import './primevue.css';
 @import './quill.css';
 
+@theme {
+  --color-white: #fafafa;
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  background-color: #fafafa;
+  color: #1f2937; /* slate-800 for better contrast on off-white */
 }
 
 h1 {

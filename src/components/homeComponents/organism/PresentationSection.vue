@@ -10,13 +10,11 @@
     >
     <div id="small-presentation" v-html="presentationStore.small" />
     <div id="button-container">
-      <!-- <a href="#presentation-text" class="p-button p-component">Plus d'informations</a> -->
       <a v-if="props.isPreview" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
       <a v-else href="#map" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
     </div>
 
-    <!-- Bottom gradient fade -->
-    <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-white via-white/40 to-transparent pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-white via-white/5 to-transparent pointer-events-none"></div>
   </div>
 
   <div class="relative h-screen"></div>
@@ -43,7 +41,7 @@ a {
   top: 75%;
   left: 50%;
   transform: translate(-50%, -75%);
-  color: white;
+  color: #fafafa;
   text-align: center;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
   pointer-events: none;

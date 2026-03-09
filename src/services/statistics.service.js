@@ -1,4 +1,8 @@
 import { useSurveyStore } from '@/stores/surveys'
+import { useSessionStore } from '@/stores/sessions'
+import { useActivityStore } from '@/stores/activities'
+import AuthService from '@/services/auth.service'
+import { UserTypeEnum } from '@/enums/User.enum'
 
 /**
  * Calcule les statistiques basées sur les sondages
@@ -37,7 +41,7 @@ async function getSurveyStatistics() {
     if (survey.rating) {
       totalRating += survey.rating
       ratingCount++
-      if (ratingsDistribution.hasOwnProperty(survey.rating)) {
+      if (Object.prototype.hasOwnProperty.call(ratingsDistribution, survey.rating)) {
         ratingsDistribution[survey.rating]++
       }
     }
@@ -51,7 +55,7 @@ async function getSurveyStatistics() {
     }
 
     // Recommandations
-    if (survey.recommend && recommendationBreakdown.hasOwnProperty(survey.recommend)) {
+    if (survey.recommend && Object.prototype.hasOwnProperty.call(recommendationBreakdown, survey.recommend)) {
       recommendationBreakdown[survey.recommend]++
     }
 
@@ -133,7 +137,90 @@ async function getStatisticsByProvider() {
   }
 }
 
+/**
+ * Récupère les statistiques générales (inscriptions, utilisateurs, activités par jour)
+ */
+async function getGeneralStatistics() {
+  const sessionStore = useSessionStore()
+  const activityStore = useActivityStore()
+
+  // S'assurer que les données sont chargées
+  if (!sessionStore.sessions) await sessionStore.getAllSessions()
+  if (activityStore.activities.length === 0) await activityStore.getAllActivities()
+
+  const sessions = sessionStore.sessions || []
+
+  // 1. Nombre d'inscrits total
+  const totalRegistrations = sessions.reduce((acc, s) => acc + (s.registersUsers?.length || 0), 0)
+
+  // 1b. Nombre d'inscrits par activité
+  const activityRegistrations = {}
+  sessions.forEach((s) => {
+    if (s.activitiesId) {
+      const count = s.registersUsers?.length || 0
+      activityRegistrations[s.activitiesId] = (activityRegistrations[s.activitiesId] || 0) + count
+    }
+  })
+
+  const registrationsPerActivity = Object.entries(activityRegistrations).map(
+    ([activityId, count]) => {
+      const activity = activityStore.activities.find((a) => a.id === parseInt(activityId))
+      return {
+        id: activityId,
+        name: activity ? activity.name : `Activité ${activityId}`,
+        count: count,
+      }
+    },
+  )
+
+  // 2. Nombre de prestataires et visiteurs inscrits avec mail
+  const usersResponse = await AuthService.getUsers()
+  const users = usersResponse.data || []
+  const userCounts = {
+    [UserTypeEnum.PROVIDER]: users.filter(
+      (u) => u.type === UserTypeEnum.PROVIDER && u.mail && u.mail.trim() !== '',
+    ).length,
+    [UserTypeEnum.VISITOR]: users.filter(
+      (u) => u.type === UserTypeEnum.VISITOR && u.mail && u.mail.trim() !== '',
+    ).length,
+  }
+
+  // 3. Nombre d'activités proposées par jour (samedi et dimanche)
+  // On récupère les dates uniques des sessions
+  const uniqueDates = [...new Set(sessions.map((s) => s.beginingDate))].sort()
+  const activitiesPerDay = {}
+
+  // On associe les deux dates trouvées à Samedi et Dimanche (selon la demande)
+  // Si plus de dates existent, on s'adapte, mais ici on cible Samedi/Dimanche
+  const dayNames = ['Samedi', 'Dimanche']
+
+  uniqueDates.forEach((date, index) => {
+    const dayName = dayNames[index] || `Jour ${index + 1}`
+    const activitiesOnDay = new Set(
+      sessions.filter((s) => s.beginingDate === date).map((s) => s.activitiesId),
+    )
+    activitiesPerDay[dayName] = activitiesOnDay.size
+  })
+
+  // Si Samedi ou Dimanche manquent dans les données, on les initialise à 0
+  dayNames.forEach((name) => {
+    if (!activitiesPerDay[name]) activitiesPerDay[name] = 0
+  })
+
+  return {
+    error: 0,
+    status: 200,
+    data: {
+      totalRegistrations,
+      registrationsPerActivity,
+      userCounts,
+      activitiesPerDay,
+    },
+  }
+}
+
 export default {
   getSurveyStatistics,
   getStatisticsByProvider,
+  getGeneralStatistics,
 }

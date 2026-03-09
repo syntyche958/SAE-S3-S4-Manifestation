@@ -2,7 +2,7 @@
   <section
     id="presentation-text"
     :class="
-      'h-screen w-full flex items-center justify-center bg-white px-6 ' +
+      'h-screen w-full flex items-center justify-center bg-white px-6 font-medium ' +
       (isPreview ? 'border-black border-solid border' : '')
     "
   >

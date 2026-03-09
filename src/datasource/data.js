@@ -788,7 +788,7 @@ const session = [
   {
     id: 13,
     activitiesId: 5,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '18:00',
     duration: 40,
     nbPlace: 10,
@@ -797,7 +797,7 @@ const session = [
   {
     id: 14,
     activitiesId: 5,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '20:00',
     duration: 30,
     nbPlace: 10,
@@ -806,7 +806,7 @@ const session = [
   {
     id: 15,
     activitiesId: 5,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '21:30',
     duration: 25,
     nbPlace: 10,
@@ -816,7 +816,7 @@ const session = [
   {
     id: 16,
     activitiesId: 6,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '11:30',
     duration: 30,
     nbPlace: 10,
@@ -825,7 +825,7 @@ const session = [
   {
     id: 17,
     activitiesId: 6,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '15:30',
     duration: 25,
     nbPlace: 10,
@@ -834,7 +834,7 @@ const session = [
   {
     id: 18,
     activitiesId: 6,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '17:30',
     duration: 40,
     nbPlace: 10,
@@ -844,7 +844,7 @@ const session = [
   {
     id: 19,
     activitiesId: 7,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '21:00',
     duration: 30,
     nbPlace: 10,
@@ -853,7 +853,7 @@ const session = [
   {
     id: 20,
     activitiesId: 7,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '22:00',
     duration: 25,
     nbPlace: 10,
@@ -862,7 +862,7 @@ const session = [
   {
     id: 21,
     activitiesId: 7,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '23:00',
     duration: 40,
     nbPlace: 10,
@@ -872,7 +872,7 @@ const session = [
   {
     id: 22,
     activitiesId: 8,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '12:00',
     duration: 60,
     nbPlace: 10,
@@ -881,7 +881,7 @@ const session = [
   {
     id: 23,
     activitiesId: 8,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '19:00',
     duration: 60,
     nbPlace: 10,
@@ -890,7 +890,7 @@ const session = [
   {
     id: 24,
     activitiesId: 8,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-05-29',
     beginingHour: '21:00',
     duration: 60,
     nbPlace: 10,

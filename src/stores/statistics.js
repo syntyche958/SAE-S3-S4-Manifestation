@@ -5,6 +5,7 @@ import StatisticsService from '@/services/statistics.service'
 export const useStatisticsStore = defineStore('statistics', () => {
   const surveyStats = ref(null)
   const providerStats = ref(null)
+  const generalStats = ref(null)
   const loading = ref(false)
 
   async function loadSurveyStatistics() {
@@ -18,6 +19,22 @@ export const useStatisticsStore = defineStore('statistics', () => {
       }
     } catch (error) {
       console.error('Erreur lors du chargement des statistiques', error)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function loadGeneralStatistics() {
+    loading.value = true
+    try {
+      const response = await StatisticsService.getGeneralStatistics()
+      if (response.error === 0) {
+        generalStats.value = response.data
+      } else {
+        console.error('Erreur lors du chargement des statistiques générales', response.data)
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des statistiques générales', error)
     } finally {
       loading.value = false
     }
@@ -47,13 +64,21 @@ export const useStatisticsStore = defineStore('statistics', () => {
     return surveyStats.value?.totalSurveys || 0
   })
 
+  const totalRegistrations = computed(() => {
+    return generalStats.value?.totalRegistrations || 0
+  })
+
   return {
     surveyStats,
     providerStats,
+    generalStats,
     loading,
     averageSatisfaction,
     totalSurveys,
+    totalRegistrations,
     loadSurveyStatistics,
     loadProviderStatistics,
+    loadGeneralStatistics,
   }
-})
+}
+)
