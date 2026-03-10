@@ -74,31 +74,26 @@ defineEmits(['go-to-activity'])
 </script>
 
 <style scoped>
-/* Conteneur de la session : fond sombre et flou comme tes autres cartes */
 .session-container {
   background-color: rgba(0, 0, 0, 0.4) !important;
   backdrop-filter: blur(12px);
   border: 1px solid rgba(250, 250, 250, 0.1) !important;
 }
 
-/* Correction du Tag : fond bleu foncé transparent pour que le texte blanc soit lisible */
 :deep(.dark-tag) {
   background-color: rgba(59, 130, 246, 0.2) !important;
-  color: #60a5fa !important; /* Bleu clair */
+  color: #60a5fa !important;
   border: 1px solid rgba(96, 165, 250, 0.5) !important;
 }
 
-/* Textes secondaires (date et heure) */
 .text-secondary-info {
   color: rgba(250, 250, 250, 0.6) !important;
 }
 
-/* Forcer la couleur des icônes boutons */
 :deep(.p-button.p-button-text) {
   color: #fafafa !important;
 }
 
-/* Style du Dialog pour rester dans le thème sombre */
 :deep(.dark-dialog .p-dialog-header),
 :deep(.dark-dialog .p-dialog-content) {
   background-color: #1a1a1a !important;

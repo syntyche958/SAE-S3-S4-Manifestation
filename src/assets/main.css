@@ -108,7 +108,7 @@ footer, footer *, .footer-container * {
 
 .p-tab-active {
   background: rgba(250, 250, 250, 0.05) !important;
-  border-bottom-color: #059669 !important; /* emerald-600 */
+  border-bottom-color: #059669 !important;
 }
 
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {

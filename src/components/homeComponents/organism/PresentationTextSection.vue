@@ -23,12 +23,12 @@ defineProps({
 </script>
 <style scoped>
 .quill-content-display :deep(h1) {
-  color: #059669; /* emerald-600 */
+  color: #059669;
 }
 
 .quill-content-display :deep(strong),
 .quill-content-display :deep(b) {
-  color: #059669; /* emerald-600 */
+  color: #059669;
   font-weight: 700;
 }
 </style>

@@ -26,8 +26,6 @@ import ProviderGalleria from '@/components/providerComponents/molecule/ProviderG
   overflow-y: auto;
 }
 
-/* TODO : Tout les h2 doivent être du même style ? */
-/* Nouveau style du menu prestataire : collé à la navbar, en haut à gauche */
 .section h2 {
   color: var(--text-color, #212529);
   margin-bottom: 1.5rem;
