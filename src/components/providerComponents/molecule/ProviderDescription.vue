@@ -1,6 +1,6 @@
 <template>
   <div class="w-1/2 relative">
-    <Card class="card-presentation">
+    <Card class="card-presentation dark-presentation-card">
       <template #title> <ProviderDescEditor /> </template>
       <template #content>
         <div class="relative">
@@ -11,6 +11,19 @@
     </Card>
   </div>
 </template>
+
+<style scoped>
+:deep(.dark-presentation-card) {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem !important;
+}
+
+.description-content :deep(*) {
+  color: #fafafa !important;
+}
+</style>
 
 <script setup>
 import Card from 'primevue/card'

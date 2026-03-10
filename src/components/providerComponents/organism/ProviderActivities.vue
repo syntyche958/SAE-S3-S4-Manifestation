@@ -1,11 +1,34 @@
+<template>
+  <section style="margin: 3rem">
+    <div class="flex justify-center items-center">
+      <h1 class="text-center texturina-title mr-3">{{ $t('message.activities') }}</h1>
+      <AddActivity />
+    </div>
+    <div class="flex justify-center flex-wrap">
+      <div v-for="(item, index) in activities" :key="index">
+        <Card
+          class="activity-card dark-presentation-card relative"
+          style="width: 250px; overflow: hidden; cursor: pointer"
+          @click="goToActivity(item.id)"
+        >
+          <template #title>{{ item.name }}</template>
+          <template #content>
+            <p class="m-0">
+              {{ item.description }}
+            </p>
+          </template>
+        </Card>
+      </div>
+    </div>
+  </section>
+</template>
+
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { Card } from 'primevue'
+import Card from 'primevue/card'
 import router from '@/router/index.js'
 import { useActivityStore } from '@/stores/activities'
-import placeholder from '@/assets/images/photos/placeholder.jpg'
-import ProviderActivityEditor from '@/components/providerComponents/molecule/ProviderActivityEditor.vue'
 import AddActivity from '@/components/activityComponents/molecule/AddActivity.vue'
 
 const route = useRoute()
@@ -27,32 +50,14 @@ function goToActivity(activityId) {
 }
 </script>
 
-<template>
-  <section style="margin: 3rem">
-    <div class="flex justify-center items-center">
-      <h1 class="text-center texturina-title mr-3">{{ $t('message.activities') }}</h1>
-      <AddActivity />
-    </div>
-    <div class="flex justify-center">
-      <div v-for="(item, index) in activities" :key="index">
-        <Card
-          class="activity-card relative"
-          style="width: 250px; overflow: hidden; cursor: pointer"
-          @click="goToActivity(item.id)"
-        >
-          <template #title>{{ item.name }}</template>
-          <template #content>
-            <p class="m-0">
-              {{ item.description }}
-            </p>
-          </template>
-        </Card>
-      </div>
-    </div>
-  </section>
-</template>
-
 <style scoped>
+:deep(.dark-presentation-card) {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem !important;
+}
+
 .activity-card {
   transition:
     transform 0.3s ease,
@@ -61,7 +66,12 @@ function goToActivity(activityId) {
 }
 
 .activity-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+:deep(.p-card-title),
+:deep(.p-card-content) {
+  color: #fafafa !important;
 }
 </style>

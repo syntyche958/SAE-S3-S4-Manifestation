@@ -176,7 +176,6 @@ function displayAreas(map, emit, mapMode, route) {
     polygon.on('click', () => {
       emit('changeSelectedLocation', locationId)
 
-      // Reset all polygons weights
       map.eachLayer(function (layer) {
         if (layer instanceof L.Polygon) {
           layer.setStyle({
@@ -194,24 +193,13 @@ function displayAreas(map, emit, mapMode, route) {
 function displayLegends(map, mapMode) {
   const { t } = useI18n()
 
-  const legend = L.control({ position: 'bottomright' })
-  let labels
-  let colors
-  let colorsRGBA
+  const legend = L.control({ position: 'topleft' })
+  let labels, colors, colorsRGBA
+
   if (mapMode === MapModeEnum.PROVIDER) {
-    labels = [
-      t('message.available'),
-      t('message.pendingRequest'),
-      t('message.yourLocation'),
-      t('message.occupied'),
-    ]
+    labels = [t('message.available'), t('message.pendingRequest'), t('message.yourLocation'), t('message.occupied')]
     colors = ['orange', 'yellow', 'green', 'blue']
-    colorsRGBA = [
-      'rgba(255, 165, 0, 0.5)',
-      'rgba(255, 255, 0, 0.5)',
-      'rgba(0, 255, 0, 0.5)',
-      'rgba(0, 0, 255, 0.5)',
-    ]
+    colorsRGBA = ['rgba(255, 165, 0, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(0, 255, 0, 0.5)', 'rgba(0, 0, 255, 0.5)']
   } else {
     labels = [t('message.available'), t('message.pendingRequest'), t('message.occupied')]
     colors = ['orange', 'yellow', 'blue']
@@ -221,33 +209,35 @@ function displayLegends(map, mapMode) {
   legend.onAdd = function () {
     let legendContainer = L.DomUtil.create('div', 'info-legend')
     L.DomEvent.disableClickPropagation(legendContainer)
-    legendContainer.style.padding = '15px'
-    legendContainer.style.backgroundColor = 'rgba(26, 26, 26, 0.9)'
-    legendContainer.style.backdropFilter = 'blur(8px)'
-    legendContainer.style.border = '1px solid rgba(250, 250, 250, 0.1)'
-    legendContainer.style.borderRadius = '5px'
-    legendContainer.style.display = 'flex'
-    legendContainer.style.flexDirection = 'column'
-    legendContainer.style.gap = '10px'
+
+    legendContainer.style.setProperty('background-color', '#1a1a1a', 'important')
+    legendContainer.style.setProperty('display', 'flex', 'important')
+    legendContainer.style.setProperty('flex-direction', 'column', 'important')
+    legendContainer.style.setProperty('padding', '15px', 'important')
+    legendContainer.style.setProperty('gap', '10px', 'important')
+    legendContainer.style.setProperty('border', '1px solid rgba(250, 250, 250, 0.2)', 'important')
+    legendContainer.style.setProperty('border-radius', '12px', 'important')
+    legendContainer.style.setProperty('margin', '20px', 'important')
+    legendContainer.style.setProperty('z-index', '9999', 'important')
+    legendContainer.style.setProperty('min-width', '150px', 'important')
 
     for (let i = 0; i < labels.length; i++) {
       let lineContainer = L.DomUtil.create('div', '', legendContainer)
       lineContainer.style.display = 'flex'
+      lineContainer.style.alignItems = 'center'
       lineContainer.style.gap = '10px'
 
       let colorBox = L.DomUtil.create('div', '', lineContainer)
-      colorBox.style.background = colorsRGBA[i]
-      colorBox.style.width = '20px'
-      colorBox.style.height = '20px'
-      colorBox.style.borderStyle = 'solid'
-      colorBox.style.borderWidth = '2px'
-      colorBox.style.borderColor = colors[i]
+      colorBox.style.setProperty('background-color', colorsRGBA[i], 'important')
+      colorBox.style.setProperty('width', '20px', 'important')
+      colorBox.style.setProperty('height', '20px', 'important')
+      colorBox.style.setProperty('border', `2px solid ${colors[i]}`, 'important')
+      colorBox.style.flexShrink = '0'
 
       let span = L.DomUtil.create('span', '', lineContainer)
       span.innerText = labels[i]
-      span.style.cursor = 'default'
-      span.style.userSelect = 'none'
-      span.style.color = '#fafafa'
+      span.style.setProperty('color', '#fafafa', 'important')
+      span.style.setProperty('font-size', '14px', 'important')
     }
 
     return legendContainer
@@ -263,7 +253,8 @@ function displayUnselectPanel(map, emit, mapMode, route) {
   customControl.onAdd = function () {
     const container = L.DomUtil.create('div', 'custom-panel')
     container.style.padding = '15px'
-    container.style.backgroundColor = 'rgba(31, 189, 136, 0.9)'
+    container.style.backgroundColor = '#1fbd88'
+    container.style.zIndex = '1000'
     container.style.backdropFilter = 'blur(8px)'
     container.style.color = '#fafafa'
     container.style.cursor = 'pointer'
@@ -275,7 +266,6 @@ function displayUnselectPanel(map, emit, mapMode, route) {
     const label = L.DomUtil.create('b', 'custom-button', container)
     label.innerHTML = t('message.deselect')
 
-    // Empêche la carte de zoomer/déplacer lorsqu’on clique
     L.DomEvent.disableClickPropagation(container)
 
     return container

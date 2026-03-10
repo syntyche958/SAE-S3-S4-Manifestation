@@ -150,5 +150,25 @@ footer, footer *, .footer-container * {
   overflow: hidden !important;
 }
 
+.p-datatable .p-datatable-tbody > tr > td,
+.p-datatable .p-datatable-thead > tr > th {
+  padding: 0.4rem 0.6rem !important;
+}
 
+.p-datatable-table {
+  font-size: 0.85rem !important;
+}
+
+.p-datatable-header {
+  padding: 0.5rem 1rem !important;
+  font-size: 0.9rem !important;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  height: 35px !important;
+}
+
+.info-legend, .custom-panel {
+  z-index: 1001 !important;
+}
 
