@@ -702,7 +702,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 4,
+    id: 1,
     activitiesId: 2,
     beginingDate: '2026-05-28',
     beginingHour: '10:00',
@@ -711,7 +711,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 5,
+    id: 2,
     activitiesId: 2,
     beginingDate: '2026-05-28',
     beginingHour: '11:00',
@@ -720,7 +720,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 6,
+    id: 3,
     activitiesId: 2,
     beginingDate: '2026-05-28',
     beginingHour: '15:00',
@@ -730,7 +730,7 @@ const session = [
   },
 
   {
-    id: 7,
+    id: 1,
     activitiesId: 3,
     beginingDate: '2026-05-28',
     beginingHour: '10:30',
@@ -739,7 +739,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 8,
+    id: 2,
     activitiesId: 3,
     beginingDate: '2026-05-28',
     beginingHour: '14:00',
@@ -748,7 +748,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 9,
+    id: 3,
     activitiesId: 3,
     beginingDate: '2026-05-28',
     beginingHour: '16:30',
@@ -758,7 +758,7 @@ const session = [
   },
 
   {
-    id: 10,
+    id: 1,
     activitiesId: 4,
     beginingDate: '2026-05-28',
     beginingHour: '09:30',
@@ -767,7 +767,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 11,
+    id: 2,
     activitiesId: 4,
     beginingDate: '2026-05-28',
     beginingHour: '13:00',
@@ -776,7 +776,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 12,
+    id: 3,
     activitiesId: 4,
     beginingDate: '2026-05-28',
     beginingHour: '17:00',
@@ -786,7 +786,7 @@ const session = [
   },
 
   {
-    id: 13,
+    id: 1,
     activitiesId: 5,
     beginingDate: '2026-05-29',
     beginingHour: '18:00',
@@ -795,7 +795,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 14,
+    id: 2,
     activitiesId: 5,
     beginingDate: '2026-05-29',
     beginingHour: '20:00',
@@ -804,7 +804,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 15,
+    id: 3,
     activitiesId: 5,
     beginingDate: '2026-05-29',
     beginingHour: '21:30',
@@ -814,7 +814,7 @@ const session = [
   },
 
   {
-    id: 16,
+    id: 1,
     activitiesId: 6,
     beginingDate: '2026-05-29',
     beginingHour: '11:30',
@@ -823,7 +823,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 17,
+    id: 2,
     activitiesId: 6,
     beginingDate: '2026-05-29',
     beginingHour: '15:30',
@@ -832,7 +832,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 18,
+    id: 3,
     activitiesId: 6,
     beginingDate: '2026-05-29',
     beginingHour: '17:30',
@@ -842,7 +842,7 @@ const session = [
   },
 
   {
-    id: 19,
+    id: 1,
     activitiesId: 7,
     beginingDate: '2026-05-29',
     beginingHour: '21:00',
@@ -851,7 +851,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 20,
+    id: 2,
     activitiesId: 7,
     beginingDate: '2026-05-29',
     beginingHour: '22:00',
@@ -860,7 +860,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 21,
+    id: 3,
     activitiesId: 7,
     beginingDate: '2026-05-29',
     beginingHour: '23:00',
@@ -870,7 +870,7 @@ const session = [
   },
 
   {
-    id: 22,
+    id: 1,
     activitiesId: 8,
     beginingDate: '2026-05-29',
     beginingHour: '12:00',
@@ -879,7 +879,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 23,
+    id: 2,
     activitiesId: 8,
     beginingDate: '2026-05-29',
     beginingHour: '19:00',
@@ -888,7 +888,7 @@ const session = [
     registersUsers: [3],
   },
   {
-    id: 24,
+    id: 3,
     activitiesId: 8,
     beginingDate: '2026-05-29',
     beginingHour: '21:00',

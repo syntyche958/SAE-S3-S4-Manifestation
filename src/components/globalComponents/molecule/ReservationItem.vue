@@ -1,14 +1,14 @@
 <template>
   <div
-    class="flex flex-col sm:flex-row sm:items-center p-4 gap-3 bg-surface-50 rounded-border border border-surface-200"
+    class="session-container flex flex-col sm:flex-row sm:items-center p-4 gap-3 rounded-border border"
   >
     <div class="flex-1">
       <div class="flex items-center justify-between mb-2">
         <span class="font-bold text-lg">{{ activityName }}</span>
-        <Tag :value="'Session #' + item.id" severity="info"></Tag>
+        <Tag :value="'Session #' + item.id" class="dark-tag"></Tag>
       </div>
 
-      <div class="flex flex-col gap-1 text-sm text-surface-600 dark:text-surface-300">
+      <div class="flex flex-col gap-1 text-sm text-secondary-info">
         <div class="flex items-center gap-2">
           <i class="pi pi-calendar"></i>
           <span>{{ item.beginingDate }}</span>
@@ -44,11 +44,13 @@
     header="Votre QR Code"
     :style="{ width: '25rem', margin: '1rem' }"
     modal
+    class="dark-dialog"
   >
     <div class="flex justify-center p-4">
       <img
         :src="`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrCode}`"
         alt="QR Code de la session"
+        class="rounded-lg"
       />
     </div>
   </Dialog>
@@ -70,3 +72,36 @@ const showQrCode = ref(false)
 
 defineEmits(['go-to-activity'])
 </script>
+
+<style scoped>
+/* Conteneur de la session : fond sombre et flou comme tes autres cartes */
+.session-container {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(250, 250, 250, 0.1) !important;
+}
+
+/* Correction du Tag : fond bleu foncé transparent pour que le texte blanc soit lisible */
+:deep(.dark-tag) {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+  color: #60a5fa !important; /* Bleu clair */
+  border: 1px solid rgba(96, 165, 250, 0.5) !important;
+}
+
+/* Textes secondaires (date et heure) */
+.text-secondary-info {
+  color: rgba(250, 250, 250, 0.6) !important;
+}
+
+/* Forcer la couleur des icônes boutons */
+:deep(.p-button.p-button-text) {
+  color: #fafafa !important;
+}
+
+/* Style du Dialog pour rester dans le thème sombre */
+:deep(.dark-dialog .p-dialog-header),
+:deep(.dark-dialog .p-dialog-content) {
+  background-color: #1a1a1a !important;
+  color: #fafafa !important;
+}
+</style>
