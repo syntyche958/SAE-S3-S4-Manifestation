@@ -1,49 +1,51 @@
 <template>
-  <div class="card relative" style="max-width: 400px">
-    <Galleria
-      v-if="images && images.length > 0"
-      :value="images || []"
-      :responsiveOptions="responsiveOptions"
-      :numVisible="5"
-      containerStyle="max-width: 640px"
-      :key="`galleria-${providerId}-${images ? images.length : 0}-${images ? images.map(img => img.id || img.idImage).join('-') : ''}`"
-    >
-      <template #header>
-        <ProviderImageModifier />
-      </template>
-      <template #item="slotProps">
-        <div v-if="slotProps && slotProps.item" class="relative">
-          <img
-            :src="slotProps.item.itemImageSrc"
-            :alt="slotProps.item.alt"
-            style="width: 100%; border-radius: 5px"
-          />
-          <div
-            v-if="!isProviderAdminPanelToHide()"
-            class="flex justify-center z-50 absolute top-0 left-0 mt-5 ml-5"
-          >
-            <Button
-              style="font-size: 25px; padding: 0 10px"
-              icon="pi pi-trash"
-              severity="danger"
-              size="small"
-              @click.stop="handleDeleteImage(slotProps.item.id || slotProps.item.idImage)"
+  <Card class="relative w-full max-w-[400px]">
+    <template #content>
+      <Galleria
+        v-if="images && images.length > 0"
+        :value="images || []"
+        :responsiveOptions="responsiveOptions"
+        :numVisible="5"
+        containerStyle="max-width: 640px"
+        :key="`galleria-${providerId}-${images ? images.length : 0}-${images ? images.map(img => img.id || img.idImage).join('-') : ''}`"
+      >
+        <template #header>
+          <ProviderImageModifier />
+        </template>
+        <template #item="slotProps">
+          <div v-if="slotProps && slotProps.item" class="relative">
+            <img
+              :src="slotProps.item.itemImageSrc"
+              :alt="slotProps.item.alt"
+              style="width: 100%; border-radius: 5px"
             />
+            <div
+              v-if="!isProviderAdminPanelToHide()"
+              class="flex justify-center z-50 absolute top-0 left-0 mt-5 ml-5"
+            >
+              <Button
+                style="font-size: 25px; padding: 0 10px"
+                icon="pi pi-trash"
+                severity="danger"
+                size="small"
+                @click.stop="handleDeleteImage(slotProps.item.id || slotProps.item.idImage)"
+              />
+            </div>
           </div>
-        </div>
-        <div v-else class="flex items-center justify-center" style="min-height: 300px; width: 100%">
-          <p class="text-gray-500">Aucune image disponible</p>
-        </div>
-      </template>
-      <template #thumbnail="slotProps">
-        <img
-          v-if="slotProps && slotProps.item"
-          :src="slotProps.item.thumbnailImageSrc"
-          :alt="slotProps.item.alt"
-        />
-      </template>
-    </Galleria>
-  </div>
+          <div v-else class="flex items-center justify-center" style="min-height: 300px; width: 100%">
+            <p class="text-gray-500">Aucune image disponible</p>
+          </div>
+        </template>
+        <template #thumbnail="slotProps">
+          <img
+            v-if="slotProps && slotProps.item"
+            :src="slotProps.item.thumbnailImageSrc"
+            :alt="slotProps.item.alt"
+          />
+        </template>
+      </Galleria>
+    </template>
+  </Card>
 </template>
 
 <script setup>
@@ -54,6 +56,7 @@ import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { displayErrToast } from '@/utils/toast.utils'
 import Galleria from 'primevue/galleria'
 import Button from 'primevue/button'
+import Card from 'primevue/card'
 import ProviderImageModifier from './ProviderImageModifier.vue'
 
 const route = useRoute()

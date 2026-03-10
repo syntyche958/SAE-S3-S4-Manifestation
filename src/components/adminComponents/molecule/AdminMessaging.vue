@@ -40,15 +40,15 @@
           <!-- Ratings détaillés -->
           <div class="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
             <div class="flex flex-col items-center">
-              <span class="text-sm text-gray-600 mb-1">{{ $t('Organisation') }}</span>
+              <span class="text-sm text-surface-400 mb-1">{{ $t('Organisation') }}</span>
               <Rating :modelValue="survey.ratings.organisation" readonly :cancel="false" size="small" />
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm text-gray-600 mb-1">{{ $t('Animations') }}</span>
+              <span class="text-sm text-surface-400 mb-1">{{ $t('Animations') }}</span>
               <Rating :modelValue="survey.ratings.animations" readonly :cancel="false" size="small" />
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm text-gray-600 mb-1">{{ $t('Accesibilité') }}</span>
+              <span class="text-sm text-surface-400 mb-1">{{ $t('Accesibilité') }}</span>
               <Rating :modelValue="survey.ratings.accessibility" readonly :cancel="false" size="small" />
             </div>
           </div>
@@ -62,20 +62,20 @@
           </div>
 
           <!-- Commentaire -->
-          <div v-if="survey.comment" class="mb-4 p-3 bg-gray-50 rounded">
+          <div v-if="survey.comment" class="mb-4 p-3 bg-surface-100/10 rounded">
             <p class="text-sm font-semibold mb-1">{{ $t('Commentaire') }} :</p>
             <p class="whitespace-pre-wrap">{{ survey.comment }}</p>
           </div>
 
           <!-- Email si fourni -->
           <div v-if="survey.email" class="mb-4">
-            <p class="text-sm text-gray-600">
+            <p class="text-sm text-surface-400">
               <i class="pi pi-envelope mr-2"></i>{{ survey.email }}
             </p>
           </div>
 
           <!-- Réponse de l'admin -->
-          <div v-if="survey.adminResponse" class="mt-3 p-3 bg-blue-50 border-l-4 border-blue-500">
+          <div v-if="survey.adminResponse" class="mt-3 p-3 bg-blue-500/10 border-l-4 border-blue-500">
             <p class="text-sm font-semibold mb-1">
               <i class="pi pi-reply mr-2"></i>{{ $t('Votre réponse') }}
             </p>
@@ -130,13 +130,10 @@ import Rating from 'primevue/rating'
 import Badge from 'primevue/badge'
 import Avatar from 'primevue/avatar'
 import Chip from 'primevue/chip'
-import Tag from 'primevue/tag'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Textarea from 'primevue/textarea'
 import { useI18n } from 'vue-i18n'
-import { messages } from '@/datasource/lang'
-import { icon } from 'leaflet'
 
 const { t } = useI18n()
 const surveyStore = useSurveyStore()

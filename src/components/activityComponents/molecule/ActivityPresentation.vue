@@ -2,40 +2,42 @@
   <div v-if="currentActivity">
     <div v-html="currentActivity.name"></div>
     <div v-html="currentActivity.presentationContent"></div>
-    <div class="card" style="margin-top: 2rem" v-if="sessions && sessions.length > 0">
-      <DataView :value="sessions" :sortOrder="triOrder" :sortField="triField">
-        <template #header>
-          <Select
-            v-model="triKey"
-            :options="triOptions"
-            optionLabel="label"
-            placeholder="Trier les sessions"
-            @change="onSortChange($event)"
-          />
-        </template>
+    <Card class="mt-8">
+      <template #content>
+        <DataView :value="sessions" :sortOrder="triOrder" :sortField="triField">
+          <template #header>
+            <Select
+              v-model="triKey"
+              :options="triOptions"
+              optionLabel="label"
+              placeholder="Trier les sessions"
+              @change="onSortChange($event)"
+            />
+          </template>
 
-        <template #list="slotProps">
-          <div class="flex flex-col">
-            <div v-for="(item, index) in slotProps.items" :key="item.id">
-              <div
-                class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
-                :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
-              >
-                <SessionItem
-                  :item="item"
-                  :is-current-provider-owner="isCurrentProviderOwner"
-                  :is-registered="isRegistered(item)"
-                  :is-user-connected="isUserConnected"
-                  :can-register="currentActivity?.canRegister"
-                  @inscription="inscription"
-                  @show-registrants="showRegistrants"
-                />
+          <template #list="slotProps">
+            <div class="flex flex-col">
+              <div v-for="(item, index) in slotProps.items" :key="item.id">
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
+                  :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
+                >
+                  <SessionItem
+                    :item="item"
+                    :is-current-provider-owner="isCurrentProviderOwner"
+                    :is-registered="isRegistered(item)"
+                    :is-user-connected="isUserConnected"
+                    :can-register="currentActivity?.canRegister"
+                    @inscription="inscription"
+                    @show-registrants="showRegistrants"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </template>
-      </DataView>
-    </div>
+          </template>
+        </DataView>
+      </template>
+    </Card>
   </div>
 
   <RegistrantsListDialog
@@ -48,7 +50,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Button, DataView, Select } from 'primevue'
+import { DataView, Select, Card } from 'primevue'
 import AuthService from '@/services/auth.service'
 import SessionItem from '@/components/activityComponents/molecule/SessionItem.vue'
 import RegistrantsListDialog from '@/components/activityComponents/molecule/RegistrantsListDialog.vue'

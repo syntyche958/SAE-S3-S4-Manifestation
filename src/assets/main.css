@@ -14,12 +14,21 @@ html {
 }
 
 body {
-  background-color: #fafafa;
-  color: #1f2937; /* slate-800 for better contrast on off-white */
+  background-color: #1a1a1a;
+  color: #fafafa;
+}
+
+p, span, li, label, .p-datatable-header, .p-datatable-thead th, .p-button-label, input, textarea, select, .p-inputtext, .p-select-label {
+  color: #fafafa !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply mb-3;
+  color: #fafafa;
 }
 
 h1 {
-  @apply text-3xl mb-3;
+  @apply text-3xl;
 }
 
 h2 {
@@ -37,4 +46,109 @@ ul {
 
 .main-section-container {
   @apply w-[95%] mt-[1vh] min-h-[85vh];
+  background-color: rgba(250, 250, 250, 0.25) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(250, 250, 250, 0.1);
 }
+
+.p-menubar {
+  background-color: rgba(250, 250, 250, 0.25) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(250, 250, 250, 0.1) !important;
+}
+
+.p-card {
+  background-color: rgba(250, 250, 250, 0.25) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(250, 250, 250, 0.1) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1) !important;
+  color: #fafafa !important;
+  border-radius: 1.5rem !important;
+  overflow: hidden !important;
+}
+
+.p-card-title, .p-card-subtitle, .p-card-content {
+  color: #fafafa !important;
+}
+
+.p-menubar-submenu-icon {
+  color: #fafafa !important;
+}
+
+.p-menubar-item-icon, .p-menubar-submenu-icon, .pi-angle-down, .pi-angle-right {
+  color: #fafafa !important;
+}
+
+.p-toast-message {
+  background-color: rgba(26, 26, 26, 0.9) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(250, 250, 250, 0.1) !important;
+}
+
+.p-button:focus, .p-button:active {
+  box-shadow: none !important;
+  outline: none !important;
+  border-color: transparent !important;
+}
+
+footer, footer *, .footer-container * {
+  color: #fafafa !important;
+}
+
+.p-tabs, .p-tablist, .p-tabpanel, .p-tabpanels, .p-tablist-tab-list {
+  background: transparent !important;
+  border: none !important;
+}
+
+.p-tab {
+  background: transparent !important;
+  border-bottom: 2px solid transparent !important;
+  transition: all 0.3s ease;
+}
+
+.p-tab-active {
+  background: rgba(250, 250, 250, 0.05) !important;
+  border-bottom-color: #059669 !important; /* emerald-600 */
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: rgba(26, 26, 26, 0.95) !important;
+  color: #fafafa !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(250, 250, 250, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-tooltip {
+  background: rgba(26, 26, 26, 0.9) !important;
+  color: #fafafa !important;
+  border: 1px solid rgba(250, 250, 250, 0.2) !important;
+  backdrop-filter: blur(4px);
+  border-radius: 4px;
+}
+
+.p-datatable, .p-datatable-table, .p-dataview, .p-dataview-content {
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+
+#map {
+  border-radius: 1.5rem !important;
+  overflow: hidden !important;
+}
+
+.leaflet-control {
+  z-index: 1000 !important;
+}
+
+.info-legend, .custom-panel {
+  z-index: 1001 !important;
+}
+
+.map-card-wrapper {
+  border-radius: 1.5rem !important;
+  overflow: hidden !important;
+}
+
+
+

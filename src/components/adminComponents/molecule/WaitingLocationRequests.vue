@@ -1,36 +1,40 @@
 <template>
-  <div v-if="locationRequestedBy.length > 0" class="mt-6 flex flex-col gap-3">
-    <h2 class="mb-0!">Demande en attente :</h2>
-    <DataTable :value="locationRequestedBy" paginator :rows="10" dataKey="id">
-      <!-- Columns -->
-      <Column field="name" header="Activité" sortable style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ data.name }}
-        </template>
-      </Column>
-      <Column field="providerId" header="Prestataire" sortable style="min-width: 12rem">
-        <template #body="{ data }">
-          {{ providerStore.get(data.providerId).name }}
-        </template>
-      </Column>
+  <Card v-if="locationRequestedBy.length > 0" class="mt-6">
+    <template #content>
+      <div class="flex flex-col gap-3">
+        <h2 class="mb-0!">Demande en attente :</h2>
+        <DataTable :value="locationRequestedBy" paginator :rows="10" dataKey="id">
+          <!-- Columns -->
+          <Column field="name" header="Activité" sortable style="min-width: 12rem">
+            <template #body="{ data }">
+              {{ data.name }}
+            </template>
+          </Column>
+          <Column field="providerId" header="Prestataire" sortable style="min-width: 12rem">
+            <template #body="{ data }">
+              {{ providerStore.get(data.providerId).name }}
+            </template>
+          </Column>
 
-      <!-- Column with button  -->
-      <Column field="id" header="" style="min-width: 12rem">
-        <template #body="{ data }">
-          <Button
-            type="button"
-            label="Accepter la demande"
-            @click="emit('set-activity-location', data.id)"
-            size="small"
-          />
-        </template>
-      </Column>
-    </DataTable>
-  </div>
+          <!-- Column with button  -->
+          <Column field="id" header="" style="min-width: 12rem">
+            <template #body="{ data }">
+              <Button
+                type="button"
+                label="Accepter la demande"
+                @click="emit('set-activity-location', data.id)"
+                size="small"
+              />
+            </template>
+          </Column>
+        </DataTable>
+      </div>
+    </template>
+  </Card>
 </template>
 <script setup>
 import { computed } from 'vue'
-import { Column, DataTable, Button } from 'primevue'
+import { Column, DataTable, Button, Card } from 'primevue'
 import { useProviderStore } from '@/stores/providers'
 import { useActivityStore } from '@/stores/activities'
 

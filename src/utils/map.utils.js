@@ -11,11 +11,11 @@ const defaultPolygonWeight = 2
 
 export function setupMap(mapId) {
   // Map setup
-  let southWestBoundsCoords = L.latLng(43.203642, 2.3594)
-  let northEastBoundsCoords = L.latLng(43.209367, 2.368358)
+  let southWestBoundsCoords = L.latLng(43.203642, 2.36)
+  let northEastBoundsCoords = L.latLng(43.209367, 2.37)
   let bounds = new L.LatLngBounds(southWestBoundsCoords, northEastBoundsCoords)
   let options = { maxBounds: bounds, minZoom: 17 }
-  const map = L.map(mapId, options).setView([43.206496, 2.363834], 17)
+  const map = L.map(mapId, options).setView([43.206496, 2.364834], 17)
 
   // Define tile layer
   const geoportailFranceTileLayer = L.tileLayer(
@@ -222,7 +222,9 @@ function displayLegends(map, mapMode) {
     let legendContainer = L.DomUtil.create('div', 'info-legend')
     L.DomEvent.disableClickPropagation(legendContainer)
     legendContainer.style.padding = '15px'
-    legendContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.97)'
+    legendContainer.style.backgroundColor = 'rgba(26, 26, 26, 0.9)'
+    legendContainer.style.backdropFilter = 'blur(8px)'
+    legendContainer.style.border = '1px solid rgba(250, 250, 250, 0.1)'
     legendContainer.style.borderRadius = '5px'
     legendContainer.style.display = 'flex'
     legendContainer.style.flexDirection = 'column'
@@ -245,6 +247,7 @@ function displayLegends(map, mapMode) {
       span.innerText = labels[i]
       span.style.cursor = 'default'
       span.style.userSelect = 'none'
+      span.style.color = '#fafafa'
     }
 
     return legendContainer
@@ -260,9 +263,9 @@ function displayUnselectPanel(map, emit, mapMode, route) {
   customControl.onAdd = function () {
     const container = L.DomUtil.create('div', 'custom-panel')
     container.style.padding = '15px'
-    container.style.backgroundColor = 'rgba(31, 189, 136, 0.97)'
-    container.style.borderRadius = '5px'
-    container.style.black = 'black'
+    container.style.backgroundColor = 'rgba(31, 189, 136, 0.9)'
+    container.style.backdropFilter = 'blur(8px)'
+    container.style.color = '#fafafa'
     container.style.cursor = 'pointer'
     container.onclick = function () {
       emit('changeSelectedLocation', undefined)

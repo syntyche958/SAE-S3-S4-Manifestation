@@ -18,7 +18,7 @@
     class="satisfaction-dialog"
   >
     <div class="px-2 pb-4">
-      <p class="text-surface-500 mb-6 text-sm">
+      <p class="text-surface-400 mb-6 text-sm">
         {{ $t('message.feedbackHero') }}
       </p>
 
@@ -26,7 +26,7 @@
         <div class="flex flex-col gap-6 p-4 rounded-xl bg-surface-50/50 border border-surface-100">
           <div class="flex flex-col sm:flex-row justify-between gap-6">
             <div class="flex-1">
-              <label class="block font-bold text-surface-900 mb-2 flex items-center gap-2">
+              <label class="block font-bold text-white mb-2 flex items-center gap-2">
                 <i class="pi pi-star-fill text-yellow-500"></i>
                 {{ $t('message.globalRating') }} *
               </label>
@@ -37,7 +37,7 @@
             </div>
 
             <div class="flex-1">
-              <label class="block font-bold text-surface-900 mb-3 flex items-center gap-2">
+              <label class="block font-bold text-white mb-3 flex items-center gap-2">
                 <i class="pi pi-thumbs-up-fill text-emerald-500"></i>
                 {{ $t('message.wouldRecommend') }}
               </label>
@@ -60,35 +60,35 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-50/30 border border-surface-50">
-            <label class="text-sm font-semibold text-surface-700">{{ $t('message.organisation') }}</label>
+          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20">
+            <label class="text-sm font-semibold text-surface-200">{{ $t('message.organisation') }}</label>
             <Rating v-model="form.ratings.organisation" :cancel="false" />
           </div>
-          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-50/30 border border-surface-50">
-            <label class="text-sm font-semibold text-surface-700">{{ $t('message.animations') }}</label>
+          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20">
+            <label class="text-sm font-semibold text-surface-200">{{ $t('message.animations') }}</label>
             <Rating v-model="form.ratings.animations" :cancel="false" />
           </div>
-          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-50/30 border border-surface-50">
-            <label class="text-sm font-semibold text-surface-700">{{ $t('message.accessibility') }}</label>
+          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20">
+            <label class="text-sm font-semibold text-surface-200">{{ $t('message.accessibility') }}</label>
             <Rating v-model="form.ratings.accessibility" :cancel="false" />
           </div>
         </div>
 
         <div class="flex flex-col gap-3">
-          <label class="font-bold text-surface-900 flex items-center gap-2">
+          <label class="font-bold text-white flex items-center gap-2">
             <i class="pi pi-ticket text-purple-500"></i>
             {{ $t('message.whichActivities') }}
           </label>
-          <div class="flex gap-3 flex-wrap bg-surface-50/20 p-4 rounded-xl border border-dashed border-surface-200">
-            <div v-for="act in activitiesOptions" :key="act" class="flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-surface-100 shadow-sm hover:border-emerald-300 transition-colors cursor-pointer group">
+          <div class="flex gap-3 flex-wrap bg-surface-100/20 p-4 rounded-xl border border-dashed border-surface-400/50">
+            <div v-for="act in activitiesOptions" :key="act" class="flex items-center gap-2 bg-surface-200/10 px-3 py-2 rounded-full border border-surface-400/20 shadow-sm hover:border-emerald-500/50 transition-colors cursor-pointer group">
               <Checkbox :inputId="act" :value="act" v-model="form.activities" />
-              <label :for="act" class="text-sm cursor-pointer select-none">{{ act }}</label>
+              <label :for="act" class="text-sm cursor-pointer select-none text-white">{{ act }}</label>
             </div>
           </div>
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="font-bold text-surface-900 flex items-center gap-2">
+          <label class="font-bold text-white flex items-center gap-2">
             <i class="pi pi-comment text-blue-500"></i>
             {{ $t('message.commentSuggestions') }}
           </label>
@@ -127,8 +127,8 @@
           </transition>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-between items-center bg-surface-50 -mx-6 -mb-6 px-6 py-4 mt-4 border-t border-surface-100">
-          <p class="text-xs text-surface-500 mb-4 sm:mb-0 text-center sm:text-left">
+        <div class="flex flex-col sm:flex-row justify-between items-center bg-surface-100/50 -mx-6 -mb-6 px-6 py-4 mt-4 border-t border-surface-200/20">
+          <p class="text-xs text-surface-400 mb-4 sm:mb-0 text-center sm:text-left">
             <i class="pi pi-heart-fill text-red-400 mr-1"></i>
             {{ $t('message.thankYouMessage') }}
           </p>

@@ -1,38 +1,40 @@
 <template>
   <ConfirmDialog></ConfirmDialog>
-  <div class="card">
-    <h2 class="m-0">{{ $t('message.newProviders') }}</h2>
-    <DataTable :value="providerStore.newProviders" dataKey="id">
-      <template #empty>{{ $t('message.noNewRequest') }}</template>
+  <Card>
+    <template #content>
+      <h2 class="m-0">{{ $t('message.newProviders') }}</h2>
+      <DataTable :value="providerStore.newProviders" dataKey="id">
+        <template #empty>{{ $t('message.noNewRequest') }}</template>
 
-      <Column field="name" header="Nom" sortable style="min-width: 16rem" />
-      <Column field="description" header="Description" sortable style="min-width: 20rem" />
-      <Column style="min-width: 12rem" header="Actions">
-        <template #body="slotProps">
-          <Button
-            icon="pi pi-check"
-            variant="outlined"
-            severity="success"
-            @click="confirmValidation(slotProps.data)"
-            v-tooltip.top="'Valider'"
-          />
-          <Button
-            icon="pi pi-trash"
-            variant="outlined"
-            severity="danger"
-            @click="confirmDeletion(slotProps.data)"
-            title="Supprimer"
-            v-tooltip.top="'Supprimer'"
-          />
-        </template>
-      </Column>
-    </DataTable>
-  </div>
+        <Column field="name" header="Nom" sortable style="min-width: 16rem" />
+        <Column field="description" header="Description" sortable style="min-width: 20rem" />
+        <Column style="min-width: 12rem" header="Actions">
+          <template #body="slotProps">
+            <Button
+              icon="pi pi-check"
+              variant="outlined"
+              severity="success"
+              @click="confirmValidation(slotProps.data)"
+              v-tooltip.top="'Valider'"
+            />
+            <Button
+              icon="pi pi-trash"
+              variant="outlined"
+              severity="danger"
+              @click="confirmDeletion(slotProps.data)"
+              title="Supprimer"
+              v-tooltip.top="'Supprimer'"
+            />
+          </template>
+        </Column>
+      </DataTable>
+    </template>
+  </Card>
 </template>
 
 <script setup>
 import { useProviderStore } from '@/stores/providers'
-import { Button, DataTable, Column } from 'primevue'
+import { Button, DataTable, Column, Card } from 'primevue'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
 

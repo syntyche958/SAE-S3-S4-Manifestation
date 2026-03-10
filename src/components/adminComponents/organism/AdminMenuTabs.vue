@@ -35,6 +35,7 @@
               <!-- <h1>{{ $t('message.interactiveMap') }}</h1> -->
               <div class="flex gap-2.5">
                 <TheMap
+                  id="admin-map"
                   :displayMode="MapModeEnum.ADMIN"
                   @change-selected-location="
                     (sl) => {
@@ -42,7 +43,7 @@
                     }
                   "
                   class="w-fit"
-                  classSize="sm:h-[50vh] sm:w-[70vh]"
+                  classSize="sm:h-[60vh] sm:w-[60vw]"
                 />
                 <AdminMapChoosing
                   :selectedLocationId="selectedLocationId"

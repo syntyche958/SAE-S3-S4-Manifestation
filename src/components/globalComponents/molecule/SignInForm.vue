@@ -2,13 +2,13 @@
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-1.5">
-        <label for="signin-mail-input" class="text-xs font-bold text-surface-500 uppercase ml-1">Email</label>
-        <InputText id="signin-mail-input" type="email" v-model="mail" fluid class="!rounded-xl border-surface-200 focus:border-emerald-500" placeholder="votre@email.fr" />
+        <label for="signin-mail-input" class="text-xs font-bold text-surface-400 uppercase ml-1">Email</label>
+        <InputText id="signin-mail-input" type="email" v-model="mail" fluid class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white" placeholder="votre@email.fr" />
       </div>
 
       <div class="flex flex-col gap-1.5">
-        <label for="signin-password-input" class="text-xs font-bold text-surface-500 uppercase ml-1">{{ $t('message.password') }}</label>
-        <InputText id="signin-password-input" type="password" v-model="password" fluid class="!rounded-xl border-surface-200 focus:border-emerald-500" placeholder="••••••••" />
+        <label for="signin-password-input" class="text-xs font-bold text-surface-400 uppercase ml-1">{{ $t('message.password') }}</label>
+        <InputText id="signin-password-input" type="password" v-model="password" fluid class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white" placeholder="••••••••" />
       </div>
     </div>
 

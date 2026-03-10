@@ -6,23 +6,18 @@ import { useAuthStore } from '@/stores/auth'
 import { useLocationStore } from '@/stores/locations'
 import { useProviderStore } from '@/stores/providers'
 import { usePresentationStore } from '@/stores/presentation'
-import { UserTypeEnum } from '@/enums/User.enum'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue'
 import { setToast } from '@/utils/toast.utils'
 import TheFooter from '@/components/globalComponents/molecule/TheFooter.vue'
-import { useContactStore } from '@/stores/contact'
 import { useActivityStore } from '@/stores/activities'
 import AnimatedBackground from '@/components/globalComponents/molecule/AnimatedBackground.vue'
-import { useSurveyStore } from './stores/surveys'
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
 const providerStore = useProviderStore()
 const presentationStore = usePresentationStore()
-const contactStore = useContactStore()
 const activityStore = useActivityStore()
-const surveyStore = useSurveyStore()
 
 setToast(useToast())
 
@@ -45,7 +40,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <AnimatedBackground v-if="$route.path != '/'" />
+  <AnimatedBackground />
   <Toast position="top-center" />
   <NavBar />
 

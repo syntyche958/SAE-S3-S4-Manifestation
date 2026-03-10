@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col sm:flex-row sm:gap-4">
     <TheMap
+      id="visitor-map"
       :display-mode="MapModeEnum.VISITOR"
       class="sm:ml-4 my-4"
       classSize="sm:h-[65vh] sm:w-[40vw]"

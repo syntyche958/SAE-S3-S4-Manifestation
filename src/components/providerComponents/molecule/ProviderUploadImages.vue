@@ -1,46 +1,48 @@
 <template>
-  <div class="card">
-    <FileUpload
-      ref="fileUploadRef"
-      name="demo[]"
-      :customUpload="true"
-      @uploader="uploadAllFiles"
-      @select="onFileSelect"
-      :multiple="true"
-      accept="image/*"
-      :maxFileSize="1000000"
-    >
-      <template #empty>
-        <span>
-          Déposez ici (drag and drop) les images que vous souhaitez rendre visibles dans le
-          carroussel
-        </span>
-      </template>
-    </FileUpload>
+  <Card>
+    <template #content>
+      <FileUpload
+        ref="fileUploadRef"
+        name="demo[]"
+        :customUpload="true"
+        @uploader="uploadAllFiles"
+        @select="onFileSelect"
+        :multiple="true"
+        accept="image/*"
+        :maxFileSize="1000000"
+      >
+        <template #empty>
+          <span>
+            Déposez ici (drag and drop) les images que vous souhaitez rendre visibles dans le
+            carroussel
+          </span>
+        </template>
+      </FileUpload>
 
-    <div v-if="selectedFiles.length > 0" class="mt-4">
-      <h3>Images sélectionnées :</h3>
-      <div class="image-grid">
-        <div v-for="(fileData, index) in selectedFiles" :key="index" class="image-item">
-          <img :src="fileData.preview" :alt="fileData.name" class="image-thumbnail" />
-          <Button
-            icon="pi pi-times"
-            class="delete-btn"
-            severity="danger"
-            size="small"
-            @click="removeSelectedFile(index)"
-          />
+      <div v-if="selectedFiles.length > 0" class="mt-4">
+        <h3>Images sélectionnées :</h3>
+        <div class="image-grid">
+          <div v-for="(fileData, index) in selectedFiles" :key="index" class="image-item">
+            <img :src="fileData.preview" :alt="fileData.name" class="image-thumbnail" />
+            <Button
+              icon="pi pi-times"
+              class="delete-btn"
+              severity="danger"
+              size="small"
+              @click="removeSelectedFile(index)"
+            />
+          </div>
         </div>
+        <Button
+          label="Uploader les images"
+          icon="pi pi-upload"
+          class="mt-3"
+          @click="uploadAllFiles"
+          :loading="isUploading"
+        />
       </div>
-      <Button
-        label="Uploader les images"
-        icon="pi pi-upload"
-        class="mt-3"
-        @click="uploadAllFiles"
-        :loading="isUploading"
-      />
-    </div>
-  </div>
+    </template>
+  </Card>
 </template>
 
 <script setup>
@@ -48,7 +50,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProviderStore } from '@/stores/providers'
 import { displayErrToast } from '@/utils/toast.utils'
-import { FileUpload, Button } from 'primevue'
+import { FileUpload, Button, Card } from 'primevue'
 
 const route = useRoute()
 const providerStore = useProviderStore()

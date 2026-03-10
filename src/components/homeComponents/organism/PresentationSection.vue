@@ -1,20 +1,17 @@
 <template>
-  <div class="absolute top-0 left-0 w-full h-full">
-    <video class="w-full h-full object-cover" autoplay loop muted>
-      <source src="@/assets/drone_video.mp4" />
-    </video>
-    <div class="absolute top-0 left-0 w-full h-full bg-black/50"></div>
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
     <span
-      class="texturina-title absolute z-1 top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 text-white text-center pointer-events-none [text-shadow:0_0_10px_rgba(0,0,0,0.7)] text-5xl sm:text-8xl"
+      class="texturina-title absolute z-1 top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 text-white text-center [text-shadow:0_0_10px_rgba(0,0,0,0.7)] text-5xl sm:text-8xl"
       >Carcassonne autrefois</span
     >
     <div id="small-presentation" v-html="presentationStore.small" />
     <div id="button-container">
-      <a v-if="props.isPreview" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
-      <a v-else href="#map" class="p-button p-component"> {{ $t('message.seeMap') }} </a>
+      <a v-if="props.isPreview" class="p-button p-component !border-none !outline-none !shadow-none"> {{ $t('message.seeMap') }} </a>
+      <a v-else href="#map" class="p-button p-component !border-none !outline-none !shadow-none"> {{ $t('message.seeMap') }} </a>
     </div>
 
-    <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-white via-white/5 to-transparent pointer-events-none"></div>
+    <!-- Maintain smooth transition to next section -->
+    <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-[#1a1a1a]/40 to-transparent"></div>
   </div>
 
   <div class="relative h-screen"></div>
@@ -45,6 +42,11 @@ a {
   text-align: center;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
   pointer-events: none;
+  background-color: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(4px);
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 #button-container {

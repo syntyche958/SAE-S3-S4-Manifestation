@@ -2,10 +2,11 @@
   <div class="flex gap-6">
     <!-- Left panel -->
     <TheMap
+      id="activity-map"
       :display-mode="MapModeEnum.PROVIDER"
       @change-selected-location="onChangeSelectedLocation"
       class="w-fit"
-      classSize="sm:h-[50vh] sm:w-[70vh]"
+      classSize="sm:h-[60vh] sm:w-[60vw]"
     />
 
     <!-- Right panel -->
