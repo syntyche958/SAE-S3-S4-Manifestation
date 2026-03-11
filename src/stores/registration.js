@@ -31,10 +31,26 @@ export const useRegistrationStore = defineStore('registration', () => {
     }
   }
 
+  async function addRegistration(activityId, sessionId, userId) {
+    let response = await registrationService.addRegistration(activityId, sessionId, userId)
+    if (response.error === 0) {
+      // Ajouter à l'état local
+      if (!registrations.value) {
+        registrations.value = []
+      }
+      registrations.value.push(response.data)
+      return response.data
+    } else {
+      console.log(response.data)
+      return null
+    }
+  }
+
   return {
     getAllRegistrations,
     getByActivity,
     getByUser,
+    addRegistration,
     registrations,
   }
 })

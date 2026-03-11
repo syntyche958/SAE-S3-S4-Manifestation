@@ -63,26 +63,23 @@ class ProviderStatisticsService {
   }
 
   calculateRegistrationsByDay(activities, registrations) {
-    const stats = {}
-    const sessionsResponse = LocalSource.getAllSessions()
-    const sessions = sessionsResponse.data
+  const stats = {}
 
-    registrations.forEach((reg) => {
-      const session = sessions.find((s) => s.id === reg.session_id)
-      if (session && session.beginingDate) {
-        const date = new Date(session.beginingDate).toLocaleDateString('fr-FR')
-        if (!stats[date]) {
-          stats[date] = {
-            date: date,
-            count: 0,
-            rawDate: new Date(session.beginingDate),
-          }
-        }
-        stats[date].count++
+  registrations.forEach((reg) => {
+    const date = new Date(reg.registration_date).toLocaleDateString('fr-FR')
+    
+    if (!stats[date]) {
+      stats[date] = {
+        date: date,
+        count: 0,
+        rawDate: new Date(reg.registration_date),
       }
-    })
-    return Object.values(stats).sort((a, b) => a.rawDate - b.rawDate)
-  }
+    }
+    stats[date].count++
+  })
+  
+  return Object.values(stats).sort((a, b) => a.rawDate - b.rawDate)
+}
 
   calculateRegistrationsByActivityAndDay(activities, registrations) {
     const stats = {}

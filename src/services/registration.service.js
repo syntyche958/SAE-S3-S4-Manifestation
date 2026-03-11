@@ -23,8 +23,19 @@ async function getRegistrationsByUser(userId) {
   return LocalSource.getRegistrationsByUser(userId)
 }
 
+/**
+ * Add a new registration
+ * @param {number} activityId
+ * @param {number} sessionId
+ * @param {number} userId
+ */
+async function addRegistration(activityId, sessionId, userId) {
+  return LocalSource.addRegistration(activityId, sessionId, userId)
+}
+
 export default {
   getAllRegistrations,
   getRegistrationsByActivity,
   getRegistrationsByUser,
+  addRegistration,
 }

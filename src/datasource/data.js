@@ -459,7 +459,7 @@ const session = [
   {
     id: 1,
     activitiesId: 1,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-03-01',
     beginingHour: '14:30',
     duration: 30,
     nbPlace: 10,
@@ -468,8 +468,8 @@ const session = [
   {
     id: 2,
     activitiesId: 1,
-    beginingDate: '2026-05-28',
-    beginingHour: '14:30',
+    beginingDate: '2026-03-05',
+    beginingHour: '15:00',
     duration: 25,
     nbPlace: 10,
     registersUsers: [3],
@@ -477,8 +477,8 @@ const session = [
   {
     id: 3,
     activitiesId: 1,
-    beginingDate: '2026-05-28',
-    beginingHour: '14:30',
+    beginingDate: '2026-03-10',
+    beginingHour: '10:00',
     duration: 40,
     nbPlace: 10,
     registersUsers: [3],
@@ -486,7 +486,7 @@ const session = [
   {
     id: 4,
     activitiesId: 5,
-    beginingDate: '2026-05-28',
+    beginingDate: '2026-03-08',
     beginingHour: '14:30',
     duration: 40,
     nbPlace: 10,
@@ -494,14 +494,23 @@ const session = [
   },
 ]
 const registrations = [
-  // Inscriptions basées sur vos sessions existantes
-  { id: 1, activity_id: 1, session_id: 1, user_id: 3, registration_date: '2026-02-15' },
-  { id: 2, activity_id: 1, session_id: 2, user_id: 3, registration_date: '2026-02-16' },
-  { id: 3, activity_id: 1, session_id: 3, user_id: 3, registration_date: '2026-02-17' },
-  { id: 4, activity_id: 5, session_id: 4, user_id: 3, registration_date: '2026-02-20' },
-  { id: 5, activity_id: 1, session_id: 1, user_id: 8, registration_date: '2026-02-18' },
-  { id: 6, activity_id: 5, session_id: 4, user_id: 8, registration_date: '2026-02-21' },
+  // 01/03 - 2 inscriptions pour activité 1
+  { id: 1, activity_id: 1, session_id: 1, user_id: 3, registration_date: '2026-03-01' },
+  { id: 2, activity_id: 1, session_id: 1, user_id: 8, registration_date: '2026-03-01' },
+  
+  // 05/03 - 4 inscriptions pour activité 1
+  { id: 3, activity_id: 1, session_id: 2, user_id: 3, registration_date: '2026-03-05' },
+  { id: 4, activity_id: 1, session_id: 2, user_id: 8, registration_date: '2026-03-05' },
+  { id: 5, activity_id: 1, session_id: 2, user_id: 3, registration_date: '2026-03-05' },
+  { id: 6, activity_id: 1, session_id: 2, user_id: 8, registration_date: '2026-03-05' },
+  
+  // 10/03 - 1 inscription pour activité 1
+  { id: 7, activity_id: 1, session_id: 3, user_id: 3, registration_date: '2026-03-10' },
+  
+  // 08/03 - 1 inscription pour activité 5 (autre prestataire)
+  { id: 8, activity_id: 5, session_id: 4, user_id: 8, registration_date: '2026-03-08' },
 ]
+
 
 // const user = [{ type: UserTypeEnum.VISITOR }]
 const users = [

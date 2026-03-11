@@ -52,20 +52,20 @@ import { Button, DataView, Select } from 'primevue'
 import AuthService from '@/services/auth.service'
 import SessionItem from '@/components/activityComponents/molecule/SessionItem.vue'
 import RegistrantsListDialog from '@/components/activityComponents/molecule/RegistrantsListDialog.vue'
-// import { useToast } from 'primevue/usetoast'
 import { useActivityStore } from '@/stores/activities'
 import { useSessionStore } from '@/stores/sessions.js'
 import { useAuthStore } from '@/stores/auth'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils.js'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
+import { useRegistrationStore } from '@/stores/registration'
 
 const route = useRoute()
 const activityStore = useActivityStore()
 const sessionsStore = useSessionStore()
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
-// const toast = useToast()
+const registrationStore = useRegistrationStore()
 
 const currentUserId = computed(() => {
   return authStore.user?.id
@@ -177,13 +177,18 @@ async function inscription(session) {
     return
   }
 
-  // copie l'ancien tableau et ajoute le nouvel user
+  // 1. Ajouter dans registrations (pour les statistiques)
+  await registrationStore.addRegistration(
+    currentActivity.value.id,
+    session.id,
+    userId
+  )
+
+  // 2. Mettre à jour session.registersUsers (pour l'affichage)
   const updatedData = {
     registersUsers: session.registersUsers.concat(userId),
   }
-  console.log(updatedData)
   await sessionsStore.updateSession(session.id, updatedData)
-
 
   const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
 
