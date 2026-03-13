@@ -9,6 +9,7 @@ import {
   activities,
   session,
   surveys,
+  registrations,
 } from '@/datasource/data'
 import { UserTypeEnum } from '@/enums/User.enum'
 
@@ -195,6 +196,61 @@ function signin(mail, password) {
     return { error: 0, status: 200, data: user }
   }
 
+  /**
+ * Add a new registration
+ * @param {number} activityId
+ * @param {number} sessionId
+ * @param {number} userId
+ * @returns {{error:number, status:number, data:object}}
+ */
+function addRegistration(activityId, sessionId, userId) {
+  // Générer un nouvel ID
+  let newId = 1
+  if (registrations.length > 0) {
+    newId = Math.max(...registrations.map(r => r.id)) + 1
+  }
+
+  const newRegistration = {
+    id: newId,
+    activity_id: activityId,
+    session_id: sessionId,
+    user_id: userId,
+    registration_date: new Date().toISOString().split('T')[0] // Format YYYY-MM-DD
+  }
+
+  registrations.push(newRegistration)
+
+  return { error: 0, status: 200, data: newRegistration }
+}
+
+  /**
+ * Get all registrations
+ * @returns {{error:number, status:number, data:array}}
+ */
+function getAllRegistrations() {
+  return { error: 0, status: 200, data: registrations }
+}
+
+/**
+ * Get registrations by activity
+ * @param {number} activityId
+ * @returns {{error:number, status:number, data:array}}
+ */
+function getRegistrationsByActivity(activityId) {
+  const data = registrations.filter((r) => r.activity_id === activityId)
+  return { error: 0, status: 200, data }
+}
+
+/**
+ * Get registrations by user
+ * @param {number} userId
+ * @returns {{error:number, status:number, data:array}}
+ */
+function getRegistrationsByUser(userId) {
+  const data = registrations.filter((r) => r.user_id === userId)
+  return { error: 0, status: 200, data }
+}
+
   export default {
     updateProviderDescription,
     getAllProviders,
@@ -214,4 +270,9 @@ function signin(mail, password) {
     login,
     signin,
     updateUserTypeToProvider,
+    addRegistration,
+    getAllRegistrations,
+    getRegistrationsByActivity,
+    getRegistrationsByUser,
+    
   }

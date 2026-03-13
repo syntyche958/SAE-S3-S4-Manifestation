@@ -5,6 +5,8 @@ import ActivityView from '@/views/ActivityView.vue'
 import Admin from '@/views/AdminView.vue'
 import MyReservationsView from '@/views/MyReservationsView.vue'
 import AuthCallbackView from '@/views/AuthCallbackView.vue'
+import ProviderStatisticsView from '@/views/ProviderStatisticsView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +35,11 @@ const router = createRouter({
       path: '/provider/:provider_id/activity/:activity_id',
       name: 'activity_page',
       component: ActivityView,
+    },
+    {
+      path: '/provider/:provider_id/statistics',
+      name: 'provider_statistics',
+      component: ProviderStatisticsView,
     },
     {
       path: '/admin',

@@ -79,6 +79,7 @@ const messages = {
       followedActivities: 'Followed activities',
       comment: 'Comment',
       reply: 'Reply',
+      globalRating: 'Global rating',
       wouldRecommend: 'Would you recommend this event?',
       maybe: 'Maybe',
       whichActivities: 'Which activities did you attend? (check all that apply)',
