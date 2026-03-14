@@ -45,12 +45,27 @@ export const useActivityStore = defineStore('activity', () => {
     }
   }
 
+  async function addRating(activityId, userId, note) {
+    let response = await activityService.addRatingLocalSource(activityId, userId, note)
+    if (response.error === 0) {
+      const index = activities.value.findIndex((a) => a.id === activityId)
+      if (index !== -1) {
+        activities.value[index] = response.data
+      }
+      displaySuccessToast(`Votre note a été enregistrée avec succès !`)
+    } else {
+      displayErrToast(`Echec de l'enregistrement de la note !`)
+      console.log(response.data)
+    }
+  }
+
   return {
     getAllActivities,
     get,
     add,
     updateLocationId,
     updateRequestedLocationId,
+    addRating,
     activities,
   }
 })

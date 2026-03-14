@@ -14,7 +14,10 @@
     </div>
 
     <!-- No data -->
-    <div v-else-if="statsStore.totalSurveys === 0 && statsStore.totalRegistrations === 0" class="text-center py-12">
+    <div
+      v-else-if="statsStore.totalSurveys === 0 && statsStore.totalRegistrations === 0"
+      class="text-center py-12"
+    >
       <div class="text-6xl mb-4">📊</div>
       <p class="text-surface-400 text-lg">{{ $t('message.noDataStats') }}</p>
       <p class="text-surface-500 text-sm mt-2">{{ $t('message.dataAppearanceInfo') }}</p>
@@ -25,16 +28,22 @@
       <!-- Stats cards -->
       <div class="flex justify-center mb-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
-          <Card class="text-center shadow-lg hover:shadow-xl transition-shadow !bg-[#1A1A1A] !border-surface-700/50">
+          <Card
+            class="text-center shadow-lg hover:shadow-xl transition-shadow !bg-[#1A1A1A] !border-surface-700/50"
+          >
             <template #content>
               <div class="py-4">
-                <div class="text-5xl font-bold text-emerald-400 mb-2">{{ statsStore.totalSurveys }}</div>
+                <div class="text-5xl font-bold text-emerald-400 mb-2">
+                  {{ statsStore.totalSurveys }}
+                </div>
                 <div class="text-surface-300 text-lg">{{ $t('message.totalSurveys') }}</div>
               </div>
             </template>
           </Card>
 
-          <Card class="text-center shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden !bg-[#1A1A1A] !border-surface-700/50">
+          <Card
+            class="text-center shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden !bg-[#1A1A1A] !border-surface-700/50"
+          >
             <template #content>
               <div class="py-4">
                 <div class="text-5xl font-bold text-purple-400 mb-2">
@@ -49,11 +58,7 @@
                 class="absolute bottom-0 left-0 w-full bg-purple-950/40 py-1 border-t border-purple-800/20 overflow-hidden"
               >
                 <div class="marquee-content flex whitespace-nowrap gap-8">
-                  <div
-                    v-for="i in 2"
-                    :key="i"
-                    class="flex gap-8 items-center marquee-track"
-                  >
+                  <div v-for="i in 2" :key="i" class="flex gap-8 items-center marquee-track">
                     <span
                       v-for="act in statsStore.generalStats.registrationsPerActivity"
                       :key="act.id"
@@ -68,14 +73,17 @@
             </template>
           </Card>
 
-          <Card class="text-center shadow-lg hover:shadow-xl transition-shadow !bg-[#1A1A1A] !border-surface-700/50">
+          <Card
+            class="text-center shadow-lg hover:shadow-xl transition-shadow !bg-[#1A1A1A] !border-surface-700/50"
+          >
             <template #content>
               <div class="py-4">
                 <div class="text-5xl font-bold text-green-400 mb-2">
                   {{ statsStore.averageSatisfaction }}
                 </div>
                 <div class="text-surface-300 text-lg">
-                  {{ $t('message.averageSatisfaction') }} <span class="text-sm text-surface-500">{{ $t('message.outOfFive') }}</span>
+                  {{ $t('message.averageSatisfaction') }}
+                  <span class="text-sm text-surface-500">{{ $t('message.outOfFive') }}</span>
                 </div>
               </div>
             </template>
@@ -91,7 +99,11 @@
             <div class="text-center text-xl">{{ $t('message.satisfactionDistribution') }}</div>
           </template>
           <template #content>
-            <div v-if="statsStore.totalSurveys > 0" style="position: relative; height: 350px" class="px-4">
+            <div
+              v-if="statsStore.totalSurveys > 0"
+              style="position: relative; height: 350px"
+              class="px-4"
+            >
               <canvas id="satisfactionChart"></canvas>
             </div>
             <div v-else class="flex justify-center items-center h-64 text-surface-400">
@@ -213,12 +225,12 @@ function drawCharts() {
             y: {
               beginAtZero: true,
               ticks: { stepSize: 1, color: '#fafafa' },
-              grid: { color: 'rgba(250, 250, 250, 0.1)' }
+              grid: { color: 'rgba(250, 250, 250, 0.1)' },
             },
             x: {
               ticks: { color: '#fafafa' },
-              grid: { color: 'rgba(250, 250, 250, 0.1)' }
-            }
+              grid: { color: 'rgba(250, 250, 250, 0.1)' },
+            },
           },
         },
       })
@@ -248,7 +260,7 @@ function drawCharts() {
           plugins: {
             legend: {
               position: 'bottom',
-              labels: { color: '#fafafa' }
+              labels: { color: '#fafafa' },
             },
           },
         },
@@ -286,12 +298,12 @@ function drawCharts() {
             y: {
               beginAtZero: true,
               ticks: { stepSize: 1, color: '#fafafa' },
-              grid: { color: 'rgba(250, 250, 250, 0.1)' }
+              grid: { color: 'rgba(250, 250, 250, 0.1)' },
             },
             x: {
               ticks: { color: '#fafafa' },
-              grid: { color: 'rgba(250, 250, 250, 0.1)' }
-            }
+              grid: { color: 'rgba(250, 250, 250, 0.1)' },
+            },
           },
         },
       })

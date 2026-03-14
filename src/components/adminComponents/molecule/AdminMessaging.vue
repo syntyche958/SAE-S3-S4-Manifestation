@@ -4,11 +4,16 @@
 
     <div v-if="surveyStore.surveys.length === 0" class="text-center py-8 text-gray-500">
       <i class="pi pi-inbox text-4xl mb-2"></i>
-      <p>{{ $t("Aucun avis pour le moment.") }}</p>
+      <p>{{ $t('Aucun avis pour le moment.') }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-3">
-      <Card v-for="survey in sortedSurveys" :key="survey.id" class="shadow-md" :class="{'opacity-60': survey.isDeleted}">
+      <Card
+        v-for="survey in sortedSurveys"
+        :key="survey.id"
+        class="shadow-md"
+        :class="{ 'opacity-60': survey.isDeleted }"
+      >
         <template #header>
           <div class="flex justify-between items-center px-4 pt-4">
             <div class="flex items-center gap-3">
@@ -41,15 +46,30 @@
           <div class="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
             <div class="flex flex-col items-center">
               <span class="text-sm text-surface-400 mb-1">{{ $t('Organisation') }}</span>
-              <Rating :modelValue="survey.ratings.organisation" readonly :cancel="false" size="small" />
+              <Rating
+                :modelValue="survey.ratings.organisation"
+                readonly
+                :cancel="false"
+                size="small"
+              />
             </div>
             <div class="flex flex-col items-center">
               <span class="text-sm text-surface-400 mb-1">{{ $t('Animations') }}</span>
-              <Rating :modelValue="survey.ratings.animations" readonly :cancel="false" size="small" />
+              <Rating
+                :modelValue="survey.ratings.animations"
+                readonly
+                :cancel="false"
+                size="small"
+              />
             </div>
             <div class="flex flex-col items-center">
               <span class="text-sm text-surface-400 mb-1">{{ $t('Accesibilité') }}</span>
-              <Rating :modelValue="survey.ratings.accessibility" readonly :cancel="false" size="small" />
+              <Rating
+                :modelValue="survey.ratings.accessibility"
+                readonly
+                :cancel="false"
+                size="small"
+              />
             </div>
           </div>
 
@@ -75,7 +95,10 @@
           </div>
 
           <!-- Réponse de l'admin -->
-          <div v-if="survey.adminResponse" class="mt-3 p-3 bg-blue-500/10 border-l-4 border-blue-500">
+          <div
+            v-if="survey.adminResponse"
+            class="mt-3 p-3 bg-blue-500/10 border-l-4 border-blue-500"
+          >
             <p class="text-sm font-semibold mb-1">
               <i class="pi pi-reply mr-2"></i>{{ $t('Votre réponse') }}
             </p>
@@ -143,9 +166,7 @@ const responseText = ref('')
 const selectedSurvey = ref(null)
 
 const sortedSurveys = computed(() => {
-  return [...surveyStore.surveys].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  )
+  return [...surveyStore.surveys].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 })
 
 function getInitials(name) {

@@ -13,7 +13,14 @@ async function removeSessionFromLocalSource() {
   return { error: 0, status: 200, data: 'done' }
 }
 
-async function addSessionToLocalSource(activityId, beginningDate, beginingHour, duration, nbPlace, existingSessions = []) {
+async function addSessionToLocalSource(
+  activityId,
+  beginningDate,
+  beginingHour,
+  duration,
+  nbPlace,
+  existingSessions = [],
+) {
   let lastId = 0
   if (existingSessions && existingSessions.length > 0) {
     existingSessions.forEach((s) => {
@@ -43,7 +50,6 @@ async function updateSessionFromLocalSource(sessionId, updatedData) {
   }
 }
 
-
 async function getAllSessions() {
   let response = null
   try {
@@ -68,19 +74,31 @@ async function removeSession(sessionID) {
   let response = null
   try {
     response = await removeSessionFromLocalSource(sessionID)
-  }
-  catch {
+  } catch {
     return networkErrResponse
   }
   return response
 }
 
-async function addSession(activityId, beginningDate, beginingHour, duration, nbPlace, existingSessions = []) {
+async function addSession(
+  activityId,
+  beginningDate,
+  beginingHour,
+  duration,
+  nbPlace,
+  existingSessions = [],
+) {
   let response = null
   try {
-    response = await addSessionToLocalSource(activityId, beginningDate, beginingHour, duration, nbPlace, existingSessions)
-  }
-  catch {
+    response = await addSessionToLocalSource(
+      activityId,
+      beginningDate,
+      beginingHour,
+      duration,
+      nbPlace,
+      existingSessions,
+    )
+  } catch {
     return networkErrResponse
   }
   return response

@@ -1,9 +1,9 @@
 <script setup>
-import { useRoute } from 'vue-router';
-import StatisticsProviderSection from '@/components/providerComponents/organism/StatisticsProviderSection.vue';
+import { useRoute } from 'vue-router'
+import StatisticsProviderSection from '@/components/providerComponents/organism/StatisticsProviderSection.vue'
 
-const route = useRoute();
-const providerId = route.params.provider_id;
+const route = useRoute()
+const providerId = route.params.provider_id
 </script>
 
 <template>

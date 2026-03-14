@@ -2,13 +2,33 @@
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-1.5">
-        <label for="signin-mail-input" class="text-xs font-bold text-surface-400 uppercase ml-1">Email</label>
-        <InputText id="signin-mail-input" type="email" v-model="mail" fluid class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white" placeholder="votre@email.fr" />
+        <label for="signin-mail-input" class="text-xs font-bold text-surface-400 uppercase ml-1"
+          >Email</label
+        >
+        <InputText
+          id="signin-mail-input"
+          type="email"
+          v-model="mail"
+          fluid
+          class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white"
+          placeholder="votre@email.fr"
+        />
       </div>
 
       <div class="flex flex-col gap-1.5">
-        <label for="signin-password-input" class="text-xs font-bold text-surface-400 uppercase ml-1">{{ $t('message.password') }}</label>
-        <InputText id="signin-password-input" type="password" v-model="password" fluid class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white" placeholder="••••••••" />
+        <label
+          for="signin-password-input"
+          class="text-xs font-bold text-surface-400 uppercase ml-1"
+          >{{ $t('message.password') }}</label
+        >
+        <InputText
+          id="signin-password-input"
+          type="password"
+          v-model="password"
+          fluid
+          class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white"
+          placeholder="••••••••"
+        />
       </div>
     </div>
 
@@ -23,7 +43,8 @@
         v-ripple
       />
       <p class="text-[10px] text-surface-400 text-center px-4 leading-relaxed mt-2">
-        En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
+        En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de
+        confidentialité.
       </p>
     </div>
   </div>

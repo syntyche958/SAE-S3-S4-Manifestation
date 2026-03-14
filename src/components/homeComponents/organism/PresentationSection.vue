@@ -6,12 +6,21 @@
     >
     <div id="small-presentation" v-html="presentationStore.small" />
     <div id="button-container">
-      <a v-if="props.isPreview" class="p-button p-component !border-none !outline-none !shadow-none"> {{ $t('message.seeMap') }} </a>
-      <a v-else href="#map" class="p-button p-component !border-none !outline-none !shadow-none"> {{ $t('message.seeMap') }} </a>
+      <a
+        v-if="props.isPreview"
+        class="p-button p-component !border-none !outline-none !shadow-none"
+      >
+        {{ $t('message.seeMap') }}
+      </a>
+      <a v-else href="#map" class="p-button p-component !border-none !outline-none !shadow-none">
+        {{ $t('message.seeMap') }}
+      </a>
     </div>
 
     <!-- Maintain smooth transition to next section -->
-    <div class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-[#1a1a1a]/40 to-transparent"></div>
+    <div
+      class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-[#1a1a1a]/40 to-transparent"
+    ></div>
   </div>
 
   <div class="relative h-screen"></div>

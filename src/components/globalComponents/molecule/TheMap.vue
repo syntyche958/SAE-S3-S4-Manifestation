@@ -1,7 +1,10 @@
 <template>
   <Card :class="(props?.class ? props.class : '') + ' rounded-2xl overflow-hidden shadow-xl'">
     <template #content>
-      <div :id="props.id" :class="'h-[90vh] w-[90vw] rounded-2xl overflow-hidden ' + classSize"></div>
+      <div
+        :id="props.id"
+        :class="'h-[90vh] w-[90vw] rounded-2xl overflow-hidden ' + classSize"
+      ></div>
     </template>
   </Card>
 </template>

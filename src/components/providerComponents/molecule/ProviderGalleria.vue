@@ -7,7 +7,7 @@
         :responsiveOptions="responsiveOptions"
         :numVisible="5"
         containerStyle="max-width: 640px"
-        :key="`galleria-${providerId}-${images ? images.length : 0}-${images ? images.map(img => img.id || img.idImage).join('-') : ''}`"
+        :key="`galleria-${providerId}-${images ? images.length : 0}-${images ? images.map((img) => img.id || img.idImage).join('-') : ''}`"
       >
         <template #header>
           <ProviderImageModifier />
@@ -32,7 +32,11 @@
               />
             </div>
           </div>
-          <div v-else class="flex items-center justify-center" style="min-height: 300px; width: 100%">
+          <div
+            v-else
+            class="flex items-center justify-center"
+            style="min-height: 300px; width: 100%"
+          >
             <p class="text-gray-500">Aucune image disponible</p>
           </div>
         </template>
@@ -83,13 +87,13 @@ const handleDeleteImage = async (imageId) => {
   try {
     if (!images.value || images.value.length === 0) return
 
-    const realImages = images.value.filter(img => !img.isPlaceholder)
+    const realImages = images.value.filter((img) => !img.isPlaceholder)
     if (realImages.length <= 2) {
       displayErrToast('Le minimum requis est de 2 images.')
       return
     }
     const imageToDelete = images.value.find(
-      (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder
+      (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder,
     )
 
     if (!imageToDelete) {
@@ -97,7 +101,7 @@ const handleDeleteImage = async (imageId) => {
     }
 
     const fullIndex = images.value.findIndex(
-      (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder
+      (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder,
     )
 
     if (fullIndex === -1) {
@@ -105,20 +109,16 @@ const handleDeleteImage = async (imageId) => {
       return
     }
 
-    const imageIndex = realImages.findIndex(
-      (img) => img.id === imageId || img.idImage === imageId
-    )
+    const imageIndex = realImages.findIndex((img) => img.id === imageId || img.idImage === imageId)
 
     if (imageIndex === -1) {
-      console.error("Image non trouvée dans les images réelles")
+      console.error('Image non trouvée dans les images réelles')
       return
     }
 
     await providerStore.deleteProviderImage(providerId.value, imageIndex)
 
-    images.value = images.value.filter(
-      (img) => img.id !== imageId && img.idImage !== imageId
-    )
+    images.value = images.value.filter((img) => img.id !== imageId && img.idImage !== imageId)
 
     const updatedImages = await providerStore.getProviderImages(providerId.value)
     images.value = updatedImages

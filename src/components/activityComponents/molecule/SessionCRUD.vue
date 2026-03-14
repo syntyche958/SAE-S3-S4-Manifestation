@@ -1,5 +1,3 @@
-
-
 <template>
   <Card>
     <template #content>
@@ -14,10 +12,7 @@
                   v-model="slotProps.data.beginingDate"
                   value="2026-05-28"
                 />
-                <label
-                  :for="`date-${slotProps.data.id}-2026-05-28`"
-                  class="ml-2 cursor-pointer"
-                >
+                <label :for="`date-${slotProps.data.id}-2026-05-28`" class="ml-2 cursor-pointer">
                   28 mai 2026
                 </label>
               </div>
@@ -27,10 +22,7 @@
                   v-model="slotProps.data.beginingDate"
                   value="2026-05-29"
                 />
-                <label
-                  :for="`date-${slotProps.data.id}-2026-05-29`"
-                  class="ml-2 cursor-pointer"
-                >
+                <label :for="`date-${slotProps.data.id}-2026-05-29`" class="ml-2 cursor-pointer">
                   29 mai 2026
                 </label>
               </div>

@@ -32,7 +32,9 @@
               </label>
               <Rating v-model="form.rating" :cancel="false" size="large" />
               <transition name="p-message">
-                <small v-if="errors.rating" class="text-red-500 mt-1 block">{{ errors.rating }}</small>
+                <small v-if="errors.rating" class="text-red-500 mt-1 block">{{
+                  errors.rating
+                }}</small>
               </transition>
             </div>
 
@@ -52,7 +54,9 @@
                 </div>
                 <div class="flex items-center gap-2">
                   <RadioButton inputId="rec-maybe" v-model="form.recommend" value="maybe" />
-                  <label for="rec-maybe" class="text-sm cursor-pointer">{{ $t('message.maybe') }}</label>
+                  <label for="rec-maybe" class="text-sm cursor-pointer">{{
+                    $t('message.maybe')
+                  }}</label>
                 </div>
               </div>
             </div>
@@ -60,16 +64,28 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20">
-            <label class="text-sm font-semibold text-surface-200">{{ $t('message.organisation') }}</label>
+          <div
+            class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20"
+          >
+            <label class="text-sm font-semibold text-surface-200">{{
+              $t('message.organisation')
+            }}</label>
             <Rating v-model="form.ratings.organisation" :cancel="false" />
           </div>
-          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20">
-            <label class="text-sm font-semibold text-surface-200">{{ $t('message.animations') }}</label>
+          <div
+            class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20"
+          >
+            <label class="text-sm font-semibold text-surface-200">{{
+              $t('message.animations')
+            }}</label>
             <Rating v-model="form.ratings.animations" :cancel="false" />
           </div>
-          <div class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20">
-            <label class="text-sm font-semibold text-surface-200">{{ $t('message.accessibility') }}</label>
+          <div
+            class="flex flex-col gap-2 p-3 rounded-lg bg-surface-100/30 border border-surface-200/20"
+          >
+            <label class="text-sm font-semibold text-surface-200">{{
+              $t('message.accessibility')
+            }}</label>
             <Rating v-model="form.ratings.accessibility" :cancel="false" />
           </div>
         </div>
@@ -79,10 +95,18 @@
             <i class="pi pi-ticket text-purple-500"></i>
             {{ $t('message.whichActivities') }}
           </label>
-          <div class="flex gap-3 flex-wrap bg-surface-100/20 p-4 rounded-xl border border-dashed border-surface-400/50">
-            <div v-for="act in activitiesOptions" :key="act" class="flex items-center gap-2 bg-surface-200/10 px-3 py-2 rounded-full border border-surface-400/20 shadow-sm hover:border-emerald-500/50 transition-colors cursor-pointer group">
+          <div
+            class="flex gap-3 flex-wrap bg-surface-100/20 p-4 rounded-xl border border-dashed border-surface-400/50"
+          >
+            <div
+              v-for="act in activitiesOptions"
+              :key="act"
+              class="flex items-center gap-2 bg-surface-200/10 px-3 py-2 rounded-full border border-surface-400/20 shadow-sm hover:border-emerald-500/50 transition-colors cursor-pointer group"
+            >
               <Checkbox :inputId="act" :value="act" v-model="form.activities" />
-              <label :for="act" class="text-sm cursor-pointer select-none text-white">{{ act }}</label>
+              <label :for="act" class="text-sm cursor-pointer select-none text-white">{{
+                act
+              }}</label>
             </div>
           </div>
         </div>
@@ -100,34 +124,46 @@
             placeholder="Dites-nous tout..."
           />
           <transition name="p-message">
-            <small v-if="errors.comment" class="text-red-500 mt-1 block">{{ errors.comment }}</small>
+            <small v-if="errors.comment" class="text-red-500 mt-1 block">{{
+              errors.comment
+            }}</small>
           </transition>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-surface-500 uppercase ml-1">{{ $t('message.nameOptional') }}</label>
+            <label class="text-xs font-bold text-surface-500 uppercase ml-1">{{
+              $t('message.nameOptional')
+            }}</label>
             <InputText v-model="form.name" class="w-full" fluid />
           </div>
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-surface-500 uppercase ml-1">{{ $t('message.emailOptional') }}</label>
+            <label class="text-xs font-bold text-surface-500 uppercase ml-1">{{
+              $t('message.emailOptional')
+            }}</label>
             <InputText v-model="form.email" class="w-full" type="email" fluid />
           </div>
         </div>
 
         <div class="flex flex-col gap-2 mt-2">
-          <div class="flex items-start gap-3 p-3 rounded-lg bg-emerald-50/30 border border-emerald-100">
+          <div
+            class="flex items-start gap-3 p-3 rounded-lg bg-emerald-50/30 border border-emerald-100"
+          >
             <Checkbox v-model="form.consent" :binary="true" inputId="consent" class="mt-0.5" />
             <label for="consent" class="text-xs text-surface-600 leading-relaxed cursor-pointer">
               {{ $t('message.consentText') }}
             </label>
           </div>
           <transition name="p-message">
-            <small v-if="errors.consent" class="text-red-500 ml-1 block">{{ errors.consent }}</small>
+            <small v-if="errors.consent" class="text-red-500 ml-1 block">{{
+              errors.consent
+            }}</small>
           </transition>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-between items-center bg-surface-100/50 -mx-6 -mb-6 px-6 py-4 mt-4 border-t border-surface-200/20">
+        <div
+          class="flex flex-col sm:flex-row justify-between items-center bg-surface-100/50 -mx-6 -mb-6 px-6 py-4 mt-4 border-t border-surface-200/20"
+        >
           <p class="text-xs text-surface-400 mb-4 sm:mb-0 text-center sm:text-left">
             <i class="pi pi-heart-fill text-red-400 mr-1"></i>
             {{ $t('message.thankYouMessage') }}

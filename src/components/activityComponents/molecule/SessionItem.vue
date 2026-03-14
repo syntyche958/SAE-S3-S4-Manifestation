@@ -7,9 +7,7 @@
             {{ item.beginingDate }} {{ item.beginingHour }}
           </span>
           <div class="text-lg font-medium mt-2">Session #{{ item.id }}</div>
-          <div class="text-sm text-surface-600 mt-1">
-            Durée: {{ item.duration }} minutes
-          </div>
+          <div class="text-sm text-surface-600 mt-1">Durée: {{ item.duration }} minutes</div>
           <div class="text-sm text-surface-600 mt-1">
             Places: {{ item.nbPlace - item.registersUsers.length }} / {{ item.nbPlace }}
           </div>
@@ -17,7 +15,7 @@
       </div>
       <div class="flex flex-col md:items-end gap-8">
         <div v-if="canRegister" class="flex flex-row-reverse md:flex-row gap-2">
-          <Button 
+          <Button
             v-if="isCurrentProviderOwner"
             icon="pi pi-users"
             label="Voir les inscrits"
@@ -30,7 +28,9 @@
             :icon="isRegistered ? 'pi pi-check' : 'pi pi-user-plus'"
             :label="isRegistered ? 'Déjà inscrit' : $t('message.signUp')"
             @click="$emit('inscription', item)"
-            :disabled="item.nbPlace <= item.registersUsers.length || isRegistered || !isUserConnected"
+            :disabled="
+              item.nbPlace <= item.registersUsers.length || isRegistered || !isUserConnected
+            "
             :severity="isRegistered ? 'success' : 'primary'"
             class="flex-auto md:flex-initial whitespace-nowrap"
           ></Button>
@@ -48,7 +48,7 @@ const props = defineProps({
   isCurrentProviderOwner: Boolean,
   isRegistered: Boolean,
   isUserConnected: Boolean,
-  canRegister: Boolean
+  canRegister: Boolean,
 })
 
 defineEmits(['inscription', 'show-registrants'])

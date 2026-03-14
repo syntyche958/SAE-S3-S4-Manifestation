@@ -12,6 +12,13 @@
           @click="goToActivity(item.id)"
         >
           <template #title>{{ item.name }}</template>
+          <template #subtitle>
+            <div class="flex align-items-center gap-2 mt-2" v-if="item.ratings">
+              <span class="text-sm font-bold">{{ getAverageRating(item) }}/5</span>
+              <Rating :modelValue="getAverageRating(item)" readonly :cancel="false" />
+              <span class="text-xs">({{ item.ratings.length }} avis)</span>
+            </div>
+          </template>
           <template #content>
             <p class="m-0">
               {{ item.description }}
@@ -26,7 +33,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import Card from 'primevue/card'
+import { Card, Rating } from 'primevue'
 import router from '@/router/index.js'
 import { useActivityStore } from '@/stores/activities'
 import AddActivity from '@/components/activityComponents/molecule/AddActivity.vue'
@@ -38,6 +45,12 @@ const activities = computed(() => {
   const providerId = Number.parseInt(route.params.provider_id)
   return activityStore.activities.filter((a) => a.providerId === providerId)
 })
+
+function getAverageRating(item) {
+  if (!item.ratings || item.ratings.length === 0) return 0
+  const sum = item.ratings.reduce((acc, curr) => acc + curr.note, 0)
+  return Math.round((sum / item.ratings.length) * 10) / 10
+}
 
 function goToActivity(activityId) {
   router.push({

@@ -9,8 +9,7 @@ export const useSessionStore = defineStore('session', () => {
     let response = await SessionsService.getAllSessions()
     if (response.error === 0) {
       sessions.value = response.data
-    }
-    else {
+    } else {
       console.log(response.data)
     }
   }

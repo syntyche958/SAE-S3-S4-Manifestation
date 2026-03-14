@@ -62,7 +62,7 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.getAllNewProviders()
     if (response.error === 0) {
       newProviders.value = response.data
-      console.log("newProviders fetched")
+      console.log('newProviders fetched')
     } else {
       console.log(response.data)
     }

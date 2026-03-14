@@ -2,13 +2,33 @@
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-1.5">
-        <label for="login-mail-input" class="text-xs font-bold text-surface-400 uppercase ml-1">Email</label>
-        <InputText id="login-mail-input" type="email" v-model="mail" fluid class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white" placeholder="votre@email.fr" />
+        <label for="login-mail-input" class="text-xs font-bold text-surface-400 uppercase ml-1"
+          >Email</label
+        >
+        <InputText
+          id="login-mail-input"
+          type="email"
+          v-model="mail"
+          fluid
+          class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white"
+          placeholder="votre@email.fr"
+        />
       </div>
 
       <div class="flex flex-col gap-1.5">
-        <label for="login-password-input" class="text-xs font-bold text-surface-400 uppercase ml-1">{{ $t('message.password') }}</label>
-        <InputText id="login-password-input" type="password" v-model="password" fluid class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white" placeholder="••••••••" />
+        <label
+          for="login-password-input"
+          class="text-xs font-bold text-surface-400 uppercase ml-1"
+          >{{ $t('message.password') }}</label
+        >
+        <InputText
+          id="login-password-input"
+          type="password"
+          v-model="password"
+          fluid
+          class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white"
+          placeholder="••••••••"
+        />
       </div>
     </div>
 
@@ -27,7 +47,10 @@
         <div class="absolute inset-0 flex items-center">
           <div class="w-full border-t border-surface-100"></div>
         </div>
-        <span class="relative px-3 text-xs text-surface-400 bg-surface-0 font-medium uppercase tracking-widest">Ou continuer avec</span>
+        <span
+          class="relative px-3 text-xs text-surface-400 bg-surface-0 font-medium uppercase tracking-widest"
+          >Ou continuer avec</span
+        >
       </div>
 
       <Button

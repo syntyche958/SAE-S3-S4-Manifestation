@@ -18,11 +18,27 @@ body {
   color: #fafafa;
 }
 
-p, span, li, label, .p-datatable-header, .p-datatable-thead th, .p-button-label, input, textarea, select, .p-inputtext, .p-select-label {
+p,
+span,
+li,
+label,
+.p-datatable-header,
+.p-datatable-thead th,
+.p-button-label,
+input,
+textarea,
+select,
+.p-inputtext,
+.p-select-label {
   color: #fafafa !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @apply mb-3;
   color: #fafafa;
 }
@@ -67,7 +83,9 @@ ul {
   overflow: hidden !important;
 }
 
-.p-card-title, .p-card-subtitle, .p-card-content {
+.p-card-title,
+.p-card-subtitle,
+.p-card-content {
   color: #fafafa !important;
 }
 
@@ -75,7 +93,10 @@ ul {
   color: #fafafa !important;
 }
 
-.p-menubar-item-icon, .p-menubar-submenu-icon, .pi-angle-down, .pi-angle-right {
+.p-menubar-item-icon,
+.p-menubar-submenu-icon,
+.pi-angle-down,
+.pi-angle-right {
   color: #fafafa !important;
 }
 
@@ -85,17 +106,24 @@ ul {
   border: 1px solid rgba(250, 250, 250, 0.1) !important;
 }
 
-.p-button:focus, .p-button:active {
+.p-button:focus,
+.p-button:active {
   box-shadow: none !important;
   outline: none !important;
   border-color: transparent !important;
 }
 
-footer, footer *, .footer-container * {
+footer,
+footer *,
+.footer-container * {
   color: #fafafa !important;
 }
 
-.p-tabs, .p-tablist, .p-tabpanel, .p-tabpanels, .p-tablist-tab-list {
+.p-tabs,
+.p-tablist,
+.p-tabpanel,
+.p-tabpanels,
+.p-tablist-tab-list {
   background: transparent !important;
   border: none !important;
 }
@@ -111,7 +139,8 @@ footer, footer *, .footer-container * {
   border-bottom-color: #059669 !important;
 }
 
-.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
   background: rgba(26, 26, 26, 0.95) !important;
   color: #fafafa !important;
   backdrop-filter: blur(8px);
@@ -127,7 +156,10 @@ footer, footer *, .footer-container * {
   border-radius: 4px;
 }
 
-.p-datatable, .p-datatable-table, .p-dataview, .p-dataview-content {
+.p-datatable,
+.p-datatable-table,
+.p-dataview,
+.p-dataview-content {
   border-radius: 1rem !important;
   overflow: hidden !important;
 }
@@ -141,7 +173,8 @@ footer, footer *, .footer-container * {
   z-index: 1000 !important;
 }
 
-.info-legend, .custom-panel {
+.info-legend,
+.custom-panel {
   z-index: 1001 !important;
 }
 
@@ -168,7 +201,7 @@ footer, footer *, .footer-container * {
   height: 35px !important;
 }
 
-.info-legend, .custom-panel {
+.info-legend,
+.custom-panel {
   z-index: 1001 !important;
 }
-

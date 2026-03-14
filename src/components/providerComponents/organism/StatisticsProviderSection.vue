@@ -15,8 +15,8 @@ Chart.register(...registerables)
 const props = defineProps({
   providerId: {
     type: [String, Number],
-    required: false
-  }
+    required: false,
+  },
 })
 
 const route = useRoute()
@@ -31,16 +31,19 @@ let chartByDay = null
 
 const totalRegistrations = computed(() => registrations.value.length)
 
-const registrationsByActivity = computed(() => 
-  ProviderStatisticsService.calculateRegistrationsByActivity(activities.value, registrations.value)
+const registrationsByActivity = computed(() =>
+  ProviderStatisticsService.calculateRegistrationsByActivity(activities.value, registrations.value),
 )
 
-const registrationsByDay = computed(() => 
-  ProviderStatisticsService.calculateRegistrationsByDay(activities.value, registrations.value)
+const registrationsByDay = computed(() =>
+  ProviderStatisticsService.calculateRegistrationsByDay(activities.value, registrations.value),
 )
 
-const registrationsByActivityAndDay = computed(() => 
-  ProviderStatisticsService.calculateRegistrationsByActivityAndDay(activities.value, registrations.value)
+const registrationsByActivityAndDay = computed(() =>
+  ProviderStatisticsService.calculateRegistrationsByActivityAndDay(
+    activities.value,
+    registrations.value,
+  ),
 )
 
 const loadData = async () => {
@@ -51,9 +54,9 @@ const loadData = async () => {
     if (!providerId) {
       throw new Error('Aucun ID de prestataire fourni')
     }
-    
+
     const result = await ProviderStatisticsService.getProviderStatistics(providerId)
-    
+
     if (result.success) {
       activities.value = result.data.activities
       registrations.value = result.data.registrations
@@ -66,7 +69,7 @@ const loadData = async () => {
       severity: 'error',
       summary: 'Erreur',
       detail: 'Impossible de charger les statistiques',
-      life: 3000
+      life: 3000,
     })
   } finally {
     loading.value = false
@@ -84,25 +87,27 @@ const drawCharts = () => {
     chartByActivity = new Chart(ctxActivity, {
       type: 'bar',
       data: {
-        labels: registrationsByActivity.value.map(item => item.name),
-        datasets: [{
-          label: 'Nombre d\'inscrits',
-          data: registrationsByActivity.value.map(item => item.count),
-          backgroundColor: '#3b82f6',
-          borderColor: '#2563eb',
-          borderWidth: 1
-        }]
+        labels: registrationsByActivity.value.map((item) => item.name),
+        datasets: [
+          {
+            label: "Nombre d'inscrits",
+            data: registrationsByActivity.value.map((item) => item.count),
+            backgroundColor: '#3b82f6',
+            borderColor: '#2563eb',
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false }
+          legend: { display: false },
         },
         scales: {
-          y: { beginAtZero: true, ticks: { stepSize: 1 } }
-        }
-      }
+          y: { beginAtZero: true, ticks: { stepSize: 1 } },
+        },
+      },
     })
   }
 
@@ -112,27 +117,29 @@ const drawCharts = () => {
     chartByDay = new Chart(ctxDay, {
       type: 'line',
       data: {
-        labels: registrationsByDay.value.map(item => item.date),
-        datasets: [{
-          label: 'Nombre d\'inscrits',
-          data: registrationsByDay.value.map(item => item.count),
-          backgroundColor: 'rgba(34, 197, 94, 0.2)',
-          borderColor: '#22c55e',
-          borderWidth: 2,
-          tension: 0.4,
-          fill: true
-        }]
+        labels: registrationsByDay.value.map((item) => item.date),
+        datasets: [
+          {
+            label: "Nombre d'inscrits",
+            data: registrationsByDay.value.map((item) => item.count),
+            backgroundColor: 'rgba(34, 197, 94, 0.2)',
+            borderColor: '#22c55e',
+            borderWidth: 2,
+            tension: 0.4,
+            fill: true,
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false }
+          legend: { display: false },
         },
         scales: {
-          y: { beginAtZero: true, ticks: { stepSize: 1 } }
-        }
-      }
+          y: { beginAtZero: true, ticks: { stepSize: 1 } },
+        },
+      },
     })
   }
 }
@@ -151,9 +158,9 @@ watch([registrationsByActivity, registrationsByDay], () => {
 <template>
   <div class="statistics-container">
     <h1 class="page-title">Statistiques des inscriptions</h1>
-    
+
     <ProgressSpinner v-if="loading" class="spinner" />
-    
+
     <div v-else class="statistics-content">
       <Card class="summary-card">
         <template #title><i class="pi pi-chart-line"></i> Vue d'ensemble</template>
@@ -202,8 +209,8 @@ watch([registrationsByActivity, registrationsByDay], () => {
       <Card class="stats-card">
         <template #title><i class="pi pi-table"></i> Détail par activité et par jour</template>
         <template #content>
-          <DataTable 
-            :value="registrationsByActivityAndDay" 
+          <DataTable
+            :value="registrationsByActivityAndDay"
             :rows="10"
             :paginator="registrationsByActivityAndDay.length > 10"
             sortField="activityName"
@@ -217,7 +224,7 @@ watch([registrationsByActivity, registrationsByDay], () => {
               </template>
             </Column>
           </DataTable>
-          
+
           <div v-if="registrationsByActivityAndDay.length === 0" class="no-data">
             <i class="pi pi-info-circle"></i>
             <p>Aucune inscription pour le moment</p>

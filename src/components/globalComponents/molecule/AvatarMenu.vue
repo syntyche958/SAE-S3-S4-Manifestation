@@ -111,15 +111,15 @@ const items = computed(() => {
       separator: true,
     },
   ]
-  
+
   if (authStore.user?.id) {
-     res.push({
+    res.push({
       label: 'Vos réservations',
       icon: 'pi pi-calendar',
       command: () => {
         router.push('/reservations')
       },
-     })
+    })
   }
 
   if (authStore.user?.type === UserTypeEnum.PROVIDER) {

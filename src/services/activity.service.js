@@ -62,9 +62,33 @@ async function addToLocalSource(providerId, name, desc) {
     locationId: undefined,
     canRegister: false,
     requestedLocationId: undefined,
+    ratings: [],
   }
 
   return { error: 0, status: 200, data: newActivity }
+}
+
+async function addRatingLocalSource(activityId, userId, note) {
+  const activityStore = useActivityStore()
+  const activities = activityStore.activities
+
+  let updatedActivities = activities.map((a) => {
+    if (a.id === activityId) {
+      let existingRatings = a.ratings || []
+
+      const existingRatingIndex = existingRatings.findIndex((r) => r.userId === userId)
+      let newRatings = [...existingRatings]
+      if (existingRatingIndex !== -1) {
+        newRatings[existingRatingIndex] = { userId, note }
+      } else {
+        newRatings.push({ userId, note })
+      }
+      return { ...a, ratings: newRatings }
+    }
+    return a
+  })
+
+  return { error: 0, status: 200, data: updatedActivities.find((a) => a.id === activityId) }
 }
 
 export default {
@@ -72,4 +96,5 @@ export default {
   updateLocationIdLocalSource,
   updateRequestedLocationIdLocalSource,
   addToLocalSource,
+  addRatingLocalSource,
 }

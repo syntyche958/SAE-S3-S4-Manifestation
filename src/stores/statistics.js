@@ -80,5 +80,4 @@ export const useStatisticsStore = defineStore('statistics', () => {
     loadProviderStatistics,
     loadGeneralStatistics,
   }
-}
-)
+})

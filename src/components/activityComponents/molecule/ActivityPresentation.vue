@@ -2,6 +2,12 @@
   <div v-if="currentActivity">
     <div v-html="currentActivity.name"></div>
     <div v-html="currentActivity.presentationContent"></div>
+
+    <div v-if="isVisitor && currentActivity.ratings" class="mt-6 flex align-items-center gap-3">
+      <span class="font-bold text-xl">Notez l'activité :</span>
+      <Rating v-model="userRating" :cancel="false" @change="onRatingChange" />
+    </div>
+
     <Card class="mt-8">
       <template #content>
         <DataView :value="sessions" :sortOrder="triOrder" :sortField="triField">
@@ -48,9 +54,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { DataView, Select, Card } from 'primevue'
+import { DataView, Select, Card, Rating } from 'primevue'
 import AuthService from '@/services/auth.service'
 import SessionItem from '@/components/activityComponents/molecule/SessionItem.vue'
 import RegistrantsListDialog from '@/components/activityComponents/molecule/RegistrantsListDialog.vue'
@@ -102,6 +108,30 @@ const currentActivity = computed(() => {
   const activityId = Number.parseInt(route.params.activity_id)
   return activityStore.activities.find((activite) => activite.id === activityId)
 })
+
+const isVisitor = computed(() => {
+  return authStore.user?.type === UserTypeEnum.VISITOR
+})
+
+
+const userRating = ref(0)
+watch(
+  currentActivity,
+  (newVal) => {
+    if (newVal && newVal.ratings && currentUserId.value) {
+      const existing = newVal.ratings.find((r) => r.userId === currentUserId.value)
+      if (existing) {
+        userRating.value = existing.note
+      }
+    }
+  },
+  { immediate: true },
+)
+
+async function onRatingChange() {
+  if (!currentUserId.value) return
+  await activityStore.addRating(currentActivity.value.id, currentUserId.value, userRating.value)
+}
 
 onMounted(async () => {
   if (!sessionsStore.sessions || sessionsStore.sessions.length === 0) {
@@ -179,15 +209,7 @@ async function inscription(session) {
     return
   }
 
-  // copie l'ancien tableau et ajoute le nouvel user
-  // 1. Ajouter dans registrations (pour les statistiques)
-  await registrationStore.addRegistration(
-    currentActivity.value.id,
-    session.id,
-    userId
-  )
-
-  // 2. Mettre à jour session.registersUsers (pour l'affichage)
+  await registrationStore.addRegistration(currentActivity.value.id, session.id, userId)
 
   const generatedQrCode =
     Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)

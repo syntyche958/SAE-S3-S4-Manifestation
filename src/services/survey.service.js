@@ -27,10 +27,10 @@ async function addSurveyToLocalSource(surveyData) {
 
 async function addReactionToLocalSource(surveyId, emoji) {
   const surveyStore = useSurveyStore()
-  const survey = surveyStore.surveys.find(s => s.id === surveyId)
+  const survey = surveyStore.surveys.find((s) => s.id === surveyId)
 
-  if(!survey) {
-    return {error: 1, status:404, data: 'Survey not found'}
+  if (!survey) {
+    return { error: 1, status: 404, data: 'Survey not found' }
   }
 
   if (!survey.reactions) {
@@ -42,17 +42,16 @@ async function addReactionToLocalSource(surveyId, emoji) {
   return {
     error: 0,
     status: 200,
-    data: {...survey},
+    data: { ...survey },
   }
-  
 }
 
 async function addAdminResponseToLocalSource(surveyId, responseText) {
   const surveyStore = useSurveyStore()
-  const survey = surveyStore.surveys.find(s => s.id === surveyId)
+  const survey = surveyStore.surveys.find((s) => s.id === surveyId)
 
-  if(!survey) {
-    return {error: 1, status:404, data: 'Survey not found'}
+  if (!survey) {
+    return { error: 1, status: 404, data: 'Survey not found' }
   }
 
   survey.adminResponse = responseText
@@ -60,9 +59,8 @@ async function addAdminResponseToLocalSource(surveyId, responseText) {
   return {
     error: 0,
     status: 200,
-    data: {...survey},
+    data: { ...survey },
   }
-  
 }
 
 async function clearSurveysFromLocalSource() {
@@ -71,8 +69,8 @@ async function clearSurveysFromLocalSource() {
 
 async function deleteSurveyFromLocalSource(surveyId) {
   const surveyStore = useSurveyStore()
-  const surveyIndex = surveyStore.surveys.findIndex(s => s.id === surveyId)
-  
+  const surveyIndex = surveyStore.surveys.findIndex((s) => s.id === surveyId)
+
   if (surveyIndex === -1) {
     return { error: 1, status: 404, data: 'Survey not found' }
   }
@@ -102,7 +100,7 @@ async function addSurvey(surveyData) {
   }
 }
 
-async function addReaction(surveyId,emoji) {
+async function addReaction(surveyId, emoji) {
   try {
     return await addReactionToLocalSource(surveyId, emoji)
   } catch {
@@ -110,7 +108,7 @@ async function addReaction(surveyId,emoji) {
   }
 }
 
-async function addAdminResponse(surveyId,responseText) {
+async function addAdminResponse(surveyId, responseText) {
   try {
     return await addAdminResponseToLocalSource(surveyId, responseText)
   } catch {
@@ -119,7 +117,7 @@ async function addAdminResponse(surveyId,responseText) {
 }
 
 async function deleteSurvey(surveyId) {
-   try {
+  try {
     return await deleteSurveyFromLocalSource(surveyId)
   } catch {
     return networkErrResponse

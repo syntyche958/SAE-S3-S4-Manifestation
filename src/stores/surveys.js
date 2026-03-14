@@ -5,7 +5,6 @@ import SurveyService from '@/services/survey.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 
 export const useSurveyStore = defineStore('survey', () => {
-
   const surveys = ref([])
 
   // ACTIONS
@@ -29,15 +28,15 @@ export const useSurveyStore = defineStore('survey', () => {
     }
   }
 
-  async function addReaction(surveyId,amoji){
+  async function addReaction(surveyId, amoji) {
     let response = await SurveyService.addReaction(surveyId, emoji)
     if (response.error === 0) {
-      const surveyIndex = surveys.value.findIndex(s => s.id === surveyId)
+      const surveyIndex = surveys.value.findIndex((s) => s.id === surveyId)
       if (surveyIndex !== -1) {
         surveys.value[surveyIndex] = response.data
       }
       displaySuccessToast('Réaction ajoutée')
-    }else {
+    } else {
       console.log(response.data)
       displayErrToast("Impossible d'ajouter la réaction")
     }
@@ -46,16 +45,15 @@ export const useSurveyStore = defineStore('survey', () => {
   async function addAdminResponse(surveyId, responseText) {
     let response = await SurveyService.addAdminResponse(surveyId, responseText)
     if (response.error === 0) {
-      const surveyIndex = surveys.value.findIndex(s => s.id === surveyId)
+      const surveyIndex = surveys.value.findIndex((s) => s.id === surveyId)
       if (surveyIndex !== -1) {
         surveys.value[surveyIndex] = response.data
       }
       displaySuccessToast('Reponse envoyée')
-    }else {
+    } else {
       console.log(response.data)
       displayErrToast("Impossible d'envoyer la reponse")
     }
-    
   }
 
   async function deleteSurvey(surveyId) {

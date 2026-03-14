@@ -25,7 +25,7 @@
     :modal="true"
     :draggable="false"
   >
-    <AdminMessaging/>
+    <AdminMessaging />
   </Dialog>
 </template>
 

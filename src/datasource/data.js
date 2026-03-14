@@ -371,7 +371,7 @@ const locations = [
       [43.20626928987775, 2.3633481554672358],
       [43.20591477449972, 2.3631902421010977],
       [43.205610902535454, 2.3635060688333738],
-      [43.20564313145161, 2.364049290814478]
+      [43.20564313145161, 2.364049290814478],
     ],
     surfaceArea: 5100,
     water: true,
@@ -386,7 +386,7 @@ const locations = [
       [43.20671588424074, 2.365325230813397],
       [43.20684479746893, 2.3647377930899722],
       [43.20653632607568, 2.364314585268147],
-      [43.20619102042647, 2.36424510338648]
+      [43.20619102042647, 2.36424510338648],
     ],
     surfaceArea: 5125,
     water: true,
@@ -400,7 +400,7 @@ const locations = [
       [43.20738346765455, 2.365085202496971],
       [43.206904649946495, 2.3647504261596453],
       [43.206780340888514, 2.3653125977447473],
-      [43.20724074353893, 2.365615791408402]
+      [43.20724074353893, 2.365615791408402],
     ],
     surfaceArea: 5125,
     water: true,
@@ -417,7 +417,7 @@ const locations = [
       [43.2074985675045, 2.363904010514858],
       [43.207213119477984, 2.3638092624949536],
       [43.20699673056703, 2.3640808734860173],
-      [43.20681717322864, 2.3640556073466996]
+      [43.20681717322864, 2.3640556073466996],
     ],
     surfaceArea: 5125,
     water: true,
@@ -432,7 +432,7 @@ const locations = [
       [43.20655912024566, 2.364240987487051],
       [43.206814110160536, 2.3639786121374584],
       [43.20667792249745, 2.3635850491124017],
-      [43.20629543637125, 2.3634260337498176]
+      [43.20629543637125, 2.3634260337498176],
     ],
     surfaceArea: 4521,
     water: true,
@@ -477,6 +477,7 @@ const activities = [
         bienveillante.
       </p>
     `,
+    ratings: [],
     locationId: 2,
     canRegister: true,
     requestedLocationId: undefined,
@@ -503,6 +504,7 @@ const activities = [
         calme et concentré, où l’on fabrique un souvenir durable de l’événement.
       </p>
     `,
+    ratings: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -531,6 +533,7 @@ const activities = [
         familial et convivial.
       </p>
     `,
+    ratings: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -540,7 +543,7 @@ const activities = [
     providerId: 2,
     name: "Tir à l'arc",
     description:
-      "Une initiation au tir à l’arc encadrée par des animateurs formés, avec du matériel adapté à tous les âges. Après quelques explications sur la posture et la sécurité, les participants s’exercent sur des cibles inspirées de l’imaginaire médiéval et tentent de réaliser le meilleur score.",
+      'Une initiation au tir à l’arc encadrée par des animateurs formés, avec du matériel adapté à tous les âges. Après quelques explications sur la posture et la sécurité, les participants s’exercent sur des cibles inspirées de l’imaginaire médiéval et tentent de réaliser le meilleur score.',
     presentationContent: `
       <h2 class="text-2xl font-semibold mb-4">Devenez archer le temps d’une séance</h2>
       <p class="mb-3">
@@ -558,6 +561,7 @@ const activities = [
         sportifs, dans une ambiance détendue et bienveillante.
       </p>
     `,
+    ratings: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -567,7 +571,7 @@ const activities = [
     providerId: 4,
     name: 'Concert médiéval',
     description:
-      "Un concert en plein air mêlant vielles, percussions, flûtes et voix pour recréer les ambiances sonores de l’époque médiévale. Les musiciens proposent un voyage musical rythmé, parfois dansant, ponctué d’anecdotes sur les instruments et les chansons d’autrefois.",
+      'Un concert en plein air mêlant vielles, percussions, flûtes et voix pour recréer les ambiances sonores de l’époque médiévale. Les musiciens proposent un voyage musical rythmé, parfois dansant, ponctué d’anecdotes sur les instruments et les chansons d’autrefois.',
     presentationContent: `
       <h2 class="text-2xl font-semibold mb-4">Un concert au son du Moyen Âge</h2>
       <p class="mb-3">
@@ -585,6 +589,7 @@ const activities = [
         une belle parenthèse musicale au cœur de la fête.
       </p>
     `,
+    ratings: [],
     locationId: 1,
     canRegister: true,
     requestedLocationId: undefined,
@@ -613,6 +618,7 @@ const activities = [
         spectateurs.
       </p>
     `,
+    ratings: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -640,6 +646,7 @@ const activities = [
         invitant simplement à lever les yeux et à se laisser emporter par la magie des lieux.
       </p>
     `,
+    ratings: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: 8,
@@ -667,6 +674,7 @@ const activities = [
         forces et de prolonger l’expérience médiévale autour d’un moment chaleureux et gourmand.
       </p>
     `,
+    ratings: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: 7,
@@ -680,7 +688,7 @@ const session = [
     beginingDate: '2026-05-28',
     beginingHour: '10:00',
     duration: 30,
-    nbPlace: 10,
+    nbPlace: 15,
     registersUsers: [3],
   },
   {
@@ -689,7 +697,7 @@ const session = [
     beginingDate: '2026-05-28',
     beginingHour: '14:00',
     duration: 30,
-    nbPlace: 10,
+    nbPlace: 15,
     registersUsers: [3],
   },
   {
@@ -698,7 +706,7 @@ const session = [
     beginingDate: '2026-05-28',
     beginingHour: '16:00',
     duration: 30,
-    nbPlace: 10,
+    nbPlace: 15,
     registersUsers: [3],
   },
   {
@@ -707,7 +715,7 @@ const session = [
     beginingDate: '2026-05-29',
     beginingHour: '11:00',
     duration: 30,
-    nbPlace: 10,
+    nbPlace: 15,
     registersUsers: [3],
   },
   {
@@ -716,7 +724,7 @@ const session = [
     beginingDate: '2026-05-29',
     beginingHour: '15:00',
     duration: 30,
-    nbPlace: 10,
+    nbPlace: 15,
     registersUsers: [3],
   },
 
@@ -1060,7 +1068,6 @@ const registrations = [
   // 08/03 - 1 inscription pour activité 5 (autre prestataire)
   { id: 8, activity_id: 5, session_id: 4, user_id: 8, registration_date: '2026-03-08' },
 ]
-
 
 // const user = [{ type: UserTypeEnum.VISITOR }]
 const users = [

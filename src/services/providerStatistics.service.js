@@ -63,23 +63,23 @@ class ProviderStatisticsService {
   }
 
   calculateRegistrationsByDay(activities, registrations) {
-  const stats = {}
+    const stats = {}
 
-  registrations.forEach((reg) => {
-    const date = new Date(reg.registration_date).toLocaleDateString('fr-FR')
-    
-    if (!stats[date]) {
-      stats[date] = {
-        date: date,
-        count: 0,
-        rawDate: new Date(reg.registration_date),
+    registrations.forEach((reg) => {
+      const date = new Date(reg.registration_date).toLocaleDateString('fr-FR')
+
+      if (!stats[date]) {
+        stats[date] = {
+          date: date,
+          count: 0,
+          rawDate: new Date(reg.registration_date),
+        }
       }
-    }
-    stats[date].count++
-  })
-  
-  return Object.values(stats).sort((a, b) => a.rawDate - b.rawDate)
-}
+      stats[date].count++
+    })
+
+    return Object.values(stats).sort((a, b) => a.rawDate - b.rawDate)
+  }
 
   calculateRegistrationsByActivityAndDay(activities, registrations) {
     const stats = {}

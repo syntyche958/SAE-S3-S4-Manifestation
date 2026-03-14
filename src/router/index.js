@@ -7,7 +7,6 @@ import MyReservationsView from '@/views/MyReservationsView.vue'
 import AuthCallbackView from '@/views/AuthCallbackView.vue'
 import ProviderStatisticsView from '@/views/ProviderStatisticsView.vue'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

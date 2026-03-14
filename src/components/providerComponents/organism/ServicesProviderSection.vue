@@ -1,5 +1,4 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
   <h1>Prochainement : Page services proposés aux prestataires</h1>

@@ -197,9 +197,19 @@ function displayLegends(map, mapMode) {
   let labels, colors, colorsRGBA
 
   if (mapMode === MapModeEnum.PROVIDER) {
-    labels = [t('message.available'), t('message.pendingRequest'), t('message.yourLocation'), t('message.occupied')]
+    labels = [
+      t('message.available'),
+      t('message.pendingRequest'),
+      t('message.yourLocation'),
+      t('message.occupied'),
+    ]
     colors = ['orange', 'yellow', 'green', 'blue']
-    colorsRGBA = ['rgba(255, 165, 0, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(0, 255, 0, 0.5)', 'rgba(0, 0, 255, 0.5)']
+    colorsRGBA = [
+      'rgba(255, 165, 0, 0.5)',
+      'rgba(255, 255, 0, 0.5)',
+      'rgba(0, 255, 0, 0.5)',
+      'rgba(0, 0, 255, 0.5)',
+    ]
   } else {
     labels = [t('message.available'), t('message.pendingRequest'), t('message.occupied')]
     colors = ['orange', 'yellow', 'blue']

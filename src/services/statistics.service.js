@@ -33,7 +33,6 @@ async function getSurveyStatistics() {
   const activityCount = {}
 
   surveys.forEach((survey) => {
-
     if (survey.rating) {
       totalRating += survey.rating
       ratingCount++
@@ -49,7 +48,10 @@ async function getSurveyStatistics() {
       subRatingCount++
     }
 
-    if (survey.recommend && Object.prototype.hasOwnProperty.call(recommendationBreakdown, survey.recommend)) {
+    if (
+      survey.recommend &&
+      Object.prototype.hasOwnProperty.call(recommendationBreakdown, survey.recommend)
+    ) {
       recommendationBreakdown[survey.recommend]++
     }
 
@@ -88,7 +90,6 @@ async function getSurveyStatistics() {
   }
 }
 
-
 async function getStatisticsByProvider() {
   const surveyStore = useSurveyStore()
   const surveys = surveyStore.surveys
@@ -124,7 +125,6 @@ async function getStatisticsByProvider() {
     data: statsByProvider,
   }
 }
-
 
 async function getGeneralStatistics() {
   const sessionStore = useSessionStore()

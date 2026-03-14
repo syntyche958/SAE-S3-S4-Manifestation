@@ -14,9 +14,13 @@
     </div>
     <div v-else>
       <ul class="list-none p-0 m-0">
-        <li v-for="user in registrants" :key="user.id" class="p-3 border-b surface-border flex align-items-center gap-2">
-            <i class="pi pi-user text-primary"></i>
-            <span>{{ user.mail }}</span>
+        <li
+          v-for="user in registrants"
+          :key="user.id"
+          class="p-3 border-b surface-border flex align-items-center gap-2"
+        >
+          <i class="pi pi-user text-primary"></i>
+          <span>{{ user.mail }}</span>
         </li>
       </ul>
     </div>
@@ -29,7 +33,7 @@ import Dialog from 'primevue/dialog'
 defineProps({
   visible: Boolean,
   loading: Boolean,
-  registrants: Array
+  registrants: Array,
 })
 
 defineEmits(['update:visible'])
