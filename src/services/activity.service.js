@@ -63,6 +63,7 @@ async function addToLocalSource(providerId, name, desc) {
     canRegister: false,
     requestedLocationId: undefined,
     ratings: [],
+    comments: [],
   }
 
   return { error: 0, status: 200, data: newActivity }
@@ -91,10 +92,45 @@ async function addRatingLocalSource(activityId, userId, note) {
   return { error: 0, status: 200, data: updatedActivities.find((a) => a.id === activityId) }
 }
 
+async function addCommentLocalSource(activityId, userId, title, content) {
+  const activityStore = useActivityStore()
+  const activities = activityStore.activities
+
+  let updatedActivities = activities.map((a) => {
+    if (a.id === activityId) {
+      let existingComments = a.comments || []
+      existingComments.push({ userId, title, content })
+      return { ...a, comments: existingComments }
+    }
+    return a
+  })
+
+  return { error: 0, status: 200, data: updatedActivities.find((a) => a.id === activityId) }
+}
+
+async function addCommentReplyLocalSource(activityId, commentIndex, replyContent) {
+  const activityStore = useActivityStore()
+  const activities = activityStore.activities
+
+  let updatedActivities = activities.map((a) => {
+    if (a.id === activityId) {
+      if (a.comments && a.comments[commentIndex]) {
+        a.comments[commentIndex].reply = replyContent
+      }
+      return { ...a }
+    }
+    return a
+  })
+
+  return { error: 0, status: 200, data: updatedActivities.find((a) => a.id === activityId) }
+}
+
 export default {
   getAllActivities,
   updateLocationIdLocalSource,
   updateRequestedLocationIdLocalSource,
   addToLocalSource,
   addRatingLocalSource,
+  addCommentLocalSource,
+  addCommentReplyLocalSource,
 }

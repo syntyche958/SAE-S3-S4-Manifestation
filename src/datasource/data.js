@@ -478,6 +478,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: 2,
     canRegister: true,
     requestedLocationId: undefined,
@@ -505,6 +506,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -534,6 +536,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -562,6 +565,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -590,6 +594,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: 1,
     canRegister: true,
     requestedLocationId: undefined,
@@ -619,6 +624,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: undefined,
@@ -647,6 +653,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: 8,
@@ -675,6 +682,7 @@ const activities = [
       </p>
     `,
     ratings: [],
+    comments: [],
     locationId: undefined,
     canRegister: true,
     requestedLocationId: 7,

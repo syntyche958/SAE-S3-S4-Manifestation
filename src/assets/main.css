@@ -156,12 +156,33 @@ footer *,
   border-radius: 4px;
 }
 
-.p-datatable,
-.p-datatable-table,
-.p-dataview,
-.p-dataview-content {
+.p-dataview {
   border-radius: 1rem !important;
   overflow: hidden !important;
+}
+
+.p-datatable-header,
+.p-datatable-thead > tr > th,
+.p-datatable-tbody > tr > td,
+.p-paginator {
+  background-color: #262626 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.p-datatable {
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.p-datatable-header,
+.p-datatable-thead tr:first-child th:first-child,
+.p-datatable-thead tr:first-child th:last-child,
+.p-datatable-tbody tr:last-child td:first-child,
+.p-datatable-tbody tr:last-child td:last-child,
+.p-datatable-footer,
+.p-paginator {
+  border-radius: 0 !important;
 }
 
 #map {
@@ -204,4 +225,14 @@ footer *,
 .info-legend,
 .custom-panel {
   z-index: 1001 !important;
+}
+
+.p-rating-icon {
+  stroke: white;
+  stroke-width: 1px;
+}
+
+.p-rating-option-active .p-rating-icon {
+  fill: #ffc107;
+  stroke: #ffc107;
 }

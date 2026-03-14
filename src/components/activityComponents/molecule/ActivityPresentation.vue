@@ -9,6 +9,48 @@
     </div>
 
     <Card class="mt-8">
+      <template #title>
+        <div class="text-xl font-bold">Commentaires</div>
+      </template>
+      <template #content>
+        <div v-if="currentActivity.comments && currentActivity.comments.length > 0" class="flex flex-col gap-4 mb-6">
+          <div
+            v-for="(comment, index) in currentActivity.comments"
+            :key="index"
+            class="p-4 surface-100 rounded-xl border border-surface-200/20"
+          >
+            <div class="font-bold text-lg mb-1">{{ comment.title }}</div>
+            <div class="text-surface-300">{{ comment.content }}</div>
+
+            <!-- Affichage de la réponse -->
+            <div v-if="comment.reply" class="mt-4 p-4 bg-emerald-950/20 rounded-lg border-l-4 border-emerald-500">
+              <div class="font-bold text-sm text-emerald-400 mb-1">Réponse du prestataire/administrateur :</div>
+              <div class="text-surface-300 text-sm">{{ comment.reply }}</div>
+            </div>
+
+            <!-- Formulaire de réponse (visible si presta/admin et pas encore de réponse) -->
+            <div v-else-if="canReplyToComment" class="mt-4 flex flex-col gap-2 border-t border-surface-200/20 pt-4">
+              <span class="font-bold text-sm text-surface-200">Répondre à ce commentaire :</span>
+              <Textarea v-model="commentReplies[index]" rows="2" placeholder="Votre réponse..." class="w-full text-sm" />
+              <Button label="Envoyer la réponse" size="small" @click="submitReply(index)" :disabled="!commentReplies[index] || !commentReplies[index].trim()" class="w-fit" />
+            </div>
+          </div>
+        </div>
+        <div v-else class="text-surface-500 italic mb-6">
+          Aucun commentaire pour le moment. Soyez le premier à donner votre avis !
+        </div>
+
+        <div v-if="isVisitor" class="flex flex-col gap-3 border-t border-surface-200/20 pt-6">
+          <span class="font-bold text-lg">Ajouter un commentaire :</span>
+          <InputText v-model="newComment.title" placeholder="Titre de votre commentaire" class="w-full" />
+          <Textarea v-model="newComment.content" rows="4" placeholder="Votre commentaire..." class="w-full" />
+          <Button label="Publier le commentaire" @click="submitComment" :disabled="!newComment.title.trim() || !newComment.content.trim()" class="w-fit mt-2" />
+        </div>
+      </template>
+    </Card>
+
+
+    <Card class="mt-8">
       <template #content>
         <DataView :value="sessions" :sortOrder="triOrder" :sortField="triField">
           <template #header>
@@ -56,7 +98,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { DataView, Select, Card, Rating } from 'primevue'
+import { DataView, Select, Card, Rating, InputText, Textarea, Button } from 'primevue'
 import AuthService from '@/services/auth.service'
 import SessionItem from '@/components/activityComponents/molecule/SessionItem.vue'
 import RegistrantsListDialog from '@/components/activityComponents/molecule/RegistrantsListDialog.vue'
@@ -113,16 +155,31 @@ const isVisitor = computed(() => {
   return authStore.user?.type === UserTypeEnum.VISITOR
 })
 
+const isAdmin = computed(() => {
+  return authStore.user?.type === UserTypeEnum.ADMIN
+})
+
+const isCurrentProviderOwner = computed(() => {
+  if (authStore.user?.type !== UserTypeEnum.PROVIDER) return false
+
+  const provider = providerStore.providers.find((p) => p.userId === authStore.user.id)
+  return provider && provider.id === currentActivity.value?.providerId
+})
+
+const canReplyToComment = computed(() => {
+  return isAdmin.value || isCurrentProviderOwner.value
+})
+
 
 const userRating = ref(0)
 watch(
-  currentActivity,
-  (newVal) => {
-    if (newVal && newVal.ratings && currentUserId.value) {
-      const existing = newVal.ratings.find((r) => r.userId === currentUserId.value)
-      if (existing) {
-        userRating.value = existing.note
-      }
+  [currentActivity, currentUserId],
+  ([newActivity, newUserId]) => {
+    if (newActivity && newActivity.ratings && newUserId) {
+      const existing = newActivity.ratings.find((r) => r.userId === newUserId)
+      userRating.value = existing ? existing.note : 0
+    } else {
+      userRating.value = 0
     }
   },
   { immediate: true },
@@ -132,6 +189,34 @@ async function onRatingChange() {
   if (!currentUserId.value) return
   await activityStore.addRating(currentActivity.value.id, currentUserId.value, userRating.value)
 }
+
+const newComment = ref({ title: '', content: '' })
+
+async function submitComment() {
+  if (!currentUserId.value || !newComment.value.title.trim() || !newComment.value.content.trim()) return
+  
+  await activityStore.addComment(
+    currentActivity.value.id,
+    currentUserId.value,
+    newComment.value.title.trim(),
+    newComment.value.content.trim()
+  )
+  
+  newComment.value.title = ''
+  newComment.value.content = ''
+}
+
+const commentReplies = ref({})
+
+async function submitReply(commentIndex) {
+  const replyContent = commentReplies.value[commentIndex]
+  if (!replyContent || !replyContent.trim()) return
+
+  await activityStore.addCommentReply(currentActivity.value.id, commentIndex, replyContent.trim())
+  
+  commentReplies.value[commentIndex] = ''
+}
+
 
 onMounted(async () => {
   if (!sessionsStore.sessions || sessionsStore.sessions.length === 0) {
@@ -181,12 +266,6 @@ async function showRegistrants(session) {
   }
 }
 
-const isCurrentProviderOwner = computed(() => {
-  if (authStore.user?.type !== UserTypeEnum.PROVIDER) return false
-
-  const provider = providerStore.providers.find((p) => p.userId === authStore.user.id)
-  return provider && provider.id === currentActivity.value?.providerId
-})
 
 async function inscription(session) {
   selectedSession.value = session

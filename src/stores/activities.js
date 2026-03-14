@@ -59,6 +59,34 @@ export const useActivityStore = defineStore('activity', () => {
     }
   }
 
+  async function addComment(activityId, userId, title, content) {
+    let response = await activityService.addCommentLocalSource(activityId, userId, title, content)
+    if (response.error === 0) {
+      const index = activities.value.findIndex((a) => a.id === activityId)
+      if (index !== -1) {
+        activities.value[index] = response.data
+      }
+      displaySuccessToast(`Votre commentaire a été publié avec succès !`)
+    } else {
+      displayErrToast(`Echec de la publication du commentaire !`)
+      console.log(response.data)
+    }
+  }
+
+  async function addCommentReply(activityId, commentIndex, replyContent) {
+    let response = await activityService.addCommentReplyLocalSource(activityId, commentIndex, replyContent)
+    if (response.error === 0) {
+      const index = activities.value.findIndex((a) => a.id === activityId)
+      if (index !== -1) {
+        activities.value[index] = response.data
+      }
+      displaySuccessToast('Votre réponse a été publiée avec succès !')
+    } else {
+      displayErrToast('Echec de la publication de la réponse !')
+      console.log(response.data)
+    }
+  }
+
   return {
     getAllActivities,
     get,
@@ -66,6 +94,8 @@ export const useActivityStore = defineStore('activity', () => {
     updateLocationId,
     updateRequestedLocationId,
     addRating,
+    addComment,
+    addCommentReply,
     activities,
   }
 })

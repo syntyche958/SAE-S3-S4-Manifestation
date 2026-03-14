@@ -15,7 +15,6 @@
         sortMode="single"
         sortField="provider.name"
       >
-        <!-- Header -->
         <template #header>
           <div :style="{ display: 'flex', 'justify-content': 'space-between' }">
             <Button
@@ -41,7 +40,6 @@
         <template #empty>{{ $t('message.noActivityFound') }}</template>
         <template #loading>{{ $t('message.loadingPlsWait') }}</template>
 
-        <!-- Column provider -->
         <Column field="provider.name" :header="$t('message.provider')" style="min-width: 12rem">
           <template #body="{ data }">
             <span>{{ data.provider.name }}</span
@@ -59,7 +57,6 @@
           </template>
         </Column>
 
-        <!-- Column activity -->
         <Column field="name" :header="$t('message.activity')" sortable style="min-width: 12rem">
           <template #body="{ data }">
             <span>{{ data.name }}</span

@@ -17,10 +17,11 @@
       </a>
     </div>
 
-    <!-- Maintain smooth transition to next section -->
-    <div
-      class="absolute bottom-0 left-0 w-full h-1/4 bg-gradient-to-t from-[#1a1a1a]/40 to-transparent"
-    ></div>
+    <div class="absolute bottom-0 left-0 w-full translate-y-px">
+      <div class="h-32 bg-gradient-to-t from-[#1a1a1a]/40 to-transparent"></div>
+
+      <div class="absolute top-full left-0 w-full h-32 bg-gradient-to-b from-[#1a1a1a]/40 to-transparent"></div>
+    </div>
   </div>
 
   <div class="relative h-screen"></div>
