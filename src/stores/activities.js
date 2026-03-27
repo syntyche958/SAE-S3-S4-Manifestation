@@ -39,6 +39,16 @@ export const useActivityStore = defineStore('activity', () => {
     else console.log(response.data)
   }
 
+  async function addSpot(activityId, locationId, dateHour) {
+    let response = await activityService.addSpotLocalSource(activityId, locationId, dateHour)
+    if (response.error === 0) {
+      activities.value = response.data
+      displaySuccessToast('Emplacement attribué avec succès !')
+    } else {
+      displayErrToast("Échec de l'attribution de l'emplacement !")
+    }
+  }
+
   async function add(providerId, name, desc) {
     let response = await activityService.addToLocalSource(providerId, name, desc)
     if (response.error === 0) {
@@ -137,6 +147,7 @@ export const useActivityStore = defineStore('activity', () => {
     getAllActivities,
     get,
     add,
+    addSpot,
     updateLocationId,
     updateRequestedLocationId,
     refuseRequestedLocation,
