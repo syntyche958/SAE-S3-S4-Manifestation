@@ -3,7 +3,7 @@
     <template #content>
       <div
         :id="props.id"
-        :class="'h-[90vh] w-[90vw] rounded-2xl overflow-hidden ' + classSize"
+        :class="'rounded-2xl overflow-hidden max-w-full ' + classSize"
       ></div>
     </template>
   </Card>

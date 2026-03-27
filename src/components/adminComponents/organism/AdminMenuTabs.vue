@@ -32,8 +32,7 @@
             </TabPanel>
 
             <TabPanel value="1">
-              <!-- <h1>{{ $t('message.interactiveMap') }}</h1> -->
-              <div class="flex gap-2.5">
+              <div class="flex flex-col gap-2.5 xl:flex-row">
                 <TheMap
                   id="admin-map"
                   :displayMode="MapModeEnum.ADMIN"
@@ -42,8 +41,8 @@
                       selectedLocationId = sl
                     }
                   "
-                  class="w-fit"
-                  classSize="sm:h-[60vh] sm:w-[60vw]"
+                  class="w-full max-w-full xl:w-fit"
+                  classSize="h-[60vh] w-full xl:w-[60vw]"
                 />
                 <AdminMapChoosing
                   :selectedLocationId="selectedLocationId"
