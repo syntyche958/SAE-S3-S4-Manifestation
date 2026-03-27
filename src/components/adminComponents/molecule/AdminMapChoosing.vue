@@ -12,7 +12,7 @@
         />
         <ManuallySetActivityLocation
           :selectedLocation="selectedLocation"
-          @set-activity-location="(activityId) => acceptActivityLocation(activityId)"
+          @set-activity-location="(spotData) => acceptActivityLocation(spotData)"
         />
       </div>
     </template>
@@ -41,8 +41,8 @@ const selectedLocation = computed(() =>
   locationStore.locations.find((l) => l.id == props.selectedLocationId),
 )
 
-function acceptActivityLocation(activityId) {
-  activityStore.updateLocationId(activityId, props.selectedLocationId)
+function acceptActivityLocation({ activityId, dateHour }) {
+  activityStore.addSpot(activityId, props.selectedLocationId, dateHour)
   emit('update-selected-location-id', undefined)
 }
 </script>

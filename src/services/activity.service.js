@@ -108,6 +108,18 @@ async function addCommentLocalSource(activityId, userId, title, content) {
   return { error: 0, status: 200, data: updatedActivities.find((a) => a.id === activityId) }
 }
 
+async function addSpotLocalSource(activityId, locationId, dateHour) {
+  const activityStore = useActivityStore()
+  const spot = { locationId, dateHour }
+  return {
+    error: 0,
+    status: 200,
+    data: activityStore.activities.map((a) =>
+      a.id === activityId ? { ...a, spotIds: [...(a.spotIds || []), spot] } : a,
+    ),
+  }
+}
+
 async function addCommentReplyLocalSource(activityId, commentIndex, replyContent) {
   const activityStore = useActivityStore()
   const activities = activityStore.activities
@@ -129,6 +141,7 @@ export default {
   getAllActivities,
   updateLocationIdLocalSource,
   updateRequestedLocationIdLocalSource,
+  addSpotLocalSource,
   addToLocalSource,
   addRatingLocalSource,
   addCommentLocalSource,
