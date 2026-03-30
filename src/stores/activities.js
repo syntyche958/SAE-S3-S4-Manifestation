@@ -30,10 +30,11 @@ export const useActivityStore = defineStore('activity', () => {
     else console.log(response.data)
   }
 
-  async function updateRequestedLocationId(activityId, requestedLocationId) {
-    let response = await activityService.updateRequestedLocationIdLocalSource(
+  async function addRequestedSpots(activityId, locationId, dateHours) {
+    const response = await activityService.addRequestedSpotsLocalSource(
       activityId,
-      requestedLocationId,
+      locationId,
+      dateHours,
     )
     if (response.error === 0) activities.value = response.data
     else console.log(response.data)
@@ -85,7 +86,7 @@ export const useActivityStore = defineStore('activity', () => {
 
       displaySuccessToast('La demande de placement a été refusée')
     } else {
-      displayErrToast("Echec du refus de la demande de placement")
+      displayErrToast('Echec du refus de la demande de placement')
       console.log(response.data)
     }
   }
@@ -119,7 +120,11 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function addCommentReply(activityId, commentIndex, replyContent) {
-    let response = await activityService.addCommentReplyLocalSource(activityId, commentIndex, replyContent)
+    let response = await activityService.addCommentReplyLocalSource(
+      activityId,
+      commentIndex,
+      replyContent,
+    )
     if (response.error === 0) {
       const index = activities.value.findIndex((a) => a.id === activityId)
       if (index !== -1) {
@@ -133,15 +138,15 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function updateServiceFlags(activityId, payload) {
-  const response = await activityService.updateServiceFlagsLocalSource(activityId,payload)
-  if (response.error === 0) {
-    activities.value = response.data
-    displaySuccessToast(t('message.serviceFlagsUpdated'))
-  } else {
-    displayErrToast(t('message.serviceFlagsUpdateFailed'))
-    console.log(response.data)
+    const response = await activityService.updateServiceFlagsLocalSource(activityId, payload)
+    if (response.error === 0) {
+      activities.value = response.data
+      displaySuccessToast(t('message.serviceFlagsUpdated'))
+    } else {
+      displayErrToast(t('message.serviceFlagsUpdateFailed'))
+      console.log(response.data)
+    }
   }
-}
 
   return {
     getAllActivities,
@@ -149,8 +154,8 @@ export const useActivityStore = defineStore('activity', () => {
     add,
     addSpot,
     updateLocationId,
-    updateRequestedLocationId,
     refuseRequestedLocation,
+    addRequestedSpots,
     addRating,
     addComment,
     addCommentReply,

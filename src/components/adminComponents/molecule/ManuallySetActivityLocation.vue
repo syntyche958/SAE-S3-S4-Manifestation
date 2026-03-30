@@ -37,6 +37,7 @@ import { computed, ref, watch } from 'vue'
 import { Select, DataTable, Column, Button } from 'primevue'
 import { useActivityStore } from '@/stores/activities'
 import { useI18n } from 'vue-i18n'
+import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
 
 useI18n()
 const activityStore = useActivityStore()
@@ -66,14 +67,10 @@ watch(
   { immediate: true, deep: true },
 )
 
-const eventDays = ['2026-05-28', '2026-05-29'] // TODO Déplacer dans un globalVar si utilisé ailleur
-const startHour = 8
-const endHour = 23
-
 const timeSlots = computed(() => {
   const slots = []
-  for (const day of eventDays) {
-    for (let h = startHour; h <= endHour; h++) {
+  for (const day of EVENT_DAYS) {
+    for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
       const hour = `${String(h).padStart(2, '0')}:00`
       slots.push({
         slotKey: `${day}T${hour}`,

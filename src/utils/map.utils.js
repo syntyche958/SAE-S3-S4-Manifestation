@@ -6,6 +6,7 @@ import { useLocationStore } from '@/stores/locations'
 import { useActivityStore } from '@/stores/activities'
 import { useProviderStore } from '@/stores/providers'
 import { MapModeEnum } from '@/enums/Map.enums'
+import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
 
 const defaultPolygonWeight = 2
 
@@ -129,24 +130,26 @@ function getAreaColor(locationId, mapMode, route) {
     const currentActivityId = Number(route.params.activity_id)
     const currentActivity = activityStore.get(currentActivityId)
 
-    if (!currentActivity) return 'orange'
+    const hasAssignedSlotInCurrentActivity =
+      (currentActivity?.spotIds || []).some((spot) => spot.locationId === locationId)
 
-    const isAskedByCurrentActivity =
-      currentActivity.requestedLocationId === locationId
+    const hasRequestedSlotInCurrentActivity =
+      (currentActivity?.requestedSpotIds || []).some((spot) => spot.locationId === locationId)
 
-    const isAssignedToCurrentActivity =
-      currentActivity.locationId === locationId
-    const isAssigned =
-      activityStore.activities.filter((a) => a.locationId === locationId).length === 1
+    const isAssignedByOtherActivities = activityStore.activities.some(
+      (a) =>
+        a.id !== currentActivityId &&
+        (a.spotIds || []).some((spot) => spot.locationId === locationId),
+    )
 
     let areaColor = 'orange'
-    if (isAssignedToCurrentActivity) areaColor = 'green'
-    else if (isAskedByCurrentActivity) areaColor = 'yellow'
-    else if (isAssigned) areaColor = 'blue'
+    if (hasAssignedSlotInCurrentActivity) areaColor = 'green'
+    else if (hasRequestedSlotInCurrentActivity) areaColor = 'yellow'
+    else if (isAssignedByOtherActivities) areaColor = 'blue'
 
     return areaColor
   } else {
-    const totalSlots = 32 // 2 * (8h->23h)
+    const totalSlots = EVENT_DAYS.length * (EVENT_END_HOUR - EVENT_START_HOUR + 1)
 
     let assignedCount = 0
     let hasRequest = false

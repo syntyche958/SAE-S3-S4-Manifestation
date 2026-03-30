@@ -6,24 +6,14 @@
         <Column field="beginingDate" :header="$t('message.date')">
           <template #body="slotProps">
             <div class="flex flex-column gap-2">
-              <div class="flex align-items-center">
+              <div v-for="eventDay in EVENT_DAYS" :key="eventDay" class="flex align-items-center">
                 <RadioButton
-                  :inputId="`date-${slotProps.data.id}-2026-05-28`"
+                  :inputId="`date-${slotProps.data.id}-${eventDay}`"
                   v-model="slotProps.data.beginingDate"
-                  value="2026-05-28"
+                  :value="eventDay"
                 />
-                <label :for="`date-${slotProps.data.id}-2026-05-28`" class="ml-2 cursor-pointer">
-                  {{ $t('message.may28') }}
-                </label>
-              </div>
-              <div class="flex align-items-center">
-                <RadioButton
-                  :inputId="`date-${slotProps.data.id}-2026-05-29`"
-                  v-model="slotProps.data.beginingDate"
-                  value="2026-05-29"
-                />
-                <label :for="`date-${slotProps.data.id}-2026-05-29`" class="ml-2 cursor-pointer">
-                  {{ $t('message.may29') }}
+                <label :for="`date-${slotProps.data.id}-${eventDay}`" class="ml-2 cursor-pointer">
+                  {{ formatEventDay(eventDay) }}
                 </label>
               </div>
             </div>
@@ -79,6 +69,7 @@ import { useSessionStore } from '@/stores/sessions.js'
 import { computed, onMounted } from 'vue'
 import { InputNumber, Button, DataTable, Column, RadioButton, Card } from 'primevue'
 import { useI18n } from 'vue-i18n'
+import { EVENT_DAYS } from '@/constants/event.constants'
 
 useI18n()
 const route = useRoute()
@@ -92,6 +83,12 @@ const sessions = computed(() => {
 
 async function addNewSession() {
   await sessionStore.addSession(activityId.value, '2026-05-28', '09:00', 60, 10)
+}
+
+function formatEventDay(day) {
+  const [y, m, d] = String(day).split('-').map(Number)
+  const dt = new Date(y, m - 1, d)
+  return dt.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
 onMounted(async () => {

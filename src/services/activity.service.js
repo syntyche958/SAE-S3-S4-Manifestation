@@ -20,29 +20,59 @@ async function updateLocationIdLocalSource(activityId, locationId) {
   activities = activities.map((a) =>
     a.locationId === locationId ? { ...a, locationId: undefined } : a,
   )
-  // Vérifie que cet emplacement est pas dans d'autre demandes
-  activities = activities.map((a) =>
-    a.requestedLocationId === locationId ? { ...a, requestedLocationId: undefined } : a,
-  )
 
   // assigner l'emplacement
   return {
     error: 0,
     status: 200,
-    data: activities.map((a) =>
-      a.id != activityId ? a : { ...a, locationId, requestedLocationId: undefined },
-    ),
+    data: activities.map((a) => (a.id != activityId ? a : { ...a, locationId })),
   }
 }
 
-async function updateRequestedLocationIdLocalSource(activityId, requestedLocationId) {
+async function addRequestedSpotsLocalSource(activityId, locationId, dateHours) {
   const activityStore = useActivityStore()
+
+  const activity = activityStore.activities.find((a) => a.id === activityId)
+  if (!activity) {
+    return { error: 1, status: 404, data: 'Activity introuvable' }
+  }
+
+  // Vérifie l'occupation/pending sur toutes les activités,
+  // car une même "place" (location + dateHour) ne doit pas être demandée deux fois.
+  const existingSpots = new Set(
+    (activityStore.activities || [])
+      .flatMap((a) => a.spotIds || [])
+      .filter((s) => String(s.locationId) === String(locationId))
+      .map((s) => `${s.locationId}-${s.dateHour}`),
+  )
+  const existingRequests = new Set(
+    (activityStore.activities || [])
+      .flatMap((a) => a.requestedSpotIds || [])
+      .filter((s) => String(s.locationId) === String(locationId))
+      .map((s) => `${s.locationId}-${s.dateHour}`),
+  )
+
+  const newRequests = []
+  for (const dateHour of dateHours) {
+    const key = `${locationId}-${dateHour}`
+    if (existingSpots.has(key)) continue // déjà pris
+    if (existingRequests.has(key)) continue // déjà demandé
+    existingRequests.add(key)
+    newRequests.push({ locationId, dateHour })
+  }
+
+  if (newRequests.length === 0) {
+    return { error: 0, status: 200, data: activityStore.activities }
+  }
+
   return {
     error: 0,
     status: 200,
-    data: activityStore.activities.map((a) =>
-      a.id === activityId ? { ...a, requestedLocationId } : a,
-    ),
+    data: activityStore.activities.map((a) => {
+      if (a.id !== activityId) return a
+      const updatedRequestedSpotIds = [...(a.requestedSpotIds || []), ...newRequests]
+      return { ...a, requestedSpotIds: updatedRequestedSpotIds }
+    }),
   }
 }
 
@@ -149,12 +179,8 @@ async function updateServiceFlagsLocalSource(activityId, payload) {
 
     return {
       ...a,
-      ...(payload.serviceEnabled !== undefined
-        ? { serviceEnabled: payload.serviceEnabled }
-        : {}),
-      ...(payload.visibility !== undefined
-        ? { visibility: payload.visibility }
-        : {}),
+      ...(payload.serviceEnabled !== undefined ? { serviceEnabled: payload.serviceEnabled } : {}),
+      ...(payload.visibility !== undefined ? { visibility: payload.visibility } : {}),
       ...(payload.commentsEnabled !== undefined
         ? { commentsEnabled: payload.commentsEnabled }
         : {}),
@@ -164,9 +190,7 @@ async function updateServiceFlagsLocalSource(activityId, payload) {
       ...(payload.registrationCountEnabled !== undefined
         ? { registrationCountEnabled: payload.registrationCountEnabled }
         : {}),
-      ...(payload.canRegister !== undefined
-        ? { canRegister: payload.canRegister }
-        : {}),
+      ...(payload.canRegister !== undefined ? { canRegister: payload.canRegister } : {}),
     }
   })
 
@@ -180,8 +204,8 @@ async function updateServiceFlagsLocalSource(activityId, payload) {
 export default {
   getAllActivities,
   updateLocationIdLocalSource,
-  updateRequestedLocationIdLocalSource,
   refuseRequestedLocationIdLocalSource,
+  addRequestedSpotsLocalSource,
   addSpotLocalSource,
   addToLocalSource,
   addRatingLocalSource,
