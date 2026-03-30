@@ -1,5 +1,5 @@
-import LocalSource from '@/services/localsource.service.js'
-import { useProviderStore } from '@/stores/providers'
+// import LocalSource from '@/services/localsource.service.js'
+// import { useProviderStore } from '@/stores/providers'
 import { networkErrResponse } from '@/utils/network.utils'
 import { deleteRequest, getRequest, postRequest, putRequest } from './axios.service'
 
@@ -7,9 +7,9 @@ import { deleteRequest, getRequest, postRequest, putRequest } from './axios.serv
 //   return LocalSource.getAllProviders()
 // }
 
-async function getProviderImagesFromLocalSource(id) {
-  return LocalSource.getProviderImages(id)
-}
+// async function getProviderImagesFromLocalSource(id) {
+//   return LocalSource.getProviderImages(id)
+// }
 
 // async function getAllNewProvidersFromLocalSource() {
 //   return LocalSource.getAllNewProviders()
@@ -29,37 +29,37 @@ async function getProviderImagesFromLocalSource(id) {
 //   return LocalSource.updateProviderDescription(providerId, providerDesc)
 // }
 
-async function uploadProviderImageFromLocalSource(providerId, imageData) {
-  return LocalSource.uploadProviderImage(providerId, imageData)
-}
+// async function uploadProviderImageFromLocalSource(providerId, imageData) {
+//   return LocalSource.uploadProviderImage(providerId, imageData)
+// }
+//
+// async function deleteProviderImageFromLocalSource(providerId, imageId) {
+//   return LocalSource.deleteProviderImage(providerId, imageId)
+// }
+//
+// async function addNewProvidersToLocalSource(providerName, providerDesc, userId) {
+//   const providerStore = useProviderStore()
+//   let lastId = 0
+//   providerStore.newProviders.forEach((p) => {
+//     lastId = Math.max(lastId, p.id)
+//   })
+//   return {
+//     error: 0,
+//     status: 200,
+//     data: { id: lastId + 1, name: providerName, description: providerDesc, userId: userId },
+//   }
+// }
 
-async function deleteProviderImageFromLocalSource(providerId, imageId) {
-  return LocalSource.deleteProviderImage(providerId, imageId)
-}
-
-async function addNewProvidersToLocalSource(providerName, providerDesc, userId) {
-  const providerStore = useProviderStore()
-  let lastId = 0
-  providerStore.newProviders.forEach((p) => {
-    lastId = Math.max(lastId, p.id)
-  })
-  return {
-    error: 0,
-    status: 200,
-    data: { id: lastId + 1, name: providerName, description: providerDesc, userId: userId },
-  }
-}
-
-async function validateNewProvidersFromLocalSource(data) {
-  const providerStore = useProviderStore()
-  // Return new provider
-  let lastId = 0
-  providerStore.providers.forEach((p) => {
-    lastId = Math.max(lastId, p.id)
-  })
-  data.id = lastId + 1
-  return { error: 0, status: 200, data }
-}
+// async function validateNewProvidersFromLocalSource(data) {
+//   const providerStore = useProviderStore()
+//   // Return new provider
+//   let lastId = 0
+//   providerStore.providers.forEach((p) => {
+//     lastId = Math.max(lastId, p.id)
+//   })
+//   data.id = lastId + 1
+//   return { error: 0, status: 200, data }
+// }
 
 async function getAllProviders() {
   let response = null
@@ -171,6 +171,16 @@ async function deleteProviderImage(providerId, imageId) {
   return response
 }
 
+async function updateProviderImage(imageId, imageData) {
+  let response = null
+  try {
+    response = await putRequest(`/providers/images/${imageId}`, imageData)
+  } catch {
+    return networkErrResponse
+  }
+  return response
+}
+
 export default {
   getAllProviders,
   getAllNewProviders,
@@ -182,4 +192,5 @@ export default {
   // getProviderDescription,
   uploadProviderImage,
   deleteProviderImage,
+  updateProviderImage,
 }
