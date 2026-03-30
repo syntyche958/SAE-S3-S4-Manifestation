@@ -30,7 +30,7 @@
               >
                 <ReservationItem
                   :item="item"
-                  :activity-name="getActivityName(item.activitiesId)"
+                  :activity-name="getActivityName(item.activityId)"
                   :qr-code="
                     (item.qrCodes && item.qrCodes[authStore.user?.id]) ||
                     'qr-' + item.id + '-' + authStore.user?.id
