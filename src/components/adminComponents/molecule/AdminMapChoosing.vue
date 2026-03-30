@@ -8,8 +8,7 @@
         <LocationCharacteristics :selectedLocation="selectedLocation" :displayTitle="true" />
         <WaitingLocationRequests
           :selectedLocationId="selectedLocationId"
-          @set-activity-location="(activityId) => acceptActivityLocation(activityId)"
-          @refuse-activity-location="(activityId) => refuseActivityLocation(activityId)"
+          @set-activity-location="(spotData) => acceptActivityLocation(spotData)"
         />
         <ManuallySetActivityLocation
           :selectedLocation="selectedLocation"
@@ -33,7 +32,7 @@ const props = defineProps({
   selectedLocationId: { type: Number },
 })
 
-const emit = defineEmits(['update-selected-location-id'])
+//const emit = defineEmits(['update-selected-location-id'])
 
 const activityStore = useActivityStore()
 const locationStore = useLocationStore()
@@ -44,7 +43,7 @@ const selectedLocation = computed(() =>
 
 function acceptActivityLocation({ activityId, dateHour }) {
   activityStore.addSpot(activityId, props.selectedLocationId, dateHour)
-  emit('update-selected-location-id', undefined)
+  //emit('update-selected-location-id', undefined)
 }
 
 async function refuseActivityLocation(activityId) {

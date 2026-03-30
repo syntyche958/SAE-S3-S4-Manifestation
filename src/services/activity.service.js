@@ -107,13 +107,18 @@ async function addCommentLocalSource(activityId, userId, title, content) {
 
 async function addSpotLocalSource(activityId, locationId, dateHour) {
   const activityStore = useActivityStore()
-  const spot = { locationId, dateHour }
+  const newSpot = { locationId, dateHour }
   return {
     error: 0,
     status: 200,
-    data: activityStore.activities.map((a) =>
-      a.id === activityId ? { ...a, spotIds: [...(a.spotIds || []), spot] } : a,
-    ),
+    data: activityStore.activities.map((a) => {
+      if (a.id !== activityId) return a
+      const updatedSpots = [...(a.spotIds || []), newSpot]
+      const updatedRequests = (a.requestedSpotIds || []).filter(
+        (r) => !(r.locationId === locationId && r.dateHour === dateHour),
+      )
+      return { ...a, spotIds: updatedSpots, requestedSpotIds: updatedRequests }
+    }),
   }
 }
 

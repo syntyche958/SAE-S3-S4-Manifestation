@@ -151,15 +151,23 @@ function getAreaColor(locationId, mapMode, route) {
 
     return areaColor
   } else {
-    const isAssigned =
-      activityStore.activities.filter((a) => a.locationId === locationId).length === 1
-    const isAskedByProviders =
-      activityStore.activities.filter((a) => a.requestedLocationId === locationId).length > 0
+    const totalSlots = 32 // 2 * (8h->23h)
 
-    let areaColor = 'orange'
-    if (isAssigned) areaColor = 'blue'
-    else if (isAskedByProviders) areaColor = 'yellow'
-    return areaColor
+    let assignedCount = 0
+    let hasRequest = false
+    for (const activity of activityStore.activities) {
+      for (const spot of activity.spotIds || []) {
+        if (spot.locationId === locationId) assignedCount++
+      }
+      for (const req of activity.requestedSpotIds || []) {
+        if (req.locationId === locationId) hasRequest = true
+      }
+    }
+
+    if (assignedCount >= totalSlots) return 'green'
+    if (hasRequest) return 'yellow'
+    if (assignedCount > 0) return 'orange'
+    return 'red'
   }
 }
 
@@ -215,9 +223,14 @@ function displayLegends(map, mapMode) {
       'rgba(0, 0, 255, 0.5)',
     ]
   } else {
-    labels = [t('message.available'), t('message.pendingRequest'), t('message.occupied')]
-    colors = ['orange', 'yellow', 'blue']
-    colorsRGBA = ['rgba(255, 165, 0, 0.5)', 'rgba(255, 255, 0, 0.5)', 'rgba(0, 0, 255, 0.5)']
+    labels = ['Complètement occupé', 'Demande en attente', 'Partiellement occupé', 'Non occupé']
+    colors = ['green', 'yellow', 'orange', 'red']
+    colorsRGBA = [
+      'rgba(0, 200, 0, 0.5)',
+      'rgba(255, 255, 0, 0.5)',
+      'rgba(255, 165, 0, 0.5)',
+      'rgba(255, 0, 0, 0.5)',
+    ]
   }
 
   legend.onAdd = function () {

@@ -1,40 +1,21 @@
 <template>
-  <Card v-if="locationRequestedBy.length > 0" class="mt-6">
+  <Card v-if="requestRows.length > 0" class="mt-6">
     <template #content>
       <div class="flex flex-col gap-3">
-        <h2 class="mb-0!">{{ $t('message.waitingRequests') }}</h2>
-        <DataTable :value="locationRequestedBy" paginator :rows="10" dataKey="id">
-          <!-- Columns -->
-          <Column field="name" :header="$t('message.activity')" sortable style="min-width: 12rem">
+        <h2 class="mb-0!">Demande en attente :</h2>
+        <DataTable :value="requestRows" paginator :rows="10" dataKey="rowKey">
+          <Column field="activityName" header="Activité" sortable style="min-width: 10rem" />
+          <Column field="providerName" header="Prestataire" sortable style="min-width: 10rem" />
+          <Column field="date" header="Date" sortable style="min-width: 8rem" />
+          <Column field="hour" header="Heure" sortable style="min-width: 6rem" />
+          <Column header="" style="min-width: 10rem">
             <template #body="{ data }">
-              {{ data.name }}
-            </template>
-          </Column>
-          <Column field="providerId" :header="$t('message.provider')" sortable style="min-width: 12rem">
-            <template #body="{ data }">
-              {{ providerStore.get(data.providerId).name }}
-            </template>
-          </Column>
-
-          <!-- Column with button  -->
-          <Column field="id" header="" style="min-width: 12rem">
-            <template #body="{ data }">
-              <div class="flex gap-2">
-                <Button
-                  type="button"
-                  :label="$t('message.acceptRequest')"
-                  @click="emit('set-activity-location', data.id)"
-                  size="small"
-                />
-                <Button
-                  type="button"
-                  label="Refuser"
-                  severity="danger"
-                  variant="outlined"
-                  @click="emit('refuse-activity-location', data.id)"
-                  size="small"
-                />
-              </div>
+              <Button
+                type="button"
+                label="Accepter"
+                @click="emit('set-activity-location', { activityId: data.activityId, dateHour: data.dateHour })"
+                size="small"
+              />
             </template>
           </Column>
         </DataTable>
@@ -57,7 +38,24 @@ const props = defineProps({
 
 const emit = defineEmits(['set-activity-location', 'refuse-activity-location'])
 
-const locationRequestedBy = computed(() => {
-  return activityStore.activities.filter((a) => a.requestedLocationId == props.selectedLocationId)
+const requestRows = computed(() => {
+  const rows = []
+  for (const activity of activityStore.activities) {
+    for (const spot of activity.requestedSpotIds || []) {
+      if (spot.locationId !== props.selectedLocationId) continue
+      const [date, hour] = spot.dateHour.split('T')
+      const provider = providerStore.get(activity.providerId)
+      rows.push({
+        rowKey: `${activity.id}-${spot.dateHour}`,
+        activityId: activity.id,
+        activityName: activity.name,
+        providerName: provider?.name || '—',
+        date,
+        hour,
+        dateHour: spot.dateHour,
+      })
+    }
+  }
+  return rows.sort((a, b) => a.dateHour.localeCompare(b.dateHour))
 })
 </script>
