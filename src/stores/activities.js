@@ -39,7 +39,7 @@ export const useActivityStore = defineStore('activity', () => {
   async function add(providerId, name, desc) {
     let response = await activityService.addToLocalSource(providerId, name, desc)
     if (response.error === 0) {
-      activities.value.push(response.data)
+      await getAllActivities()
       displaySuccessToast(`L'activité ${name} a été ajouté avec succès !`)
     } else {
       displayErrToast(`Echec de l'ajout de l'activité ${name} !`)
