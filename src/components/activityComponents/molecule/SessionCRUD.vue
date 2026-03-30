@@ -85,11 +85,11 @@ const sessionStore = useSessionStore()
 const activityId = computed(() => Number.parseInt(route.params.activity_id))
 const sessions = computed(() => {
   if (!sessionStore.sessions) return []
-  return sessionStore.sessions.filter((s) => s.activitiesId === activityId.value)
+  return sessionStore.sessions.filter((s) => s.activityId === activityId.value)
 })
 
 async function addNewSession() {
-  await sessionStore.addSession(activityId.value, '', '', 0, 0)
+  await sessionStore.addSession(activityId.value, '2026-05-28', '09:00', 60, 10)
 }
 
 onMounted(async () => {

@@ -133,7 +133,7 @@ function isRegistered(session) {
 const sessions = computed(() => {
   const activityId = Number.parseInt(route.params.activity_id)
   if (!sessionsStore.sessions) return []
-  return sessionsStore.sessions.filter((s) => s.activitiesId === activityId)
+  return sessionsStore.sessions.filter((s) => s.activityId === activityId)
 })
 
 const triKey = ref()

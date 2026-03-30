@@ -139,9 +139,9 @@ async function getGeneralStatistics() {
 
   const activityRegistrations = {}
   sessions.forEach((s) => {
-    if (s.activitiesId) {
+    if (s.activityId) {
       const count = s.registersUsers?.length || 0
-      activityRegistrations[s.activitiesId] = (activityRegistrations[s.activitiesId] || 0) + count
+      activityRegistrations[s.activityId] = (activityRegistrations[s.activityId] || 0) + count
     }
   })
 
@@ -175,7 +175,7 @@ async function getGeneralStatistics() {
   uniqueDates.forEach((date, index) => {
     const dayName = dayNames[index] || `Jour ${index + 1}`
     const activitiesOnDay = new Set(
-      sessions.filter((s) => s.beginingDate === date).map((s) => s.activitiesId),
+      sessions.filter((s) => s.beginingDate === date).map((s) => s.activityId),
     )
     activitiesPerDay[dayName] = activitiesOnDay.size
   })
