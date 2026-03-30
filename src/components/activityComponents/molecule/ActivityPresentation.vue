@@ -328,16 +328,13 @@ async function inscription(session) {
     return
   }
 
-  await registrationStore.addRegistration(currentActivity.value.id, session.id, userId)
-
-  const generatedQrCode =
-    Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-  const updatedData = {
-    registersUsers: session.registersUsers.concat(userId),
-    qrCodes: { ...(session.qrCodes || {}), [userId]: generatedQrCode },
+  const result = await registrationStore.addRegistration(session.id, userId)
+  if (!result) {
+    displayErrToast("Echec de l'inscription, veuillez réessayer")
+    return
   }
 
-  await sessionsStore.updateSession(session.id, updatedData)
+  await sessionsStore.getAllSessions()
 
   const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
 

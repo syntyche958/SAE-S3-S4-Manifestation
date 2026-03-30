@@ -1,41 +1,41 @@
-import LocalSource from '@/services/localsource.service'
+import { networkErrResponse } from '@/utils/network.utils'
+import { getRequest, postRequest, deleteRequest } from './axios.service'
 
-/**
- * Get all registrations
- */
-async function getAllRegistrations() {
-  return LocalSource.getAllRegistrations()
+async function getRegistrationsBySession(sessionId) {
+  try {
+    return await getRequest('/registrations/session/' + sessionId)
+  } catch {
+    return networkErrResponse
+  }
 }
 
-/**
- * Get registrations by activity
- * @param {number} activityId
- */
-async function getRegistrationsByActivity(activityId) {
-  return LocalSource.getRegistrationsByActivity(activityId)
-}
-
-/**
- * Get registrations by user
- * @param {number} userId
- */
 async function getRegistrationsByUser(userId) {
-  return LocalSource.getRegistrationsByUser(userId)
+  try {
+    return await getRequest('/registrations/user/' + userId)
+  } catch {
+    return networkErrResponse
+  }
 }
 
-/**
- * Add a new registration
- * @param {number} activityId
- * @param {number} sessionId
- * @param {number} userId
- */
-async function addRegistration(activityId, sessionId, userId) {
-  return LocalSource.addRegistration(activityId, sessionId, userId)
+async function addRegistration(sessionId, userId) {
+  try {
+    return await postRequest('/registrations', { sessionId, userId })
+  } catch {
+    return networkErrResponse
+  }
+}
+
+async function deleteRegistration(sessionId, userId) {
+  try {
+    return await deleteRequest('/registrations', { sessionId, userId })
+  } catch {
+    return networkErrResponse
+  }
 }
 
 export default {
-  getAllRegistrations,
-  getRegistrationsByActivity,
+  getRegistrationsBySession,
   getRegistrationsByUser,
   addRegistration,
+  deleteRegistration,
 }
