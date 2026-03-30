@@ -66,7 +66,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function login(mail, password) {
     let response = await AuthService.login(mail, password)
     if (response.error === 0) {
-      persistSession(response.data)
+      persistSession(response.data.user, response.data.token)
       displaySuccessToast('Connecté avec succés')
       return true
     } else {
@@ -80,7 +80,7 @@ export const useAuthStore = defineStore('auth', () => {
     let response = await AuthService.signin(mail, password)
     console.log(response)
     if (response.error === 0) {
-      persistSession(response.data)
+      persistSession(response.data.user, response.data.token)
       displaySuccessToast('Connecté avec succés')
       return true
     } else {

@@ -1,4 +1,5 @@
 import LocalSource from '@/services/localsource.service.js'
+import { postRequest, putRequest, getRequest } from './axios.service'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
@@ -6,41 +7,56 @@ function buildApiUrl(path) {
   return `${API_URL}${path}`
 }
 
-async function loginFromLocalSource(mail, password) {
-  return LocalSource.login(mail, password)
-}
+// async function loginFromLocalSource(mail, password) {
+//   return LocalSource.login(mail, password)
+// }
 
-async function signinFromLocalSource(mail, password) {
-  return LocalSource.signin(mail, password)
-}
+// async function signinFromLocalSource(mail, password) {
+//   return LocalSource.signin(mail, password)
+// }
 
-async function updateUserTypeToProviderFromLocalSource(userId) {
-  return LocalSource.updateUserTypeToProvider(userId)
-}
-
-// async function getUser() {
-//   let response = null
-//   try {
-//     response = await getUserFromLocalSource()
-//   } catch {
-//     return { error: 1, status: 400, data: 'A network error occured : ' }
-//   }
-
-//   return response
+// async function updateUserTypeToProviderFromLocalSource(userId) {
+//   return LocalSource.updateUserTypeToProvider(userId)
 // }
 
 async function login(mail, password) {
-  return loginFromLocalSource(mail, password)
+  let response = null
+  try {
+    response = await postRequest('/auth/login', { mail, password })
+  } catch {
+    return { error: 1, status: 400, data: 'A network error occured : ' }
+  }
+  return response
 }
+
 async function signin(mail, password) {
-  return signinFromLocalSource(mail, password)
+  let response = null
+  try {
+    response = await postRequest('/auth/register', { mail, password })
+  } catch {
+    return { error: 1, status: 400, data: 'A network error occured : ' }
+  }
+  return response
 }
+
 async function updateUserTypeToProvider(userId) {
-  return updateUserTypeToProviderFromLocalSource(userId)
+  let response = null
+  try {
+    response = await putRequest('/auth/user-type', { userId })
+  } catch {
+    return { error: 1, status: 400, data: 'A network error occured : ' }
+  }
+  return response
 }
 
 async function getUsers() {
-  return LocalSource.getUsers()
+  let response = null
+  try {
+    response = await getRequest('/auth/users')
+  } catch {
+    return { error: 1, status: 400, data: 'A network error occured : ' }
+  }
+  return response
 }
 
 function startGoogleOAuth() {
