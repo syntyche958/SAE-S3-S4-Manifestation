@@ -1,15 +1,19 @@
 import LocalSource from '@/services/localsource.service.js'
+import { networkErrResponse } from '@/utils/network.utils'
+import { getRequest } from './axios.service'
 
-async function getAllLocationsFromLocalSource() {
+/*async function getAllLocationsFromLocalSource() {
   return LocalSource.getAllLocations()
 }
+  */
 
 async function getAllLocations() {
   let response = null
   try {
-    response = await getAllLocationsFromLocalSource()
+    //response = await getAllLocationsFromLocalSource()
+    response = await getRequest('/locations')
   } catch {
-    return { error: 1, status: 400, data: 'A network error occured : ' }
+    return networkErrResponse
   }
 
   return response
