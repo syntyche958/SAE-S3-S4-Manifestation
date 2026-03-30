@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
       ...rawUser,
       id: rawUser.id || rawUser._id || null,
       mail: rawUser.mail || rawUser.email || '',
-      type: rawUser.type || UserTypeEnum.VISITOR,
+      type: rawUser.type ? rawUser.type.toLowerCase() : UserTypeEnum.VISITOR,
     }
   }
 
