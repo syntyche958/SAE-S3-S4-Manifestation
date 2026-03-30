@@ -160,10 +160,10 @@ async function getGeneralStatistics() {
   const users = usersResponse.data || []
   const userCounts = {
     [UserTypeEnum.PROVIDER]: users.filter(
-      (u) => u.type === UserTypeEnum.PROVIDER && u.mail && u.mail.trim() !== '',
+      (u) => u.type?.toLowerCase() === UserTypeEnum.PROVIDER && u.mail && u.mail.trim() !== '',
     ).length,
     [UserTypeEnum.VISITOR]: users.filter(
-      (u) => u.type === UserTypeEnum.VISITOR && u.mail && u.mail.trim() !== '',
+      (u) => u.type?.toLowerCase() === UserTypeEnum.VISITOR && u.mail && u.mail.trim() !== '',
     ).length,
   }
 
