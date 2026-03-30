@@ -1,15 +1,12 @@
 import LocalSource from '@/services/localsource.service.js'
 import { useActivityStore } from '@/stores/activities'
 import { networkErrResponse } from '@/utils/network.utils'
-
-async function getAllActivitiesFromLocalSource() {
-  return LocalSource.getAllActivities()
-}
+import { getRequest, postRequest, putRequest } from './axios.service'
 
 async function getAllActivities() {
   let response = null
   try {
-    response = await getAllActivitiesFromLocalSource()
+    response = await getRequest('/activities')
   } catch {
     return networkErrResponse
   }
