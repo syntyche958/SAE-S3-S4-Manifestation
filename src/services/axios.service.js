@@ -45,7 +45,8 @@ export async function putRequest(url, data, optHeaders = {}) {
 export async function deleteRequest(url, data = null) {
   let response = null
   try {
-    response = await instance.delete(url, { data, headers })
+    const config = data != null ? { data, headers } : {}
+    response = await instance.delete(url, config)
   } catch (error) {
     console.error(error)
     response = await handleErrors(url, 'delete', error)

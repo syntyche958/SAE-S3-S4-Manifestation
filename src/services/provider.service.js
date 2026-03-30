@@ -88,7 +88,7 @@ async function getAllNewProviders() {
 async function getProviderImages(id) {
   let response = null
   try {
-    response = await getRequest(`/providers/${id}/images`)
+    response = await getProviderImagesFromLocalSource(id)
   } catch {
     return networkErrResponse
   }
@@ -154,7 +154,7 @@ async function updateProviderDescription(providerId, newDescription) {
 async function uploadProviderImage(providerId, imageData) {
   let response = null
   try {
-    response = await postRequest(`/providers/${providerId}/images`, imageData)
+    response = await uploadProviderImageFromLocalSource(providerId, imageData)
   } catch {
     return networkErrResponse
   }
@@ -164,7 +164,7 @@ async function uploadProviderImage(providerId, imageData) {
 async function deleteProviderImage(providerId, imageId) {
   let response = null
   try {
-    response = await deleteRequest(`/providers/images/${imageId}`)
+    response = await deleteProviderImageFromLocalSource(providerId, imageId)
   } catch {
     return networkErrResponse
   }

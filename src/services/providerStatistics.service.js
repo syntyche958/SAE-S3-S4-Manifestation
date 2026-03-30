@@ -1,11 +1,7 @@
 import activityService from './activity.service'
-import registrationService from './registration.service'
-import LocalSource from './localsource.service'
+import sessionsService from './sessions.service'
 
 class ProviderStatisticsService {
-  /**
-   * Récupère toutes les statistiques d'un prestataire
-   */
   async getProviderStatistics(providerId) {
     try {
       const activitiesResponse = await activityService.getAllActivities()
@@ -19,15 +15,27 @@ class ProviderStatisticsService {
           (activity.registrationCountEnabled ?? true),
       )
 
-      const registrationsResponse = await registrationService.getAllRegistrations()
-      if (registrationsResponse.error !== 0) {
-        throw new Error('Erreur lors de la récupération des inscriptions')
+      const sessionsResponse = await sessionsService.getAllSessions()
+      if (sessionsResponse.error !== 0) {
+        throw new Error('Erreur lors de la récupération des sessions')
       }
 
       const activityIds = activities.map((a) => a.id)
-      const registrations = registrationsResponse.data.filter((r) =>
-        activityIds.includes(r.activity_id),
-      )
+      const sessions = sessionsResponse.data.filter((s) => activityIds.includes(s.activityId))
+
+      const registrations = []
+      sessions.forEach((s) => {
+        if (s.registersUsers) {
+          s.registersUsers.forEach((userId) => {
+            registrations.push({
+              activity_id: s.activityId,
+              session_id: s.id,
+              user_id: userId,
+              registration_date: s.beginingDate,
+            })
+          })
+        }
+      })
 
       return {
         success: true,
@@ -85,17 +93,14 @@ class ProviderStatisticsService {
 
   calculateRegistrationsByActivityAndDay(activities, registrations) {
     const stats = {}
-    const sessionsResponse = LocalSource.getAllSessions()
-    const sessions = sessionsResponse.data
 
     registrations.forEach((reg) => {
       const activity = activities.find((a) => a.id === reg.activity_id)
-      const session = sessions.find((s) => s.id === reg.session_id)
 
-      if (activity && session) {
+      if (activity) {
         const activityName = activity.name
-        const date = session.beginingDate
-          ? new Date(session.beginingDate).toLocaleDateString('fr-FR')
+        const date = reg.registration_date
+          ? new Date(reg.registration_date).toLocaleDateString('fr-FR')
           : 'Date non définie'
 
         const key = `${activity.id}|${date}`
@@ -105,7 +110,7 @@ class ProviderStatisticsService {
             activityName: activityName,
             date: date,
             count: 0,
-            rawDate: session.beginingDate ? new Date(session.beginingDate) : null,
+            rawDate: reg.registration_date ? new Date(reg.registration_date) : null,
           }
         }
         stats[key].count++

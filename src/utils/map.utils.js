@@ -132,11 +132,15 @@ function getAreaColor(locationId, mapMode, route) {
 
   if (mapMode === MapModeEnum.PROVIDER) {
     const currentActivityId = Number(route.params.activity_id)
+    const currentActivity = activityStore.get(currentActivityId)
+
+    if (!currentActivity) return 'orange'
+
     const isAskedByCurrentActivity =
-      activityStore.get(currentActivityId).requestedLocationId === locationId
+      currentActivity.requestedLocationId === locationId
 
     const isAssignedToCurrentActivity =
-      activityStore.get(currentActivityId).locationId === locationId
+      currentActivity.locationId === locationId
     const isAssigned =
       activityStore.activities.filter((a) => a.locationId === locationId).length === 1
 
