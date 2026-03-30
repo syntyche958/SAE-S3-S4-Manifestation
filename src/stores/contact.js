@@ -32,7 +32,7 @@ export const useContactStore = defineStore('contact', () => {
   async function addContact(mail, providerId, activityId, message) {
     let response = await ContactService.addContact(mail, providerId, activityId, message)
     if (response.error === 0) {
-      contacts.value.push(response.data)
+      await getAllContacts()
       displaySuccessToast('Message envoyé avec succès !')
     } else {
       console.log(response.data)
@@ -43,7 +43,7 @@ export const useContactStore = defineStore('contact', () => {
   async function removeContact(id) {
     let response = await ContactService.removeContact(id)
     if (response.error === 0) {
-      contacts.value = contacts.value.filter((c) => c.id !== id)
+      await getAllContacts()
       displaySuccessToast('Tâche marqué comme traité !')
     } else {
       console.log(response.data)

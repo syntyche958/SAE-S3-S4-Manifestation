@@ -34,7 +34,7 @@
         text
         rounded
         v-tooltip.top="'Voir l\'activité'"
-        @click="$emit('go-to-activity', item.activitiesId)"
+        @click="$emit('go-to-activity', item.activityId)"
       />
     </div>
   </div>
