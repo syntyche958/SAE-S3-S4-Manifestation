@@ -1,7 +1,6 @@
-import LocalSource from '@/services/localsource.service.js'
 import { useActivityStore } from '@/stores/activities'
 import { networkErrResponse } from '@/utils/network.utils'
-import { getRequest, postRequest, putRequest } from './axios.service'
+import { getRequest, postRequest } from './axios.service'
 
 async function getAllActivities() {
   let response = null
@@ -48,27 +47,11 @@ async function updateRequestedLocationIdLocalSource(activityId, requestedLocatio
 }
 
 async function addToLocalSource(providerId, name, desc) {
-  const activityStore = useActivityStore()
-  const lastId = activityStore.activities.map((a) => a.id).sort((a, b) => b - a)[0]
-  const newActivity = {
-    id: lastId + 1,
-    providerId,
-    name,
-    description: desc,
-    presentationContent: `<h1>${name}!</h1>`,
-    locationId: undefined,
-    canRegister: false,
-    requestedLocationId: undefined,
-    ratings: [],
-    comments: [],
-    serviceEnabled: true,
-    visibility: 'public',
-    commentsEnabled: true,
-    sessionsEnabled: true,
-    registrationCountEnabled: true,
+  try {
+    return await postRequest('/activities', { providerId, name, description: desc })
+  } catch {
+    return networkErrResponse
   }
-
-  return { error: 0, status: 200, data: newActivity }
 }
 
 async function addRatingLocalSource(activityId, userId, note) {

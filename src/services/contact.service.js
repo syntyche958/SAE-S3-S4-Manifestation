@@ -1,43 +1,9 @@
-import LocalSource from '@/services/localsource.service.js'
-import { useContactStore } from '@/stores/contact'
 import { networkErrResponse } from '@/utils/network.utils'
-
-async function getAllContactsFromLocalSource() {
-  return LocalSource.getAllContacts()
-}
-
-async function getAllContactsByIdFromLocalSource(userId) {
-  return LocalSource.getAllContactsById(userId)
-}
-
-async function removeContactFromLocalSource(id) {
-  return { error: 0, status: 200, data: { id } }
-}
-
-async function addContactToLocalSource(mail, providerId, activityId, message) {
-  const contactStore = useContactStore()
-
-  let lastId = 0
-  contactStore.contacts.forEach((c) => {
-    lastId = Math.max(lastId, c.id)
-  })
-
-  return {
-    error: 0,
-    status: 200,
-    data: {
-      id: lastId + 1,
-      mail,
-      providerId,
-      activityId,
-      message,
-    },
-  }
-}
+import { getRequest, postRequest, deleteRequest } from './axios.service'
 
 async function getAllContacts() {
   try {
-    return await getAllContactsFromLocalSource()
+    return await getRequest('/contacts')
   } catch {
     return networkErrResponse
   }
@@ -45,7 +11,7 @@ async function getAllContacts() {
 
 async function getAllContactsById(userId) {
   try {
-    return await getAllContactsByIdFromLocalSource(userId)
+    return await getRequest('/contacts/' + userId)
   } catch {
     return networkErrResponse
   }
@@ -53,7 +19,7 @@ async function getAllContactsById(userId) {
 
 async function addContact(mail, providerId, activityId, message) {
   try {
-    return await addContactToLocalSource(mail, providerId, activityId, message)
+    return await postRequest('/contacts', { mail, providerId, activityId, message })
   } catch {
     return networkErrResponse
   }
@@ -61,7 +27,7 @@ async function addContact(mail, providerId, activityId, message) {
 
 async function removeContact(id) {
   try {
-    return await removeContactFromLocalSource(id)
+    return await deleteRequest('/contacts/' + id)
   } catch {
     return networkErrResponse
   }
