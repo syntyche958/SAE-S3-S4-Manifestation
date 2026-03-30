@@ -42,8 +42,9 @@
 
         <Column field="provider.name" :header="$t('message.provider')" style="min-width: 12rem">
           <template #body="{ data }">
-            <span>{{ data.provider.name }}</span
+            <span>{{ data.provider?.name }}</span
             ><Button
+              v-if="data.provider"
               icon="pi pi-info-circle"
               label=""
               size="small"

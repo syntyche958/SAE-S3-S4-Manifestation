@@ -41,10 +41,10 @@ export async function putRequest(url, data, optHeaders = {}) {
   return response.data
 }
 
-export async function deleteRequest(url) {
+export async function deleteRequest(url, data = null) {
   let response = null
   try {
-    response = await instance.delete(url)
+    response = await instance.delete(url, { data, headers })
   } catch (error) {
     console.error(error)
     response = await handleErrors(url, 'delete', error)

@@ -1,7 +1,7 @@
 import LocalSource from '@/services/localsource.service.js'
 import { useProviderStore } from '@/stores/providers'
 import { networkErrResponse } from '@/utils/network.utils'
-import { getRequest, postRequest } from './axios.service'
+import { deleteRequest, getRequest, postRequest, putRequest } from './axios.service'
 
 // async function getAllProvidersFromLocalSource() {
 //   return LocalSource.getAllProviders()
@@ -25,9 +25,9 @@ async function getProviderImagesFromLocalSource(id) {
 //   return { error: 0, status: 200, data: 'done' }
 // }
 
-async function updateProviderDescriptionFromLocalSource(providerId, providerDesc) {
-  return LocalSource.updateProviderDescription(providerId, providerDesc)
-}
+// async function updateProviderDescriptionFromLocalSource(providerId, providerDesc) {
+//   return LocalSource.updateProviderDescription(providerId, providerDesc)
+// }
 
 async function uploadProviderImageFromLocalSource(providerId, imageData) {
   return LocalSource.uploadProviderImage(providerId, imageData)
@@ -88,7 +88,7 @@ async function getAllNewProviders() {
 async function getProviderImages(id) {
   let response = null
   try {
-    response = await getProviderImagesFromLocalSource(id)
+    response = await getRequest(`/providers/${id}/images`)
   } catch {
     return networkErrResponse
   }
@@ -98,7 +98,7 @@ async function getProviderImages(id) {
 async function addNewProvider(providerName, providerDesc, userId) {
   let response = null
   try {
-    response = await addNewProvidersToLocalSource(providerName, providerDesc, userId)
+    response = await postRequest('/providers/new', { name: providerName, description: providerDesc })
   } catch {
     return networkErrResponse
   }
@@ -111,7 +111,7 @@ async function removeNewProvider(id) {
   let response = null
   try {
     // response = await removeNewProviderFromLocalSource(id)
-    response = await postRequest('/providers/new', { id })
+    response = await deleteRequest('/providers/new', { id })
   } catch {
     return networkErrResponse
   }
@@ -122,7 +122,7 @@ async function removeNewProvider(id) {
 async function validateNewProviders(data) {
   let response = null
   try {
-    response = await validateNewProvidersFromLocalSource(data)
+    response = await postRequest(`/providers/accept-new-provider/${data.id}`)
   } catch {
     return networkErrResponse
   }
@@ -144,7 +144,7 @@ async function validateNewProviders(data) {
 async function updateProviderDescription(providerId, newDescription) {
   let response = null
   try {
-    response = await updateProviderDescriptionFromLocalSource(providerId, newDescription)
+    response = await putRequest('/providers', { providerId, newDescription })
   } catch {
     return networkErrResponse
   }
@@ -154,7 +154,7 @@ async function updateProviderDescription(providerId, newDescription) {
 async function uploadProviderImage(providerId, imageData) {
   let response = null
   try {
-    response = await uploadProviderImageFromLocalSource(providerId, imageData)
+    response = await postRequest(`/providers/${providerId}/images`, imageData)
   } catch {
     return networkErrResponse
   }
@@ -164,7 +164,7 @@ async function uploadProviderImage(providerId, imageData) {
 async function deleteProviderImage(providerId, imageId) {
   let response = null
   try {
-    response = await deleteProviderImageFromLocalSource(providerId, imageId)
+    response = await deleteRequest(`/providers/images/${imageId}`)
   } catch {
     return networkErrResponse
   }
