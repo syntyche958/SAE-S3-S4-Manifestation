@@ -21,6 +21,7 @@ const activityStore = useActivityStore()
 const props = defineProps({
   id: { type: String, default: 'map' },
   displayMode: { type: String, required: true },
+  selectedLocationId: { type: [Number, String], required: false },
   class: { type: String, required: false },
   classSize: { type: String, required: true },
 })
@@ -33,12 +34,12 @@ onMounted(async () => {
   watch(
     () => activityStore.activities,
     () => {
-      refreshLocations(map, emit, props.displayMode, route)
+      refreshLocations(map, emit, props.displayMode, route, props.selectedLocationId)
     },
   )
 
   const map = setupMap(props.id)
-  displayLocations(map, props.displayMode, emit, route)
+  displayLocations(map, props.displayMode, emit, route, props.selectedLocationId)
 
   const observer = new ResizeObserver(() => {
     map.invalidateSize()

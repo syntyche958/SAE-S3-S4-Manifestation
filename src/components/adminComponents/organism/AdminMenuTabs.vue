@@ -36,6 +36,7 @@
                 <TheMap
                   id="admin-map"
                   :displayMode="MapModeEnum.ADMIN"
+                  :selectedLocationId="selectedLocationId"
                   @change-selected-location="
                     (sl) => {
                       selectedLocationId = sl

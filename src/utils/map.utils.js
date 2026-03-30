@@ -38,21 +38,18 @@ export function setupMap(mapId) {
   return map
 }
 
-export async function displayLocations(map, mapMode, emit, route) {
+export async function displayLocations(map, mapMode, emit, route, selectedLocationId) {
   if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map)
-  } else if (mapMode === MapModeEnum.ADMIN) {
-    displayAreas(map, emit, mapMode, route)
-    displayLegends(map, mapMode)
-    displayUnselectPanel(map, emit, mapMode, route)
   } else {
-    displayAreas(map, emit, mapMode, route)
+    // ADMIN + PROVIDER
+    displayAreas(map, emit, mapMode, route, selectedLocationId)
     displayLegends(map, mapMode)
     displayUnselectPanel(map, emit, mapMode, route)
   }
 }
 
-export function refreshLocations(map, emit, mapMode, route) {
+export function refreshLocations(map, emit, mapMode, route, selectedLocationId) {
   // Remove all previous polygons on map
   map.eachLayer((layer) => {
     if (layer instanceof L.Polygon) {
@@ -60,10 +57,8 @@ export function refreshLocations(map, emit, mapMode, route) {
     }
   })
 
-  if (mapMode === MapModeEnum.ADMIN) {
-    displayAreas(map, emit, mapMode, route)
-  } else if (mapMode === MapModeEnum.PROVIDER) {
-    displayAreas(map, emit, mapMode, route)
+  if (mapMode === MapModeEnum.ADMIN || mapMode === MapModeEnum.PROVIDER) {
+    displayAreas(map, emit, mapMode, route, selectedLocationId)
   }
 }
 
@@ -171,7 +166,7 @@ function getAreaColor(locationId, mapMode, route) {
   }
 }
 
-function displayAreas(map, emit, mapMode, route) {
+function displayAreas(map, emit, mapMode, route, selectedLocationId) {
   const polygons = ref([])
   const locationStore = useLocationStore()
 
@@ -179,10 +174,14 @@ function displayAreas(map, emit, mapMode, route) {
     const locationId = location.id
 
     const areaColor = getAreaColor(locationId, mapMode, route)
+    const initialWeight =
+      selectedLocationId != undefined && Number(locationId) === Number(selectedLocationId)
+        ? defaultPolygonWeight + 4
+        : defaultPolygonWeight
 
     let polygon = L.polygon(location['area'], {
       color: areaColor,
-      weight: defaultPolygonWeight,
+      weight: initialWeight,
     }).addTo(map)
 
     polygon.on('click', () => {
@@ -287,7 +286,7 @@ function displayUnselectPanel(map, emit, mapMode, route) {
     container.style.cursor = 'pointer'
     container.onclick = function () {
       emit('changeSelectedLocation', undefined)
-      refreshLocations(map, emit, mapMode, route)
+      refreshLocations(map, emit, mapMode, route, undefined)
     }
 
     const label = L.DomUtil.create('b', 'custom-button', container)
