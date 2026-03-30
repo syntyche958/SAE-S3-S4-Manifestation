@@ -13,7 +13,12 @@
               <Button
                 type="button"
                 label="Accepter"
-                @click="emit('set-activity-location', { activityId: data.activityId, dateHour: data.dateHour })"
+                @click="
+                  emit('set-activity-location', {
+                    activityId: data.activityId,
+                    dateHour: data.dateHour,
+                  })
+                "
                 size="small"
               />
             </template>
@@ -22,10 +27,11 @@
       </div>
     </template>
   </Card>
+  <Message v-else severity="info">Aucune demande en attente</Message>
 </template>
 <script setup>
 import { computed } from 'vue'
-import { Column, DataTable, Button, Card } from 'primevue'
+import { Column, DataTable, Button, Card, Message } from 'primevue'
 import { useProviderStore } from '@/stores/providers'
 import { useActivityStore } from '@/stores/activities'
 
