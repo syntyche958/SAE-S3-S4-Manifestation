@@ -71,9 +71,8 @@ export const useProviderStore = defineStore('provider', () => {
   async function addNewProvider(providerName, providerDesc, userId) {
     let response = await ProviderService.addNewProvider(providerName, providerDesc, userId)
     if (response.error === 0) {
-      // TODO : Quand le back-end sera en place, plutôt appeler getAllNewProviders() pour maj le store !
+      await getAllNewProviders()
       displaySuccessToast('Votre demande a été enregistré avec succès')
-      newProviders.value.push(response.data)
     } else {
       displayErrToast("Échec de l'envoi de la demande, veuillez réessayer")
       console.log(response.data)
@@ -83,7 +82,7 @@ export const useProviderStore = defineStore('provider', () => {
   async function removeNewProvider(data) {
     let response = await ProviderService.removeNewProvider(data.id)
     if (response.error === 0) {
-      // TODO : Quand le back-end sera en place, appeler getAllNewProviders() pour maj le store !
+      await getAllNewProviders()
       displaySuccessToast(`La demande de ${data.name} a été supprimé avec succès`)
     } else {
       displayErrToast(`Échec de la suppression de la demande de ${data.name}`)
@@ -94,12 +93,11 @@ export const useProviderStore = defineStore('provider', () => {
   async function validateNewProviders(data) {
     let response1 = await ProviderService.validateNewProviders(data)
 
-    newProviders.value = newProviders.value.filter((p) => p.id != data.id)
-    providers.value.push(response1.data)
-
     // Update user type to provider
     let response2 = await AuthService.updateUserTypeToProvider(data.userId)
     if (response1.error === 0 && response2.error === 0) {
+      await getAllNewProviders()
+      await getAllProviders()
       displaySuccessToast(`La demande de ${data.name} a été validé avec succès`)
     } else {
       displayErrToast(`Échec de la validation de la demande de ${data.name}`)
@@ -111,11 +109,7 @@ export const useProviderStore = defineStore('provider', () => {
 
     if (response.error === 0) {
       displaySuccessToast('Image uploadée avec succès')
-      // providerImages.value = await getProviderImages(providerId)
-      providerImages.value = providerImages.value.map((p) => {
-        if (p.id !== providerId) return p
-        return { ...p, images: [...p.images, response.data] }
-      })
+      await getProviderImages(providerId)
     } else {
       displayErrToast("Erreur lors de l'upload")
       console.log(response.data)
@@ -129,6 +123,7 @@ export const useProviderStore = defineStore('provider', () => {
 
     if (response.error === 0) {
       displaySuccessToast('Image supprimée avec succès')
+      await getProviderImages(providerId)
     } else {
       displayErrToast('Erreur lors de la suppression')
       console.log(response.data)
