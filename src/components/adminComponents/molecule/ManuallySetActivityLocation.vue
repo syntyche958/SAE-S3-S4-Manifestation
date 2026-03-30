@@ -1,7 +1,7 @@
 <template>
   <div class="mt-6 flex flex-col gap-3">
     <h2 class="mb-0!">{{ $t('message.manuallyChoose') + ' :' }}</h2>
-    <Message severity="info">Sélectionnez une activité pour chaque heure.</Message>
+    <!-- <Message severity="info">Sélectionnez une activité pour chaque heure.</Message> -->
 
     <DataTable :value="timeSlots" dataKey="slotKey" paginator :rows="8">
       <Column field="beginingDate" header="Date" sortable />
@@ -34,7 +34,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { Select, Message, DataTable, Column, Button } from 'primevue'
+import { Select, DataTable, Column, Button } from 'primevue'
 import { useActivityStore } from '@/stores/activities'
 import { useI18n } from 'vue-i18n'
 
