@@ -76,12 +76,22 @@ const loadData = async () => {
   }
 }
 
+const axisStyle = {
+  y: {
+    beginAtZero: true,
+    ticks: { stepSize: 1, color: '#fafafa' },
+    grid: { color: 'rgba(250, 250, 250, 0.1)' },
+  },
+  x: {
+    ticks: { color: '#fafafa' },
+    grid: { color: 'rgba(250, 250, 250, 0.1)' },
+  },
+}
+
 const drawCharts = () => {
-  // Détruire anciens graphiques
   if (chartByActivity) chartByActivity.destroy()
   if (chartByDay) chartByDay.destroy()
 
-  // Graphique par activité
   const ctxActivity = document.getElementById('chartActivity')
   if (ctxActivity && registrationsByActivity.value.length > 0) {
     chartByActivity = new Chart(ctxActivity, {
@@ -104,14 +114,11 @@ const drawCharts = () => {
         plugins: {
           legend: { display: false },
         },
-        scales: {
-          y: { beginAtZero: true, ticks: { stepSize: 1 } },
-        },
+        scales: axisStyle,
       },
     })
   }
 
-  // Graphique par jour
   const ctxDay = document.getElementById('chartDay')
   if (ctxDay && registrationsByDay.value.length > 0) {
     chartByDay = new Chart(ctxDay, {
@@ -136,9 +143,7 @@ const drawCharts = () => {
         plugins: {
           legend: { display: false },
         },
-        scales: {
-          y: { beginAtZero: true, ticks: { stepSize: 1 } },
-        },
+        scales: axisStyle,
       },
     })
   }
@@ -176,10 +181,11 @@ watch([registrationsByActivity, registrationsByDay], () => {
         </template>
       </Card>
 
-      <!-- Graphiques -->
       <div class="charts-grid">
-        <Card class="chart-card">
-          <template #title><i class="pi pi-chart-bar"></i> Inscriptions par activité</template>
+        <Card class="chart-card shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
+          <template #title>
+            <div class="chart-title"><i class="pi pi-chart-bar"></i> Inscriptions par activité</div>
+          </template>
           <template #content>
             <div v-if="registrationsByActivity.length > 0" class="chart-wrapper">
               <canvas id="chartActivity"></canvas>
@@ -191,8 +197,10 @@ watch([registrationsByActivity, registrationsByDay], () => {
           </template>
         </Card>
 
-        <Card class="chart-card">
-          <template #title><i class="pi pi-calendar"></i> Inscriptions par jour</template>
+        <Card class="chart-card shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
+          <template #title>
+            <div class="chart-title"><i class="pi pi-calendar"></i> Inscriptions par jour</div>
+          </template>
           <template #content>
             <div v-if="registrationsByDay.length > 0" class="chart-wrapper">
               <canvas id="chartDay"></canvas>
@@ -205,7 +213,6 @@ watch([registrationsByActivity, registrationsByDay], () => {
         </Card>
       </div>
 
-      <!-- Tableaux détaillés -->
       <Card class="stats-card">
         <template #title><i class="pi pi-table"></i> Détail par activité et par jour</template>
         <template #content>
@@ -218,9 +225,16 @@ watch([registrationsByActivity, registrationsByDay], () => {
           >
             <Column field="activityName" header="Activité" sortable></Column>
             <Column field="date" header="Date" sortable></Column>
-            <Column field="count" header="Nombre d'inscrits" sortable>
+            <Column
+              field="count"
+              header="Nombre d'inscrits"
+              sortable
+              bodyClass="count-col"
+              headerClass="count-col-header"
+              style="width: 180px"
+            >
               <template #body="slotProps">
-                <Tag :value="slotProps.data.count" severity="info" />
+                <Tag :value="slotProps.data.count" class="stats-count-tag" />
               </template>
             </Column>
           </DataTable>
@@ -279,25 +293,26 @@ watch([registrationsByActivity, registrationsByDay], () => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: #1a1a1a;
   border-radius: 8px;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .summary-stat:last-child {
   margin-bottom: 0;
-  border-bottom: none;
 }
 
 .stat-label {
   font-size: 1.1rem;
   font-weight: 500;
+  color: #d4d4d8;
 }
 
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
+  color: #fafafa;
 }
 
 .charts-grid {
@@ -306,16 +321,19 @@ watch([registrationsByActivity, registrationsByDay], () => {
   gap: 2rem;
 }
 
-.chart-card :deep(.p-card-title) {
+.chart-title {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  color: #fafafa;
+  text-align: center;
 }
 
 .chart-wrapper {
   position: relative;
-  height: 300px;
-  padding: 1rem;
+  height: 350px;
+  padding: 0 1rem 1rem;
 }
 
 .stats-card :deep(.p-card-title) {
@@ -327,7 +345,7 @@ watch([registrationsByActivity, registrationsByDay], () => {
 .no-data {
   text-align: center;
   padding: 3rem 2rem;
-  color: #9ca3af;
+  color: #a1a1aa;
 }
 
 .no-data i {
@@ -340,8 +358,47 @@ watch([registrationsByActivity, registrationsByDay], () => {
   .statistics-container {
     padding: 1rem;
   }
+
   .charts-grid {
     grid-template-columns: 1fr;
   }
+
+  .chart-wrapper {
+    height: 320px;
+    padding: 0;
+  }
+}
+
+.stats-card :deep(.p-datatable-table) {
+  font-size: 0.92rem;
+}
+
+.stats-card :deep(.p-datatable-thead > tr > th),
+.stats-card :deep(.p-datatable-tbody > tr > td) {
+  padding: 0.65rem 0.75rem;
+}
+
+.stats-card :deep(.count-col-header),
+.stats-card :deep(.count-col) {
+  text-align: center;
+}
+
+.stats-card :deep(.count-col .stats-count-tag) {
+  margin: 0 auto;
+  min-width: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #f8fbff;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: 1px solid rgba(191, 219, 254, 0.55);
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+}
+
+.stats-card :deep(.p-datatable-tbody > tr:hover > td) {
+  background-color: rgba(255, 255, 255, 0.06);
 }
 </style>
