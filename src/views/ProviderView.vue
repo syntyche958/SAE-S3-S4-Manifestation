@@ -61,7 +61,6 @@ import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import PresentationProviderSection from '@/components/providerComponents/organism/PresentationProviderSection.vue'
-import ServicesProviderSection from '@/components/providerComponents/organism/ServicesProviderSection.vue'
 import StatisticsProviderSection from '@/components/providerComponents/organism/StatisticsProviderSection.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { useProviderStore } from '@/stores/providers'

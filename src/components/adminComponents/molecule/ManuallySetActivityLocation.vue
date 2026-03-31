@@ -26,7 +26,7 @@
           :disabled="selectedDateHours.length === 0"
         />
       </div>
-      <Button :label="$t('message.validate')" :disabled="!canSubmit" @click="submit" />
+      <Button :label="buttonLabel" :disabled="!canSubmit" @click="submit" />
       <span v-if="selectedDateHours.length > 0" class="text-xs text-white/70">
         {{ $t('message.selectedSlotsCount', { n: selectedDateHours.length }) }}
       </span>
@@ -45,6 +45,8 @@ import { ActivitySpotStatusEnum } from '@/enums/ActivitySpotStatus.enum'
 import {
   buildAdminSlotsForLocation,
   getActivitiesAssignableToAllSlots,
+  getActivityRequestingSlot,
+  getActivityWithConfirmedSlot,
 } from '@/utils/locationSlots.utils'
 import { displayErrToast } from '@/utils/toast.utils'
 
@@ -60,10 +62,12 @@ const props = defineProps({
 const adminSelectableStatuses = [
   ActivitySpotStatusEnum.ADMIN_FREE,
   ActivitySpotStatusEnum.ADMIN_PENDING,
+  ActivitySpotStatusEnum.ADMIN_RESERVED,
 ]
 
 const selectedDateHours = ref([])
 const selectedActivityId = ref(null)
+const validatingRequestActivityId = ref(null)
 
 watch(
   () => props.selectedLocation?.id,
@@ -119,10 +123,64 @@ const canSubmit = computed(
     activitiesForAllSelectedSlots.value.some((a) => a.id === selectedActivityId.value),
 )
 
+const isValidatingRequest = computed(() => {
+  if (selectedDateHours.value.length !== 1) return false
+  const slot = allAdminSlots.value.find((s) => s.dateHour === selectedDateHours.value[0])
+  return slot && slot.status === ActivitySpotStatusEnum.ADMIN_PENDING
+})
+
+const isReassigning = computed(() => {
+  if (selectedDateHours.value.length !== 1) return false
+  const slot = allAdminSlots.value.find((s) => s.dateHour === selectedDateHours.value[0])
+  return slot && slot.status === ActivitySpotStatusEnum.ADMIN_RESERVED
+})
+
+const buttonLabel = computed(() => {
+  if (isValidatingRequest.value) return t('message.validateRequest')
+  if (isReassigning.value) return t('message.reassignSpot')
+  return t('message.validate')
+})
+
 function toggleSlot(dateHour) {
   const i = selectedDateHours.value.indexOf(dateHour)
-  if (i >= 0) selectedDateHours.value.splice(i, 1)
-  else selectedDateHours.value.push(dateHour)
+
+  if (i >= 0) {
+    // Désélection
+    selectedDateHours.value.splice(i, 1)
+    if (selectedDateHours.value.length === 0) {
+      validatingRequestActivityId.value = null
+      selectedActivityId.value = null
+    }
+  } else {
+    // Sélection
+    const slot = allAdminSlots.value.find((s) => s.dateHour === dateHour)
+    selectedDateHours.value.push(dateHour)
+
+    // Si c'est une demande, préremplir l'activité qui l'a demandée
+    if (slot && slot.status === ActivitySpotStatusEnum.ADMIN_PENDING) {
+      const requestingActivity = getActivityRequestingSlot(
+        activityStore.activities,
+        props.selectedLocation.id,
+        dateHour,
+      )
+      if (requestingActivity) {
+        selectedActivityId.value = requestingActivity.id
+        validatingRequestActivityId.value = requestingActivity.id
+      }
+    }
+    // Si c'est un slot réservé, préremplir l'activité qui l'occupe
+    else if (slot && slot.status === ActivitySpotStatusEnum.ADMIN_RESERVED) {
+      const currentActivity = getActivityWithConfirmedSlot(
+        activityStore.activities,
+        props.selectedLocation.id,
+        dateHour,
+      )
+      if (currentActivity) {
+        selectedActivityId.value = currentActivity.id
+        validatingRequestActivityId.value = null
+      }
+    }
+  }
 }
 
 function submit() {

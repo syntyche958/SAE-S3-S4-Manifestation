@@ -76,9 +76,11 @@ const messages = {
       demandSpotButton: 'Request',
       availabilityHoursTitle: 'Availability (all hours)',
       capsuleSelectHintAdmin:
-        'Select free slots or pending requests (bold), choose an activity that is valid for every slot, then confirm.',
+        'Select free slots, pending requests (bold), or reserved spots (green) to reassign. Choose an activity valid for every slot, then confirm.',
       manualAssignSelectActivity: 'Choose an activity',
       validate: 'Confirm',
+      validateRequest: 'Validate request',
+      reassignSpot: 'Reassign spot',
       activityNotAssignableAllSlots:
         'This activity cannot be assigned to all selected time slots (conflict or eligibility).',
       appearanceOfThePage: 'Appearance of the page',
@@ -376,9 +378,11 @@ const messages = {
       demandSpotButton: 'Demander',
       availabilityHoursTitle: 'Disponibilités (toutes heures)',
       capsuleSelectHintAdmin:
-        'Sélectionnez les créneaux libres ou en demande (gras), choisissez une activité valide pour tous, puis validez.',
+        'Sélectionnez les créneaux libres, en demande (gras), ou réservés (vert) pour réassigner. Choisissez une activité valide pour tous, puis validez.',
       manualAssignSelectActivity: 'Choisir une activité',
       validate: 'Valider',
+      validateRequest: 'Valider la demande',
+      reassignSpot: 'Réassigner l\'emplacement',
       activityNotAssignableAllSlots:
         'Cette activité ne peut pas être attribuée à tous les créneaux sélectionnés (conflit ou éligibilité).',
       appearanceOfThePage: 'Apparence de la page',

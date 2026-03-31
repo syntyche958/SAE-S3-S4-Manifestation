@@ -1,13 +1,64 @@
 import { ActivitySpotStatusEnum } from '@/enums/ActivitySpotStatus.enum'
 
-/**
- * Activités pouvant recevoir une attribution confirmée sur (locationId, dateHour),
- * sans conflit ailleurs à la même heure ni avec un autre occupant / demandeur incompatible.
- */
+export function getActivityRequestingSlot(activities, locationId, dateHour) {
+  const locStr = String(locationId)
+  const dhStr = String(dateHour)
+
+  for (const activity of activities) {
+    for (const req of activity.requestedSpotIds || []) {
+      if (String(req.locationId) === locStr && String(req.dateHour) === dhStr) {
+        return activity
+      }
+    }
+  }
+  return null
+}
+
+export function getActivityWithConfirmedSlot(activities, locationId, dateHour) {
+  const locStr = String(locationId)
+  const dhStr = String(dateHour)
+
+  for (const activity of activities) {
+    for (const spot of activity.spotIds || []) {
+      if (String(spot.locationId) === locStr && String(spot.dateHour) === dhStr) {
+        return activity
+      }
+    }
+  }
+  return null
+}
+
 export function getAssignableActivitiesForAdminSlot(activities, locationId, dateHour) {
   const locStr = String(locationId)
   const dh = String(dateHour)
 
+  const currentActivity = getActivityWithConfirmedSlot(activities, locationId, dateHour)
+
+  if (currentActivity) {
+    const requesterIds = new Set()
+    for (const a of activities) {
+      for (const r of a.requestedSpotIds || []) {
+        if (String(r.locationId) === locStr && String(r.dateHour) === dh) {
+          requesterIds.add(a.id)
+        }
+      }
+    }
+
+    return activities
+      .filter((a) => {
+        if (a.id === currentActivity.id) return true
+
+        const blockedElsewhere = (a.spotIds || []).some(
+          (s) => String(s.dateHour) === dh && String(s.locationId) !== locStr,
+        )
+        if (blockedElsewhere) return false
+        if (requesterIds.size > 0 && !requesterIds.has(a.id)) return false
+        return true
+      })
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  // Si non occupé, utiliser la logique standard
   const hasConfirmed = activities.some((a) =>
     (a.spotIds || []).some(
       (s) => String(s.locationId) === locStr && String(s.dateHour) === dh,
