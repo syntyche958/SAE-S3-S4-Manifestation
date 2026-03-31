@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <h3 class="mb-2 text-sm font-semibold text-white/90">{{ $t(sectionTitleKey) }}</h3>
+  <div class="rounded-2xl border border-white/20 bg-zinc-800/70 p-4 shadow-inner shadow-black/20">
+    <h3 class="mb-2 text-sm font-semibold tracking-wide text-white">{{ $t(sectionTitleKey) }}</h3>
     <div
-      class="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-white/10 bg-white/3 px-3 py-2 text-xs text-white/85"
+      class="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-white/20 bg-zinc-700/60 px-3 py-2 text-xs text-white"
     >
-      <span class="font-medium text-white/70">{{ $t('message.capsuleLegendTitle') }}</span>
+      <span class="font-medium text-white/80">{{ $t('message.capsuleLegendTitle') }}</span>
       <template v-if="legendMode === 'admin'">
         <span class="inline-flex items-center gap-1.5">
           <AvailabilityHourCapsule hour="10:00" :status="ActivitySpotStatusEnum.ADMIN_FREE" />
@@ -37,11 +37,15 @@
           {{ $t('message.capsuleLegendOther') }}
         </span>
       </template>
-      <span class="w-full text-[11px] text-white/55">{{ $t(hintKey) }}</span>
+      <span class="w-full text-[11px] text-white/65">{{ $t(hintKey) }}</span>
     </div>
-    <div class="max-h-60 overflow-auto rounded-xl border border-white/10 p-3">
+    <div class="max-h-60 overflow-auto rounded-xl border border-white/20 bg-zinc-800/55 p-3">
       <div v-for="day in availableDates" :key="day" class="mb-3 last:mb-0">
-        <div class="mb-2 text-xs text-white/70">{{ formatDate(day) }}</div>
+        <div
+          class="mb-2 inline-flex rounded-md border border-white/20 bg-zinc-700/65 px-2 py-0.5 text-xs font-medium text-white/90"
+        >
+          {{ formatDate(day) }}
+        </div>
         <div class="flex flex-wrap gap-2">
           <AvailabilityHourCapsule
             v-for="slot in slotsByDay[day] || []"
@@ -66,15 +70,9 @@ const props = defineProps({
   availableDates: { type: Array, required: true },
   slotsByDay: { type: Object, required: true },
   selectedDateHours: { type: Array, required: true },
-  /** Clé i18n pour le titre de section */
   sectionTitleKey: { type: String, default: 'message.availabilityHoursTitle' },
   hintKey: { type: String, default: 'message.capsuleSelectHint' },
-  /**
-   * Statuts cliquables (ex. admin : libre + demande en attente).
-   * Si null, seul PROVIDER_FREE est sélectionnable (comportement prestataire).
-   */
   selectableStatuses: { type: Array, default: null },
-  /** Légende : 4 pastilles prestataire ou 3 pastilles admin (bleu / orange / vert). */
   legendMode: {
     type: String,
     default: 'provider',

@@ -145,18 +145,15 @@ function toggleSlot(dateHour) {
   const i = selectedDateHours.value.indexOf(dateHour)
 
   if (i >= 0) {
-    // Désélection
     selectedDateHours.value.splice(i, 1)
     if (selectedDateHours.value.length === 0) {
       validatingRequestActivityId.value = null
       selectedActivityId.value = null
     }
   } else {
-    // Sélection
     const slot = allAdminSlots.value.find((s) => s.dateHour === dateHour)
     selectedDateHours.value.push(dateHour)
 
-    // Si c'est une demande, préremplir l'activité qui l'a demandée
     if (slot && slot.status === ActivitySpotStatusEnum.ADMIN_PENDING) {
       const requestingActivity = getActivityRequestingSlot(
         activityStore.activities,
@@ -167,9 +164,7 @@ function toggleSlot(dateHour) {
         selectedActivityId.value = requestingActivity.id
         validatingRequestActivityId.value = requestingActivity.id
       }
-    }
-    // Si c'est un slot réservé, préremplir l'activité qui l'occupe
-    else if (slot && slot.status === ActivitySpotStatusEnum.ADMIN_RESERVED) {
+    } else if (slot && slot.status === ActivitySpotStatusEnum.ADMIN_RESERVED) {
       const currentActivity = getActivityWithConfirmedSlot(
         activityStore.activities,
         props.selectedLocation.id,
