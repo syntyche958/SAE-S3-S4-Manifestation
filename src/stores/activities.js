@@ -40,13 +40,36 @@ export const useActivityStore = defineStore('activity', () => {
     else console.log(response.data)
   }
 
+  async function updateRequestedLocationId(activityId, requestedLocationId, dateHours = []) {
+    if (Array.isArray(dateHours) && dateHours.length > 0) {
+      await addRequestedSpots(activityId, requestedLocationId, dateHours)
+    }
+  }
+
   async function addSpot(activityId, locationId, dateHour) {
-    let response = await activityService.addSpotLocalSource(activityId, locationId, dateHour)
+    let response = await activityService.addSpotsBulkLocalSource(activityId, locationId, [dateHour])
     if (response.error === 0) {
       activities.value = response.data
       displaySuccessToast('Emplacement attribué avec succès !')
     } else {
       displayErrToast("Échec de l'attribution de l'emplacement !")
+    }
+  }
+
+  async function addSpotsBulk(activityId, locationId, dateHours) {
+    const response = await activityService.addSpotsBulkLocalSource(
+      activityId,
+      locationId,
+      dateHours,
+    )
+    if (response.error === 0) {
+      activities.value = response.data
+      const n = [...new Set(dateHours.map(String))].length
+      displaySuccessToast(
+        n > 1 ? `${n} créneaux attribués avec succès !` : 'Emplacement attribué avec succès !',
+      )
+    } else {
+      displayErrToast("Échec de l'attribution des emplacements !")
     }
   }
 
@@ -153,8 +176,10 @@ export const useActivityStore = defineStore('activity', () => {
     get,
     add,
     addSpot,
+    addSpotsBulk,
     updateLocationId,
     refuseRequestedLocation,
+    updateRequestedLocationId,
     addRequestedSpots,
     addRating,
     addComment,

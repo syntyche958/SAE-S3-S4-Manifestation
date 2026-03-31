@@ -14,19 +14,22 @@
         <LocationCharacteristics :selected-location="selectedLocation" :display-title="false" />
 
         <div class="mt-4 flex flex-col gap-4">
-          <AvailabilityHoursContainer :available-dates="availableDates" :slots-by-day="slotsByDay" />
-          <LocationRequestsReservations
+          <AvailabilityHoursContainer
             :available-dates="availableDates"
-            :hour-options="availableHourOptions"
-            :request-rows="requestRows"
-            :is-adding-row="isAddingRow"
-            :draft-day="draftDay"
-            :draft-hour="draftHour"
-            @start-add-row="startAddRow"
-            @add-request-row="addRequestRow"
-            @update:draft-day="draftDay = $event"
-            @update:draft-hour="draftHour = $event"
+            :slots-by-day="slotsByDay"
+            :selected-date-hours="selectedDateHours"
+            @toggle-slot="toggleSlotSelection"
           />
+          <div class="flex flex-wrap items-center gap-3">
+            <Button
+              :label="$t('message.demandSpotButton')"
+              :disabled="selectedDateHours.length === 0"
+              @click="submitSelectedRequests"
+            />
+            <span v-if="selectedDateHours.length > 0" class="text-xs text-white/70">
+              {{ $t('message.selectedSlotsCount', { n: selectedDateHours.length }) }}
+            </span>
+          </div>
         </div>
       </template>
     </Card>
@@ -38,25 +41,27 @@
 </template>
 
 <script setup>
-import { Card } from 'primevue'
+import { Button, Card } from 'primevue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import TheMap from '@/components/globalComponents/molecule/TheMap.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useLocationStore } from '@/stores/locations'
 import { useActivityStore } from '@/stores/activities'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import LocationCharacteristics from '@/components/globalComponents/molecule/LocationCharacteristics.vue'
 import AvailabilityHoursContainer from '@/components/activityComponents/molecule/AvailabilityHoursContainer.vue'
-import LocationRequestsReservations from '@/components/activityComponents/molecule/LocationRequestsReservations.vue'
 import { useSessionStore } from '@/stores/sessions'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 import { ActivitySpotStatusEnum } from '@/enums/ActivitySpotStatus.enum'
 import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
+import { buildProviderSlots } from '@/utils/locationSlots.utils'
 
 const locationStore = useLocationStore()
 const activityStore = useActivityStore()
 const route = useRoute()
 const sessionStore = useSessionStore()
+const { t } = useI18n()
 
 const selectedLocationId = ref()
 const selectedLocation = computed(() =>
@@ -67,12 +72,13 @@ const onChangeSelectedLocation = (locationId) => {
 }
 
 const currentActivityId = computed(() => Number(route.params.activity_id))
-const hourOptions = computed(() => {
-  const options = []
-  for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
-    options.push(`${String(h).padStart(2, '0')}:00`)
-  }
-  return options
+const currentActivity = computed(() => activityStore.get(currentActivityId.value))
+
+/** Créneaux sélectionnés pour demande (clés `YYYY-MM-DDTHH:00`) */
+const selectedDateHours = ref([])
+
+watch(selectedLocationId, () => {
+  selectedDateHours.value = []
 })
 
 const availableDates = computed(() => {
@@ -91,67 +97,23 @@ const availableDates = computed(() => {
   return Array.from(dates).sort()
 })
 
-const draftDay = ref(EVENT_DAYS[0])
-const draftHour = ref(hourOptions.value[0])
-const isAddingRow = ref(false)
+const allSlots = computed(() =>
+  buildProviderSlots(
+    availableDates.value,
+    selectedLocationId.value,
+    currentActivityId.value,
+    activityStore.activities,
+    currentActivity.value,
+    EVENT_START_HOUR,
+    EVENT_END_HOUR,
+  ),
+)
 
-watch(availableDates, (days) => {
-  if (!days || days.length === 0) return
-  if (!draftDay.value || !days.includes(draftDay.value)) draftDay.value = days[0]
-})
-
-const allSlots = computed(() => {
-  const slots = []
-  for (const day of availableDates.value) {
-    for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
-      const hourLabel = `${String(h).padStart(2, '0')}:00`
-      const dateHour = `${day}T${hourLabel}`
-      const locationIdStr = String(selectedLocationId.value)
-
-      const occupied = activityStore.activities.some(
-        (a) =>
-          (a.spotIds || []).some(
-            (s) => String(s.locationId) === locationIdStr && String(s.dateHour) === dateHour,
-          ),
-      )
-      const pending = !occupied
-        ? activityStore.activities.some(
-            (a) =>
-              (a.requestedSpotIds || []).some(
-                (s) =>
-                  String(s.locationId) === locationIdStr && String(s.dateHour) === dateHour,
-              ),
-          )
-        : false
-
-      slots.push({
-        day,
-        hour: hourLabel,
-        dateHour,
-        status: occupied
-          ? ActivitySpotStatusEnum.OCCUPIED
-          : pending
-            ? ActivitySpotStatusEnum.PENDING
-            : ActivitySpotStatusEnum.AVAILABLE,
-      })
-    }
-  }
-  return slots
-})
-
-const availableHourOptions = computed(() => {
-  if (!draftDay.value) return []
-  return allSlots.value
-    .filter((s) => s.day === draftDay.value && s.status === ActivitySpotStatusEnum.AVAILABLE)
-    .map((s) => s.hour)
-})
-
-watch(availableHourOptions, (hours) => {
-  if (!hours || hours.length === 0) {
-    draftHour.value = ''
-    return
-  }
-  if (!hours.includes(draftHour.value)) draftHour.value = hours[0]
+watch(allSlots, () => {
+  selectedDateHours.value = selectedDateHours.value.filter((dh) => {
+    const s = allSlots.value.find((x) => x.dateHour === dh)
+    return s?.status === ActivitySpotStatusEnum.PROVIDER_FREE
+  })
 })
 
 const slotsByDay = computed(() => {
@@ -162,46 +124,34 @@ const slotsByDay = computed(() => {
   return grouped
 })
 
-const requestRows = computed(() => {
-  const activity = activityStore.get(currentActivityId.value)
-  if (!activity || !selectedLocationId.value) return []
-  const rows = []
-  const locationIdStr = String(selectedLocationId.value)
-
-  for (const spot of activity.spotIds || []) {
-    if (String(spot.locationId) !== locationIdStr) continue
-    const [day, hour] = String(spot.dateHour).split('T')
-    rows.push({ key: `a-${spot.dateHour}`, day, hour, status: ActivitySpotStatusEnum.ACCEPTED })
-  }
-  for (const spot of activity.requestedSpotIds || []) {
-    if (String(spot.locationId) !== locationIdStr) continue
-    const [day, hour] = String(spot.dateHour).split('T')
-    rows.push({ key: `p-${spot.dateHour}`, day, hour, status: ActivitySpotStatusEnum.PENDING })
-  }
-  return rows.sort((a, b) => `${a.day}T${a.hour}`.localeCompare(`${b.day}T${b.hour}`))
-})
-
-function startAddRow() {
-  isAddingRow.value = true
-  draftDay.value = availableDates.value[0]
-  draftHour.value = availableHourOptions.value[0] || ''
+function toggleSlotSelection(dateHour) {
+  const i = selectedDateHours.value.indexOf(dateHour)
+  if (i >= 0) selectedDateHours.value.splice(i, 1)
+  else selectedDateHours.value.push(dateHour)
 }
 
-async function addRequestRow() {
-  if (!selectedLocationId.value || !draftDay.value || !draftHour.value) return
-  const dateHour = `${draftDay.value}T${draftHour.value}`
-  const slot = allSlots.value.find((s) => s.dateHour === dateHour)
-  if (!slot || slot.status !== ActivitySpotStatusEnum.AVAILABLE) {
-    displayErrToast('Ce créneau n’est pas disponible.')
+async function submitSelectedRequests() {
+  if (!selectedLocationId.value || selectedDateHours.value.length === 0) return
+
+  const dateHours = selectedDateHours.value.filter((dh) => {
+    const s = allSlots.value.find((x) => x.dateHour === dh)
+    return s?.status === ActivitySpotStatusEnum.PROVIDER_FREE
+  })
+  if (dateHours.length === 0) {
+    displayErrToast(t('message.noValidSlotsInSelection'))
     return
   }
 
   try {
-    await activityStore.addRequestedSpots(currentActivityId.value, selectedLocationId.value, [dateHour])
-    displaySuccessToast('Demande ajoutée.')
-    isAddingRow.value = false
+    await activityStore.addRequestedSpots(currentActivityId.value, selectedLocationId.value, dateHours)
+    displaySuccessToast(
+      dateHours.length > 1
+        ? t('message.requestsSavedMany', { n: dateHours.length })
+        : t('message.requestsSavedOne'),
+    )
+    selectedDateHours.value = []
   } catch (e) {
-    displayErrToast('Erreur lors de l’ajout.')
+    displayErrToast(t('message.requestsSaveError'))
     console.error(e)
   }
 }

@@ -21,7 +21,7 @@
             <TabPanel value="1">
               <ManuallySetActivityLocation
                 :selectedLocation="selectedLocation"
-                @set-activity-location="(spotData) => acceptActivityLocation(spotData)"
+                @assign-spots-bulk="acceptSpotsBulk"
               />
             </TabPanel>
           </TabPanels>
@@ -55,7 +55,10 @@ const selectedLocation = computed(() =>
 
 function acceptActivityLocation({ activityId, dateHour }) {
   activityStore.addSpot(activityId, props.selectedLocationId, dateHour)
-  //emit('update-selected-location-id', undefined)
+}
+
+function acceptSpotsBulk({ activityId, dateHours }) {
+  activityStore.addSpotsBulk(activityId, props.selectedLocationId, dateHours)
 }
 
 async function refuseActivityLocation(activityId) {

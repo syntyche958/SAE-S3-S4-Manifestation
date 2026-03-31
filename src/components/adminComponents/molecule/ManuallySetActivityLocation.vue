@@ -1,107 +1,146 @@
 <template>
-  <div class="mt-6 flex flex-col gap-3">
-    <h2 class="mb-0!">{{ $t('message.manuallyChoose') + ' :' }}</h2>
-    <!-- <Message severity="info">Sélectionnez une activité pour chaque heure.</Message> -->
+  <div class="mt-6 flex flex-col gap-4">
+    <AvailabilityHoursContainer
+      legend-mode="admin"
+      :available-dates="EVENT_DAYS"
+      :slots-by-day="slotsByDay"
+      :selected-date-hours="selectedDateHours"
+      :hint-key="'message.capsuleSelectHintAdmin'"
+      :selectable-statuses="adminSelectableStatuses"
+      @toggle-slot="toggleSlot"
+    />
 
-    <DataTable :value="timeSlots" dataKey="slotKey" paginator :rows="8">
-      <Column field="beginingDate" header="Date" sortable />
-      <Column field="beginingHour" header="Heure" sortable />
-      <Column header="Activité">
-        <template #body="{ data }">
-          <Select
-            v-model="manualAssignments[data.slotKey]"
-            :options="getAvailableActivitiesForSlot(data.slotKey)"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Choisir une activité"
-            class="w-full md:w-72"
-          />
-        </template>
-      </Column>
-      <Column header="">
-        <template #body="{ data }">
-          <Button
-            icon="pi pi-save"
-            size="small"
-            :disabled="!manualAssignments[data.slotKey]"
-            @click="setActivityLocation(data.slotKey, manualAssignments[data.slotKey])"
-          />
-        </template>
-      </Column>
-    </DataTable>
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+      <div class="min-w-56 flex-1">
+        <label class="mb-1 block text-xs font-medium text-white/70" for="manual-assign-activity">{{
+          $t('message.activity')
+        }}</label>
+        <Select
+          id="manual-assign-activity"
+          v-model="selectedActivityId"
+          :options="activitiesForAllSelectedSlots"
+          optionLabel="name"
+          optionValue="id"
+          :placeholder="$t('message.manualAssignSelectActivity')"
+          class="w-full md:max-w-md"
+          :disabled="selectedDateHours.length === 0"
+        />
+      </div>
+      <Button :label="$t('message.validate')" :disabled="!canSubmit" @click="submit" />
+      <span v-if="selectedDateHours.length > 0" class="text-xs text-white/70">
+        {{ $t('message.selectedSlotsCount', { n: selectedDateHours.length }) }}
+      </span>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { Select, DataTable, Column, Button } from 'primevue'
+import { Select, Button } from 'primevue'
 import { useActivityStore } from '@/stores/activities'
 import { useI18n } from 'vue-i18n'
 import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
+import AvailabilityHoursContainer from '@/components/activityComponents/molecule/AvailabilityHoursContainer.vue'
+import { ActivitySpotStatusEnum } from '@/enums/ActivitySpotStatus.enum'
+import {
+  buildAdminSlotsForLocation,
+  getActivitiesAssignableToAllSlots,
+} from '@/utils/locationSlots.utils'
+import { displayErrToast } from '@/utils/toast.utils'
 
-useI18n()
 const activityStore = useActivityStore()
+const { t } = useI18n()
 
-const emit = defineEmits(['set-activity-location'])
+const emit = defineEmits(['assign-spots-bulk'])
 
 const props = defineProps({
-  selectedLocation: { required: true },
+  selectedLocation: { type: Object, required: true },
 })
 
-const manualAssignments = ref({})
+const adminSelectableStatuses = [
+  ActivitySpotStatusEnum.ADMIN_FREE,
+  ActivitySpotStatusEnum.ADMIN_PENDING,
+]
+
+const selectedDateHours = ref([])
+const selectedActivityId = ref(null)
 
 watch(
-  () => [props.selectedLocation, activityStore.activities],
+  () => props.selectedLocation?.id,
   () => {
-    const assignments = {}
-    if (!props.selectedLocation) return
-    for (const activity of activityStore.activities) {
-      for (const spot of activity.spotIds || []) {
-        if (spot.locationId === props.selectedLocation.id) {
-          assignments[spot.dateHour] = activity.id
-        }
-      }
-    }
-    manualAssignments.value = assignments
+    selectedDateHours.value = []
+    selectedActivityId.value = null
   },
-  { immediate: true, deep: true },
 )
 
-const timeSlots = computed(() => {
-  const slots = []
-  for (const day of EVENT_DAYS) {
-    for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
-      const hour = `${String(h).padStart(2, '0')}:00`
-      slots.push({
-        slotKey: `${day}T${hour}`,
-        beginingDate: day,
-        beginingHour: hour,
-      })
-    }
-  }
-  return slots
+const allAdminSlots = computed(() =>
+  buildAdminSlotsForLocation(
+    activityStore.activities,
+    props.selectedLocation.id,
+    EVENT_DAYS,
+    EVENT_START_HOUR,
+    EVENT_END_HOUR,
+  ),
+)
+
+watch(allAdminSlots, () => {
+  selectedDateHours.value = selectedDateHours.value.filter((dh) => {
+    const s = allAdminSlots.value.find((x) => x.dateHour === dh)
+    return s && adminSelectableStatuses.includes(s.status)
+  })
 })
 
-function getActivitiesTakenAtSlot(slotKey) {
-  const taken = new Set()
-  for (const activity of activityStore.activities) {
-    for (const spot of activity.spotIds || []) {
-      if (spot.dateHour === slotKey && spot.locationId !== props.selectedLocation.id) {
-        taken.add(activity.id)
-      }
-    }
+const slotsByDay = computed(() => {
+  const grouped = {}
+  for (const day of EVENT_DAYS) {
+    grouped[day] = allAdminSlots.value.filter((s) => s.day === day)
   }
-  return taken
+  return grouped
+})
+
+const activitiesForAllSelectedSlots = computed(() =>
+  getActivitiesAssignableToAllSlots(
+    activityStore.activities,
+    props.selectedLocation.id,
+    selectedDateHours.value,
+  ),
+)
+
+watch(activitiesForAllSelectedSlots, (list) => {
+  if (selectedActivityId.value != null && !list.some((a) => a.id === selectedActivityId.value)) {
+    selectedActivityId.value = null
+  }
+})
+
+const canSubmit = computed(
+  () =>
+    selectedDateHours.value.length > 0 &&
+    selectedActivityId.value != null &&
+    activitiesForAllSelectedSlots.value.some((a) => a.id === selectedActivityId.value),
+)
+
+function toggleSlot(dateHour) {
+  const i = selectedDateHours.value.indexOf(dateHour)
+  if (i >= 0) selectedDateHours.value.splice(i, 1)
+  else selectedDateHours.value.push(dateHour)
 }
 
-function getAvailableActivitiesForSlot(slotKey) {
-  const taken = getActivitiesTakenAtSlot(slotKey)
-  return activityStore.activities
-    .filter((a) => !taken.has(a.id))
-    .sort((a, b) => a.name.localeCompare(b.name))
-}
-
-const setActivityLocation = (slotKey, activityId) => {
-  emit('set-activity-location', { activityId, dateHour: slotKey })
+function submit() {
+  const dateHours = [...selectedDateHours.value]
+  const allowed = getActivitiesAssignableToAllSlots(
+    activityStore.activities,
+    props.selectedLocation.id,
+    dateHours,
+  )
+  if (!allowed.some((a) => a.id === selectedActivityId.value)) {
+    displayErrToast(t('message.activityNotAssignableAllSlots'))
+    return
+  }
+  emit('assign-spots-bulk', {
+    activityId: selectedActivityId.value,
+    dateHours,
+  })
+  selectedDateHours.value = []
+  selectedActivityId.value = null
 }
 </script>

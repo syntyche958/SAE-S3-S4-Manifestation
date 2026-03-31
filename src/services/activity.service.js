@@ -135,18 +135,30 @@ async function addCommentLocalSource(activityId, userId, title, content) {
   return { error: 0, status: 200, data: updatedActivities.find((a) => a.id === activityId) }
 }
 
-async function addSpotLocalSource(activityId, locationId, dateHour) {
+async function addSpotsBulkLocalSource(activityId, locationId, dateHours) {
   const activityStore = useActivityStore()
-  const newSpot = { locationId, dateHour }
+  const unique = [...new Set(dateHours.map(String))]
   return {
     error: 0,
     status: 200,
     data: activityStore.activities.map((a) => {
       if (a.id !== activityId) return a
-      const updatedSpots = [...(a.spotIds || []), newSpot]
-      const updatedRequests = (a.requestedSpotIds || []).filter(
-        (r) => !(r.locationId === locationId && r.dateHour === dateHour),
-      )
+      let updatedSpots = [...(a.spotIds || [])]
+      let updatedRequests = [...(a.requestedSpotIds || [])]
+      for (const dateHour of unique) {
+        if (
+          updatedSpots.some(
+            (s) => String(s.locationId) === String(locationId) && String(s.dateHour) === dateHour,
+          )
+        ) {
+          continue
+        }
+        updatedSpots.push({ locationId, dateHour })
+        updatedRequests = updatedRequests.filter(
+          (r) =>
+            !(String(r.locationId) === String(locationId) && String(r.dateHour) === dateHour),
+        )
+      }
       return { ...a, spotIds: updatedSpots, requestedSpotIds: updatedRequests }
     }),
   }
@@ -206,7 +218,7 @@ export default {
   updateLocationIdLocalSource,
   refuseRequestedLocationIdLocalSource,
   addRequestedSpotsLocalSource,
-  addSpotLocalSource,
+  addSpotsBulkLocalSource,
   addToLocalSource,
   addRatingLocalSource,
   addCommentLocalSource,

@@ -130,24 +130,37 @@ function getAreaColor(locationId, mapMode, route) {
     const currentActivityId = Number(route.params.activity_id)
     const currentActivity = activityStore.get(currentActivityId)
 
-    const hasAssignedSlotInCurrentActivity =
-      (currentActivity?.spotIds || []).some((spot) => spot.locationId === locationId)
-
-    const hasRequestedSlotInCurrentActivity =
-      (currentActivity?.requestedSpotIds || []).some((spot) => spot.locationId === locationId)
-
-    const isAssignedByOtherActivities = activityStore.activities.some(
-      (a) =>
-        a.id !== currentActivityId &&
-        (a.spotIds || []).some((spot) => spot.locationId === locationId),
+    const hasConfirmedSpot = (currentActivity?.spotIds || []).some(
+      (spot) => spot.locationId === locationId,
     )
+    const hasPendingRequest = (currentActivity?.requestedSpotIds || []).some(
+      (spot) => spot.locationId === locationId,
+    )
+    if (hasConfirmedSpot) return 'limegreen'
+    if (hasPendingRequest) return 'gold'
 
-    let areaColor = 'orange'
-    if (hasAssignedSlotInCurrentActivity) areaColor = 'green'
-    else if (hasRequestedSlotInCurrentActivity) areaColor = 'yellow'
-    else if (isAssignedByOtherActivities) areaColor = 'blue'
-
-    return areaColor
+    let hasFreeSlot = false
+    for (const day of EVENT_DAYS) {
+      for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
+        const hourLabel = `${String(h).padStart(2, '0')}:00`
+        const dateHour = `${day}T${hourLabel}`
+        const occupied = activityStore.activities.some((a) =>
+          (a.spotIds || []).some(
+            (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
+          ) ||
+          (a.requestedSpotIds || []).some(
+            (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
+          ),
+        )
+        if (!occupied) {
+          hasFreeSlot = true
+          break
+        }
+      }
+      if (hasFreeSlot) break
+    }
+    if (hasFreeSlot) return 'dodgerblue'
+    return 'crimson'
   } else {
     const totalSlots = EVENT_DAYS.length * (EVENT_END_HOUR - EVENT_START_HOUR + 1)
 
@@ -212,17 +225,17 @@ function displayLegends(map, mapMode) {
 
   if (mapMode === MapModeEnum.PROVIDER) {
     labels = [
-      t('message.available'),
-      t('message.pendingRequest'),
-      t('message.yourLocation'),
-      t('message.occupied'),
+      t('message.providerLegendFree'),
+      t('message.providerLegendSelf'),
+      t('message.providerLegendPendingMap'),
+      t('message.providerLegendOther'),
     ]
-    colors = ['orange', 'yellow', 'green', 'blue']
+    colors = ['dodgerblue', 'limegreen', 'gold', 'crimson']
     colorsRGBA = [
-      'rgba(255, 165, 0, 0.5)',
-      'rgba(255, 255, 0, 0.5)',
-      'rgba(0, 255, 0, 0.5)',
-      'rgba(0, 0, 255, 0.5)',
+      'rgba(56, 189, 248, 0.45)',
+      'rgba(34, 197, 94, 0.45)',
+      'rgba(234, 179, 8, 0.45)',
+      'rgba(244, 63, 94, 0.45)',
     ]
   } else {
     labels = ['Complètement occupé', 'Demande en attente', 'Partiellement occupé', 'Non occupé']
