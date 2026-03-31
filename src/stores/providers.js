@@ -10,14 +10,17 @@ export const useProviderStore = defineStore('provider', () => {
   const newProviders = ref([])
   const providerImages = ref([])
   const providerDescription = ref('')
+  const isLoadingProviders = ref(false)
 
   async function getAllProviders() {
+    isLoadingProviders.value = true
     let response = await ProviderService.getAllProviders()
     if (response.error === 0) {
       providers.value = response.data
     } else {
       console.log(response.data)
     }
+    isLoadingProviders.value = false
   }
 
   function get(providerId) {
@@ -68,8 +71,8 @@ export const useProviderStore = defineStore('provider', () => {
     }
   }
 
-  async function addNewProvider(providerName, providerDesc, userId) {
-    let response = await ProviderService.addNewProvider(providerName, providerDesc, userId)
+  async function addNewProvider(providerName, providerDesc) {
+    let response = await ProviderService.addNewProvider(providerName, providerDesc)
     if (response.error === 0) {
       await getAllNewProviders()
       displaySuccessToast('Votre demande a été enregistré avec succès')
@@ -137,6 +140,7 @@ export const useProviderStore = defineStore('provider', () => {
     newProviders,
     providerImages,
     providerDescription,
+    isLoadingProviders,
     get,
     getDescription,
     updateProviderDescription,

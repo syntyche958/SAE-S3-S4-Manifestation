@@ -1,10 +1,15 @@
 <template>
+  <!-- Loading state -->
+  <div v-if="providerStore.isLoadingProviders || !currentProvider" class="flex justify-center items-center min-h-screen">
+    <ProgressSpinner />
+  </div>
+
   <!-- Visitor -->
-  <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
+  <div v-else-if="isProviderAdminPanelToHide()" class="flex justify-center">
     <Card class="main-section-container"
       ><template #content>
         <h1 class="text-center texturina-title">
-          {{ providerStore.get(Number($route.params.provider_id)).name }}
+          {{ currentProvider.name }}
         </h1>
         <PresentationProviderSection
       /></template>
@@ -16,7 +21,7 @@
     <Card class="main-section-container">
       <template #content
         ><h1 class="text-center texturina-title">
-          {{ providerStore.get(Number($route.params.provider_id)).name }}
+          {{ currentProvider.name }}
         </h1>
         <Tabs value="0">
           <TabList>
@@ -46,7 +51,9 @@
 </template>
 
 <script setup>
-import { Card, Tabs, Tab, TabPanel, TabPanels, TabList } from 'primevue'
+import { Card, Tabs, Tab, TabPanel, TabPanels, TabList, ProgressSpinner } from 'primevue'
+import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
 import PresentationProviderSection from '@/components/providerComponents/organism/PresentationProviderSection.vue'
 import ServicesProviderSection from '@/components/providerComponents/organism/ServicesProviderSection.vue'
@@ -55,4 +62,16 @@ import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { useProviderStore } from '@/stores/providers'
 
 const providerStore = useProviderStore()
+const $route = useRoute()
+
+const currentProvider = computed(() => {
+  return providerStore.get(Number($route.params.provider_id))
+})
+
+onMounted(async () => {
+  // Ensure providers are loaded
+  if (providerStore.providers.length === 0) {
+    await providerStore.getAllProviders()
+  }
+})
 </script>

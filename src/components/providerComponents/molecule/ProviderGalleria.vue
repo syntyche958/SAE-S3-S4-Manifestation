@@ -1,9 +1,10 @@
 <template>
+  <ConfirmDialog />
   <Card class="relative w-full max-w-[400px]">
     <template #content>
       <Galleria
         v-if="images && images.length > 0"
-        :value="images || []"
+        :value="images"
         :responsiveOptions="responsiveOptions"
         :numVisible="5"
         containerStyle="max-width: 640px"
@@ -61,9 +62,12 @@ import { displayErrToast } from '@/utils/toast.utils'
 import Galleria from 'primevue/galleria'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useConfirm } from 'primevue/useconfirm'
 import ProviderImageModifier from './ProviderImageModifier.vue'
 
 const route = useRoute()
+const confirm = useConfirm()
 const images = ref(null)
 const providerStore = useProviderStore()
 const responsiveOptions = ref([
@@ -84,48 +88,65 @@ watchEffect(async () => {
 })
 
 const handleDeleteImage = async (imageId) => {
-  try {
-    if (!images.value || images.value.length === 0) return
+  if (!images.value || images.value.length === 0) return
 
-    const realImages = images.value.filter((img) => !img.isPlaceholder)
-    if (realImages.length <= 2) {
-      displayErrToast('Le minimum requis est de 2 images.')
-      return
-    }
-    const imageToDelete = images.value.find(
-      (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder,
-    )
-
-    if (!imageToDelete) {
-      return
-    }
-
-    const fullIndex = images.value.findIndex(
-      (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder,
-    )
-
-    if (fullIndex === -1) {
-      console.error("Image non trouvée avec l'id:", imageId)
-      return
-    }
-
-    const imageIndex = realImages.findIndex((img) => img.id === imageId || img.idImage === imageId)
-
-    if (imageIndex === -1) {
-      console.error('Image non trouvée dans les images réelles')
-      return
-    }
-
-    await providerStore.deleteProviderImage(providerId.value, imageIndex)
-
-    images.value = images.value.filter((img) => img.id !== imageId && img.idImage !== imageId)
-
-    const updatedImages = await providerStore.getProviderImages(providerId.value)
-    images.value = updatedImages
-  } catch (error) {
-    console.error("Erreur lors de la suppression de l'image:", error)
-    images.value = await providerStore.getProviderImages(providerId.value)
+  const realImages = images.value.filter((img) => !img.isPlaceholder)
+  if (realImages.length <= 2) {
+    displayErrToast('Le minimum requis est de 2 images.')
+    return
   }
+
+  confirm.require({
+    message: 'Êtes-vous sûr de vouloir supprimer cette image ? Cette action est irréversible.',
+    header: 'Suppression',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Annuler',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Supprimer',
+      severity: 'danger',
+    },
+    accept: async () => {
+      try {
+        const imageToDelete = images.value.find(
+          (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder,
+        )
+
+        if (!imageToDelete) {
+          return
+        }
+
+        const fullIndex = images.value.findIndex(
+          (img) => (img.id === imageId || img.idImage === imageId) && !img.isPlaceholder,
+        )
+
+        if (fullIndex === -1) {
+          console.error("Image non trouvée avec l'id:", imageId)
+          return
+        }
+
+        const imageIndex = realImages.findIndex((img) => img.id === imageId || img.idImage === imageId)
+
+        if (imageIndex === -1) {
+          console.error('Image non trouvée dans les images réelles')
+          return
+        }
+
+        await providerStore.deleteProviderImage(providerId.value, imageId)
+
+        images.value = images.value.filter((img) => img.id !== imageId && img.idImage !== imageId)
+
+        const updatedImages = await providerStore.getProviderImages(providerId.value)
+        images.value = updatedImages
+      } catch (error) {
+        console.error("Erreur lors de la suppression de l'image:", error)
+        images.value = await providerStore.getProviderImages(providerId.value)
+      }
+    },
+  })
 }
 </script>
 

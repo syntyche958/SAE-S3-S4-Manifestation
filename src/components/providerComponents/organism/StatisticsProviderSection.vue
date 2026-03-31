@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useRoute } from 'vue-router'
 import ProviderStatisticsService from '@/services/providerStatistics.service'
@@ -28,6 +28,17 @@ const loading = ref(true)
 
 let chartByActivity = null
 let chartByDay = null
+
+const destroyCharts = () => {
+  if (chartByActivity) {
+    chartByActivity.destroy()
+    chartByActivity = null
+  }
+  if (chartByDay) {
+    chartByDay.destroy()
+    chartByDay = null
+  }
+}
 
 const totalRegistrations = computed(() => registrations.value.length)
 
@@ -144,14 +155,17 @@ const drawCharts = () => {
   }
 }
 
-onMounted(() => {
-  loadData().then(() => {
-    setTimeout(() => drawCharts(), 200)
-  })
+onMounted(async () => {
+  await loadData()
+  drawCharts()
 })
 
 watch([registrationsByActivity, registrationsByDay], () => {
-  setTimeout(() => drawCharts(), 100)
+  drawCharts()
+})
+
+onBeforeUnmount(() => {
+  destroyCharts()
 })
 </script>
 
