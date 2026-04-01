@@ -10,6 +10,8 @@ import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.
 
 const defaultPolygonWeight = 2
 
+// TODO : FIx popup des mouseover de la carte en mode visiteur !
+
 export function setupMap(mapId) {
   // Map setup
   let southWestBoundsCoords = L.latLng(43.203642, 2.36)
@@ -39,9 +41,17 @@ export function setupMap(mapId) {
   return map
 }
 
-export async function displayLocations(map, mapMode, emit, route, selectedLocationId) {
+export function displayLocations(
+  map,
+  mapMode,
+  emit,
+  route,
+  selectedLocationId,
+  visitorDateHour,
+  visitorActivityId,
+) {
   if (mapMode === MapModeEnum.VISITOR) {
-    displayPinPoints(map)
+    displayPinPoints(map, visitorDateHour, visitorActivityId)
   } else {
     // ADMIN + PROVIDER
     displayAreas(map, emit, mapMode, route, selectedLocationId)
@@ -50,7 +60,25 @@ export async function displayLocations(map, mapMode, emit, route, selectedLocati
   }
 }
 
-export function refreshLocations(map, emit, mapMode, route, selectedLocationId) {
+export function refreshLocations(
+  map,
+  emit,
+  mapMode,
+  route,
+  selectedLocationId,
+  visitorDateHour,
+  visitorActivityId,
+) {
+  if (mapMode === MapModeEnum.VISITOR) {
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer)
+      }
+    })
+    displayPinPoints(map, visitorDateHour, visitorActivityId)
+    return
+  }
+
   // Remove all previous polygons on map
   map.eachLayer((layer) => {
     if (layer instanceof L.Polygon) {
@@ -63,20 +91,13 @@ export function refreshLocations(map, emit, mapMode, route, selectedLocationId) 
   }
 }
 
-function bindPopupVisitor(map, marker, locationId) {
+function bindPopupVisitor(map, marker, activitiesAtLocation) {
   const { t } = useI18n()
 
-  const activityStore = useActivityStore()
-  const providerStore = useProviderStore()
   const router = useRouter()
 
   let mouseOnPopUp = false
   let mouseOneMarker = false
-
-  let activity = activityStore.activities.find((a) => a.locationId === locationId)
-  let activityName = activity.name
-  let provider = providerStore.get(activity.providerId)
-  let providerName = provider.name
 
   // Add popup with needed event to open and close it
   marker.on('mouseover', () => {
@@ -89,11 +110,17 @@ function bindPopupVisitor(map, marker, locationId) {
 
     map.closePopup()
     mouseOneMarker = true
-    marker
-      .bindPopup(
-        `<b>${t('message.provider')} : </b><span>${providerName}</span><br><b>${t('message.activity')} : </b><span>${activityName}</span>`,
-      )
-      .openPopup()
+
+    const popupContent = activitiesAtLocation
+      .map(({ activity, provider }) => {
+        return `<div class="visitor-popup-line" data-provider-id="${provider.id}" data-activity-id="${activity.id}" style="padding: 6px 2px; cursor: pointer;">
+          <b>${t('message.provider')} : </b><span>${provider.name}</span><br>
+          <b>${t('message.activity')} : </b><span>${activity.name}</span>
+        </div>`
+      })
+      .join('<div style="border-top: 1px solid rgba(0,0,0,0.1);"></div>')
+
+    marker.bindPopup(popupContent).openPopup()
 
     let popupElement = marker.getPopup().getElement()
     popupElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
@@ -101,25 +128,60 @@ function bindPopupVisitor(map, marker, locationId) {
       mouseOnPopUp = false
       marker.closePopup()
     })
-    popupElement.style.cursor = 'pointer'
-    popupElement.onclick = function () {
-      router.push(`/provider/${provider.id}/activity/${activity.id}`)
-    }
+
+    const clickables = popupElement.querySelectorAll('.visitor-popup-line')
+    clickables.forEach((line) => {
+      line.addEventListener('click', () => {
+        const providerId = line.getAttribute('data-provider-id')
+        const activityId = line.getAttribute('data-activity-id')
+        if (!providerId || !activityId) return
+        router.push(`/provider/${providerId}/activity/${activityId}`)
+      })
+    })
   })
 }
 
-function displayPinPoints(map) {
-  const markers = ref([])
-  const locationStore = useLocationStore()
+function getVisitorActivitiesForLocation(locationId, visitorDateHour, visitorActivityId) {
   const activityStore = useActivityStore()
+  const providerStore = useProviderStore()
+
+  const selectedActivityId =
+    visitorActivityId == null || visitorActivityId === '' ? null : Number(visitorActivityId)
+
+  return (activityStore.activities || [])
+    .filter((activity) => {
+      if (selectedActivityId != null && activity.id !== selectedActivityId) return false
+      return (activity.spotIds || []).some((spot) => {
+        if (String(spot.locationId) !== String(locationId)) return false
+        if (!visitorDateHour) return true
+        return String(spot.dateHour) === String(visitorDateHour)
+      })
+    })
+    .map((activity) => ({
+      activity,
+      provider: providerStore.get(activity.providerId),
+    }))
+    .filter((entry) => entry.provider != null)
+    .sort((a, b) => {
+      const providerCompare = a.provider.name.localeCompare(b.provider.name)
+      if (providerCompare !== 0) return providerCompare
+      return a.activity.name.localeCompare(b.activity.name)
+    })
+}
+
+function displayPinPoints(map, visitorDateHour, visitorActivityId) {
+  const locationStore = useLocationStore()
 
   for (let location of locationStore.locations) {
-    // Do not display if no activity assigned to location
-    if (!activityStore.activities.find((a) => a.locationId === location.id)) continue
+    const activitiesAtLocation = getVisitorActivitiesForLocation(
+      location.id,
+      visitorDateHour,
+      visitorActivityId,
+    )
+    if (activitiesAtLocation.length === 0) continue
 
     let marker = L.marker(location['coord']).addTo(map)
-    bindPopupVisitor(map, marker, location.id)
-    markers.value.push(marker)
+    bindPopupVisitor(map, marker, activitiesAtLocation)
   }
 }
 
@@ -144,13 +206,14 @@ function getAreaColor(locationId, mapMode, route) {
       for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
         const hourLabel = `${String(h).padStart(2, '0')}:00`
         const dateHour = `${day}T${hourLabel}`
-        const occupied = activityStore.activities.some((a) =>
-          (a.spotIds || []).some(
-            (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
-          ) ||
-          (a.requestedSpotIds || []).some(
-            (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
-          ),
+        const occupied = activityStore.activities.some(
+          (a) =>
+            (a.spotIds || []).some(
+              (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
+            ) ||
+            (a.requestedSpotIds || []).some(
+              (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
+            ),
         )
         if (!occupied) {
           hasFreeSlot = true

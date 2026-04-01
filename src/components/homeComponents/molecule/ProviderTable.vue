@@ -1,5 +1,5 @@
 <template>
-  <Card class="grow sm:my-4 sm:mr-4 h-fit">
+  <Card class="grow h-full">
     <template #content>
       <DataTable
         v-model:filters="filters"
