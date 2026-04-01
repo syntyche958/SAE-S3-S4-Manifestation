@@ -9,6 +9,6 @@ import PresentationTextSection from '@/components/homeComponents/organism/Presen
   <br />
   <br />
   <br />
-  <MapAndProviderSection />
   <PresentationTextSection />
+  <MapAndProviderSection />
 </template>

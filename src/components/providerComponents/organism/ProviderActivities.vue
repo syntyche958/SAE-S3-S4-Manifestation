@@ -8,7 +8,7 @@
       <div v-for="(item, index) in activities" :key="index">
         <Card
           class="activity-card dark-presentation-card relative"
-          style="width: 250px; overflow: hidden; cursor: pointer"
+          style="width: 400px; overflow: hidden; cursor: pointer"
           @click="goToActivity(item.id)"
         >
           <template #title>{{ item.name }}</template>
