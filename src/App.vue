@@ -41,11 +41,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <AnimatedBackground />
-  <Toast position="top-center" />
-  <NavBar />
+  <div class="app-shell">
+    <AnimatedBackground />
+    <Toast position="top-center" />
+    <NavBar />
 
-  <RouterView />
+    <main class="app-content">
+      <RouterView />
+    </main>
 
-  <TheFooter />
+    <TheFooter />
+  </div>
 </template>

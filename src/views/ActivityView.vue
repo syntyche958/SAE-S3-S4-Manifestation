@@ -1,18 +1,22 @@
 <template>
-  <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
-    <Card class="main-section-container"
-      ><template #content>
+  <div v-if="isProviderAdminPanelToHide()" class="page-shell">
+    <Card class="main-section-container activity-page-card">
+      <template #content>
         <ActivityCardTitle />
-        <ActivityPresentation />
+        <div class="activity-page-body">
+          <ActivityPresentation />
+        </div>
       </template>
     </Card>
   </div>
 
-  <div v-else class="flex justify-center">
-    <Card class="main-section-container">
+  <div v-else class="page-shell">
+    <Card class="main-section-container activity-page-card">
       <template #content>
         <ActivityCardTitle />
-        <ActivityMenuTabs />
+        <div class="activity-page-body">
+          <ActivityMenuTabs />
+        </div>
       </template>
     </Card>
   </div>
@@ -26,3 +30,18 @@ import ActivityCardTitle from '@/components/activityComponents/molecule/Activity
 import ActivityMenuTabs from '@/components/activityComponents/organism/ActivityMenuTabs.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 </script>
+
+<style scoped>
+.page-shell {
+  display: flex;
+  justify-content: center;
+}
+
+.activity-page-card {
+  margin-top: 0;
+}
+
+.activity-page-body {
+  margin-top: 0;
+}
+</style>

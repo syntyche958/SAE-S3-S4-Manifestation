@@ -251,15 +251,16 @@ watch([registrationsByActivity, registrationsByDay], () => {
 
 <style scoped>
 .statistics-container {
-  padding: 2rem;
+  padding: 0.5rem;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .page-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  line-height: 1.2;
 }
 
 .spinner {
@@ -272,17 +273,14 @@ watch([registrationsByActivity, registrationsByDay], () => {
 .statistics-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.25rem;
 }
 
 .summary-card {
-  background: white;
-  color: inherit;
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .summary-card :deep(.p-card-title) {
-  color: inherit;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -292,10 +290,10 @@ watch([registrationsByActivity, registrationsByDay], () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 0.95rem 1rem;
   background: #1a1a1a;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
@@ -304,21 +302,26 @@ watch([registrationsByActivity, registrationsByDay], () => {
 }
 
 .stat-label {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #d4d4d8;
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
   font-weight: 700;
   color: #fafafa;
 }
 
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.chart-card,
+.stats-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .chart-title {
@@ -332,8 +335,8 @@ watch([registrationsByActivity, registrationsByDay], () => {
 
 .chart-wrapper {
   position: relative;
-  height: 350px;
-  padding: 0 1rem 1rem;
+  height: 340px;
+  padding: 0.25rem 0.75rem 0.75rem;
 }
 
 .stats-card :deep(.p-card-title) {
@@ -344,7 +347,7 @@ watch([registrationsByActivity, registrationsByDay], () => {
 
 .no-data {
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
   color: #a1a1aa;
 }
 
@@ -356,7 +359,7 @@ watch([registrationsByActivity, registrationsByDay], () => {
 
 @media (max-width: 768px) {
   .statistics-container {
-    padding: 1rem;
+    padding: 0.2rem;
   }
 
   .charts-grid {
@@ -364,7 +367,7 @@ watch([registrationsByActivity, registrationsByDay], () => {
   }
 
   .chart-wrapper {
-    height: 320px;
+    height: 300px;
     padding: 0;
   }
 }

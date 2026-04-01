@@ -1,35 +1,34 @@
 <template>
   <!-- Visitor -->
-  <div v-if="isProviderAdminPanelToHide()" class="flex justify-center">
-    <Card class="main-section-container"
-      ><template #content>
-        <h1 class="text-center texturina-title">
+  <div v-if="isProviderAdminPanelToHide()" class="page-shell">
+    <Card class="main-section-container provider-page-card">
+      <template #content>
+        <h1 class="text-center texturina-title provider-page-title">
           {{ providerStore.get(Number($route.params.provider_id)).name }}
         </h1>
-        <PresentationProviderSection
-      /></template>
+        <PresentationProviderSection />
+      </template>
     </Card>
   </div>
 
   <!-- Provider / Admin -->
-  <div v-else class="flex justify-center">
-    <Card class="main-section-container">
-      <template #content
-        ><h1 class="text-center texturina-title">
+  <div v-else class="page-shell">
+    <Card class="main-section-container provider-page-card">
+      <template #content>
+        <h1 class="text-center texturina-title provider-page-title">
           {{ providerStore.get(Number($route.params.provider_id)).name }}
         </h1>
-        <Tabs value="0">
+        <Tabs value="0" class="provider-tabs">
           <TabList>
-            <Tab value="0"
-              ><i class="pi pi-file-edit"></i
-              ><span>{{ $t('message.appearanceOfThePage') }}</span></Tab
-            >
-            <Tab value="1"
-              ><i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span></Tab
-            >
-            <Tab value="2"
-              ><i class="pi pi-chart-bar"></i><span> {{ $t('message.seeStatistics') }}</span></Tab
-            >
+            <Tab value="0">
+              <i class="pi pi-file-edit"></i><span>{{ $t('message.appearanceOfThePage') }}</span>
+            </Tab>
+            <Tab value="1">
+              <i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span>
+            </Tab>
+            <Tab value="2">
+              <i class="pi pi-chart-bar"></i><span>{{ $t('message.seeStatistics') }}</span>
+            </Tab>
           </TabList>
 
           <TabPanels>
@@ -44,8 +43,10 @@
             <TabPanel value="2">
               <StatisticsProviderSection :provider-id="Number($route.params.provider_id)" />
             </TabPanel>
-          </TabPanels> </Tabs></template
-    ></Card>
+          </TabPanels>
+        </Tabs>
+      </template>
+    </Card>
   </div>
 </template>
 
@@ -60,3 +61,33 @@ import { useProviderStore } from '@/stores/providers'
 
 const providerStore = useProviderStore()
 </script>
+
+<style scoped>
+.page-shell {
+  display: flex;
+  justify-content: center;
+}
+
+.provider-page-card {
+  margin-top: 0;
+}
+
+.provider-page-title {
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.provider-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.provider-tabs :deep(.p-tablist) {
+  margin-bottom: 0;
+}
+
+.provider-tabs :deep(.p-tab) {
+  gap: 0.45rem;
+}
+</style>
