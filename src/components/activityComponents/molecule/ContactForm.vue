@@ -42,6 +42,7 @@
           optionLabel="name"
           name="provider"
           placeholder="Select the provider"
+          @update:modelValue="onProviderChange"
           fluid
         />
         <Message v-if="$form.provider?.invalid" severity="error" size="small" variant="simple">{{
@@ -49,16 +50,16 @@
         }}</Message>
       </div>
 
-      <!-- TODO : Default value if on a activity page ! -->
-      <!-- TODO : Ajouter quand le store activity sera mis en place -->
       <!-- Activity input -->
       <div class="flex flex-col gap-1">
         <label class="font-semibold w-24">{{ $t('message.activity') }} (opt)</label>
         <Select
-          disabled
-          :options="activities"
+          :key="selectedProviderId ?? 'no-provider'"
+          name="activity"
+          :options="filteredActivities"
           optionLabel="name"
           placeholder="Select the activity"
+          emptyMessage="No activity available"
           fluid
         />
       </div>
@@ -86,27 +87,48 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Button, InputText, Dialog, Select, Textarea, Message } from 'primevue'
 import { Form } from '@primevue/forms'
 
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { useProviderStore } from '@/stores/providers'
+import { useActivityStore } from '@/stores/activities'
 import { useContactStore } from '@/stores/contact'
 import { z } from 'zod'
 
 const providerStore = useProviderStore()
+const activityStore = useActivityStore()
 const contactStore = useContactStore()
 
 const visible = ref(false)
 const initialValues = ref({
   email: '',
-  activity: '',
+  provider: null,
+  activity: null,
   message: '',
 })
-const activities = ref([]) // TODO
+const selectedProvider = ref(null)
 
-const openModal = () => {
+const selectedProviderId = computed(() => {
+  const id = selectedProvider.value?.id
+  return id == null ? null : Number(id)
+})
+
+const filteredActivities = computed(() => {
+  if (selectedProviderId.value == null) return []
+  return activityStore.activities.filter((a) => Number(a.providerId) === selectedProviderId.value)
+})
+
+const onProviderChange = (provider) => {
+  selectedProvider.value = provider
+}
+
+const openModal = async () => {
+  if (!activityStore.activities.length) {
+    await activityStore.getAllActivities()
+  }
+  selectedProvider.value = null
   visible.value = true
 }
 
@@ -114,7 +136,7 @@ const onFormSubmit = ({ valid, values }) => {
   if (!valid) return
 
   visible.value = false
-  contactStore.addContact(values.email, values.provider.id, null, values.message)
+  contactStore.addContact(values.email, values.provider.id, values.activity?.id ?? null, values.message)
 }
 
 const resolver = ref(
@@ -128,7 +150,9 @@ const resolver = ref(
         .min(10, { message: 'Message with more than ten characters is required.' }),
       provider: z
         .any()
-        .refine((p) => p !== undefined, { message: 'Provider selection is required' }),
+        .refine((p) => p !== undefined && p !== null, {
+          message: 'Provider selection is required',
+        }),
     }),
   ),
 )
