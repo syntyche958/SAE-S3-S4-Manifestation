@@ -11,6 +11,7 @@ import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.
 const defaultPolygonWeight = 2
 
 // TODO : FIx popup des mouseover de la carte en mode visiteur !
+// TODO : Enlever le fitre activité enmode visiteur car sert a rien dans tout les cas un seul spot par activité en simultané
 
 export function setupMap(mapId) {
   // Map setup
