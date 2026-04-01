@@ -24,10 +24,10 @@
               ><i class="pi pi-file-edit"></i
               ><span>{{ $t('message.appearanceOfThePage') }}</span></Tab
             >
-            <!-- <Tab value="1"
-              ><i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span></Tab
-            > -->
             <Tab value="1"
+              ><i class="pi pi-file-edit"></i><span>{{ $t('message.chooseServices') }}</span></Tab
+            >
+            <Tab value="2"
               ><i class="pi pi-chart-bar"></i><span> {{ $t('message.seeStatistics') }}</span></Tab
             >
           </TabList>
@@ -38,6 +38,10 @@
             </TabPanel>
 
             <TabPanel value="1">
+              <ServicesProviderSection />
+            </TabPanel>
+
+            <TabPanel value="2">
               <StatisticsProviderSection :provider-id="Number($route.params.provider_id)" />
             </TabPanel>
           </TabPanels> </Tabs></template

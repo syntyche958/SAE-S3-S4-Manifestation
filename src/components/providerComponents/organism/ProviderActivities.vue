@@ -36,14 +36,27 @@ import { useRoute } from 'vue-router'
 import { Card, Rating } from 'primevue'
 import router from '@/router/index.js'
 import { useActivityStore } from '@/stores/activities'
+import { useAuthStore } from '@/stores/auth'
+import { UserTypeEnum } from '@/enums/User.enum'
 import AddActivity from '@/components/activityComponents/molecule/AddActivity.vue'
 
 const route = useRoute()
 const activityStore = useActivityStore()
+const authstore = useAuthStore()
+
+const isPublicUser = computed(() =>{
+  const t = authstore.user?.type
+  return t === UserTypeEnum.VISITOR || t === UserTypeEnum.NOTCONNECTED
+})
 
 const activities = computed(() => {
   const providerId = Number.parseInt(route.params.provider_id)
-  return activityStore.activities.filter((a) => a.providerId === providerId)
+  const list = activityStore.activities.filter((a) => a.providerId === providerId)
+  if (!isPublicUser.value) return list
+
+  return list.filter(
+    (a) => (a.serviceEnabled ?? true) && (a.visibility ?? 'public') === 'public',
+  )
 })
 
 function getAverageRating(item) {

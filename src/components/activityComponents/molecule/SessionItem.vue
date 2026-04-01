@@ -16,7 +16,7 @@
       <div class="flex flex-col md:items-end gap-8">
         <div v-if="canRegister" class="flex flex-row-reverse md:flex-row gap-2">
           <Button
-            v-if="isCurrentProviderOwner"
+            v-if="isCurrentProviderOwner && canShowRegistrants"
             icon="pi pi-users"
             label="Voir les inscrits"
             severity="info"
@@ -49,6 +49,7 @@ const props = defineProps({
   isRegistered: Boolean,
   isUserConnected: Boolean,
   canRegister: Boolean,
+  canShowRegistrants: Boolean,
 })
 
 defineEmits(['inscription', 'show-registrants'])

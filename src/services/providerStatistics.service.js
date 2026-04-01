@@ -14,7 +14,9 @@ class ProviderStatisticsService {
       }
 
       const activities = activitiesResponse.data.filter(
-        (activity) => activity.providerId === parseInt(providerId),
+        (activity) =>
+          activity.providerId === parseInt(providerId) &&
+          (activity.registrationCountEnabled ?? true),
       )
 
       const registrationsResponse = await registrationService.getAllRegistrations()

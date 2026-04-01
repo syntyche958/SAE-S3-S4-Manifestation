@@ -87,6 +87,17 @@ export const useActivityStore = defineStore('activity', () => {
     }
   }
 
+  async function updateServiceFlags(activityId, payload) {
+  const response = await activityService.updateServiceFlagsLocalSource(activityId,payload)
+  if (response.error === 0) {
+    activities.value = response.data
+    displaySuccessToast('Paramètres du service mis à jour')
+  } else {
+    displayErrToast('Echec de la mise à jour du service')
+    console.log(response.data)
+  }
+}
+    
   return {
     getAllActivities,
     get,
@@ -97,5 +108,6 @@ export const useActivityStore = defineStore('activity', () => {
     addComment,
     addCommentReply,
     activities,
+    updateServiceFlags,
   }
 })

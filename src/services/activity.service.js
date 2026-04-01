@@ -64,6 +64,11 @@ async function addToLocalSource(providerId, name, desc) {
     requestedLocationId: undefined,
     ratings: [],
     comments: [],
+    serviceEnabled: true,
+    visibility: 'public',
+    commentsEnabled: true,
+    sessionsEnabled: true,
+    registrationCountEnabled: true,
   }
 
   return { error: 0, status: 200, data: newActivity }
@@ -125,6 +130,44 @@ async function addCommentReplyLocalSource(activityId, commentIndex, replyContent
   return { error: 0, status: 200, data: updatedActivities.find((a) => a.id === activityId) }
 }
 
+async function updateServiceFlagsLocalSource(activityId, payload) {
+  const activityStore = useActivityStore()
+
+  const nextActivities = activityStore.activities.map((a) => {
+    if (a.id !== activityId) {
+      return a
+    }
+
+    return {
+      ...a,
+      ...(payload.serviceEnabled !== undefined
+        ? { serviceEnabled: payload.serviceEnabled }
+        : {}),
+      ...(payload.visibility !== undefined
+        ? { visibility: payload.visibility }
+        : {}),
+      ...(payload.commentsEnabled !== undefined
+        ? { commentsEnabled: payload.commentsEnabled }
+        : {}),
+      ...(payload.sessionsEnabled !== undefined
+        ? { sessionsEnabled: payload.sessionsEnabled }
+        : {}),
+      ...(payload.registrationCountEnabled !== undefined
+        ? { registrationCountEnabled: payload.registrationCountEnabled }
+        : {}),
+      ...(payload.canRegister !== undefined
+        ? { canRegister: payload.canRegister }
+        : {}),
+    }
+  })
+
+  return {
+    error: 0,
+    status: 200,
+    data: nextActivities,
+  }
+}
+
 export default {
   getAllActivities,
   updateLocationIdLocalSource,
@@ -133,4 +176,5 @@ export default {
   addRatingLocalSource,
   addCommentLocalSource,
   addCommentReplyLocalSource,
+  updateServiceFlagsLocalSource,
 }

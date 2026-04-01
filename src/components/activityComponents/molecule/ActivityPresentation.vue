@@ -8,7 +8,7 @@
       <Rating v-model="userRating" :cancel="false" @change="onRatingChange" />
     </div>
 
-    <Card class="mt-8">
+    <Card v-if="currentActivity?.commentsEnabled ?? true" class="mt-8">
       <template #title>
         <div class="text-xl font-bold">Commentaires</div>
       </template>
@@ -50,7 +50,7 @@
     </Card>
 
 
-    <Card class="mt-8">
+    <Card v-if="currentActivity?.sessionsEnabled ?? true" class="mt-8">
       <template #content>
         <DataView :value="sessions" :sortOrder="triOrder" :sortField="triField">
           <template #header>
@@ -76,6 +76,7 @@
                     :is-registered="isRegistered(item)"
                     :is-user-connected="isUserConnected"
                     :can-register="currentActivity?.canRegister"
+                    :can-show-registrants="canShowRegistrants"
                     @inscription="inscription"
                     @show-registrants="showRegistrants"
                   />
@@ -168,6 +169,13 @@ const isCurrentProviderOwner = computed(() => {
 
 const canReplyToComment = computed(() => {
   return isAdmin.value || isCurrentProviderOwner.value
+})
+
+const canShowRegistrants = computed(() => {
+  return (
+    (isAdmin.value || isCurrentProviderOwner.value) &&
+    (currentActivity.value?.registrationCountEnabled ?? true)
+  )
 })
 
 

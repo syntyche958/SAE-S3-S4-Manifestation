@@ -26,6 +26,13 @@ function getAllProviders() {
  * @returns {{error:number, status:number, data:{id:number, providerId:number, name:string, description: string, presentationContent: string, locationId: integer}}}
  */
 function getAllActivities() {
+  const normalizedActivities = activities.map((a) =>({
+    serviceEnabled:a.serviceEnabled ?? true,
+    visibility: a.visibility ?? 'public',
+    commentsEnabled: a.commentsEnabled ?? true,
+    sessionsEnabled: a.sessionsEnabled ?? true,
+    registrationCountEnabled: a.registrationCountEnabled ?? true,
+  }))
   return { error: 0, status: 200, data: activities }
 }
 
