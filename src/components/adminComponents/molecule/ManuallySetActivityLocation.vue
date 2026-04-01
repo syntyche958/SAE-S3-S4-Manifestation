@@ -18,13 +18,35 @@
         <Select
           id="manual-assign-activity"
           v-model="selectedActivityId"
-          :options="activitiesForAllSelectedSlots"
-          optionLabel="name"
+          :options="enrichedActivitiesForAllSelectedSlots"
           optionValue="id"
           :placeholder="$t('message.manualAssignSelectActivity')"
           class="w-full md:max-w-md"
           :disabled="selectedDateHours.length === 0"
-        />
+        >
+          <template #option="slotProps">
+            <span>
+              {{ slotProps.option.name }}
+              <span v-if="slotProps.option.isRequester" class="ml-1 text-amber-300">(demande)</span>
+            </span>
+          </template>
+          <template #value="slotProps">
+            <span v-if="slotProps.value">
+              {{
+                enrichedActivitiesForAllSelectedSlots.find((a) => a.id === slotProps.value)?.name
+              }}
+              <span
+                v-if="
+                  enrichedActivitiesForAllSelectedSlots.find((a) => a.id === slotProps.value)
+                    ?.isRequester
+                "
+                class="ml-1 text-amber-300"
+              >
+                (demande)
+              </span>
+            </span>
+          </template>
+        </Select>
       </div>
       <Button :label="buttonLabel" :disabled="!canSubmit" @click="submit" />
       <span v-if="selectedDateHours.length > 0" class="text-xs text-white/70">
@@ -109,6 +131,21 @@ const activitiesForAllSelectedSlots = computed(() =>
     selectedDateHours.value,
   ),
 )
+
+const enrichedActivitiesForAllSelectedSlots = computed(() => {
+  if (selectedDateHours.value.length === 1) {
+    const requestingActivity = getActivityRequestingSlot(
+      activityStore.activities,
+      props.selectedLocation.id,
+      selectedDateHours.value[0],
+    )
+    return activitiesForAllSelectedSlots.value.map((a) => ({
+      ...a,
+      isRequester: requestingActivity && requestingActivity.id === a.id,
+    }))
+  }
+  return activitiesForAllSelectedSlots.value.map((a) => ({ ...a, isRequester: false }))
+})
 
 watch(activitiesForAllSelectedSlots, (list) => {
   if (selectedActivityId.value != null && !list.some((a) => a.id === selectedActivityId.value)) {

@@ -35,15 +35,6 @@ export function getAssignableActivitiesForAdminSlot(activities, locationId, date
   const currentActivity = getActivityWithConfirmedSlot(activities, locationId, dateHour)
 
   if (currentActivity) {
-    const requesterIds = new Set()
-    for (const a of activities) {
-      for (const r of a.requestedSpotIds || []) {
-        if (String(r.locationId) === locStr && String(r.dateHour) === dh) {
-          requesterIds.add(a.id)
-        }
-      }
-    }
-
     return activities
       .filter((a) => {
         if (a.id === currentActivity.id) return true
@@ -52,7 +43,6 @@ export function getAssignableActivitiesForAdminSlot(activities, locationId, date
           (s) => String(s.dateHour) === dh && String(s.locationId) !== locStr,
         )
         if (blockedElsewhere) return false
-        if (requesterIds.size > 0 && !requesterIds.has(a.id)) return false
         return true
       })
       .sort((a, b) => a.name.localeCompare(b.name))
@@ -66,22 +56,12 @@ export function getAssignableActivitiesForAdminSlot(activities, locationId, date
   )
   if (hasConfirmed) return []
 
-  const requesterIds = new Set()
-  for (const a of activities) {
-    for (const r of a.requestedSpotIds || []) {
-      if (String(r.locationId) === locStr && String(r.dateHour) === dh) {
-        requesterIds.add(a.id)
-      }
-    }
-  }
-
   return activities
     .filter((a) => {
       const blockedElsewhere = (a.spotIds || []).some(
         (s) => String(s.dateHour) === dh && String(s.locationId) !== locStr,
       )
       if (blockedElsewhere) return false
-      if (requesterIds.size > 0 && !requesterIds.has(a.id)) return false
       return true
     })
     .sort((a, b) => a.name.localeCompare(b.name))
