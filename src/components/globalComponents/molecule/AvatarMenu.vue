@@ -1,12 +1,8 @@
 <template>
-  <div @click="visible = !visible" class="cursor-pointer">
-    <OverlayBadge
-      v-if="contacts.length > 0 && authStore.user?.type === UserTypeEnum.PROVIDER"
-      class="inline-flex"
-      size="xsmall"
-    >
-      <Avatar icon="pi pi-user" class="mr-2" size="medium" shape="square"
-    /></OverlayBadge>
+  <div @click="onAvatarClick" class="cursor-pointer">
+    <OverlayBadge v-if="avatarBadgeCount > 0" class="inline-flex" size="xsmall">
+      <Avatar icon="pi pi-user" class="mr-2" size="medium" shape="square" />
+    </OverlayBadge>
 
     <Avatar v-else icon="pi pi-user" class="mr-2" size="medium" shape="square" />
   </div>
@@ -54,6 +50,41 @@
       ></Column>
     </DataTable>
   </Dialog>
+
+  <Dialog
+    v-model:visible="visitorDialogVisible"
+    header="Notifications"
+    :style="{ width: 'auto' }"
+    position="topright"
+    :modal="true"
+    :draggable="false"
+  >
+    <span
+      v-if="visitorNotifications.length === 0"
+      class="text-surface-500 dark:text-surface-400 block mb-8"
+    >
+      Aucune nouvelle notification.
+    </span>
+
+    <DataTable
+      v-if="visitorNotifications.length !== 0"
+      :value="visitorNotifications"
+      tableStyle="min-width: 40rem"
+    >
+      <Column field="message" header="Message"></Column>
+      <Column field="createdAt" header="Date">
+        <template #body="{ data }">{{ formatNotificationDate(data.createdAt) }}</template>
+      </Column>
+    </DataTable>
+
+    <div class="flex justify-end mt-4" v-if="visitorNotifications.length !== 0">
+      <Button
+        label="Marquer comme lu"
+        icon="pi pi-check"
+        @click="markVisitorNotificationsAsRead"
+      />
+    </div>
+  </Dialog>
 </template>
 
 <script setup>
@@ -74,6 +105,10 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import {
+  clearNotificationsForUser,
+  getNotificationsForUser,
+} from '@/utils/visitorNotifications.utils'
 
 const { t } = useI18n()
 
@@ -104,6 +139,39 @@ const profileName = computed(() => {
 
 const visible = ref(false)
 const dialogVisible = ref(false)
+const visitorDialogVisible = ref(false)
+const visitorNotifications = ref([])
+
+const refreshVisitorNotifications = () => {
+  if (authStore.user?.type !== UserTypeEnum.VISITOR) {
+    visitorNotifications.value = []
+    return
+  }
+
+  visitorNotifications.value = getNotificationsForUser(authStore.user?.id)
+}
+
+const avatarBadgeCount = computed(() => {
+  if (authStore.user?.type === UserTypeEnum.PROVIDER) return contacts.value.length
+  if (authStore.user?.type === UserTypeEnum.VISITOR) return visitorNotifications.value.length
+  return 0
+})
+
+const onAvatarClick = () => {
+  refreshVisitorNotifications()
+  visible.value = !visible.value
+}
+
+const markVisitorNotificationsAsRead = () => {
+  clearNotificationsForUser(authStore.user?.id)
+  visitorNotifications.value = []
+  visitorDialogVisible.value = false
+}
+
+const formatNotificationDate = (timestamp) => {
+  const date = new Date(timestamp)
+  return date.toLocaleString('fr-FR')
+}
 
 const items = computed(() => {
   let res = [
@@ -130,6 +198,19 @@ const items = computed(() => {
       command: () => (dialogVisible.value = true),
     })
   }
+
+  if (authStore.user?.type === UserTypeEnum.VISITOR) {
+    res.push({
+      label: 'Notifications',
+      icon: 'pi pi-bell',
+      badge: visitorNotifications.value.length,
+      command: () => {
+        refreshVisitorNotifications()
+        visitorDialogVisible.value = true
+      },
+    })
+  }
+
   res.push({
     label: t('message.logout'),
     icon: 'pi pi-sign-out',

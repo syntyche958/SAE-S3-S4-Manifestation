@@ -31,3 +31,17 @@ export function displayErrToast(msg) {
     life: 3000,
   })
 }
+
+export function displayWarnToast(msg) {
+  if (!toast) {
+    console.warn('Missing toast !')
+    return
+  }
+
+  toast.add({
+    severity: 'warn',
+    summary: 'Information',
+    detail: msg,
+    life: 5000,
+  })
+}

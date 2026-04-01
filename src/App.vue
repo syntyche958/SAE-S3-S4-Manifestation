@@ -23,6 +23,7 @@ setToast(useToast())
 
 onMounted(async () => {
   await authStore.getUser()
+
   await locationStore.getAllLocations()
   await presentationStore.getPresentationContent()
   await providerStore.getAllProviders()

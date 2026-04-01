@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { useActivityStore } from '@/stores/activities'
 import registrationService from '@/services/registration.service'
 import { displaySuccessToast } from '@/utils/toast.utils'
+import { enqueueNotificationsForUsers } from '@/utils/visitorNotifications.utils'
 
 import Card from 'primevue/card'
 import DataTable from 'primevue/datatable'
@@ -36,7 +37,8 @@ async function onVisibilityChange(activity, value) {
 
 async function onSessionRegistrationToggle(activity, value) {
   const registrationsResponse = await registrationService.getRegistrationsByActivity(activity.id)
-  const registrationCount = registrationsResponse.error === 0 ? registrationsResponse.data.length : 0
+  const registrations = registrationsResponse.error === 0 ? registrationsResponse.data : []
+  const registrationCount = registrations.length
 
   if (!value && registrationCount > 0) {
     const confirmed = window.confirm(
@@ -54,8 +56,17 @@ async function onSessionRegistrationToggle(activity, value) {
   })
 
   if (!value && registrationCount > 0) {
+    const registeredUserIds = registrations
+      .map((r) => r.user_id ?? r.userId)
+      .filter((id) => id !== undefined && id !== null)
+
+    enqueueNotificationsForUsers(
+      registeredUserIds,
+      `Le prestataire a désactivé les inscriptions pour l'activité "${activity.name}".`,
+    )
+
     displaySuccessToast(
-      `Session/inscription désactivée. Pensez à prévenir les ${registrationCount} utilisateur(s) inscrit(s).`,
+      `Session/inscription désactivée. Une notification a été envoyée à ${registrationCount} utilisateur(s) inscrit(s).`,
     )
   }
 }
