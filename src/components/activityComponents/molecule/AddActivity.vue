@@ -86,7 +86,6 @@ const onFormSubmit = ({ valid, values }) => {
   if (!valid) return
 
   visible.value = false
-  console.log('TODO : ', values)
   activityStore.add(Number(route.params.provider_id), values.name, values.desc)
 }
 </script>
