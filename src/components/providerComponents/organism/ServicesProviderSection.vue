@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useActivityStore } from '@/stores/activities'
 import registrationService from '@/services/registration.service'
@@ -13,10 +13,14 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Checkbox from 'primevue/checkbox'
 import Select from 'primevue/select'
+import ConfirmDialog from 'primevue/confirmdialog'
+import { useConfirm } from 'primevue/useconfirm'
 
 const { t } = useI18n()
 const route = useRoute()
 const activityStore = useActivityStore()
+const confirm = useConfirm()
+const sessionToggleVersion = ref(0)
 
 const providerId = computed(() => Number.parseInt(route.params.provider_id))
 
@@ -72,22 +76,49 @@ async function deleteRegistrations(registrations) {
   )
 }
 
+function confirmDisableSessionModal(registrationCount) {
+  return new Promise((resolve) => {
+    confirm.require({
+      group: 'services-provider-confirm',
+      message: t('message.confirmDisableSession', { count: registrationCount }),
+      header: t('message.deleteConfirmHeader'),
+      icon: 'pi pi-exclamation-triangle',
+      rejectProps: {
+        label: t('message.no'),
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        label: t('message.yes'),
+        severity: 'danger',
+      },
+      accept: () => resolve(true),
+      reject: () => resolve(false),
+      onHide: () => resolve(false),
+    })
+  })
+}
+
+function resetSessionToggleVisual() {
+  sessionToggleVersion.value += 1
+}
+
 async function onSessionRegistrationToggle(activity, value) {
   const registrations = await getRegistrationsByActivity(activity.id)
   const registrationCount = registrations.length
 
   if (!value && registrationCount > 0) {
-    const confirmed = globalThis.confirm(
-      t('message.confirmDisableSession', { count: registrationCount }),
-    )
+    const confirmed = await confirmDisableSessionModal(registrationCount)
 
     if (!confirmed) {
+      resetSessionToggleVisual()
       return
     }
 
     const deletionOk = await deleteRegistrations(registrations)
     if (!deletionOk) {
       displayErrToast(t('message.registrationDeleteFailed'))
+      resetSessionToggleVisual()
       return
     }
   }
@@ -113,6 +144,7 @@ async function onSessionRegistrationToggle(activity, value) {
 </script>
 
 <template>
+  <ConfirmDialog group="services-provider-confirm" />
   <Card>
     <template #title>{{ $t('message.serviceManagement') }}</template>
 
@@ -136,7 +168,8 @@ async function onSessionRegistrationToggle(activity, value) {
 
         <Column :header="$t('message.sessionRegistration')">
           <template #body="slotProps">
-            <Checkbox :modelValue="slotProps.data.sessionsEnabled && slotProps.data.canRegister" :binary="true"
+            <Checkbox :key="`session-${slotProps.data.id}-${sessionToggleVersion}`"
+              :modelValue="slotProps.data.sessionsEnabled && slotProps.data.canRegister" :binary="true"
               @update:modelValue="(v) => onSessionRegistrationToggle(slotProps.data, v)" />
           </template>
         </Column>
