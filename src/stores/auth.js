@@ -4,7 +4,9 @@ import { defineStore } from 'pinia'
 import AuthService from '@/services/auth.service'
 import { UserTypeEnum } from '@/enums/User.enum.js'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
-//import { useI18n } from 'vue-i18n'
+import i18n from '@/i18n'
+
+const { t } = i18n.global
 
 export const useAuthStore = defineStore('auth', () => {
   const STORAGE_TOKEN_KEY = 'accessToken'
@@ -67,11 +69,11 @@ export const useAuthStore = defineStore('auth', () => {
     let response = await AuthService.login(mail, password)
     if (response.error === 0) {
       persistSession(response.data.user, response.data.token)
-      displaySuccessToast('Connecté avec succés')
+      displaySuccessToast(t('message.loginSuccess'))
       return true
     } else {
       console.log(response.data)
-      displayErrToast("Echec de l'authentification")
+      displayErrToast(t('message.loginFailed'))
       return false
     }
   }
@@ -81,11 +83,11 @@ export const useAuthStore = defineStore('auth', () => {
     console.log(response)
     if (response.error === 0) {
       persistSession(response.data.user, response.data.token)
-      displaySuccessToast('Connecté avec succés')
+      displaySuccessToast(t('message.loginSuccess'))
       return true
     } else {
       console.log(response.data)
-      displayErrToast("Echec de l'enregistrement")
+      displayErrToast(t('message.signinFailed'))
       return false
     }
   }
@@ -102,7 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
     const { token, error, user: callbackUser } = AuthService.parseOAuthCallback(search)
     if (error || !token) {
       clearSession()
-      displayErrToast("Echec de l'authentification Google")
+      displayErrToast(t('message.googleAuthFailed'))
       return { ok: false, error: error || 'missing_token' }
     }
 
@@ -116,7 +118,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     persistSession(resolvedUser, token)
-    displaySuccessToast('Connecté avec Google')
+    displaySuccessToast(t('message.googleLoginSuccess'))
     return { ok: true }
   }
 

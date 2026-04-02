@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { useActivityStore } from '@/stores/activities'
 import registrationService from '@/services/registration.service'
 import { displaySuccessToast } from '@/utils/toast.utils'
+import { useI18n } from 'vue-i18n'
 import { enqueueNotificationsForUsers } from '@/utils/visitorNotifications.utils'
 
 import Card from 'primevue/card'
@@ -13,15 +14,16 @@ import Checkbox from 'primevue/checkbox'
 import Select from 'primevue/select'
 import Tag from 'primevue/tag'
 
+const { t } = useI18n()
 const route = useRoute()
 const activityStore = useActivityStore()
 
 const providerId = computed(() => Number.parseInt(route.params.provider_id))
 
-const visibilityOptions = [
-  { label: 'Public', value: 'public' },
-  { label: 'Prestataire uniquement', value: 'provider_only' },
-]
+const visibilityOptions = computed(() => [
+  { label: t('message.publicLabel'), value: 'public' },
+  { label: t('message.providerOnly'), value: 'provider_only' },
+])
 
 const activities = computed(() =>
   activityStore.activities.filter((a) => a.providerId === providerId.value),
@@ -42,7 +44,7 @@ async function onSessionRegistrationToggle(activity, value) {
 
   if (!value && registrationCount > 0) {
     const confirmed = window.confirm(
-      `Ce service a ${registrationCount} inscrit(s). Voulez-vous vraiment désactiver session/inscription ?`,
+      t('message.confirmDisableSession'),
     )
 
     if (!confirmed) {
@@ -66,7 +68,7 @@ async function onSessionRegistrationToggle(activity, value) {
     )
 
     displaySuccessToast(
-      `Session/inscription désactivée. Une notification a été envoyée à ${registrationCount} utilisateur(s) inscrit(s).`,
+      t('message.sessionDisabledWarning'),
     )
   }
 }
@@ -74,13 +76,13 @@ async function onSessionRegistrationToggle(activity, value) {
 
 <template>
   <Card>
-    <template #title>Gestion des services</template>
+    <template #title>{{ $t('message.serviceManagement') }}</template>
 
     <template #content>
       <DataTable :value="activities" tableStyle="min-width: 72rem">
-        <Column field="name" header="Service" />
+        <Column field="name" :header="$t('message.service')" />
 
-        <Column header="Actif">
+        <Column :header="$t('message.active')">
           <template #body="slotProps">
             <Checkbox
               :modelValue="slotProps.data.serviceEnabled"
@@ -90,7 +92,7 @@ async function onSessionRegistrationToggle(activity, value) {
           </template>
         </Column>
 
-        <Column header="Visibilité">
+        <Column :header="$t('message.visibility')">
           <template #body="slotProps">
             <Select
               :modelValue="slotProps.data.visibility"
@@ -103,7 +105,7 @@ async function onSessionRegistrationToggle(activity, value) {
           </template>
         </Column>
 
-        <Column header="Commentaires">
+        <Column :header="$t('message.commentsLabel')">
           <template #body="slotProps">
             <Checkbox
               :modelValue="slotProps.data.commentsEnabled"
@@ -113,7 +115,7 @@ async function onSessionRegistrationToggle(activity, value) {
           </template>
         </Column>
 
-        <Column header="Session/inscription">
+        <Column :header="$t('message.sessionRegistration')">
           <template #body="slotProps">
             <Checkbox
               :modelValue="slotProps.data.sessionsEnabled && slotProps.data.canRegister"
@@ -123,7 +125,7 @@ async function onSessionRegistrationToggle(activity, value) {
           </template>
         </Column>
 
-        <Column header="Comptage stats">
+        <Column :header="$t('message.statsCount')">
           <template #body="slotProps">
             <Checkbox
               :modelValue="slotProps.data.registrationCountEnabled"
@@ -133,11 +135,11 @@ async function onSessionRegistrationToggle(activity, value) {
           </template>
         </Column>
 
-        <Column header="Etat">
+        <Column :header="$t('message.state')">
           <template #body="slotProps">
             <Tag
               :severity="slotProps.data.serviceEnabled ? 'success' : 'danger'"
-              :value="slotProps.data.serviceEnabled ? 'Actif' : 'Inactif'"
+              :value="slotProps.data.serviceEnabled ? $t('message.active') : $t('message.inactive')"
             />
           </template>
         </Column>

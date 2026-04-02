@@ -12,6 +12,8 @@ import {
   registrations,
 } from '@/datasource/data'
 import { UserTypeEnum } from '@/enums/User.enum'
+import i18n from '@/i18n'
+const { t } = i18n.global
 
 /**
  * Get all providers
@@ -191,10 +193,10 @@ function deleteProviderImage(providerId, imageIndex) {
   if (providerImagesEntry && providerImagesEntry.images) {
     providerImagesEntry.images.splice(imageIndex, 1)
 
-    return { error: 0, status: 200, data: 'Image supprimée' }
+    return { error: 0, status: 200, data: t('message.imageDeleted') }
   }
 
-  return { error: 1, status: 404, data: 'Prestataire non trouvé' }
+  return { error: 1, status: 404, data: t('message.providerNotFound') }
 }
 
 function updateUserTypeToProvider(userId) {

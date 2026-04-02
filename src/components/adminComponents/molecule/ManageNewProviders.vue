@@ -6,24 +6,24 @@
       <DataTable :value="providerStore.newProviders" dataKey="id">
         <template #empty>{{ $t('message.noNewRequest') }}</template>
 
-        <Column field="name" header="Nom" sortable style="min-width: 16rem" />
-        <Column field="description" header="Description" sortable style="min-width: 20rem" />
-        <Column style="min-width: 12rem" header="Actions">
+        <Column field="name" :header="$t('message.name')" sortable style="min-width: 16rem" />
+        <Column field="description" :header="$t('message.description')" sortable style="min-width: 20rem" />
+        <Column style="min-width: 12rem" :header="$t('message.actions')">
           <template #body="slotProps">
             <Button
               icon="pi pi-check"
               variant="outlined"
               severity="success"
               @click="confirmValidation(slotProps.data)"
-              v-tooltip.top="'Valider'"
+              v-tooltip.top="$t('message.validate')"
             />
             <Button
               icon="pi pi-trash"
               variant="outlined"
               severity="danger"
               @click="confirmDeletion(slotProps.data)"
-              title="Supprimer"
-              v-tooltip.top="'Supprimer'"
+              :title="$t('message.delete')"
+              v-tooltip.top="$t('message.delete')"
             />
           </template>
         </Column>
@@ -37,23 +37,25 @@ import { useProviderStore } from '@/stores/providers'
 import { Button, DataTable, Column, Card } from 'primevue'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const confirm = useConfirm()
 
 const providerStore = useProviderStore()
 
 const confirmDeletion = (data) => {
   confirm.require({
-    message: `Êtes vous sûr de vouloir supprimer la demande de ${data.name}`,
-    header: 'Suppression',
+    message: t('message.deleteConfirmMessage'),
+    header: t('message.deleteConfirmHeader'),
     icon: 'pi pi-exclamation-triangle',
     rejectProps: {
-      label: 'Annuler',
+      label: t('message.cancel'),
       severity: 'secondary',
       outlined: true,
     },
     acceptProps: {
-      label: 'Supprimer',
+      label: t('message.delete'),
       severity: 'danger',
     },
     accept: async () => {
@@ -64,16 +66,16 @@ const confirmDeletion = (data) => {
 
 const confirmValidation = (data) => {
   confirm.require({
-    message: `Êtes vous sûr de vouloir valider la demande de ${data.name}`,
-    header: "Ajout d'un prestataire",
+    message: t('message.validateConfirmMessage'),
+    header: t('message.validateConfirmHeader'),
     icon: 'pi pi-info-circle',
     rejectProps: {
-      label: 'Annuler',
+      label: t('message.cancel'),
       severity: 'secondary',
       outlined: true,
     },
     acceptProps: {
-      label: 'Valider',
+      label: t('message.validate'),
       severity: 'success',
     },
     accept: async () => {

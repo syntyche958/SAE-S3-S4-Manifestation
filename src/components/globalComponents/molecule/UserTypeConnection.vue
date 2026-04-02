@@ -14,9 +14,9 @@
           class="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-[#1a1a1a]/20 to-transparent"
         ></div>
         <div class="absolute bottom-12 left-12 right-12 text-white">
-          <h3 class="text-3xl font-bold mb-3 tracking-tight">Vivez l'expérience Carcassonne</h3>
+          <h3 class="text-3xl font-bold mb-3 tracking-tight">{{ $t('message.experienceCarcassonne') }}</h3>
           <p class="text-white/80 leading-relaxed text-sm max-w-xs font-medium">
-            Participez aux animations, réservez vos ateliers et profitez de moments inoubliables.
+            {{ $t('message.participateDescription') }}
           </p>
         </div>
       </div>
@@ -30,23 +30,23 @@
                 <span
                   class="inline-block px-3 py-1 rounded-full bg-emerald-950/30 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-4 border border-emerald-800/50"
                 >
-                  Connexion
+                  {{ $t('message.connection') }}
                 </span>
-                <h2 class="text-4xl font-black text-white mb-2 tracking-tight">Bon retour !</h2>
+                <h2 class="text-4xl font-black text-white mb-2 tracking-tight">{{ $t('message.welcomeBack') }}</h2>
                 <p class="text-surface-400 text-sm">
-                  Entrez vos identifiants pour accéder à votre compte.
+                  {{ $t('message.enterCredentials') }}
                 </p>
               </header>
 
               <LoginForm @close-dialog="closeDialog" />
 
               <footer class="mt-12 text-center text-sm text-surface-400 font-medium">
-                Pas encore de compte ?
+                {{ $t('message.noAccountYet') }}
                 <button
                   @click="isLogin = false"
                   class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline cursor-pointer ml-1 transition-colors"
                 >
-                  Créer un compte
+                  {{ $t('message.createAccount') }}
                 </button>
               </footer>
             </div>
@@ -56,23 +56,23 @@
                 <span
                   class="inline-block px-3 py-1 rounded-full bg-purple-950/30 text-purple-400 text-[10px] font-bold uppercase tracking-wider mb-4 border border-purple-800/50"
                 >
-                  Inscription
+                  {{ $t('message.registration') }}
                 </span>
-                <h2 class="text-4xl font-black text-white mb-2 tracking-tight">Bienvenue</h2>
+                <h2 class="text-4xl font-black text-white mb-2 tracking-tight">{{ $t('message.welcome') }}</h2>
                 <p class="text-surface-400 text-sm">
-                  Rejoignez-nous et participez à l'aventure Carcassonne.
+                  {{ $t('message.joinAdventure') }}
                 </p>
               </header>
 
               <SignInForm />
 
               <footer class="mt-12 text-center text-sm text-surface-400 font-medium">
-                J'ai déjà un compte.
+                {{ $t('message.alreadyHaveAccount') }}
                 <button
                   @click="isLogin = true"
                   class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline cursor-pointer ml-1 transition-colors"
                 >
-                  Se connecter
+                  {{ $t('message.connectLabel') }}
                 </button>
               </footer>
             </div>
@@ -85,9 +85,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import LoginForm from './LoginForm.vue'
 import SignInForm from './SignInForm.vue'
 
+const { t } = useI18n()
 const isLogin = ref(true)
 const emit = defineEmits(['hide-dialog'])
 

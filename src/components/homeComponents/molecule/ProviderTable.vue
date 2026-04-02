@@ -54,7 +54,7 @@
             />
           </template>
           <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" placeholder="Search by name" />
+            <InputText v-model="filterModel.value" :placeholder="$t('message.keywordSearch')" />
           </template>
         </Column>
 
@@ -71,7 +71,7 @@
             />
           </template>
           <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" placeholder="Search by name" />
+            <InputText v-model="filterModel.value" :placeholder="$t('message.keywordSearch')" />
           </template>
         </Column>
       </DataTable>
@@ -81,11 +81,13 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api'
 import { InputText, Button, DataTable, Column, IconField, InputIcon, Card } from 'primevue'
 import { useProviderStore } from '@/stores/providers'
 import { useActivityStore } from '@/stores/activities'
 
+const { t } = useI18n()
 const providerStore = useProviderStore()
 const activityStore = useActivityStore()
 

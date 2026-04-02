@@ -25,7 +25,7 @@
 
   <Dialog
     v-model:visible="dialogVisible"
-    header="Messages"
+    :header="$t('message.messages')"
     :style="{ width: 'auto' }"
     position="topright"
     :modal="true"
@@ -35,14 +35,14 @@
       $t('message.noNewMessage')
     }}</span>
     <DataTable v-if="contacts.length !== 0" :value="contacts" tableStyle="min-width: 50rem">
-      <Column field="activityId" header="Activité"></Column>
+      <Column field="activityId" :header="$t('message.activity')"></Column>
       <Column field="message" header="Message"></Column>
-      <Column field="id" header="Actions">
+      <Column field="id" :header="$t('message.actions')">
         <template #body="{ data }"
           ><div class="flex">
-            <Button label="Répondre" icon="pi pi-envelope" @click="() => sendMail(data.mail)" />
+            <Button :label="$t('message.reply')" icon="pi pi-envelope" @click="() => sendMail(data.mail)" />
             <Button
-              label="Marqué comme terminé"
+              :label="$t('message.markedAsDone')"
               icon="pi pi-check-circle"
               @click="() => contactStore.removeContact(data.id)"
             />
@@ -182,7 +182,7 @@ const items = computed(() => {
 
   if (authStore.user?.id) {
     res.push({
-      label: 'Vos réservations',
+      label: t('message.yourReservations'),
       icon: 'pi pi-calendar',
       command: () => {
         router.push('/reservations')
@@ -192,7 +192,7 @@ const items = computed(() => {
 
   if (authStore.user?.type === UserTypeEnum.PROVIDER) {
     res.push({
-      label: 'Message',
+      label: t('message.messages'),
       icon: 'pi pi-inbox',
       badge: contacts.value.length,
       command: () => (dialogVisible.value = true),

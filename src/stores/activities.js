@@ -5,6 +5,9 @@ import activityService from '@/services/activity.service'
 import { useProviderStore } from '@/stores/providers'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 import { enqueueNotificationsForUsers } from '@/utils/visitorNotifications.utils'
+import i18n from '@/i18n'
+
+const { t } = i18n.global
 
 export const useActivityStore = defineStore('activity', () => {
   // STATE
@@ -40,9 +43,9 @@ export const useActivityStore = defineStore('activity', () => {
     let response = await activityService.addToLocalSource(providerId, name, desc)
     if (response.error === 0) {
       await getAllActivities()
-      displaySuccessToast(`L'activité ${name} a été ajouté avec succès !`)
+      displaySuccessToast(t('message.activityAddedSuccess'))
     } else {
-      displayErrToast(`Echec de l'ajout de l'activité ${name} !`)
+      displayErrToast(t('message.activityAddedFailed'))
       console.log(response.data)
     }
   }
@@ -84,9 +87,9 @@ export const useActivityStore = defineStore('activity', () => {
       if (index !== -1) {
         activities.value[index] = response.data
       }
-      displaySuccessToast(`Votre note a été enregistrée avec succès !`)
+      displaySuccessToast(t('message.ratingRecorded'))
     } else {
-      displayErrToast(`Echec de l'enregistrement de la note !`)
+      displayErrToast(t('message.ratingFailed'))
       console.log(response.data)
     }
   }
@@ -98,9 +101,9 @@ export const useActivityStore = defineStore('activity', () => {
       if (index !== -1) {
         activities.value[index] = response.data
       }
-      displaySuccessToast(`Votre commentaire a été publié avec succès !`)
+      displaySuccessToast(t('message.commentPublished'))
     } else {
-      displayErrToast(`Echec de la publication du commentaire !`)
+      displayErrToast(t('message.commentFailed'))
       console.log(response.data)
     }
   }
@@ -112,9 +115,9 @@ export const useActivityStore = defineStore('activity', () => {
       if (index !== -1) {
         activities.value[index] = response.data
       }
-      displaySuccessToast('Votre réponse a été publiée avec succès !')
+      displaySuccessToast(t('message.replyPublished'))
     } else {
-      displayErrToast('Echec de la publication de la réponse !')
+      displayErrToast(t('message.replyFailed'))
       console.log(response.data)
     }
   }
@@ -123,13 +126,13 @@ export const useActivityStore = defineStore('activity', () => {
   const response = await activityService.updateServiceFlagsLocalSource(activityId,payload)
   if (response.error === 0) {
     activities.value = response.data
-    displaySuccessToast('Paramètres du service mis à jour')
+    displaySuccessToast(t('message.serviceFlagsUpdated'))
   } else {
-    displayErrToast('Echec de la mise à jour du service')
+    displayErrToast(t('message.serviceFlagsUpdateFailed'))
     console.log(response.data)
   }
 }
-    
+
   return {
     getAllActivities,
     get,

@@ -11,7 +11,7 @@
     <Dialog
       v-model:visible="displayDialog"
       modal
-      header="Modification du texte de présentation : "
+      :header="$t('message.modifyDescription')"
       :style="{ width: '50vw' }"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     >

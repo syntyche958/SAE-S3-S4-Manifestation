@@ -11,7 +11,7 @@
           v-model="mail"
           fluid
           class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white"
-          placeholder="votre@email.fr"
+          :placeholder="$t('message.emailPlaceholder')"
         />
       </div>
 
@@ -34,7 +34,7 @@
 
     <div class="flex flex-col gap-3 mt-2">
       <Button
-        label="Connexion"
+        :label="$t('message.connection')"
         icon="pi pi-sign-in"
         fluid
         class="!rounded-xl py-3 font-bold"
@@ -49,7 +49,7 @@
         </div>
         <span
           class="relative px-3 text-xs text-surface-400 bg-surface-0 font-medium uppercase tracking-widest"
-          >Ou continuer avec</span
+          >{{ $t('message.continueWith') }}</span
         >
       </div>
 
@@ -70,6 +70,9 @@
 import { useAuthStore } from '@/stores/auth'
 import { InputText, Button } from 'primevue'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 // TODO : Ajouter les verifs zod pour le format du mail
 

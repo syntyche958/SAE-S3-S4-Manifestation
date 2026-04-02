@@ -7,9 +7,9 @@
             {{ item.beginingDate }} {{ item.beginingHour }}
           </span>
           <div class="text-lg font-medium mt-2">Session #{{ item.id }}</div>
-          <div class="text-sm text-surface-600 mt-1">Durée: {{ item.duration }} minutes</div>
+          <div class="text-sm text-surface-600 mt-1">{{ $t('message.duration') }}: {{ item.duration }} {{ $t('message.minutes') }}</div>
           <div class="text-sm text-surface-600 mt-1">
-            Places: {{ item.nbPlace - item.registersUsers.length }} / {{ item.nbPlace }}
+            {{ $t('message.places') }}: {{ item.nbPlace - item.registersUsers.length }} / {{ item.nbPlace }}
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
           <Button
             v-if="isCurrentProviderOwner && canShowRegistrants"
             icon="pi pi-users"
-            label="Voir les inscrits"
+            :label="$t('message.seeRegistrants')"
             severity="info"
             outlined
             @click="$emit('show-registrants', item)"
@@ -26,7 +26,7 @@
           />
           <Button
             :icon="isRegistered ? 'pi pi-check' : 'pi pi-user-plus'"
-            :label="isRegistered ? 'Déjà inscrit' : $t('message.signUp')"
+            :label="isRegistered ? $t('message.alreadyRegistered') : $t('message.signUp')"
             @click="$emit('inscription', item)"
             :disabled="
               item.nbPlace <= item.registersUsers.length || isRegistered || !isUserConnected
@@ -42,6 +42,9 @@
 
 <script setup>
 import Button from 'primevue/button'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   item: Object,

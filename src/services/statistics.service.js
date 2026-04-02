@@ -3,6 +3,8 @@ import { useSessionStore } from '@/stores/sessions'
 import { useActivityStore } from '@/stores/activities'
 import AuthService from '@/services/auth.service'
 import { UserTypeEnum } from '@/enums/User.enum'
+import i18n from '@/i18n'
+const { t } = i18n.global
 
 async function getSurveyStatistics() {
   const surveyStore = useSurveyStore()
@@ -150,7 +152,7 @@ async function getGeneralStatistics() {
       const activity = activityStore.activities.find((a) => a.id === parseInt(activityId))
       return {
         id: activityId,
-        name: activity ? activity.name : `Activité ${activityId}`,
+        name: activity ? activity.name : `${t('message.activityFallback')} ${activityId}`,
         count: count,
       }
     },
@@ -170,10 +172,10 @@ async function getGeneralStatistics() {
   const uniqueDates = [...new Set(sessions.map((s) => s.beginingDate))].sort()
   const activitiesPerDay = {}
 
-  const dayNames = ['Samedi', 'Dimanche']
+  const dayNames = [t('message.saturday'), t('message.sunday')]
 
   uniqueDates.forEach((date, index) => {
-    const dayName = dayNames[index] || `Jour ${index + 1}`
+    const dayName = dayNames[index] || `${t('message.dayN')} ${index + 1}`
     const activitiesOnDay = new Set(
       sessions.filter((s) => s.beginingDate === date).map((s) => s.activityId),
     )

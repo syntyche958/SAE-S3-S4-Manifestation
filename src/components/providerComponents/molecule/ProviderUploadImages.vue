@@ -13,14 +13,13 @@
       >
         <template #empty>
           <span>
-            Déposez ici (drag and drop) les images que vous souhaitez rendre visibles dans le
-            carroussel
+            {{ $t('message.dropImages') }}
           </span>
         </template>
       </FileUpload>
 
       <div v-if="selectedFiles.length > 0" class="mt-4">
-        <h3>Images sélectionnées :</h3>
+        <h3>{{ $t('message.selectedImages') }}</h3>
         <div class="image-grid">
           <div v-for="(fileData, index) in selectedFiles" :key="index" class="image-item">
             <img :src="fileData.preview" :alt="fileData.name" class="image-thumbnail" />
@@ -34,7 +33,7 @@
           </div>
         </div>
         <Button
-          label="Uploader les images"
+          :label="$t('message.uploadButton')"
           icon="pi pi-upload"
           class="mt-3"
           @click="uploadAllFiles"
@@ -51,7 +50,9 @@ import { useRoute } from 'vue-router'
 import { useProviderStore } from '@/stores/providers'
 import { displayErrToast } from '@/utils/toast.utils'
 import { FileUpload, Button, Card } from 'primevue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const route = useRoute()
 const providerStore = useProviderStore()
 const fileUploadRef = ref(null)
@@ -80,7 +81,7 @@ const removeSelectedFile = (index) => {
 
 const uploadAllFiles = async () => {
   if (selectedFiles.value.length === 0) {
-    displayErrToast('Aucune image sélectionnée')
+    displayErrToast(t('message.noImagesSelected'))
     return
   }
   isUploading.value = true
@@ -101,7 +102,7 @@ const uploadAllFiles = async () => {
     }
   } catch (error) {
     console.error('Erreur upload:', error)
-    displayErrToast("Erreur lors de l'upload")
+    displayErrToast(t('message.imageUploadFailed'))
   } finally {
     isUploading.value = false
   }

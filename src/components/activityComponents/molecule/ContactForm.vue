@@ -87,6 +87,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
 import { Button, InputText, Dialog, Select, Textarea, Message } from 'primevue'
 import { Form } from '@primevue/forms'
@@ -97,6 +99,7 @@ import { useActivityStore } from '@/stores/activities'
 import { useContactStore } from '@/stores/contact'
 import { z } from 'zod'
 
+const { t } = useI18n()
 const providerStore = useProviderStore()
 const activityStore = useActivityStore()
 const contactStore = useContactStore()

@@ -2,15 +2,15 @@
   <Card v-if="locationRequestedBy.length > 0" class="mt-6">
     <template #content>
       <div class="flex flex-col gap-3">
-        <h2 class="mb-0!">Demande en attente :</h2>
+        <h2 class="mb-0!">{{ $t('message.waitingRequests') }}</h2>
         <DataTable :value="locationRequestedBy" paginator :rows="10" dataKey="id">
           <!-- Columns -->
-          <Column field="name" header="Activité" sortable style="min-width: 12rem">
+          <Column field="name" :header="$t('message.activity')" sortable style="min-width: 12rem">
             <template #body="{ data }">
               {{ data.name }}
             </template>
           </Column>
-          <Column field="providerId" header="Prestataire" sortable style="min-width: 12rem">
+          <Column field="providerId" :header="$t('message.provider')" sortable style="min-width: 12rem">
             <template #body="{ data }">
               {{ providerStore.get(data.providerId).name }}
             </template>
@@ -22,7 +22,7 @@
               <div class="flex gap-2">
                 <Button
                   type="button"
-                  label="Accepter"
+                  :label="$t('message.acceptRequest')"
                   @click="emit('set-activity-location', data.id)"
                   size="small"
                 />

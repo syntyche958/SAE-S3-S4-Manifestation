@@ -26,14 +26,14 @@
         icon="pi pi-qrcode"
         text
         rounded
-        v-tooltip.top="'Afficher le QR code'"
+        v-tooltip.top="$t('message.showQrCode')"
         @click="showQrCode = true"
       />
       <Button
         icon="pi pi-eye"
         text
         rounded
-        v-tooltip.top="'Voir l\'activité'"
+        v-tooltip.top="$t('message.seeActivity')"
         @click="$emit('go-to-activity', item.activityId)"
       />
     </div>
@@ -41,7 +41,7 @@
 
   <Dialog
     v-model:visible="showQrCode"
-    header="Votre QR Code"
+    :header="$t('message.yourQrCode')"
     :style="{ width: '25rem', margin: '1rem' }"
     modal
     class="dark-dialog"
@@ -49,7 +49,7 @@
     <div class="flex justify-center p-4">
       <img
         :src="`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrCode}`"
-        alt="QR Code de la session"
+        :alt="$t('message.qrCodeAlt')"
         class="rounded-lg"
       />
     </div>
@@ -61,6 +61,9 @@ import { ref } from 'vue'
 import Button from 'primevue/button'
 import Tag from 'primevue/tag'
 import Dialog from 'primevue/dialog'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 defineProps({
   item: Object,

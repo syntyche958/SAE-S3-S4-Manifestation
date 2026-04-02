@@ -4,6 +4,9 @@ import { defineStore } from 'pinia'
 import ProviderService from '@/services/provider.service'
 import AuthService from '@/services/auth.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
+import i18n from '@/i18n'
+
+const { t } = i18n.global
 
 export const useProviderStore = defineStore('provider', () => {
   const providers = ref([])
@@ -72,9 +75,9 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.addNewProvider(providerName, providerDesc, userId)
     if (response.error === 0) {
       await getAllNewProviders()
-      displaySuccessToast('Votre demande a été enregistré avec succès')
+      displaySuccessToast(t('message.providerRequestSuccess'))
     } else {
-      displayErrToast("Échec de l'envoi de la demande, veuillez réessayer")
+      displayErrToast(t('message.providerRequestFailed'))
       console.log(response.data)
     }
   }
@@ -83,9 +86,9 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.removeNewProvider(data.id)
     if (response.error === 0) {
       await getAllNewProviders()
-      displaySuccessToast(`La demande de ${data.name} a été supprimé avec succès`)
+      displaySuccessToast(t('message.providerRequestDeletedSuccess'))
     } else {
-      displayErrToast(`Échec de la suppression de la demande de ${data.name}`)
+      displayErrToast(t('message.providerRequestDeletedFailed'))
       console.log(response.data)
     }
   }
@@ -98,9 +101,9 @@ export const useProviderStore = defineStore('provider', () => {
     if (response1.error === 0 && response2.error === 0) {
       await getAllNewProviders()
       await getAllProviders()
-      displaySuccessToast(`La demande de ${data.name} a été validé avec succès`)
+      displaySuccessToast(t('message.providerRequestValidatedSuccess'))
     } else {
-      displayErrToast(`Échec de la validation de la demande de ${data.name}`)
+      displayErrToast(t('message.providerRequestValidatedFailed'))
     }
   }
 
@@ -108,10 +111,10 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.uploadProviderImage(providerId, imageData)
 
     if (response.error === 0) {
-      displaySuccessToast('Image uploadée avec succès')
+      displaySuccessToast(t('message.imageUploadedSuccess'))
       await getProviderImages(providerId)
     } else {
-      displayErrToast("Erreur lors de l'upload")
+      displayErrToast(t('message.imageUploadFailed'))
       console.log(response.data)
     }
 
@@ -122,10 +125,10 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.deleteProviderImage(providerId, imageId)
 
     if (response.error === 0) {
-      displaySuccessToast('Image supprimée avec succès')
+      displaySuccessToast(t('message.imageDeletedSuccess'))
       await getProviderImages(providerId)
     } else {
-      displayErrToast('Erreur lors de la suppression')
+      displayErrToast(t('message.imageDeleteFailed'))
       console.log(response.data)
     }
 

@@ -33,7 +33,7 @@
         </div>
         <!-- Desc input -->
         <div class="flex flex-col gap-1 mb-8">
-          <label for="desc" class="font-semibold w-24">Description</label>
+          <label for="desc" class="font-semibold w-24">{{ $t('message.description') }}</label>
           <InputText id="desc" name="desc" class="flex-auto" />
           <Message v-if="$form.desc?.invalid" severity="error" size="small" variant="simple">{{
             $form.desc.error?.message
@@ -54,6 +54,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Button, Dialog, InputText, Message } from 'primevue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { Form } from '@primevue/forms'
@@ -62,6 +63,7 @@ import { z } from 'zod'
 import { useActivityStore } from '@/stores/activities'
 import { useRoute } from 'vue-router'
 
+const { t } = useI18n()
 const route = useRoute()
 const activityStore = useActivityStore()
 

@@ -1,5 +1,7 @@
 import activityService from './activity.service'
 import sessionsService from './sessions.service'
+import i18n from '@/i18n'
+const { t } = i18n.global
 
 class ProviderStatisticsService {
   async getProviderStatistics(providerId) {
@@ -101,7 +103,7 @@ class ProviderStatisticsService {
         const activityName = activity.name
         const date = reg.registration_date
           ? new Date(reg.registration_date).toLocaleDateString('fr-FR')
-          : 'Date non définie'
+          : t('message.undefinedDate')
 
         const key = `${activity.id}|${date}`
         if (!stats[key]) {
