@@ -219,8 +219,7 @@ async function addSpotsBulkLocalSource(activityId, locationId, dateHours) {
         }
         updatedSpots.push({ locationId, dateHour })
         updatedRequests = updatedRequests.filter(
-          (r) =>
-            !(String(r.locationId) === String(locationId) && String(r.dateHour) === dateHour),
+          (r) => !(String(r.locationId) === String(locationId) && String(r.dateHour) === dateHour),
         )
       }
       return { ...a, spotIds: updatedSpots, requestedSpotIds: updatedRequests }
