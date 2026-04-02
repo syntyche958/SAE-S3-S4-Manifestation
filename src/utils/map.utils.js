@@ -248,6 +248,27 @@ function getVisitorActivitiesForLocation(locationId, visitorDateHour) {
     })
 }
 
+function getLocationCoord(location) {
+  if (Array.isArray(location?.coord) && location.coord.length >= 2) {
+    return location.coord
+  }
+
+  const latitude = Number(location?.latitude)
+  const longitude = Number(location?.longitude)
+  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+    return [latitude, longitude]
+  }
+
+  return null
+}
+
+function getLocationArea(location) {
+  if (Array.isArray(location?.area) && location.area.length > 0) {
+    return location.area
+  }
+  return null
+}
+
 function displayPinPoints(map, visitorDateHour, t, router) {
   const locationStore = useLocationStore()
 
@@ -262,7 +283,10 @@ function displayPinPoints(map, visitorDateHour, t, router) {
     const activitiesAtLocation = getVisitorActivitiesForLocation(location.id, visitorDateHour)
     if (activitiesAtLocation.length === 0) continue
 
-    let marker = L.marker(location['coord']).addTo(map)
+    const coord = getLocationCoord(location)
+    if (!coord) continue
+
+    let marker = L.marker(coord).addTo(map)
     bindPopupVisitor(map, marker, activitiesAtLocation, t, router)
   }
 }
@@ -304,6 +328,8 @@ function displayAreas(map, emit, mapMode, route, selectedLocationId) {
 
   for (let location of locationStore.locations) {
     const locationId = location.id
+    const area = getLocationArea(location)
+    if (!area) continue
 
     const areaColor = getAreaColor(locationId, mapMode, route)
     const initialWeight =
@@ -311,7 +337,7 @@ function displayAreas(map, emit, mapMode, route, selectedLocationId) {
         ? defaultPolygonWeight + 4
         : defaultPolygonWeight
 
-    let polygon = L.polygon(location['area'], {
+    let polygon = L.polygon(area, {
       color: areaColor,
       weight: initialWeight,
     }).addTo(map)
