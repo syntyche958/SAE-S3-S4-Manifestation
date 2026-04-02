@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import * as L from 'leaflet'
 import { useLocationStore } from '@/stores/locations'
 import { useActivityStore } from '@/stores/activities'
@@ -6,16 +5,72 @@ import { useProviderStore } from '@/stores/providers'
 import { MapModeEnum } from '@/enums/Map.enums'
 import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
 
-const defaultPolygonWeight = 2
-const visitorPopupCloseDelayMs = 500
 const visitorMapClickCloseBound = new WeakSet()
+
+function translateOrIdentity(t) {
+  return t || ((key) => key)
+}
+
+function buildEventDateHours() {
+  const dateHours = []
+  for (const day of EVENT_DAYS) {
+    for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
+      const hourLabel = `${String(h).padStart(2, '0')}:00`
+      dateHours.push(`${day}T${hourLabel}`)
+    }
+  }
+  return dateHours
+}
+
+function hasAnySpotForLocationAndDateHour(activity, locationId, dateHour) {
+  return (activity.spotIds || []).some(
+    (spot) => spot.locationId === locationId && String(spot.dateHour) === dateHour,
+  )
+}
+
+function hasAnyRequestedSpotForLocationAndDateHour(activity, locationId, dateHour) {
+  return (activity.requestedSpotIds || []).some(
+    (spot) => spot.locationId === locationId && String(spot.dateHour) === dateHour,
+  )
+}
+
+function hasAtLeastOneFreeSlotForLocation(activities, locationId) {
+  const eventDateHours = buildEventDateHours()
+  for (const dateHour of eventDateHours) {
+    const occupied = activities.some(
+      (activity) =>
+        hasAnySpotForLocationAndDateHour(activity, locationId, dateHour) ||
+        hasAnyRequestedSpotForLocationAndDateHour(activity, locationId, dateHour),
+    )
+    if (!occupied) return true
+  }
+  return false
+}
+
+function getLocationSlotSummaryForAdmin(activities, locationId) {
+  const totalSlots = EVENT_DAYS.length * (EVENT_END_HOUR - EVENT_START_HOUR + 1)
+
+  let assignedCount = 0
+  let hasRequest = false
+
+  for (const activity of activities) {
+    for (const spot of activity.spotIds || []) {
+      if (spot.locationId === locationId) assignedCount++
+    }
+    if (!hasRequest) {
+      hasRequest = (activity.requestedSpotIds || []).some((req) => req.locationId === locationId)
+    }
+  }
+
+  return { totalSlots, assignedCount, hasRequest }
+}
 
 export function setupMap(mapId) {
   // Map setup
-  let southWestBoundsCoords = L.latLng(43.203642, 2.36)
-  let northEastBoundsCoords = L.latLng(43.209367, 2.37)
-  let bounds = new L.LatLngBounds(southWestBoundsCoords, northEastBoundsCoords)
-  let options = { maxBounds: bounds, minZoom: 17 }
+  const southWestBoundsCoords = L.latLng(43.203642, 2.36)
+  const northEastBoundsCoords = L.latLng(43.209367, 2.37)
+  const bounds = new L.LatLngBounds(southWestBoundsCoords, northEastBoundsCoords)
+  const options = { maxBounds: bounds, minZoom: 17 }
   const map = L.map(mapId, options).setView([43.206496, 2.364834], 17)
 
   // Define tile layer
@@ -92,7 +147,8 @@ export function refreshLocations(
 }
 
 function bindPopupVisitor(map, marker, activitiesAtLocation, t, router) {
-  const translate = t || ((key) => key)
+  const translate = translateOrIdentity(t)
+  const popupCloseDelayMs = 500
 
   let mouseOnPopUp = false
   let mouseOnMarker = false
@@ -111,7 +167,7 @@ function bindPopupVisitor(map, marker, activitiesAtLocation, t, router) {
       if (!mouseOnPopUp && !mouseOnMarker) {
         marker.closePopup()
       }
-    }, visitorPopupCloseDelayMs)
+    }, popupCloseDelayMs)
   }
 
   const popupContent = activitiesAtLocation
@@ -227,52 +283,23 @@ function getAreaColor(locationId, mapMode, route) {
     if (hasConfirmedSpot) return 'limegreen'
     if (hasPendingRequest) return 'gold'
 
-    let hasFreeSlot = false
-    for (const day of EVENT_DAYS) {
-      for (let h = EVENT_START_HOUR; h <= EVENT_END_HOUR; h++) {
-        const hourLabel = `${String(h).padStart(2, '0')}:00`
-        const dateHour = `${day}T${hourLabel}`
-        const occupied = activityStore.activities.some(
-          (a) =>
-            (a.spotIds || []).some(
-              (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
-            ) ||
-            (a.requestedSpotIds || []).some(
-              (s) => s.locationId === locationId && String(s.dateHour) === dateHour,
-            ),
-        )
-        if (!occupied) {
-          hasFreeSlot = true
-          break
-        }
-      }
-      if (hasFreeSlot) break
-    }
+    const hasFreeSlot = hasAtLeastOneFreeSlotForLocation(activityStore.activities, locationId)
     if (hasFreeSlot) return 'dodgerblue'
     return 'crimson'
-  } else {
-    const totalSlots = EVENT_DAYS.length * (EVENT_END_HOUR - EVENT_START_HOUR + 1)
-
-    let assignedCount = 0
-    let hasRequest = false
-    for (const activity of activityStore.activities) {
-      for (const spot of activity.spotIds || []) {
-        if (spot.locationId === locationId) assignedCount++
-      }
-      for (const req of activity.requestedSpotIds || []) {
-        if (req.locationId === locationId) hasRequest = true
-      }
-    }
-
-    if (assignedCount >= totalSlots) return 'green'
-    if (hasRequest) return 'yellow'
-    if (assignedCount > 0) return 'orange'
-    return 'red'
   }
+
+  const { totalSlots, assignedCount, hasRequest } = getLocationSlotSummaryForAdmin(
+    activityStore.activities,
+    locationId,
+  )
+  if (assignedCount >= totalSlots) return 'green'
+  if (hasRequest) return 'yellow'
+  if (assignedCount > 0) return 'orange'
+  return 'red'
 }
 
 function displayAreas(map, emit, mapMode, route, selectedLocationId) {
-  const polygons = ref([])
+  const defaultPolygonWeight = 2
   const locationStore = useLocationStore()
 
   for (let location of locationStore.locations) {
@@ -302,12 +329,11 @@ function displayAreas(map, emit, mapMode, route, selectedLocationId) {
 
       polygon.setStyle({ weight: defaultPolygonWeight + 4 })
     })
-    polygons.value.push(polygon)
   }
 }
 
 function displayLegends(map, mapMode, t) {
-  const translate = t || ((key) => key)
+  const translate = translateOrIdentity(t)
 
   const legend = L.control({ position: 'topleft' })
   let labels, colors, colorsRGBA
@@ -378,7 +404,7 @@ function displayLegends(map, mapMode, t) {
 }
 
 function displayUnselectPanel(map, emit, mapMode, route, t, router) {
-  const translate = t || ((key) => key)
+  const translate = translateOrIdentity(t)
 
   const customControl = L.control({ position: 'topright' })
   customControl.onAdd = function () {
@@ -391,7 +417,7 @@ function displayUnselectPanel(map, emit, mapMode, route, t, router) {
     container.style.cursor = 'pointer'
     container.onclick = function () {
       emit('changeSelectedLocation', undefined)
-      refreshLocations(map, emit, mapMode, route, undefined, undefined, undefined, t, router)
+      refreshLocations(map, emit, mapMode, route, undefined, undefined, t, router)
     }
 
     const label = L.DomUtil.create('b', 'custom-button', container)
