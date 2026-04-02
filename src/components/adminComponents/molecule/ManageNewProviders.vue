@@ -46,7 +46,7 @@ const providerStore = useProviderStore()
 
 const confirmDeletion = (data) => {
   confirm.require({
-    message: t('message.deleteConfirmMessage'),
+    message: t('message.deleteConfirmMessage', { name: data?.name ?? '' }),
     header: t('message.deleteConfirmHeader'),
     icon: 'pi pi-exclamation-triangle',
     rejectProps: {
@@ -66,7 +66,7 @@ const confirmDeletion = (data) => {
 
 const confirmValidation = (data) => {
   confirm.require({
-    message: t('message.validateConfirmMessage'),
+    message: t('message.validateConfirmMessage', { name: data?.name ?? '' }),
     header: t('message.validateConfirmHeader'),
     icon: 'pi pi-info-circle',
     rejectProps: {
