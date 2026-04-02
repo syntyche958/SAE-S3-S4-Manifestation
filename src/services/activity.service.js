@@ -23,6 +23,11 @@ function pickActivityUpdatePayload(activity, overrides = {}) {
     requestedLocationId: overrides.requestedLocationId ?? activity.requestedLocationId,
     spotIds: overrides.spotIds ?? activity.spotIds ?? [],
     requestedSpotIds: overrides.requestedSpotIds ?? activity.requestedSpotIds ?? [],
+    visibility: overrides.visibility ?? activity.visibility ?? 'public',
+    commentsEnabled: overrides.commentsEnabled ?? activity.commentsEnabled ?? true,
+    sessionsEnabled: overrides.sessionsEnabled ?? activity.sessionsEnabled ?? true,
+    registrationCountEnabled:
+      overrides.registrationCountEnabled ?? activity.registrationCountEnabled ?? true,
     canRegister: overrides.canRegister ?? activity.canRegister,
   }
 }

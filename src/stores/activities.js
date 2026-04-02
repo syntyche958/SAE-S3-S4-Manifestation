@@ -246,9 +246,18 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function updateServiceFlags(activityId, payload) {
-    const response = await activityService.updateServiceFlagsLocalSource(activityId, payload)
+    const activity = get(activityId)
+    if (!activity) {
+      displayErrToast(t('message.serviceFlagsUpdateFailed'))
+      return
+    }
+
+    const response = await activityService.updateActivity(activity, payload)
     if (response.error === 0) {
-      activities.value = response.data
+      const index = activities.value.findIndex((a) => a.id === activityId)
+      if (index !== -1) {
+        activities.value[index] = response.data
+      }
       displaySuccessToast(t('message.serviceFlagsUpdated'))
     } else {
       displayErrToast(t('message.serviceFlagsUpdateFailed'))

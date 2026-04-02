@@ -301,8 +301,7 @@ const messages = {
       providerNotFound: 'Provider not found',
       confirmDisableSession:
         'This service has {count} registrant(s). Disabling session/registration will delete existing registrations. Continue?',
-      sessionDisabledWarning:
-        '{count} registration(s) deleted and session/registration disabled.',
+      sessionDisabledWarning: '{count} registration(s) deleted and session/registration disabled.',
       registrationDeleteFailed:
         'Unable to delete all existing registrations. Session/registration has not been disabled.',
       emailPlaceholder: 'your@email.com',
