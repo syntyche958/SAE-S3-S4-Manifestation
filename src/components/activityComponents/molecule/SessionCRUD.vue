@@ -84,6 +84,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useSessionStore } from '@/stores/sessions.js'
 import { useActivityStore } from '@/stores/activities'
@@ -106,7 +107,7 @@ import {
   splitDateHour,
 } from '@/utils/sessionTimeSlots.utils'
 
-useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const sessionStore = useSessionStore()
 const activityStore = useActivityStore()
@@ -136,7 +137,7 @@ const reservedSlotOptions = computed(() => {
 
 async function addNewSession() {
   if (reservedDateHours.value.length === 0) {
-    displayErrToast('Aucun créneau réservé pour cette activité.')
+    displayErrToast(t('message.noReservedSlotError'))
     return
   }
 
@@ -153,7 +154,7 @@ async function addNewSession() {
     undefined,
   )
   if (!beginingHour) {
-    displayErrToast('Durée invalide pour un créneau de 1 heure.')
+    displayErrToast(t('message.invalidDurationForSlot'))
     return
   }
 
@@ -216,7 +217,7 @@ function setSessionReservedSlot(session, dateHour) {
     session.id,
   )
   if (!beginingHour) {
-    displayErrToast('Durée trop longue pour ce créneau de 1 heure.')
+    displayErrToast(t('message.durationTooLongForSlot'))
     return
   }
 
@@ -251,7 +252,7 @@ function setSessionDuration(session, duration) {
   )
 
   if (!validHour) {
-    displayErrToast('Session impossible: durée supérieure à 60 minutes.')
+    displayErrToast(t('message.sessionImpossibleDuration'))
     session.duration = SLOT_DURATION_MINUTES
     session.beginingHour = getSlotStartHour(slot)
     return
@@ -272,7 +273,7 @@ async function validateSession(session) {
   )
 
   if (!beginingHour) {
-    displayErrToast('Aucun horaire valide pour cette session dans le créneau.')
+    displayErrToast(t('message.noValidHourForSession'))
     return
   }
 
@@ -288,7 +289,7 @@ async function validateSession(session) {
 
   markSessionAsSaved(session)
 
-  displaySuccessToast('Session validée')
+  displaySuccessToast(t('message.sessionValidated'))
 }
 
 function normalizeSessionsWithActivityReservations() {
