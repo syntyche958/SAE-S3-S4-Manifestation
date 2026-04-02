@@ -84,7 +84,6 @@
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSessionStore } from '@/stores/sessions.js'
