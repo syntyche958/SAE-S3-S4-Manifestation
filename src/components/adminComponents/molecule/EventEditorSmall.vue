@@ -27,7 +27,7 @@
     <Button
       :label="$t('message.save')"
       icon="pi pi-save"
-      @click="presentationStore.updateSmallText(smallText)"
+      @click="onSave"
     />
     <Button
       :label="$t('message.preview')"
@@ -63,4 +63,8 @@ const presentationStore = usePresentationStore()
 onMounted(() => {
   smallText.value = presentationStore.small
 })
+
+async function onSave() {
+  await presentationStore.persistPresentation({ small: smallText.value })
+}
 </script>

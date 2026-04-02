@@ -1,16 +1,9 @@
-//import LocalSource from '@/services/localsource.service.js'
 import { networkErrResponse } from '@/utils/network.utils'
-import {getRequest} from './axios.service'
-
-/*async function getPresentationContentFromLocalSource() {
-  return LocalSource.getPresentationContent()
-}
-  */
+import { getRequest, putRequest } from './axios.service'
 
 async function getPresentationContent() {
   let response = null
   try {
-    //response = await getPresentationContentFromLocalSource()
     response = await getRequest('/presentation')
   } catch {
     return networkErrResponse
@@ -18,4 +11,12 @@ async function getPresentationContent() {
   return response
 }
 
-export default { getPresentationContent }
+async function updatePresentation(patch) {
+  try {
+    return await putRequest('/presentation', patch)
+  } catch {
+    return networkErrResponse
+  }
+}
+
+export default { getPresentationContent, updatePresentation }

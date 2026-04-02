@@ -12,12 +12,14 @@ import { setToast } from '@/utils/toast.utils'
 import TheFooter from '@/components/globalComponents/molecule/TheFooter.vue'
 import { useActivityStore } from '@/stores/activities'
 import AnimatedBackground from '@/components/globalComponents/molecule/AnimatedBackground.vue'
+import { useSurveyStore } from '@/stores/surveys'
 
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
 const providerStore = useProviderStore()
 const presentationStore = usePresentationStore()
 const activityStore = useActivityStore()
+const surveyStore = useSurveyStore()
 
 setToast(useToast())
 
@@ -29,6 +31,7 @@ onMounted(async () => {
   await providerStore.getAllProviders()
   await providerStore.getAllNewProviders()
   await activityStore.getAllActivities()
+  await surveyStore.getAllSurveys()
   // TODO : Appeler seulement quand necessaire, dans AdminView quand le composant concerné est affiché !
   // TODO : Mettre un watch la dessus !!!
   // if (authStore.user.type === UserTypeEnum.ADMIN) {

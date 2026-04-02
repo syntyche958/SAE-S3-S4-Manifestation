@@ -10,10 +10,9 @@ const { t } = i18n.global
 export const useSurveyStore = defineStore('survey', () => {
   const surveys = ref([])
 
-  // ACTIONS
   async function getAllSurveys() {
     let response = await SurveyService.getAllSurveys()
-    if (response.error === 0) {
+    if (response.error === 0 && Array.isArray(response.data)) {
       surveys.value = response.data
     } else {
       console.log(response.data)
@@ -23,7 +22,7 @@ export const useSurveyStore = defineStore('survey', () => {
   async function addSurvey(surveyData) {
     let response = await SurveyService.addSurvey(surveyData)
     if (response.error === 0) {
-      surveys.value.push(response.data)
+      await getAllSurveys()
       displaySuccessToast(t('message.feedbackRecorded'))
     } else {
       console.log(response.data)
@@ -31,13 +30,10 @@ export const useSurveyStore = defineStore('survey', () => {
     }
   }
 
-  async function addReaction(surveyId, amoji) {
+  async function addReaction(surveyId, emoji) {
     let response = await SurveyService.addReaction(surveyId, emoji)
     if (response.error === 0) {
-      const surveyIndex = surveys.value.findIndex((s) => s.id === surveyId)
-      if (surveyIndex !== -1) {
-        surveys.value[surveyIndex] = response.data
-      }
+      await getAllSurveys()
       displaySuccessToast(t('message.reactionAdded'))
     } else {
       console.log(response.data)
@@ -48,10 +44,7 @@ export const useSurveyStore = defineStore('survey', () => {
   async function addAdminResponse(surveyId, responseText) {
     let response = await SurveyService.addAdminResponse(surveyId, responseText)
     if (response.error === 0) {
-      const surveyIndex = surveys.value.findIndex((s) => s.id === surveyId)
-      if (surveyIndex !== -1) {
-        surveys.value[surveyIndex] = response.data
-      }
+      await getAllSurveys()
       displaySuccessToast(t('message.responseSent'))
     } else {
       console.log(response.data)
@@ -60,9 +53,9 @@ export const useSurveyStore = defineStore('survey', () => {
   }
 
   async function deleteSurvey(surveyId) {
-    let response = await SurveyService.deleteSurvey()
+    let response = await SurveyService.deleteSurvey(surveyId)
     if (response.error === 0) {
-      surveys.value = []
+      await getAllSurveys()
       displaySuccessToast(t('message.messageDeleted'))
     } else {
       console.log(response.data)

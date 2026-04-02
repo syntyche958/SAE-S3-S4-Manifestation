@@ -186,7 +186,7 @@ export const useActivityStore = defineStore('activity', () => {
 
       if (providerUserId != null) {
         const suffix = reason ? ` Motif : ${reason}` : ''
-        enqueueNotificationsForUsers(
+        await enqueueNotificationsForUsers(
           [providerUserId],
           `Votre demande de placement pour l'activité "${activity.name}" a été refusée par un administrateur.${suffix}`,
         )
@@ -200,12 +200,9 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function addRating(activityId, userId, note) {
-    let response = await activityService.addRatingLocalSource(activityId, userId, note)
+    let response = await activityService.addActivityRating(activityId, userId, note)
     if (response.error === 0) {
-      const index = activities.value.findIndex((a) => a.id === activityId)
-      if (index !== -1) {
-        activities.value[index] = response.data
-      }
+      await getAllActivities()
       displaySuccessToast(t('message.ratingRecorded'))
     } else {
       displayErrToast(t('message.ratingFailed'))
@@ -214,12 +211,9 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function addComment(activityId, userId, title, content) {
-    let response = await activityService.addCommentLocalSource(activityId, userId, title, content)
+    let response = await activityService.addActivityComment(activityId, userId, title, content)
     if (response.error === 0) {
-      const index = activities.value.findIndex((a) => a.id === activityId)
-      if (index !== -1) {
-        activities.value[index] = response.data
-      }
+      await getAllActivities()
       displaySuccessToast(t('message.commentPublished'))
     } else {
       displayErrToast(t('message.commentFailed'))
@@ -228,16 +222,13 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function addCommentReply(activityId, commentIndex, replyContent) {
-    let response = await activityService.addCommentReplyLocalSource(
+    let response = await activityService.replyToActivityComment(
       activityId,
       commentIndex,
       replyContent,
     )
     if (response.error === 0) {
-      const index = activities.value.findIndex((a) => a.id === activityId)
-      if (index !== -1) {
-        activities.value[index] = response.data
-      }
+      await getAllActivities()
       displaySuccessToast(t('message.replyPublished'))
     } else {
       displayErrToast(t('message.replyFailed'))
@@ -254,10 +245,7 @@ export const useActivityStore = defineStore('activity', () => {
 
     const response = await activityService.updateActivity(activity, payload)
     if (response.error === 0) {
-      const index = activities.value.findIndex((a) => a.id === activityId)
-      if (index !== -1) {
-        activities.value[index] = response.data
-      }
+      await getAllActivities()
       displaySuccessToast(t('message.serviceFlagsUpdated'))
     } else {
       displayErrToast(t('message.serviceFlagsUpdateFailed'))

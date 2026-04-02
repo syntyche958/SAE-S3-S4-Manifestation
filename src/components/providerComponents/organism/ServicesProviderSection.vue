@@ -100,7 +100,7 @@ async function onSessionRegistrationToggle(activity, value) {
   if (!value && registrationCount > 0) {
     const registeredUserIds = registrations.map((r) => r.userId)
 
-    enqueueNotificationsForUsers(
+    await enqueueNotificationsForUsers(
       registeredUserIds,
       `Le prestataire a désactivé les inscriptions pour l'activité "${activity.name}".`,
     )

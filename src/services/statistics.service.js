@@ -8,7 +8,7 @@ const { t } = i18n.global
 
 async function getSurveyStatistics() {
   const surveyStore = useSurveyStore()
-  const surveys = surveyStore.surveys
+  const surveys = (surveyStore.surveys || []).filter((s) => !s.isDeleted)
 
   if (!surveys || surveys.length === 0) {
     return {
@@ -94,7 +94,7 @@ async function getSurveyStatistics() {
 
 async function getStatisticsByProvider() {
   const surveyStore = useSurveyStore()
-  const surveys = surveyStore.surveys
+  const surveys = (surveyStore.surveys || []).filter((s) => !s.isDeleted)
 
   const statsByProvider = {}
 

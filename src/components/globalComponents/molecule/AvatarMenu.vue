@@ -138,7 +138,7 @@ const dialogVisible = ref(false)
 const visitorDialogVisible = ref(false)
 const notifications = ref([])
 
-const refreshNotifications = () => {
+const refreshNotifications = async () => {
   if (
     authStore.user?.type !== UserTypeEnum.VISITOR &&
     authStore.user?.type !== UserTypeEnum.PROVIDER
@@ -147,7 +147,7 @@ const refreshNotifications = () => {
     return
   }
 
-  notifications.value = getNotificationsForUser(authStore.user?.id)
+  notifications.value = await getNotificationsForUser(authStore.user?.id)
 }
 
 const avatarBadgeCount = computed(() => {
@@ -157,13 +157,13 @@ const avatarBadgeCount = computed(() => {
   return 0
 })
 
-const onAvatarClick = () => {
-  refreshNotifications()
+const onAvatarClick = async () => {
+  await refreshNotifications()
   visible.value = !visible.value
 }
 
-const markVisitorNotificationsAsRead = () => {
-  clearNotificationsForUser(authStore.user?.id)
+const markVisitorNotificationsAsRead = async () => {
+  await clearNotificationsForUser(authStore.user?.id)
   notifications.value = []
   visitorDialogVisible.value = false
 }
@@ -207,8 +207,8 @@ const items = computed(() => {
       label: 'Notifications',
       icon: 'pi pi-bell',
       badge: notifications.value.length,
-      command: () => {
-        refreshNotifications()
+      command: async () => {
+        await refreshNotifications()
         visitorDialogVisible.value = true
       },
     })

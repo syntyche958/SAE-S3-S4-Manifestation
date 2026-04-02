@@ -1,92 +1,26 @@
-import LocalSource from '@/services/localsource.service.js'
-import { useSurveyStore } from '@/stores/surveys'
 import { networkErrResponse } from '@/utils/network.utils'
+import { deleteRequest, getRequest, postRequest, putRequest } from './axios.service'
 
-async function getAllSurveysFromLocalSource() {
-  return LocalSource.getAllSurveys()
-}
-
-async function addSurveyToLocalSource(surveyData) {
-  const surveyStore = useSurveyStore()
-
-  let lastId = 0
-  surveyStore.surveys.forEach((s) => {
-    lastId = Math.max(lastId, s.id)
-  })
-
+function mapSurvey(row) {
+  if (!row || typeof row !== 'object') return row
   return {
-    error: 0,
-    status: 200,
-    data: {
-      ...surveyData,
-      id: lastId + 1,
-      createdAt: new Date().toISOString(),
-    },
-  }
-}
-
-async function addReactionToLocalSource(surveyId, emoji) {
-  const surveyStore = useSurveyStore()
-  const survey = surveyStore.surveys.find((s) => s.id === surveyId)
-
-  if (!survey) {
-    return { error: 1, status: 404, data: 'Survey not found' }
-  }
-
-  if (!survey.reactions) {
-    survey.reactions = []
-  }
-
-  survey.reactions.push(emoji)
-
-  return {
-    error: 0,
-    status: 200,
-    data: { ...survey },
-  }
-}
-
-async function addAdminResponseToLocalSource(surveyId, responseText) {
-  const surveyStore = useSurveyStore()
-  const survey = surveyStore.surveys.find((s) => s.id === surveyId)
-
-  if (!survey) {
-    return { error: 1, status: 404, data: 'Survey not found' }
-  }
-
-  survey.adminResponse = responseText
-
-  return {
-    error: 0,
-    status: 200,
-    data: { ...survey },
-  }
-}
-
-async function clearSurveysFromLocalSource() {
-  return { error: 0, status: 200, data: [] }
-}
-
-async function deleteSurveyFromLocalSource(surveyId) {
-  const surveyStore = useSurveyStore()
-  const surveyIndex = surveyStore.surveys.findIndex((s) => s.id === surveyId)
-
-  if (surveyIndex === -1) {
-    return { error: 1, status: 404, data: 'Survey not found' }
-  }
-
-  surveyStore.surveys.splice(surveyIndex, 1)
-
-  return {
-    error: 0,
-    status: 200,
-    data: { success: true },
+    ...row,
+    createdAt:
+      typeof row.createdAt === 'string'
+        ? row.createdAt
+        : row.createdAt instanceof Date
+          ? row.createdAt.toISOString()
+          : row.createdAt,
   }
 }
 
 async function getAllSurveys() {
   try {
-    return await getAllSurveysFromLocalSource()
+    const response = await getRequest('/surveys')
+    if (response.error === 0 && Array.isArray(response.data)) {
+      return { ...response, data: response.data.map(mapSurvey) }
+    }
+    return response
   } catch {
     return networkErrResponse
   }
@@ -94,7 +28,22 @@ async function getAllSurveys() {
 
 async function addSurvey(surveyData) {
   try {
-    return await addSurveyToLocalSource(surveyData)
+    const { rating, recommend, ratings, activities, comment, name, email, consent } = surveyData
+    const body = {
+      rating,
+      recommend,
+      ratings,
+      activities,
+      comment,
+      name,
+      email,
+      consent,
+    }
+    const response = await postRequest('/surveys', body)
+    if (response.error === 0 && response.data) {
+      return { ...response, data: mapSurvey(response.data) }
+    }
+    return response
   } catch {
     return networkErrResponse
   }
@@ -102,7 +51,11 @@ async function addSurvey(surveyData) {
 
 async function addReaction(surveyId, emoji) {
   try {
-    return await addReactionToLocalSource(surveyId, emoji)
+    const response = await postRequest(`/surveys/${surveyId}/reactions`, { emoji })
+    if (response.error === 0 && response.data) {
+      return { ...response, data: mapSurvey(response.data) }
+    }
+    return response
   } catch {
     return networkErrResponse
   }
@@ -110,7 +63,11 @@ async function addReaction(surveyId, emoji) {
 
 async function addAdminResponse(surveyId, responseText) {
   try {
-    return await addAdminResponseToLocalSource(surveyId, responseText)
+    const response = await putRequest(`/surveys/${surveyId}/admin-response`, { responseText })
+    if (response.error === 0 && response.data) {
+      return { ...response, data: mapSurvey(response.data) }
+    }
+    return response
   } catch {
     return networkErrResponse
   }
@@ -118,7 +75,7 @@ async function addAdminResponse(surveyId, responseText) {
 
 async function deleteSurvey(surveyId) {
   try {
-    return await deleteSurveyFromLocalSource(surveyId)
+    return await deleteRequest(`/surveys/${surveyId}`)
   } catch {
     return networkErrResponse
   }
@@ -126,7 +83,7 @@ async function deleteSurvey(surveyId) {
 
 async function clearSurveys() {
   try {
-    return await clearSurveysFromLocalSource()
+    return await deleteRequest('/surveys')
   } catch {
     return networkErrResponse
   }
@@ -135,6 +92,7 @@ async function clearSurveys() {
 export default {
   getAllSurveys,
   addSurvey,
+  addReaction,
   addAdminResponse,
   deleteSurvey,
   clearSurveys,
