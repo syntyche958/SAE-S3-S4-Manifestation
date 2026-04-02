@@ -2,36 +2,43 @@
   <Card>
     <template #content>
       <DataTable :value="sessions" tableStyle="min-width: 50rem">
-        <!-- input de date-->
-        <Column field="beginingDate" :header="$t('message.date')">
+        <Column field="reservedSlot" header="Créneau réservé">
           <template #body="slotProps">
-            <div class="flex flex-column gap-2">
-              <div v-for="eventDay in EVENT_DAYS" :key="eventDay" class="flex align-items-center">
-                <RadioButton
-                  :inputId="`date-${slotProps.data.id}-${eventDay}`"
-                  v-model="slotProps.data.beginingDate"
-                  :value="eventDay"
-                />
-                <label :for="`date-${slotProps.data.id}-${eventDay}`" class="ml-2 cursor-pointer">
-                  {{ formatEventDay(eventDay) }}
-                </label>
-              </div>
-            </div>
+            <Select
+              :modelValue="getReservedSlotForSession(slotProps.data)"
+              :options="reservedSlotOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Sélectionner un créneau"
+              class="w-full"
+              :disabled="reservedSlotOptions.length === 0"
+              @update:modelValue="(value) => setSessionReservedSlot(slotProps.data, value)"
+            />
           </template>
         </Column>
-        <!-- input de heure-->
-        <Column field="beginingHour" :header="$t('message.time')">
+        <Column field="beginingHour" header="Heure début">
           <template #body="slotProps">
-            <input
-              type="time"
-              v-model="slotProps.data.beginingHour"
-              class="p-inputtext p-component w-full"
+            <Select
+              :modelValue="slotProps.data.beginingHour"
+              :options="getStartHourOptionsForSession(slotProps.data)"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Sélectionner une heure"
+              class="w-full"
+              :disabled="getStartHourOptionsForSession(slotProps.data).length === 0"
+              @update:modelValue="(value) => setSessionBeginingHour(slotProps.data, value)"
             />
           </template>
         </Column>
         <Column field="duration" :header="$t('message.duration')">
           <template #body="slotProps">
-            <InputNumber v-model="slotProps.data.duration" fluid />
+            <InputNumber
+              :modelValue="getSessionDuration(slotProps.data)"
+              :min="1"
+              :max="SLOT_DURATION_MINUTES"
+              fluid
+              @update:modelValue="(value) => setSessionDuration(slotProps.data, value)"
+            />
           </template>
         </Column>
         <Column field="nbPlace" :header="$t('message.places')">
@@ -41,6 +48,15 @@
         </Column>
         <Column :header="$t('message.actions')">
           <template #body="slotProps">
+            <Button
+              icon="pi pi-check"
+              severity="success"
+              rounded
+              outlined
+              class="mr-2"
+              :disabled="!isSessionModified(slotProps.data)"
+              @click="validateSession(slotProps.data)"
+            />
             <Button
               icon="pi pi-trash"
               severity="danger"
@@ -56,9 +72,13 @@
           icon="pi pi-plus"
           :label="$t('message.addSession')"
           severity="secondary"
+          :disabled="reservedSlotOptions.length === 0"
           @click="addNewSession"
         />
       </div>
+      <small v-if="reservedSlotOptions.length === 0" class="block mt-3 text-orange-400">
+        Aucun créneau réservé pour cette activité. Réservez d'abord un emplacement horaire.
+      </small>
     </template>
   </Card>
 </template>
@@ -66,34 +86,243 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { useSessionStore } from '@/stores/sessions.js'
-import { computed, onMounted } from 'vue'
-import { InputNumber, Button, DataTable, Column, RadioButton, Card } from 'primevue'
-import { useI18n } from 'vue-i18n'
-import { EVENT_DAYS } from '@/constants/event.constants'
+import { useActivityStore } from '@/stores/activities'
+import { computed, onMounted, ref, watch } from 'vue'
+import { InputNumber, Button, DataTable, Column, Card, Select } from 'primevue'
+import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
+import {
+  SLOT_DURATION_MINUTES,
+  buildReservedDateHours,
+  buildReservedSlotOptions,
+  buildSessionStateSnapshot,
+  formatEventDayFr,
+  getSessionDurationOrDefault,
+  getStartHourOptionsForSession as getStartHourOptionsForSessionUtil,
+  getReservedSlotFromSession,
+  getSlotStartHour,
+  isSessionStateModified,
+  normalizeSessionDuration,
+  pickPreferredStartHour,
+  splitDateHour,
+} from '@/utils/sessionTimeSlots.utils'
 
 useI18n()
 const route = useRoute()
 const sessionStore = useSessionStore()
+const activityStore = useActivityStore()
+const savedSessionStates = ref({})
 
 const activityId = computed(() => Number.parseInt(route.params.activity_id))
+const currentActivity = computed(() => activityStore.get(activityId.value))
+
 const sessions = computed(() => {
   if (!sessionStore.sessions) return []
   return sessionStore.sessions.filter((s) => s.activityId === activityId.value)
 })
 
+const defaultSessionDuration = computed(() => {
+  const firstSessionWithDuration = sessions.value.find((s) => Number(s.duration) > 0)
+  const fallback = firstSessionWithDuration ? Number(firstSessionWithDuration.duration) : 30
+  return normalizeSessionDuration(fallback)
+})
+
+const reservedDateHours = computed(() => {
+  return buildReservedDateHours(currentActivity.value?.spotIds || [])
+})
+
+const reservedSlotOptions = computed(() => {
+  return buildReservedSlotOptions(reservedDateHours.value, formatEventDayFr)
+})
+
 async function addNewSession() {
-  await sessionStore.addSession(activityId.value, '2026-05-28', '09:00', 60, 10)
+  if (reservedDateHours.value.length === 0) {
+    displayErrToast('Aucun créneau réservé pour cette activité.')
+    return
+  }
+
+  const firstSlot = reservedDateHours.value[0]
+  const split = splitDateHour(firstSlot)
+  if (!split) return
+
+  const duration = defaultSessionDuration.value
+  const beginingHour = pickPreferredStartHour(
+    firstSlot,
+    getSlotStartHour(firstSlot),
+    duration,
+    sessions.value,
+    undefined,
+  )
+  if (!beginingHour) {
+    displayErrToast('Durée invalide pour un créneau de 1 heure.')
+    return
+  }
+
+  await sessionStore.addSession(activityId.value, split.date, beginingHour, duration, 0)
 }
 
-function formatEventDay(day) {
-  const [y, m, d] = String(day).split('-').map(Number)
-  const dt = new Date(y, m - 1, d)
-  return dt.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+function getReservedSlotForSession(session) {
+  return getReservedSlotFromSession(session?.beginingDate, session?.beginingHour)
+}
+
+function getSessionDuration(session) {
+  return getSessionDurationOrDefault(session, defaultSessionDuration.value)
+}
+
+function markSessionAsSaved(session) {
+  savedSessionStates.value[session.id] = buildSessionStateSnapshot(
+    session,
+    defaultSessionDuration.value,
+  )
+}
+
+function syncSavedSessionsWithCurrentList() {
+  const currentIds = new Set(sessions.value.map((session) => session.id))
+
+  for (const session of sessions.value) {
+    if (!savedSessionStates.value[session.id]) {
+      markSessionAsSaved(session)
+    }
+  }
+
+  for (const savedId of Object.keys(savedSessionStates.value)) {
+    if (!currentIds.has(Number(savedId))) {
+      delete savedSessionStates.value[savedId]
+    }
+  }
+}
+
+function isSessionModified(session) {
+  return isSessionStateModified(
+    session,
+    savedSessionStates.value[session.id],
+    defaultSessionDuration.value,
+  )
+}
+
+function getStartHourOptionsForSession(session) {
+  return getStartHourOptionsForSessionUtil(session, sessions.value, defaultSessionDuration.value)
+}
+
+function setSessionReservedSlot(session, dateHour) {
+  const slot = splitDateHour(dateHour)
+  if (!slot) return
+
+  const duration = getSessionDuration(session)
+  const beginingHour = pickPreferredStartHour(
+    dateHour,
+    session.beginingHour,
+    duration,
+    sessions.value,
+    session.id,
+  )
+  if (!beginingHour) {
+    displayErrToast('Durée trop longue pour ce créneau de 1 heure.')
+    return
+  }
+
+  session.beginingDate = slot.date
+  session.beginingHour = beginingHour
+  session.duration = duration
+}
+
+function setSessionBeginingHour(session, beginingHour) {
+  const slot = getReservedSlotForSession(session)
+  const validHour = pickPreferredStartHour(
+    slot,
+    beginingHour,
+    getSessionDuration(session),
+    sessions.value,
+    session.id,
+  )
+  if (!validHour) return
+
+  session.beginingHour = validHour
+}
+
+function setSessionDuration(session, duration) {
+  const normalizedDuration = normalizeSessionDuration(duration)
+  const slot = getReservedSlotForSession(session)
+  const validHour = pickPreferredStartHour(
+    slot,
+    session.beginingHour,
+    normalizedDuration,
+    sessions.value,
+    session.id,
+  )
+
+  if (!validHour) {
+    displayErrToast('Session impossible: durée supérieure à 60 minutes.')
+    session.duration = SLOT_DURATION_MINUTES
+    session.beginingHour = getSlotStartHour(slot)
+    return
+  }
+
+  session.duration = normalizedDuration
+  session.beginingHour = validHour
+}
+
+async function validateSession(session) {
+  const slot = getReservedSlotForSession(session)
+  const beginingHour = pickPreferredStartHour(
+    slot,
+    session.beginingHour,
+    getSessionDuration(session),
+    sessions.value,
+    session.id,
+  )
+
+  if (!beginingHour) {
+    displayErrToast('Aucun horaire valide pour cette session dans le créneau.')
+    return
+  }
+
+  session.beginingHour = beginingHour
+  session.duration = getSessionDuration(session)
+
+  await sessionStore.updateSession(session.id, {
+    beginingDate: session.beginingDate,
+    beginingHour: session.beginingHour,
+    duration: session.duration,
+    nbPlace: Number(session.nbPlace) || 0,
+  })
+
+  markSessionAsSaved(session)
+
+  displaySuccessToast('Session validée')
+}
+
+function normalizeSessionsWithActivityReservations() {
+  if (!sessions.value.length) return
+  if (!reservedDateHours.value.length) return
+
+  const firstReservedDateHour = reservedDateHours.value[0]
+  for (const session of sessions.value) {
+    const currentSlot = getReservedSlotForSession(session)
+    const isReservedSlot = reservedDateHours.value.includes(currentSlot)
+    if (!isReservedSlot) {
+      setSessionReservedSlot(session, firstReservedDateHour)
+    } else {
+      setSessionReservedSlot(session, currentSlot)
+    }
+  }
 }
 
 onMounted(async () => {
   if (!sessionStore.sessions || sessionStore.sessions.length === 0) {
     await sessionStore.getAllSessions()
   }
+  if (!activityStore.activities || activityStore.activities.length === 0) {
+    await activityStore.getAllActivities()
+  }
+
+  normalizeSessionsWithActivityReservations()
+  syncSavedSessionsWithCurrentList()
 })
+
+watch(
+  () => sessions.value.map((session) => session.id).join(','),
+  () => {
+    syncSavedSessionsWithCurrentList()
+  },
+)
 </script>

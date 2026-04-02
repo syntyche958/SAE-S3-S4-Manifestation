@@ -1,6 +1,55 @@
 import { networkErrResponse } from '@/utils/network.utils'
 import { getRequest, postRequest, putRequest, deleteRequest } from './axios.service'
 
+async function getAllSessionsFromLocalSource() {
+  return LocalSource.getAllSessions()
+}
+
+async function getSessionsByActivityIdFromLocalSource(activityId) {
+  return LocalSource.getSessionsByActivityId(activityId)
+}
+
+async function removeSessionFromLocalSource() {
+  return { error: 0, status: 200, data: 'done' }
+}
+
+async function addSessionToLocalSource(
+  activityId,
+  beginningDate,
+  beginingHour,
+  duration,
+  nbPlace,
+  existingSessions = [],
+) {
+  let lastId = 0
+  if (existingSessions && existingSessions.length > 0) {
+    existingSessions.forEach((s) => {
+      lastId = Math.max(lastId, s.id)
+    })
+  }
+  return {
+    error: 0,
+    status: 200,
+    data: {
+      id: lastId + 1,
+      activitiesId: activityId,
+      beginingDate: beginningDate,
+      beginingHour: beginingHour,
+      duration: duration,
+      nbPlace: nbPlace,
+      registersUsers: [],
+    },
+  }
+}
+
+async function updateSessionFromLocalSource(sessionId, updatedData) {
+  return {
+    error: 0,
+    status: 200,
+    data: { id: sessionId, ...updatedData },
+  }
+}
+
 async function getAllSessions() {
   try {
     return await getRequest('/sessions')
