@@ -1,7 +1,5 @@
 import { ref } from 'vue'
 import * as L from 'leaflet'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useLocationStore } from '@/stores/locations'
 import { useActivityStore } from '@/stores/activities'
 import { useProviderStore } from '@/stores/providers'
@@ -9,8 +7,9 @@ import { MapModeEnum } from '@/enums/Map.enums'
 import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
 
 const defaultPolygonWeight = 2
+const visitorPopupCloseDelayMs = 500
+const visitorMapClickCloseBound = new WeakSet()
 
-// TODO : FIx popup des mouseover de la carte en mode visiteur !
 // TODO : Enlever le fitre activité enmode visiteur car sert a rien dans tout les cas un seul spot par activité en simultané
 
 export function setupMap(mapId) {
@@ -50,14 +49,16 @@ export function displayLocations(
   selectedLocationId,
   visitorDateHour,
   visitorActivityId,
+  t,
+  router,
 ) {
   if (mapMode === MapModeEnum.VISITOR) {
-    displayPinPoints(map, visitorDateHour, visitorActivityId)
+    displayPinPoints(map, visitorDateHour, visitorActivityId, t, router)
   } else {
     // ADMIN + PROVIDER
     displayAreas(map, emit, mapMode, route, selectedLocationId)
-    displayLegends(map, mapMode)
-    displayUnselectPanel(map, emit, mapMode, route)
+    displayLegends(map, mapMode, t)
+    displayUnselectPanel(map, emit, mapMode, route, t, router)
   }
 }
 
@@ -69,6 +70,8 @@ export function refreshLocations(
   selectedLocationId,
   visitorDateHour,
   visitorActivityId,
+  t,
+  router,
 ) {
   if (mapMode === MapModeEnum.VISITOR) {
     map.eachLayer((layer) => {
@@ -76,7 +79,7 @@ export function refreshLocations(
         map.removeLayer(layer)
       }
     })
-    displayPinPoints(map, visitorDateHour, visitorActivityId)
+    displayPinPoints(map, visitorDateHour, visitorActivityId, t, router)
     return
   }
 
@@ -92,53 +95,80 @@ export function refreshLocations(
   }
 }
 
-function bindPopupVisitor(map, marker, activitiesAtLocation) {
-  const { t } = useI18n()
-
-  const router = useRouter()
+function bindPopupVisitor(map, marker, activitiesAtLocation, t, router) {
+  const translate = t || ((key) => key)
 
   let mouseOnPopUp = false
-  let mouseOneMarker = false
+  let mouseOnMarker = false
+  let closeTimer = null
 
-  // Add popup with needed event to open and close it
+  function clearCloseTimer() {
+    if (closeTimer) {
+      clearTimeout(closeTimer)
+      closeTimer = null
+    }
+  }
+
+  function schedulePopupClose() {
+    clearCloseTimer()
+    closeTimer = setTimeout(() => {
+      if (!mouseOnPopUp && !mouseOnMarker) {
+        marker.closePopup()
+      }
+    }, visitorPopupCloseDelayMs)
+  }
+
+  const popupContent = activitiesAtLocation
+    .map(({ activity, provider }) => {
+      return `<div class="visitor-popup-line" data-provider-id="${provider.id}" data-activity-id="${activity.id}" style="padding: 6px 2px; cursor: pointer;">
+        <b>${translate('message.provider')} : </b><span>${provider.name}</span><br>
+        <b>${translate('message.activity')} : </b><span>${activity.name}</span>
+      </div>`
+    })
+    .join('<div style="border-top: 1px solid rgba(0,0,0,0.1);"></div>')
+
+  marker.bindPopup(popupContent)
+
+  // Open on hover and close only when mouse leaves both marker and popup.
   marker.on('mouseover', () => {
-    marker.on('mouseout', () => {
-      mouseOneMarker = false
-      setTimeout(() => {
-        if (!mouseOnPopUp && !mouseOneMarker) marker.closePopup()
-      }, 200)
-    })
-
+    clearCloseTimer()
     map.closePopup()
-    mouseOneMarker = true
+    mouseOnMarker = true
+    marker.openPopup()
+  })
 
-    const popupContent = activitiesAtLocation
-      .map(({ activity, provider }) => {
-        return `<div class="visitor-popup-line" data-provider-id="${provider.id}" data-activity-id="${activity.id}" style="padding: 6px 2px; cursor: pointer;">
-          <b>${t('message.provider')} : </b><span>${provider.name}</span><br>
-          <b>${t('message.activity')} : </b><span>${activity.name}</span>
-        </div>`
-      })
-      .join('<div style="border-top: 1px solid rgba(0,0,0,0.1);"></div>')
+  marker.on('mouseout', () => {
+    mouseOnMarker = false
+    if (!mouseOnPopUp) schedulePopupClose()
+  })
 
-    marker.bindPopup(popupContent).openPopup()
+  marker.on('popupopen', () => {
+    const popupElement = marker.getPopup()?.getElement()
+    if (!popupElement) return
 
-    let popupElement = marker.getPopup().getElement()
-    popupElement.addEventListener('mouseenter', () => (mouseOnPopUp = true))
-    popupElement.addEventListener('mouseleave', () => {
+    popupElement.onmouseenter = () => {
+      clearCloseTimer()
+      mouseOnPopUp = true
+    }
+    popupElement.onmouseleave = () => {
       mouseOnPopUp = false
-      marker.closePopup()
-    })
+      if (!mouseOnMarker) schedulePopupClose()
+    }
 
     const clickables = popupElement.querySelectorAll('.visitor-popup-line')
     clickables.forEach((line) => {
-      line.addEventListener('click', () => {
+      line.onclick = () => {
         const providerId = line.getAttribute('data-provider-id')
         const activityId = line.getAttribute('data-activity-id')
-        if (!providerId || !activityId) return
+        if (!providerId || !activityId || !router) return
         router.push(`/provider/${providerId}/activity/${activityId}`)
-      })
+      }
     })
+  })
+
+  marker.on('popupclose', () => {
+    mouseOnPopUp = false
+    clearCloseTimer()
   })
 }
 
@@ -170,8 +200,15 @@ function getVisitorActivitiesForLocation(locationId, visitorDateHour, visitorAct
     })
 }
 
-function displayPinPoints(map, visitorDateHour, visitorActivityId) {
+function displayPinPoints(map, visitorDateHour, visitorActivityId, t, router) {
   const locationStore = useLocationStore()
+
+  if (!visitorMapClickCloseBound.has(map)) {
+    map.on('click', () => {
+      map.closePopup()
+    })
+    visitorMapClickCloseBound.add(map)
+  }
 
   for (let location of locationStore.locations) {
     const activitiesAtLocation = getVisitorActivitiesForLocation(
@@ -182,7 +219,7 @@ function displayPinPoints(map, visitorDateHour, visitorActivityId) {
     if (activitiesAtLocation.length === 0) continue
 
     let marker = L.marker(location['coord']).addTo(map)
-    bindPopupVisitor(map, marker, activitiesAtLocation)
+    bindPopupVisitor(map, marker, activitiesAtLocation, t, router)
   }
 }
 
@@ -281,18 +318,18 @@ function displayAreas(map, emit, mapMode, route, selectedLocationId) {
   }
 }
 
-function displayLegends(map, mapMode) {
-  const { t } = useI18n()
+function displayLegends(map, mapMode, t) {
+  const translate = t || ((key) => key)
 
   const legend = L.control({ position: 'topleft' })
   let labels, colors, colorsRGBA
 
   if (mapMode === MapModeEnum.PROVIDER) {
     labels = [
-      t('message.providerLegendFree'),
-      t('message.providerLegendSelf'),
-      t('message.providerLegendPendingMap'),
-      t('message.providerLegendOther'),
+      translate('message.providerLegendFree'),
+      translate('message.providerLegendSelf'),
+      translate('message.providerLegendPendingMap'),
+      translate('message.providerLegendOther'),
     ]
     colors = ['dodgerblue', 'limegreen', 'gold', 'crimson']
     colorsRGBA = [
@@ -352,8 +389,8 @@ function displayLegends(map, mapMode) {
   legend.addTo(map)
 }
 
-function displayUnselectPanel(map, emit, mapMode, route) {
-  const { t } = useI18n()
+function displayUnselectPanel(map, emit, mapMode, route, t, router) {
+  const translate = t || ((key) => key)
 
   const customControl = L.control({ position: 'topright' })
   customControl.onAdd = function () {
@@ -366,11 +403,11 @@ function displayUnselectPanel(map, emit, mapMode, route) {
     container.style.cursor = 'pointer'
     container.onclick = function () {
       emit('changeSelectedLocation', undefined)
-      refreshLocations(map, emit, mapMode, route, undefined)
+      refreshLocations(map, emit, mapMode, route, undefined, undefined, undefined, t, router)
     }
 
     const label = L.DomUtil.create('b', 'custom-button', container)
-    label.innerHTML = t('message.deselect')
+    label.innerHTML = translate('message.deselect')
 
     L.DomEvent.disableClickPropagation(container)
 

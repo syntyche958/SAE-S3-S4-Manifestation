@@ -17,9 +17,12 @@ import { onMounted, watch } from 'vue'
 import Card from 'primevue/card'
 import { displayLocations, refreshLocations, setupMap } from '@/utils/map.utils'
 import { useActivityStore } from '@/stores/activities'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 const activityStore = useActivityStore()
+const { t } = useI18n()
+const router = useRouter()
 
 const props = defineProps({
   id: { type: String, default: 'map' },
@@ -47,6 +50,8 @@ onMounted(() => {
         props.selectedLocationId,
         props.visitorDateHour,
         props.visitorActivityId,
+        t,
+        router,
       )
     },
   )
@@ -62,6 +67,8 @@ onMounted(() => {
         props.selectedLocationId,
         props.visitorDateHour,
         props.visitorActivityId,
+        t,
+        router,
       )
     },
   )
@@ -75,6 +82,8 @@ onMounted(() => {
     props.selectedLocationId,
     props.visitorDateHour,
     props.visitorActivityId,
+    t,
+    router,
   )
 
   const observer = new ResizeObserver(() => {
