@@ -11,7 +11,7 @@
     <Dialog
       v-model:visible="visibleActivity"
       modal
-      header="Modification des activités : "
+      :header="$t('message.modifyActivities')"
       :style="{ width: '50vw' }"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     >

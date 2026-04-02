@@ -37,7 +37,7 @@
             class="flex items-center justify-center"
             style="min-height: 300px; width: 100%"
           >
-            <p class="text-gray-500">Aucune image disponible</p>
+            <p class="text-gray-500">{{ $t('message.noImage') }}</p>
           </div>
         </template>
         <template #thumbnail="slotProps">
@@ -58,11 +58,13 @@ import { useRoute } from 'vue-router'
 import { useProviderStore } from '@/stores/providers.js'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { displayErrToast } from '@/utils/toast.utils'
+import { useI18n } from 'vue-i18n'
 import Galleria from 'primevue/galleria'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import ProviderImageModifier from './ProviderImageModifier.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const images = ref(null)
 const providerStore = useProviderStore()
@@ -89,7 +91,7 @@ const handleDeleteImage = async (imageId) => {
 
     const realImages = images.value.filter((img) => !img.isPlaceholder)
     if (realImages.length <= 2) {
-      displayErrToast('Le minimum requis est de 2 images.')
+      displayErrToast(t('message.minTwoImages'))
       return
     }
     const imageToDelete = images.value.find(

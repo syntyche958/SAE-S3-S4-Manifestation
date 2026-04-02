@@ -4,8 +4,8 @@
     <template v-slot:toolbar>
       <span class="ql-formats">
         <select class="ql-header">
-          <option value="1">Titre 1</option>
-          <option value="2">Titre 2</option>
+          <option value="1">{{ $t('message.title1') }}</option>
+          <option value="2">{{ $t('message.title2') }}</option>
           <option selected></option>
         </select>
       </span>
@@ -15,8 +15,8 @@
         <button v-tooltip.bottom="'Underline'" class="ql-underline"></button>
       </span>
       <span class="ql-formats">
-        <button v-tooltip.bottom="'Liste à puces'" class="ql-list" value="bullet"></button>
-        <button v-tooltip.bottom="'Liste numérotée'" class="ql-list" value="ordered"></button>
+        <button v-tooltip.bottom="$t('message.bulletList')" class="ql-list" value="bullet"></button>
+        <button v-tooltip.bottom="$t('message.numberedList')" class="ql-list" value="ordered"></button>
       </span>
       <span class="ql-formats">
         <select class="ql-color"></select>

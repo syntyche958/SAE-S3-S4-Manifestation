@@ -3,6 +3,9 @@ import { defineStore } from 'pinia'
 
 import ContactService from '@/services/contact.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
+import i18n from '@/i18n'
+
+const { t } = i18n.global
 
 // TODO : Mettre en place l'affichage des messages côté prestataire !
 export const useContactStore = defineStore('contact', () => {
@@ -33,10 +36,10 @@ export const useContactStore = defineStore('contact', () => {
     let response = await ContactService.addContact(mail, providerId, activityId, message)
     if (response.error === 0) {
       await getAllContacts()
-      displaySuccessToast('Message envoyé avec succès !')
+      displaySuccessToast(t('message.messageSentSuccess'))
     } else {
       console.log(response.data)
-      displayErrToast("Echec de l'envoi, veuillez réessayer !")
+      displayErrToast(t('message.sendFailed'))
     }
   }
 
@@ -44,10 +47,10 @@ export const useContactStore = defineStore('contact', () => {
     let response = await ContactService.removeContact(id)
     if (response.error === 0) {
       await getAllContacts()
-      displaySuccessToast('Tâche marqué comme traité !')
+      displaySuccessToast(t('message.taskDone'))
     } else {
       console.log(response.data)
-      displayErrToast('Echec de validation de la tâche, veuillez réessayer !')
+      displayErrToast(t('message.taskDoneFailed'))
     }
   }
 

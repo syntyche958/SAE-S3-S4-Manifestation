@@ -4,9 +4,7 @@
       <template #title>
         <div class="flex items-center gap-2">
           <i class="pi pi-calendar-check text-2xl text-primary"></i>
-          <span>{{
-            $t('message.providers') === 'Prestataires' ? 'Vos réservations' : 'Your Reservations'
-          }}</span>
+          <span>{{ $t('message.yourReservations') }}</span>
         </div>
       </template>
       <template #content>
@@ -16,8 +14,8 @@
 
         <div v-else-if="userSessions.length === 0" class="text-center p-6 text-surface-500">
           <i class="pi pi-calendar-times text-4xl mb-3"></i>
-          <p>Vous n'avez aucune réservation pour le moment.</p>
-          <Button label="Voir les activités" link @click="$router.push('/')" />
+          <p>{{ $t('message.noReservations') }}</p>
+          <Button :label="$t('message.seeActivities')" link @click="$router.push('/')" />
         </div>
 
         <DataView v-else :value="userSessions">
@@ -56,7 +54,9 @@ import Card from 'primevue/card'
 import DataView from 'primevue/dataview'
 import Button from 'primevue/button'
 import ReservationItem from '@/components/globalComponents/molecule/ReservationItem.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
 const sessionStore = useSessionStore()
@@ -73,7 +73,7 @@ const userSessions = computed(() => {
 
 const getActivityName = (activityId) => {
   const activity = activityStore.activities?.find((a) => a.id === activityId)
-  return activity ? activity.name : 'Activité inconnue'
+  return activity ? activity.name : t('message.unknownActivity')
 }
 
 const goToActivity = (activityId) => {

@@ -4,7 +4,7 @@
     <div v-html="currentActivity.presentationContent"></div>
 
     <div v-if="isVisitor && currentActivity.ratings" class="mt-6 flex align-items-center gap-3">
-      <span class="font-bold text-xl">Notez l'activité :</span>
+      <span class="font-bold text-xl">{{ $t('message.rateActivity') }}</span>
       <Rating v-model="userRating" :cancel="false" @change="onRatingChange" />
     </div>
 
@@ -16,7 +16,7 @@
               v-model="triKey"
               :options="triOptions"
               optionLabel="label"
-              placeholder="Trier les sessions"
+              :placeholder="$t('message.sortSessions')"
               @change="onSortChange($event)"
             />
           </template>
@@ -48,7 +48,7 @@
 
     <Card v-if="currentActivity?.commentsEnabled ?? true" class="mt-8">
       <template #title>
-        <div class="text-xl font-bold">Commentaires</div>
+        <div class="text-xl font-bold">{{ $t('message.comments') }}</div>
       </template>
       <template #content>
         <div
@@ -68,7 +68,7 @@
               class="mt-4 p-4 bg-emerald-950/20 rounded-lg border-l-4 border-emerald-500"
             >
               <div class="font-bold text-sm text-emerald-400 mb-1">
-                Réponse du prestataire/administrateur :
+                {{ $t('message.providerAdminReply') }}
               </div>
               <div class="text-surface-300 text-sm">{{ comment.reply }}</div>
             </div>
@@ -77,15 +77,15 @@
               v-else-if="canReplyToComment"
               class="mt-4 flex flex-col gap-2 border-t border-surface-200/20 pt-4"
             >
-              <span class="font-bold text-sm text-surface-200">Répondre à ce commentaire :</span>
+              <span class="font-bold text-sm text-surface-200">{{ $t('message.replyToComment') }}</span>
               <Textarea
                 v-model="commentReplies[index]"
                 rows="2"
-                placeholder="Votre réponse..."
+                :placeholder="$t('message.yourReply')"
                 class="w-full text-sm"
               />
               <Button
-                label="Envoyer la réponse"
+                :label="$t('message.sendReply')"
                 size="small"
                 @click="submitReply(index)"
                 :disabled="!commentReplies[index] || !commentReplies[index].trim()"
@@ -95,24 +95,24 @@
           </div>
         </div>
         <div v-else class="text-surface-500 italic mb-6">
-          Aucun commentaire pour le moment. Soyez le premier à donner votre avis !
+          {{ $t('message.noComments') }}
         </div>
 
         <div v-if="isVisitor" class="flex flex-col gap-3 border-t border-surface-200/20 pt-6">
-          <span class="font-bold text-lg">Ajouter un commentaire :</span>
+          <span class="font-bold text-lg">{{ $t('message.addComment') }}</span>
           <InputText
             v-model="newComment.title"
-            placeholder="Titre de votre commentaire"
+            :placeholder="$t('message.commentTitle')"
             class="w-full"
           />
           <Textarea
             v-model="newComment.content"
             rows="4"
-            placeholder="Votre commentaire..."
+            :placeholder="$t('message.yourComment')"
             class="w-full"
           />
           <Button
-            label="Publier le commentaire"
+            :label="$t('message.publishComment')"
             @click="submitComment"
             :disabled="!newComment.title.trim() || !newComment.content.trim()"
             class="w-fit mt-2"
@@ -133,6 +133,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { DataView, Select, Card, Rating, InputText, Textarea, Button } from 'primevue'
+import { useI18n } from 'vue-i18n'
 import AuthService from '@/services/auth.service'
 import SessionItem from '@/components/activityComponents/molecule/SessionItem.vue'
 import RegistrantsListDialog from '@/components/activityComponents/molecule/RegistrantsListDialog.vue'
@@ -145,6 +146,7 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useRegistrationStore } from '@/stores/registration'
 
+const { t } = useI18n()
 const route = useRoute()
 const activityStore = useActivityStore()
 const sessionsStore = useSessionStore()
@@ -176,8 +178,8 @@ const triField = ref()
 const selectedSession = ref(null) // the session which have been clicked to register
 
 const triOptions = ref([
-  { label: 'Date croissante', nom: 'beginingDate' },
-  { label: 'Date décroissante', nom: '!beginingDate' },
+  { label: t('message.dateAsc'), nom: 'beginingDate' },
+  { label: t('message.dateDesc'), nom: '!beginingDate' },
 ])
 
 const currentActivity = computed(() => {
@@ -301,7 +303,7 @@ async function showRegistrants(session) {
     }
   } catch (e) {
     console.error(e)
-    displayErrToast('Erreur lors du chargement des inscrits')
+    displayErrToast(t('message.loadRegistrantsError'))
   } finally {
     loadingRegistrants.value = false
   }
@@ -312,34 +314,30 @@ async function inscription(session) {
   const placesRestantes = session.nbPlace - session.registersUsers.length
 
   if (placesRestantes <= 0) {
-    displayErrToast('Plus de places disponibles pour cette session')
+    displayErrToast(t('message.noMorePlaces'))
     return
   }
 
   if (!isUserConnected.value) {
-    displayErrToast('Vous devez être connecté pour vous inscrire')
+    displayErrToast(t('message.mustBeConnected'))
     return
   }
 
   const userId = currentUserId.value
 
   if (isRegistered(session)) {
-    displayErrToast('Vous êtes déjà inscrit à cette session')
+    displayErrToast(t('message.alreadyRegisteredSession'))
     return
   }
 
   const result = await registrationStore.addRegistration(session.id, userId)
   if (!result) {
-    displayErrToast("Echec de l'inscription, veuillez réessayer")
+    displayErrToast(t('message.registrationFailed'))
     return
   }
 
   await sessionsStore.getAllSessions()
 
-  const nouvellesPlacesRestantes = session.nbPlace - (session.registersUsers.length + 1)
-
-  displaySuccessToast(
-    `Vous êtes inscrit à la session #${session.id}. Places restantes : ${nouvellesPlacesRestantes}/${session.nbPlace}`,
-  )
+  displaySuccessToast(t('message.registrationSuccess'))
 }
 </script>

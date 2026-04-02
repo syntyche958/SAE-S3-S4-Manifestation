@@ -4,8 +4,8 @@
     <template v-slot:toolbar>
       <span class="ql-formats">
         <select class="ql-header">
-          <option value="1">Titre 1</option>
-          <option value="2">Titre 2</option>
+          <option value="1">{{ $t('message.title1') }}</option>
+          <option value="2">{{ $t('message.title2') }}</option>
           <option selected></option>
         </select>
       </span>

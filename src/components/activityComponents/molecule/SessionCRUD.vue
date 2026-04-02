@@ -3,7 +3,7 @@
     <template #content>
       <DataTable :value="sessions" tableStyle="min-width: 50rem">
         <!-- input de date-->
-        <Column field="beginingDate" header="Date">
+        <Column field="beginingDate" :header="$t('message.date')">
           <template #body="slotProps">
             <div class="flex flex-column gap-2">
               <div class="flex align-items-center">
@@ -13,7 +13,7 @@
                   value="2026-05-28"
                 />
                 <label :for="`date-${slotProps.data.id}-2026-05-28`" class="ml-2 cursor-pointer">
-                  28 mai 2026
+                  {{ $t('message.may28') }}
                 </label>
               </div>
               <div class="flex align-items-center">
@@ -23,14 +23,14 @@
                   value="2026-05-29"
                 />
                 <label :for="`date-${slotProps.data.id}-2026-05-29`" class="ml-2 cursor-pointer">
-                  29 mai 2026
+                  {{ $t('message.may29') }}
                 </label>
               </div>
             </div>
           </template>
         </Column>
         <!-- input de heure-->
-        <Column field="beginingHour" header="Heure">
+        <Column field="beginingHour" :header="$t('message.time')">
           <template #body="slotProps">
             <input
               type="time"
@@ -39,17 +39,17 @@
             />
           </template>
         </Column>
-        <Column field="duration" header="Durée">
+        <Column field="duration" :header="$t('message.duration')">
           <template #body="slotProps">
             <InputNumber v-model="slotProps.data.duration" fluid />
           </template>
         </Column>
-        <Column field="nbPlace" header="Places">
+        <Column field="nbPlace" :header="$t('message.places')">
           <template #body="slotProps">
             <InputNumber v-model="slotProps.data.nbPlace" fluid />
           </template>
         </Column>
-        <Column header="Actions">
+        <Column :header="$t('message.actions')">
           <template #body="slotProps">
             <Button
               icon="pi pi-trash"
@@ -64,7 +64,7 @@
       <div class="mt-4 flex justify-end">
         <Button
           icon="pi pi-plus"
-          label="Ajouter une session"
+          :label="$t('message.addSession')"
           severity="secondary"
           @click="addNewSession"
         />
@@ -78,7 +78,9 @@ import { useRoute } from 'vue-router'
 import { useSessionStore } from '@/stores/sessions.js'
 import { computed, onMounted } from 'vue'
 import { InputNumber, Button, DataTable, Column, RadioButton, Card } from 'primevue'
+import { useI18n } from 'vue-i18n'
 
+useI18n()
 const route = useRoute()
 const sessionStore = useSessionStore()
 

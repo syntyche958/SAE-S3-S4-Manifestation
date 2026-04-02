@@ -35,7 +35,7 @@
 
       <!-- Description input -->
       <div class="flex flex-col gap-1">
-        <label for="description" class="font-semibold w-24">Description</label>
+        <label for="description" class="font-semibold w-24">{{ $t('message.description') }}</label>
         <Textarea id="description" name="description" fluid />
         <Message v-if="$form.description?.invalid" severity="error" size="small" variant="simple">{{
           $form.description.error?.message
@@ -58,6 +58,7 @@
 <script setup>
 import { z } from 'zod'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Dialog, Button, InputText, Textarea, Message } from 'primevue'
 import { Form } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
@@ -65,6 +66,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { useProviderStore } from '@/stores/providers'
 import { useAuthStore } from '@/stores/auth'
 
+const { t } = useI18n()
 const providerStore = useProviderStore()
 const authStore = useAuthStore()
 

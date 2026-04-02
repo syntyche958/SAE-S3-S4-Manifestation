@@ -46,11 +46,11 @@
               <div class="flex gap-4 items-center">
                 <div class="flex items-center gap-2">
                   <RadioButton inputId="rec-yes" v-model="form.recommend" value="yes" />
-                  <label for="rec-yes" class="text-sm cursor-pointer">{{ $t('Oui') }}</label>
+                  <label for="rec-yes" class="text-sm cursor-pointer">{{ $t('message.yes') }}</label>
                 </div>
                 <div class="flex items-center gap-2">
                   <RadioButton inputId="rec-no" v-model="form.recommend" value="no" />
-                  <label for="rec-no" class="text-sm cursor-pointer">{{ $t('Non') }}</label>
+                  <label for="rec-no" class="text-sm cursor-pointer">{{ $t('message.no') }}</label>
                 </div>
                 <div class="flex items-center gap-2">
                   <RadioButton inputId="rec-maybe" v-model="form.recommend" value="maybe" />
@@ -121,7 +121,7 @@
             rows="4"
             autoResize
             class="w-full border-surface-200 focus:border-emerald-500 transition-colors"
-            placeholder="Dites-nous tout..."
+            :placeholder="$t('message.tellUsEverything')"
           />
           <transition name="p-message">
             <small v-if="errors.comment" class="text-red-500 mt-1 block">{{

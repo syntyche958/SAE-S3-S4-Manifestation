@@ -87,6 +87,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Button, InputText, Dialog, Select, Textarea, Message } from 'primevue'
 import { Form } from '@primevue/forms'
 
@@ -95,6 +96,7 @@ import { useProviderStore } from '@/stores/providers'
 import { useContactStore } from '@/stores/contact'
 import { z } from 'zod'
 
+const { t } = useI18n()
 const providerStore = useProviderStore()
 const contactStore = useContactStore()
 

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useRoute } from 'vue-router'
 import ProviderStatisticsService from '@/services/providerStatistics.service'
@@ -19,6 +20,7 @@ const props = defineProps({
   },
 })
 
+const { t } = useI18n()
 const route = useRoute()
 const toast = useToast()
 
@@ -67,8 +69,8 @@ const loadData = async () => {
     console.error('Erreur:', error)
     toast.add({
       severity: 'error',
-      summary: 'Erreur',
-      detail: 'Impossible de charger les statistiques',
+      summary: t('message.error'),
+      detail: t('message.cannotLoadStats'),
       life: 3000,
     })
   } finally {
@@ -100,7 +102,7 @@ const drawCharts = () => {
         labels: registrationsByActivity.value.map((item) => item.name),
         datasets: [
           {
-            label: "Nombre d'inscrits",
+            label: t('message.registrationCount'),
             data: registrationsByActivity.value.map((item) => item.count),
             backgroundColor: '#3b82f6',
             borderColor: '#2563eb',
@@ -127,7 +129,7 @@ const drawCharts = () => {
         labels: registrationsByDay.value.map((item) => item.date),
         datasets: [
           {
-            label: "Nombre d'inscrits",
+            label: t('message.registrationCount'),
             data: registrationsByDay.value.map((item) => item.count),
             backgroundColor: 'rgba(34, 197, 94, 0.2)',
             borderColor: '#22c55e',
@@ -162,20 +164,20 @@ watch([registrationsByActivity, registrationsByDay], () => {
 
 <template>
   <div class="statistics-container">
-    <h1 class="page-title">Statistiques des inscriptions</h1>
+    <h1 class="page-title">{{ $t('message.registrationStats') }}</h1>
 
     <ProgressSpinner v-if="loading" class="spinner" />
 
     <div v-else class="statistics-content">
       <Card class="summary-card">
-        <template #title><i class="pi pi-chart-line"></i> Vue d'ensemble</template>
+        <template #title><i class="pi pi-chart-line"></i> {{ $t('message.overview') }}</template>
         <template #content>
           <div class="summary-stat">
-            <span class="stat-label">Total des inscriptions :</span>
+            <span class="stat-label">{{ $t('message.totalRegistrationsLabel') }}</span>
             <span class="stat-value">{{ totalRegistrations }}</span>
           </div>
           <div class="summary-stat">
-            <span class="stat-label">Nombre d'activités :</span>
+            <span class="stat-label">{{ $t('message.numberOfActivitiesLabel') }}</span>
             <span class="stat-value">{{ activities.length }}</span>
           </div>
         </template>
@@ -184,7 +186,7 @@ watch([registrationsByActivity, registrationsByDay], () => {
       <div class="charts-grid">
         <Card class="chart-card shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
           <template #title>
-            <div class="chart-title"><i class="pi pi-chart-bar"></i> Inscriptions par activité</div>
+            <div class="chart-title"><i class="pi pi-chart-bar"></i> {{ $t('message.registrationsPerActivity') }}</div>
           </template>
           <template #content>
             <div v-if="registrationsByActivity.length > 0" class="chart-wrapper">
@@ -192,14 +194,14 @@ watch([registrationsByActivity, registrationsByDay], () => {
             </div>
             <div v-else class="no-data">
               <i class="pi pi-info-circle"></i>
-              <p>Aucune inscription</p>
+              <p>{{ $t('message.noRegistration') }}</p>
             </div>
           </template>
         </Card>
 
         <Card class="chart-card shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
           <template #title>
-            <div class="chart-title"><i class="pi pi-calendar"></i> Inscriptions par jour</div>
+            <div class="chart-title"><i class="pi pi-calendar"></i> {{ $t('message.registrationsPerDay') }}</div>
           </template>
           <template #content>
             <div v-if="registrationsByDay.length > 0" class="chart-wrapper">
@@ -207,14 +209,14 @@ watch([registrationsByActivity, registrationsByDay], () => {
             </div>
             <div v-else class="no-data">
               <i class="pi pi-info-circle"></i>
-              <p>Aucune inscription</p>
+              <p>{{ $t('message.noRegistration') }}</p>
             </div>
           </template>
         </Card>
       </div>
 
       <Card class="stats-card">
-        <template #title><i class="pi pi-table"></i> Détail par activité et par jour</template>
+        <template #title><i class="pi pi-table"></i> {{ $t('message.detailPerActivity') }}</template>
         <template #content>
           <DataTable
             :value="registrationsByActivityAndDay"
@@ -223,11 +225,11 @@ watch([registrationsByActivity, registrationsByDay], () => {
             sortField="activityName"
             :sortOrder="1"
           >
-            <Column field="activityName" header="Activité" sortable></Column>
-            <Column field="date" header="Date" sortable></Column>
+            <Column field="activityName" :header="$t('message.activity')" sortable></Column>
+            <Column field="date" :header="$t('message.date')" sortable></Column>
             <Column
               field="count"
-              header="Nombre d'inscrits"
+              :header="$t('message.registrationCount')"
               sortable
               bodyClass="count-col"
               headerClass="count-col-header"
@@ -241,7 +243,7 @@ watch([registrationsByActivity, registrationsByDay], () => {
 
           <div v-if="registrationsByActivityAndDay.length === 0" class="no-data">
             <i class="pi pi-info-circle"></i>
-            <p>Aucune inscription pour le moment</p>
+            <p>{{ $t('message.noRegistrationYet') }}</p>
           </div>
         </template>
       </Card>

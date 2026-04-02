@@ -9,7 +9,7 @@
       v-model="selectedActivity"
       :options="filteredActivities"
       optionLabel="name"
-      placeholder="Select an activity"
+      :placeholder="$t('message.activity')"
       class="w-full md:w-56"
     />
     <Button

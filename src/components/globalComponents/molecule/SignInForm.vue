@@ -11,7 +11,7 @@
           v-model="mail"
           fluid
           class="!rounded-xl border-surface-200/20 focus:border-emerald-500 bg-surface-100/10 text-white"
-          placeholder="votre@email.fr"
+          :placeholder="$t('message.emailPlaceholder')"
         />
       </div>
 
@@ -34,7 +34,7 @@
 
     <div class="flex flex-col gap-3 mt-2">
       <Button
-        label="Créer mon compte"
+        :label="$t('message.createMyAccount')"
         icon="pi pi-user-plus"
         fluid
         class="!rounded-xl py-3 font-bold"
@@ -43,8 +43,7 @@
         v-ripple
       />
       <p class="text-[10px] text-surface-400 text-center px-4 leading-relaxed mt-2">
-        En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de
-        confidentialité.
+        {{ $t('message.termsAcceptance') }}
       </p>
     </div>
   </div>
@@ -53,7 +52,9 @@
 import { useAuthStore } from '@/stores/auth'
 import { InputText, Button } from 'primevue'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const authStore = useAuthStore()
 
 const mail = ref()

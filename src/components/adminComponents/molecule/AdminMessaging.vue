@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col gap-4">
-    <h2 class="text-2xl font-bold">{{ $t('Messages des avis') }}</h2>
+    <h2 class="text-2xl font-bold">{{ $t('message.feedbackMessages') }}</h2>
 
     <div v-if="surveyStore.surveys.length === 0" class="text-center py-8 text-gray-500">
       <i class="pi pi-inbox text-4xl mb-2"></i>
-      <p>{{ $t('Aucun avis pour le moment.') }}</p>
+      <p>{{ $t('message.noNewMessage') }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-3">
@@ -24,7 +24,7 @@
                 <!--Pour voir si il a repondu: essaie -->
                 <Badge
                   v-if="survey.adminResponse"
-                  value="Repondu"
+                  :value="$t('message.responded')"
                   severity="warning"
                   icon="pi pi-exclamation-circle"
                 />
@@ -45,7 +45,7 @@
           <!-- Ratings détaillés -->
           <div class="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
             <div class="flex flex-col items-center">
-              <span class="text-sm text-surface-400 mb-1">{{ $t('Organisation') }}</span>
+              <span class="text-sm text-surface-400 mb-1">{{ $t('message.organisation') }}</span>
               <Rating
                 :modelValue="survey.ratings.organisation"
                 readonly
@@ -54,7 +54,7 @@
               />
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm text-surface-400 mb-1">{{ $t('Animations') }}</span>
+              <span class="text-sm text-surface-400 mb-1">{{ $t('message.animations') }}</span>
               <Rating
                 :modelValue="survey.ratings.animations"
                 readonly
@@ -63,7 +63,7 @@
               />
             </div>
             <div class="flex flex-col items-center">
-              <span class="text-sm text-surface-400 mb-1">{{ $t('Accesibilité') }}</span>
+              <span class="text-sm text-surface-400 mb-1">{{ $t('message.accessibility') }}</span>
               <Rating
                 :modelValue="survey.ratings.accessibility"
                 readonly
@@ -75,7 +75,7 @@
 
           <!-- Activités suivies -->
           <div v-if="survey.activities && survey.activities.length > 0" class="mb-4">
-            <p class="text-sm font-semibold mb-2">{{ $t('Activités suivies') }} :</p>
+            <p class="text-sm font-semibold mb-2">{{ $t('message.followedActivities') }} :</p>
             <div class="flex gap-2 flex-wrap">
               <Chip v-for="act in survey.activities" :key="act" :label="act" />
             </div>
@@ -83,7 +83,7 @@
 
           <!-- Commentaire -->
           <div v-if="survey.comment" class="mb-4 p-3 bg-surface-100/10 rounded">
-            <p class="text-sm font-semibold mb-1">{{ $t('Commentaire') }} :</p>
+            <p class="text-sm font-semibold mb-1">{{ $t('message.comment') }} :</p>
             <p class="whitespace-pre-wrap">{{ survey.comment }}</p>
           </div>
 
@@ -100,14 +100,14 @@
             class="mt-3 p-3 bg-blue-500/10 border-l-4 border-blue-500"
           >
             <p class="text-sm font-semibold mb-1">
-              <i class="pi pi-reply mr-2"></i>{{ $t('Votre réponse') }}
+              <i class="pi pi-reply mr-2"></i>{{ $t('message.yourReply') }}
             </p>
             <p class="whitespace-pre-wrap">{{ survey.adminResponse }}</p>
           </div>
 
           <div class="flex gap-2 mt-4 pt-4 border-t">
             <Button
-              :label="$t('Répondre')"
+              :label="$t('message.reply')"
               icon="pi pi-reply"
               @click="openResponseDialog(survey)"
               severity="primary"
@@ -121,24 +121,24 @@
     <!-- Dialog pour répondre -->
     <Dialog
       v-model:visible="responseDialogVisible"
-      :header="$t('Repondre à l\'avis')"
+      :header="$t('message.replyToFeedback')"
       :style="{ width: '600px' }"
       :modal="true"
     >
       <div class="flex flex-col gap-4">
         <Textarea
           v-model="responseText"
-          :placeholder="$t('Écrivez votre réponse')"
+          :placeholder="$t('message.yourReply')"
           rows="5"
           class="w-full"
         />
         <div class="flex justify-end gap-2">
           <Button
-            :label="$t('Annuler')"
+            :label="$t('message.cancel')"
             severity="secondary"
             @click="responseDialogVisible = false"
           />
-          <Button :label="$t('Envoyer')" @click="submitResponse" />
+          <Button :label="$t('message.send')" @click="submitResponse" />
         </div>
       </div>
     </Dialog>
@@ -192,11 +192,11 @@ function formatDate(dateStr) {
 function getRecommendLabel(recommend) {
   switch (recommend) {
     case 'yes':
-      return t('Oui')
+      return t('message.yes')
     case 'no':
-      return t('Non')
+      return t('message.no')
     case 'maybe':
-      return t('Peut-etre')
+      return t('message.maybe')
     default:
       return '-'
   }

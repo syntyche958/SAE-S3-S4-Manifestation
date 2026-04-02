@@ -3,14 +3,14 @@
     :visible="visible"
     @update:visible="$emit('update:visible', $event)"
     modal
-    header="Utilisateurs inscrits"
+    :header="$t('message.registeredUsers')"
     :style="{ width: '50vw' }"
   >
     <div v-if="loading" class="flex justify-center">
       <i class="pi pi-spin pi-spinner text-2xl"></i>
     </div>
     <div v-else-if="registrants.length === 0">
-      <p>Aucun inscrit pour cette session.</p>
+      <p>{{ $t('message.noRegistrants') }}</p>
     </div>
     <div v-else>
       <ul class="list-none p-0 m-0">
@@ -29,6 +29,9 @@
 
 <script setup>
 import Dialog from 'primevue/dialog'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 defineProps({
   visible: Boolean,

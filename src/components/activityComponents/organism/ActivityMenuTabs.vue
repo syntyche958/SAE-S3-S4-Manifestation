@@ -8,7 +8,7 @@
       <Tab value="1"
         ><i class="pi pi-file-edit"></i><span>{{ $t('message.choiceOfLocation') }}</span></Tab
       >
-      <Tab value="2"><i class="pi pi-cog"></i><span> Configuration</span></Tab>
+      <Tab value="2"><i class="pi pi-cog"></i><span> {{ $t('message.configuration') }}</span></Tab>
     </TabList>
     <TabPanels>
       <TabPanel value="0">

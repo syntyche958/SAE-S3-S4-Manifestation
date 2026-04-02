@@ -3,6 +3,9 @@ import { defineStore } from 'pinia'
 
 import SurveyService from '@/services/survey.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
+import i18n from '@/i18n'
+
+const { t } = i18n.global
 
 export const useSurveyStore = defineStore('survey', () => {
   const surveys = ref([])
@@ -21,10 +24,10 @@ export const useSurveyStore = defineStore('survey', () => {
     let response = await SurveyService.addSurvey(surveyData)
     if (response.error === 0) {
       surveys.value.push(response.data)
-      displaySuccessToast('Votre avis a bien été enregistré.')
+      displaySuccessToast(t('message.feedbackRecorded'))
     } else {
       console.log(response.data)
-      displayErrToast("Impossible d'enregistrer votre avis.")
+      displayErrToast(t('message.feedbackRecordFailed'))
     }
   }
 
@@ -35,10 +38,10 @@ export const useSurveyStore = defineStore('survey', () => {
       if (surveyIndex !== -1) {
         surveys.value[surveyIndex] = response.data
       }
-      displaySuccessToast('Réaction ajoutée')
+      displaySuccessToast(t('message.reactionAdded'))
     } else {
       console.log(response.data)
-      displayErrToast("Impossible d'ajouter la réaction")
+      displayErrToast(t('message.reactionAddFailed'))
     }
   }
 
@@ -49,10 +52,10 @@ export const useSurveyStore = defineStore('survey', () => {
       if (surveyIndex !== -1) {
         surveys.value[surveyIndex] = response.data
       }
-      displaySuccessToast('Reponse envoyée')
+      displaySuccessToast(t('message.responseSent'))
     } else {
       console.log(response.data)
-      displayErrToast("Impossible d'envoyer la reponse")
+      displayErrToast(t('message.responseSendFailed'))
     }
   }
 
@@ -60,10 +63,10 @@ export const useSurveyStore = defineStore('survey', () => {
     let response = await SurveyService.deleteSurvey()
     if (response.error === 0) {
       surveys.value = []
-      displaySuccessToast('Message supprimé')
+      displaySuccessToast(t('message.messageDeleted'))
     } else {
       console.log(response.data)
-      displayErrToast('Impossible de supprimer le message')
+      displayErrToast(t('message.messageDeleteFailed'))
     }
   }
 
@@ -71,10 +74,10 @@ export const useSurveyStore = defineStore('survey', () => {
     let response = await SurveyService.clearSurveys()
     if (response.error === 0) {
       surveys.value = []
-      displaySuccessToast('Tous les avis ont été supprimés.')
+      displaySuccessToast(t('message.allFeedbackDeleted'))
     } else {
       console.log(response.data)
-      displayErrToast('Échec de la suppression des avis.')
+      displayErrToast(t('message.allFeedbackDeleteFailed'))
     }
   }
 

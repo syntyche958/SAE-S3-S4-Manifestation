@@ -11,7 +11,7 @@
     <Dialog
       v-model:visible="visibleCarrousel"
       modal
-      header="Modification des images : "
+      :header="$t('message.modifyImages')"
       :style="{ width: '50vw' }"
       :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     >
