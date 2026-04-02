@@ -168,6 +168,8 @@ const messages = {
       seeRegistrants: 'See registrants',
       alreadyRegistered: 'Already registered',
       addSession: 'Add a session',
+      sessionValidated: 'Session saved successfully',
+      sessionValidationFailed: 'Failed to save session',
       registeredUsers: 'Registered users',
       noRegistrants: 'No registrants for this session.',
       may28: 'May 28, 2026',
@@ -177,7 +179,8 @@ const messages = {
       mustBeConnected: 'You must be logged in to register',
       alreadyRegisteredSession: 'You are already registered for this session',
       registrationFailed: 'Registration failed, please try again',
-      registrationSuccess: 'You are registered for session #{id}. Remaining places: {remaining}/{total}',
+      registrationSuccess:
+        'You are registered for session #{id}. Remaining places: {remaining}/{total}',
       messageSentSuccess: 'Message sent successfully!',
       sendFailed: 'Sending failed, please try again!',
       taskDone: 'Task marked as done!',
@@ -238,7 +241,8 @@ const messages = {
       sunday: 'Sunday',
       dayN: 'Day {n}',
       experienceCarcassonne: 'Experience Carcassonne',
-      participateDescription: 'Take part in activities, book your workshops and enjoy unforgettable moments.',
+      participateDescription:
+        'Take part in activities, book your workshops and enjoy unforgettable moments.',
       connection: 'Login',
       welcomeBack: 'Welcome back!',
       enterCredentials: 'Enter your credentials to access your account.',
@@ -295,8 +299,10 @@ const messages = {
       undefinedDate: 'Undefined date',
       imageDeleted: 'Image deleted',
       providerNotFound: 'Provider not found',
-      confirmDisableSession: 'This service has {count} registrant(s). Do you really want to disable session/registration?',
-      sessionDisabledWarning: 'Session/registration disabled. Remember to notify the {count} registered user(s).',
+      confirmDisableSession:
+        'This service has {count} registrant(s). Do you really want to disable session/registration?',
+      sessionDisabledWarning:
+        'Session/registration disabled. Remember to notify the {count} registered user(s).',
       emailPlaceholder: 'your@email.com',
     },
   },
@@ -381,7 +387,7 @@ const messages = {
       manualAssignSelectActivity: 'Choisir une activité',
       validate: 'Valider',
       validateRequest: 'Valider la demande',
-      reassignSpot: 'Réassigner l\'emplacement',
+      reassignSpot: "Réassigner l'emplacement",
       activityNotAssignableAllSlots:
         'Cette activité ne peut pas être attribuée à tous les créneaux sélectionnés (conflit ou éligibilité).',
       appearanceOfThePage: 'Apparence de la page',
@@ -425,9 +431,11 @@ const messages = {
       satisfactionDistribution: 'Distribution de la satisfaction',
       registeredUsersEmail: 'Utilisateurs inscrits (avec email)',
       activitiesPerDay: "Nombre d'activités par jour",
-      statsDescription: 'Graphiques et visualisations basés sur les données des sondages de satisfaction.',
+      statsDescription:
+        'Graphiques et visualisations basés sur les données des sondages de satisfaction.',
       noDataStats: 'Aucune donnée disponible pour afficher les statistiques.',
-      dataAppearanceInfo: 'Les graphiques apparaîtront une fois que des interactions auront eu lieu sur le site.',
+      dataAppearanceInfo:
+        'Les graphiques apparaîtront une fois que des interactions auront eu lieu sur le site.',
       password: 'Mot de passe',
       signIn: "S'inscrire",
       description: 'Description',
@@ -469,6 +477,8 @@ const messages = {
       seeRegistrants: 'Voir les inscrits',
       alreadyRegistered: 'Déjà inscrit',
       addSession: 'Ajouter une session',
+      sessionValidated: 'Session enregistree avec succes',
+      sessionValidationFailed: "Echec de l'enregistrement de la session",
       registeredUsers: 'Utilisateurs inscrits',
       noRegistrants: 'Aucun inscrit pour cette session.',
       may28: '28 mai 2026',
@@ -478,7 +488,8 @@ const messages = {
       mustBeConnected: 'Vous devez être connecté pour vous inscrire',
       alreadyRegisteredSession: 'Vous êtes déjà inscrit à cette session',
       registrationFailed: "Echec de l'inscription, veuillez réessayer",
-      registrationSuccess: 'Vous êtes inscrit à la session #{id}. Places restantes : {remaining}/{total}',
+      registrationSuccess:
+        'Vous êtes inscrit à la session #{id}. Places restantes : {remaining}/{total}',
       messageSentSuccess: 'Message envoyé avec succès !',
       sendFailed: "Echec de l'envoi, veuillez réessayer !",
       taskDone: 'Tâche marquée comme traitée !',
@@ -539,7 +550,8 @@ const messages = {
       sunday: 'Dimanche',
       dayN: 'Jour {n}',
       experienceCarcassonne: "Vivez l'expérience Carcassonne",
-      participateDescription: 'Participez aux animations, réservez vos ateliers et profitez de moments inoubliables.',
+      participateDescription:
+        'Participez aux animations, réservez vos ateliers et profitez de moments inoubliables.',
       connection: 'Connexion',
       welcomeBack: 'Bon retour !',
       enterCredentials: 'Entrez vos identifiants pour accéder à votre compte.',
@@ -551,7 +563,8 @@ const messages = {
       alreadyHaveAccount: "J'ai déjà un compte.",
       connectLabel: 'Se connecter',
       createMyAccount: 'Créer mon compte',
-      termsAcceptance: "En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
+      termsAcceptance:
+        "En vous inscrivant, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
       continueWith: 'Ou continuer avec',
       yourReservations: 'Vos réservations',
       noReservations: "Vous n'avez aucune réservation pour le moment.",
@@ -568,7 +581,8 @@ const messages = {
       qrCodeAlt: 'QR Code de la session',
       noImage: 'Aucune image disponible',
       minTwoImages: 'Le minimum requis est de 2 images.',
-      dropImages: 'Déposez ici (drag and drop) les images que vous souhaitez rendre visibles dans le carrousel',
+      dropImages:
+        'Déposez ici (drag and drop) les images que vous souhaitez rendre visibles dans le carrousel',
       selectedImages: 'Images sélectionnées :',
       uploadButton: 'Uploader les images',
       noImagesSelected: 'Aucune image sélectionnée',
@@ -596,8 +610,10 @@ const messages = {
       undefinedDate: 'Date non définie',
       imageDeleted: 'Image supprimée',
       providerNotFound: 'Prestataire non trouvé',
-      confirmDisableSession: 'Ce service a {count} inscrit(s). Voulez-vous vraiment désactiver session/inscription ?',
-      sessionDisabledWarning: 'Session/inscription désactivée. Pensez à prévenir les {count} utilisateur(s) inscrit(s).',
+      confirmDisableSession:
+        'Ce service a {count} inscrit(s). Voulez-vous vraiment désactiver session/inscription ?',
+      sessionDisabledWarning:
+        'Session/inscription désactivée. Pensez à prévenir les {count} utilisateur(s) inscrit(s).',
       emailPlaceholder: 'votre@email.fr',
     },
   },
