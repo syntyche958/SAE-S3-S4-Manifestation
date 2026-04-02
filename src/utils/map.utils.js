@@ -10,8 +10,6 @@ const defaultPolygonWeight = 2
 const visitorPopupCloseDelayMs = 500
 const visitorMapClickCloseBound = new WeakSet()
 
-// TODO : Enlever le fitre activité enmode visiteur car sert a rien dans tout les cas un seul spot par activité en simultané
-
 export function setupMap(mapId) {
   // Map setup
   let southWestBoundsCoords = L.latLng(43.203642, 2.36)
@@ -48,12 +46,11 @@ export function displayLocations(
   route,
   selectedLocationId,
   visitorDateHour,
-  visitorActivityId,
   t,
   router,
 ) {
   if (mapMode === MapModeEnum.VISITOR) {
-    displayPinPoints(map, visitorDateHour, visitorActivityId, t, router)
+    displayPinPoints(map, visitorDateHour, t, router)
   } else {
     // ADMIN + PROVIDER
     displayAreas(map, emit, mapMode, route, selectedLocationId)
@@ -69,7 +66,6 @@ export function refreshLocations(
   route,
   selectedLocationId,
   visitorDateHour,
-  visitorActivityId,
   t,
   router,
 ) {
@@ -79,7 +75,7 @@ export function refreshLocations(
         map.removeLayer(layer)
       }
     })
-    displayPinPoints(map, visitorDateHour, visitorActivityId, t, router)
+    displayPinPoints(map, visitorDateHour, t, router)
     return
   }
 
@@ -172,16 +168,12 @@ function bindPopupVisitor(map, marker, activitiesAtLocation, t, router) {
   })
 }
 
-function getVisitorActivitiesForLocation(locationId, visitorDateHour, visitorActivityId) {
+function getVisitorActivitiesForLocation(locationId, visitorDateHour) {
   const activityStore = useActivityStore()
   const providerStore = useProviderStore()
 
-  const selectedActivityId =
-    visitorActivityId == null || visitorActivityId === '' ? null : Number(visitorActivityId)
-
   return (activityStore.activities || [])
     .filter((activity) => {
-      if (selectedActivityId != null && activity.id !== selectedActivityId) return false
       return (activity.spotIds || []).some((spot) => {
         if (String(spot.locationId) !== String(locationId)) return false
         if (!visitorDateHour) return true
@@ -200,7 +192,7 @@ function getVisitorActivitiesForLocation(locationId, visitorDateHour, visitorAct
     })
 }
 
-function displayPinPoints(map, visitorDateHour, visitorActivityId, t, router) {
+function displayPinPoints(map, visitorDateHour, t, router) {
   const locationStore = useLocationStore()
 
   if (!visitorMapClickCloseBound.has(map)) {
@@ -211,11 +203,7 @@ function displayPinPoints(map, visitorDateHour, visitorActivityId, t, router) {
   }
 
   for (let location of locationStore.locations) {
-    const activitiesAtLocation = getVisitorActivitiesForLocation(
-      location.id,
-      visitorDateHour,
-      visitorActivityId,
-    )
+    const activitiesAtLocation = getVisitorActivitiesForLocation(location.id, visitorDateHour)
     if (activitiesAtLocation.length === 0) continue
 
     let marker = L.marker(location['coord']).addTo(map)

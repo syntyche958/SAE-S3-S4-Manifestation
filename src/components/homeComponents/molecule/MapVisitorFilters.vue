@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-3 grid gap-2 md:grid-cols-3">
+  <div class="mb-3 grid gap-2 md:grid-cols-2">
     <div>
       <label class="mb-1 block text-xs font-medium text-white/75">Jour</label>
       <Select
@@ -23,18 +23,6 @@
         @update:modelValue="(value) => emit('update:selectedHour', value)"
       />
     </div>
-
-    <div>
-      <label class="mb-1 block text-xs font-medium text-white/75">Activite</label>
-      <Select
-        :modelValue="selectedActivityId"
-        :options="activityOptions"
-        optionLabel="label"
-        optionValue="value"
-        class="w-full"
-        @update:modelValue="(value) => emit('update:selectedActivityId', value)"
-      />
-    </div>
   </div>
 </template>
 
@@ -42,21 +30,13 @@
 import { computed } from 'vue'
 import { Select } from 'primevue'
 import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
-import { useActivityStore } from '@/stores/activities'
-
-const activityStore = useActivityStore()
 
 defineProps({
   selectedDay: { type: String, required: true },
   selectedHour: { type: String, required: true },
-  selectedActivityId: { type: [String, Number, null], required: true },
 })
 
-const emit = defineEmits([
-  'update:selectedDay',
-  'update:selectedHour',
-  'update:selectedActivityId',
-])
+const emit = defineEmits(['update:selectedDay', 'update:selectedHour'])
 
 const availableHours = computed(() =>
   Array.from(
@@ -78,18 +58,6 @@ const hourOptions = computed(() =>
     value: hour,
   })),
 )
-
-const allActivities = computed(() =>
-  activityStore.activities.slice().sort((a, b) => a.name.localeCompare(b.name)),
-)
-
-const activityOptions = computed(() => [
-  { label: 'Tout', value: null },
-  ...allActivities.value.map((activity) => ({
-    label: activity.name,
-    value: activity.id,
-  })),
-])
 
 function formatDate(dateStr) {
   const [year, month, day] = String(dateStr).split('-').map(Number)

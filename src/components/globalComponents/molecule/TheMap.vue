@@ -29,7 +29,6 @@ const props = defineProps({
   displayMode: { type: String, required: true },
   selectedLocationId: { type: [Number, String], required: false },
   visitorDateHour: { type: String, required: false, default: undefined },
-  visitorActivityId: { type: [Number, String, null], required: false, default: null },
   withCard: { type: Boolean, required: false, default: true },
   class: { type: String, required: false },
   classSize: { type: String, required: true },
@@ -49,7 +48,6 @@ onMounted(() => {
         route,
         props.selectedLocationId,
         props.visitorDateHour,
-        props.visitorActivityId,
         t,
         router,
       )
@@ -57,7 +55,7 @@ onMounted(() => {
   )
 
   watch(
-    () => [props.visitorDateHour, props.visitorActivityId],
+    () => props.visitorDateHour,
     () => {
       refreshLocations(
         map,
@@ -66,7 +64,6 @@ onMounted(() => {
         route,
         props.selectedLocationId,
         props.visitorDateHour,
-        props.visitorActivityId,
         t,
         router,
       )
@@ -81,7 +78,6 @@ onMounted(() => {
     route,
     props.selectedLocationId,
     props.visitorDateHour,
-    props.visitorActivityId,
     t,
     router,
   )

@@ -7,10 +7,8 @@
         <MapVisitorFilters
           :selected-day="selectedDay"
           :selected-hour="selectedHour"
-          :selected-activity-id="selectedActivityId"
           @update:selected-day="(value) => (selectedDay = value)"
           @update:selected-hour="(value) => (selectedHour = value)"
-          @update:selected-activity-id="(value) => (selectedActivityId = value)"
         />
 
         <h2 class="mb-3 text-base font-semibold text-white">Carte</h2>
@@ -18,7 +16,6 @@
           id="visitor-map"
           :display-mode="MapModeEnum.VISITOR"
           :visitor-date-hour="selectedDateHour"
-          :visitor-activity-id="selectedActivityId"
           :with-card="false"
           classSize="h-[26vh] lg:h-[calc(100vh-24rem)] w-full"
         />
@@ -42,7 +39,6 @@ import { EVENT_DAYS, EVENT_START_HOUR } from '@/constants/event.constants'
 
 const selectedDay = ref(EVENT_DAYS[0])
 const selectedHour = ref(`${String(EVENT_START_HOUR).padStart(2, '0')}:00`)
-const selectedActivityId = ref(null)
 
 const selectedDateHour = computed(() => `${selectedDay.value}T${selectedHour.value}`)
 </script>
