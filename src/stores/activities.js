@@ -24,19 +24,46 @@ export const useActivityStore = defineStore('activity', () => {
     return activities.value.find((a) => a.id === activityId)
   }
 
+  function getAvailableDateHoursForLocation(activityId, locationId, dateHours = []) {
+    const occupiedKeys = new Set()
+    for (const activity of activities.value || []) {
+      if (activity.id === activityId) continue
+
+      for (const spot of activity.spotIds || []) {
+        occupiedKeys.add(`${spot.locationId}-${spot.dateHour}`)
+      }
+      for (const request of activity.requestedSpotIds || []) {
+        occupiedKeys.add(`${request.locationId}-${request.dateHour}`)
+      }
+    }
+
+    return [...new Set(dateHours.map(String))].filter(
+      (dateHour) => !occupiedKeys.has(`${locationId}-${dateHour}`),
+    )
+  }
+
   async function updateLocationId(activity_id, locationId) {
-    let response = await activityService.updateLocationIdLocalSource(activity_id, locationId)
-    if (response.error === 0) activities.value = response.data
+    const activity = get(activity_id)
+    if (!activity) return
+
+    let response = await activityService.updateLocationId(activity, locationId)
+    if (response.error === 0) await getAllActivities()
     else console.log(response.data)
   }
 
   async function addRequestedSpots(activityId, locationId, dateHours) {
-    const response = await activityService.addRequestedSpotsLocalSource(
-      activityId,
+    const activity = get(activityId)
+    if (!activity) return
+
+    const availableDateHours = getAvailableDateHoursForLocation(activityId, locationId, dateHours)
+    if (availableDateHours.length === 0) return
+
+    const response = await activityService.addRequestedSpots(
+      activity,
       locationId,
-      dateHours,
+      availableDateHours,
     )
-    if (response.error === 0) activities.value = response.data
+    if (response.error === 0) await getAllActivities()
     else console.log(response.data)
   }
 
@@ -47,9 +74,12 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function addSpot(activityId, locationId, dateHour) {
-    let response = await activityService.addSpotsBulkLocalSource(activityId, locationId, [dateHour])
+    const activity = get(activityId)
+    if (!activity) return
+
+    let response = await activityService.addSpotsBulk(activity, locationId, [dateHour])
     if (response.error === 0) {
-      activities.value = response.data
+      await getAllActivities()
       displaySuccessToast('Emplacement attribué avec succès !')
     } else {
       displayErrToast("Échec de l'attribution de l'emplacement !")
@@ -57,14 +87,16 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   async function addSpotsBulk(activityId, locationId, dateHours) {
-    const response = await activityService.addSpotsBulkLocalSource(
-      activityId,
-      locationId,
-      dateHours,
-    )
+    const activity = get(activityId)
+    if (!activity) return
+
+    const availableDateHours = getAvailableDateHoursForLocation(activityId, locationId, dateHours)
+    if (availableDateHours.length === 0) return
+
+    const response = await activityService.addSpotsBulk(activity, locationId, availableDateHours)
     if (response.error === 0) {
-      activities.value = response.data
-      const n = [...new Set(dateHours.map(String))].length
+      await getAllActivities()
+      const n = new Set(availableDateHours.map(String)).size
       displaySuccessToast(
         n > 1 ? `${n} créneaux attribués avec succès !` : 'Emplacement attribué avec succès !',
       )
@@ -91,9 +123,9 @@ export const useActivityStore = defineStore('activity', () => {
       return
     }
 
-    const response = await activityService.refuseRequestedLocationIdLocalSource(activityId)
+    const response = await activityService.refuseRequestedLocationId(activity)
     if (response.error === 0) {
-      activities.value = response.data
+      await getAllActivities()
 
       const providerStore = useProviderStore()
       const provider = providerStore.get(activity.providerId)

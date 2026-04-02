@@ -1,6 +1,6 @@
 import { useActivityStore } from '@/stores/activities'
 import { networkErrResponse } from '@/utils/network.utils'
-import { getRequest, postRequest } from './axios.service'
+import { getRequest, postRequest, putRequest } from './axios.service'
 
 async function getAllActivities() {
   let response = null
@@ -11,6 +11,28 @@ async function getAllActivities() {
   }
 
   return response
+}
+
+function pickActivityUpdatePayload(activity, overrides = {}) {
+  return {
+    id: activity.id,
+    providerId: activity.providerId,
+    name: activity.name,
+    description: activity.description || '',
+    locationId: overrides.locationId ?? activity.locationId,
+    requestedLocationId: overrides.requestedLocationId ?? activity.requestedLocationId,
+    spotIds: overrides.spotIds ?? activity.spotIds ?? [],
+    requestedSpotIds: overrides.requestedSpotIds ?? activity.requestedSpotIds ?? [],
+    canRegister: overrides.canRegister ?? activity.canRegister,
+  }
+}
+
+async function updateActivity(activity, overrides = {}) {
+  try {
+    return await putRequest('/activities', pickActivityUpdatePayload(activity, overrides))
+  } catch {
+    return networkErrResponse
+  }
 }
 
 async function updateLocationIdLocalSource(activityId, locationId) {
@@ -27,6 +49,10 @@ async function updateLocationIdLocalSource(activityId, locationId) {
     status: 200,
     data: activities.map((a) => (a.id != activityId ? a : { ...a, locationId })),
   }
+}
+
+async function updateLocationId(activity, locationId) {
+  return updateActivity(activity, { locationId })
 }
 
 async function addRequestedSpotsLocalSource(activityId, locationId, dateHours) {
@@ -76,6 +102,32 @@ async function addRequestedSpotsLocalSource(activityId, locationId, dateHours) {
   }
 }
 
+async function addRequestedSpots(activity, locationId, dateHours) {
+  const existingSpots = activity.spotIds || []
+  const existingRequests = activity.requestedSpotIds || []
+
+  const spotKeys = new Set(existingSpots.map((s) => `${s.locationId}-${s.dateHour}`))
+  const requestKeys = new Set(existingRequests.map((s) => `${s.locationId}-${s.dateHour}`))
+
+  const unique = [...new Set((dateHours || []).map(String))]
+  const newRequests = []
+  for (const dateHour of unique) {
+    const key = `${locationId}-${dateHour}`
+    if (spotKeys.has(key) || requestKeys.has(key)) continue
+    requestKeys.add(key)
+    newRequests.push({ locationId, dateHour })
+  }
+
+  if (newRequests.length === 0) {
+    return { error: 0, status: 200, data: activity }
+  }
+
+  return updateActivity(activity, {
+    requestedSpotIds: [...existingRequests, ...newRequests],
+    requestedLocationId: locationId,
+  })
+}
+
 async function refuseRequestedLocationIdLocalSource(activityId) {
   const activityStore = useActivityStore()
 
@@ -86,6 +138,13 @@ async function refuseRequestedLocationIdLocalSource(activityId) {
       a.id === activityId ? { ...a, requestedLocationId: undefined } : a,
     ),
   }
+}
+
+async function refuseRequestedLocationId(activity) {
+  return updateActivity(activity, {
+    requestedLocationId: undefined,
+    requestedSpotIds: [],
+  })
 }
 
 async function addToLocalSource(providerId, name, desc) {
@@ -164,6 +223,32 @@ async function addSpotsBulkLocalSource(activityId, locationId, dateHours) {
   }
 }
 
+async function addSpotsBulk(activity, locationId, dateHours) {
+  const unique = [...new Set((dateHours || []).map(String))]
+  let updatedSpots = [...(activity.spotIds || [])]
+  let updatedRequests = [...(activity.requestedSpotIds || [])]
+
+  for (const dateHour of unique) {
+    if (
+      updatedSpots.some(
+        (s) => String(s.locationId) === String(locationId) && String(s.dateHour) === dateHour,
+      )
+    ) {
+      continue
+    }
+    updatedSpots.push({ locationId, dateHour })
+    updatedRequests = updatedRequests.filter(
+      (r) => !(String(r.locationId) === String(locationId) && String(r.dateHour) === dateHour),
+    )
+  }
+
+  return updateActivity(activity, {
+    locationId,
+    spotIds: updatedSpots,
+    requestedSpotIds: updatedRequests,
+  })
+}
+
 async function addCommentReplyLocalSource(activityId, commentIndex, replyContent) {
   const activityStore = useActivityStore()
   const activities = activityStore.activities
@@ -215,6 +300,11 @@ async function updateServiceFlagsLocalSource(activityId, payload) {
 
 export default {
   getAllActivities,
+  updateActivity,
+  updateLocationId,
+  addRequestedSpots,
+  refuseRequestedLocationId,
+  addSpotsBulk,
   updateLocationIdLocalSource,
   refuseRequestedLocationIdLocalSource,
   addRequestedSpotsLocalSource,
