@@ -4,26 +4,20 @@ import { defineStore } from 'pinia'
 import ProviderService from '@/services/provider.service'
 import AuthService from '@/services/auth.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
-import i18n from '@/i18n'
-
-const { t } = i18n.global
 
 export const useProviderStore = defineStore('provider', () => {
   const providers = ref([])
   const newProviders = ref([])
   const providerImages = ref([])
   const providerDescription = ref('')
-  const isLoadingProviders = ref(false)
 
   async function getAllProviders() {
-    isLoadingProviders.value = true
     let response = await ProviderService.getAllProviders()
     if (response.error === 0) {
       providers.value = response.data
     } else {
       console.log(response.data)
     }
-    isLoadingProviders.value = false
   }
 
   function get(providerId) {
@@ -66,20 +60,20 @@ export const useProviderStore = defineStore('provider', () => {
 
   async function getAllNewProviders() {
     let response = await ProviderService.getAllNewProviders()
-    if (response.error === 0) {
+    if (response && response.error === 0 && Array.isArray(response.data)) {
       newProviders.value = response.data
     } else {
-      console.log(response.data)
+      console.log(response?.data ?? response)
     }
   }
 
   async function addNewProvider(providerName, providerDesc) {
     let response = await ProviderService.addNewProvider(providerName, providerDesc)
     if (response.error === 0) {
+      displaySuccessToast('Votre demande a été enregistrée avec succès')
       await getAllNewProviders()
-      displaySuccessToast(t('message.providerRequestSuccess'))
     } else {
-      displayErrToast(t('message.providerRequestFailed'))
+      displayErrToast("Échec de l'envoi de la demande, veuillez réessayer")
       console.log(response.data)
     }
   }
@@ -87,25 +81,34 @@ export const useProviderStore = defineStore('provider', () => {
   async function removeNewProvider(data) {
     let response = await ProviderService.removeNewProvider(data.id)
     if (response.error === 0) {
+      displaySuccessToast(`La demande de ${data.name} a été supprimée avec succès`)
       await getAllNewProviders()
-      displaySuccessToast(t('message.providerRequestDeletedSuccess'))
     } else {
-      displayErrToast(t('message.providerRequestDeletedFailed'))
+      displayErrToast(`Échec de la suppression de la demande de ${data.name}`)
       console.log(response.data)
     }
   }
 
   async function validateNewProviders(data) {
-    let response1 = await ProviderService.validateNewProviders(data)
+    const response1 = await ProviderService.validateNewProviders(data)
+    if (response1.error !== 0) {
+      displayErrToast(`Échec de la validation de la demande de ${data.name}`)
+      console.log(response1.data)
+      return
+    }
 
-    // Update user type to provider
-    let response2 = await AuthService.updateUserTypeToProvider(data.userId)
-    if (response1.error === 0 && response2.error === 0) {
-      await getAllNewProviders()
-      await getAllProviders()
-      displaySuccessToast(t('message.providerRequestValidatedSuccess'))
+    await getAllNewProviders()
+    await getAllProviders()
+
+    const response2 =
+      data.userId != null ? await AuthService.updateUserTypeToProvider(data.userId) : { error: 0 }
+    if (response2.error === 0) {
+      displaySuccessToast(`La demande de ${data.name} a été validée avec succès`)
     } else {
-      displayErrToast(t('message.providerRequestValidatedFailed'))
+      displayErrToast(
+        `Le prestataire a été créé, mais le compte utilisateur n'a pas pu être mis à jour.`,
+      )
+      console.log(response2.data)
     }
   }
 
@@ -113,10 +116,13 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.uploadProviderImage(providerId, imageData)
 
     if (response.error === 0) {
-      displaySuccessToast(t('message.imageUploadedSuccess'))
-      await getProviderImages(providerId)
+      displaySuccessToast('Image uploadée avec succès')
+      providerImages.value = providerImages.value.map((p) => {
+        if (p.id !== providerId) return p
+        return { ...p, images: [...p.images, response.data] }
+      })
     } else {
-      displayErrToast(t('message.imageUploadFailed'))
+      displayErrToast("Erreur lors de l'upload")
       console.log(response.data)
     }
 
@@ -127,10 +133,9 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.deleteProviderImage(providerId, imageId)
 
     if (response.error === 0) {
-      displaySuccessToast(t('message.imageDeletedSuccess'))
-      await getProviderImages(providerId)
+      displaySuccessToast('Image supprimée avec succès')
     } else {
-      displayErrToast(t('message.imageDeleteFailed'))
+      displayErrToast('Erreur lors de la suppression')
       console.log(response.data)
     }
 
@@ -142,7 +147,6 @@ export const useProviderStore = defineStore('provider', () => {
     newProviders,
     providerImages,
     providerDescription,
-    isLoadingProviders,
     get,
     getDescription,
     updateProviderDescription,
