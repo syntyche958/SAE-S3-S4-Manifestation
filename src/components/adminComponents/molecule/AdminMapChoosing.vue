@@ -9,6 +9,7 @@
         <WaitingLocationRequests
           :selectedLocationId="selectedLocationId"
           @set-activity-location="(activityId) => acceptActivityLocation(activityId)"
+          @refuse-activity-location="(activityId) => refuseActivityLocation(activityId)"
         />
         <ManuallySetActivityLocation
           :selectedLocation="selectedLocation"
@@ -43,6 +44,17 @@ const selectedLocation = computed(() =>
 
 function acceptActivityLocation(activityId) {
   activityStore.updateLocationId(activityId, props.selectedLocationId)
+  emit('update-selected-location-id', undefined)
+}
+
+async function refuseActivityLocation(activityId) {
+  const confirmed = window.confirm('Refuser cette demande de placement ?')
+  if (!confirmed) {
+    return
+  }
+
+  const reason = window.prompt('Motif du refus (facultatif)')?.trim()
+  await activityStore.refuseRequestedLocation(activityId, reason || undefined)
   emit('update-selected-location-id', undefined)
 }
 </script>

@@ -19,12 +19,22 @@
           <!-- Column with button  -->
           <Column field="id" header="" style="min-width: 12rem">
             <template #body="{ data }">
-              <Button
-                type="button"
-                label="Accepter la demande"
-                @click="emit('set-activity-location', data.id)"
-                size="small"
-              />
+              <div class="flex gap-2">
+                <Button
+                  type="button"
+                  label="Accepter"
+                  @click="emit('set-activity-location', data.id)"
+                  size="small"
+                />
+                <Button
+                  type="button"
+                  label="Refuser"
+                  severity="danger"
+                  variant="outlined"
+                  @click="emit('refuse-activity-location', data.id)"
+                  size="small"
+                />
+              </div>
             </template>
           </Column>
         </DataTable>
@@ -45,7 +55,7 @@ const props = defineProps({
   selectedLocationId: { type: Number },
 })
 
-const emit = defineEmits(['set-activity-location'])
+const emit = defineEmits(['set-activity-location', 'refuse-activity-location'])
 
 const locationRequestedBy = computed(() => {
   return activityStore.activities.filter((a) => a.requestedLocationId == props.selectedLocationId)

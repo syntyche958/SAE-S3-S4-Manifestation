@@ -60,15 +60,15 @@
     :draggable="false"
   >
     <span
-      v-if="visitorNotifications.length === 0"
+      v-if="notifications.length === 0"
       class="text-surface-500 dark:text-surface-400 block mb-8"
     >
       Aucune nouvelle notification.
     </span>
 
     <DataTable
-      v-if="visitorNotifications.length !== 0"
-      :value="visitorNotifications"
+      v-if="notifications.length !== 0"
+      :value="notifications"
       tableStyle="min-width: 40rem"
     >
       <Column field="message" header="Message"></Column>
@@ -77,12 +77,8 @@
       </Column>
     </DataTable>
 
-    <div class="flex justify-end mt-4" v-if="visitorNotifications.length !== 0">
-      <Button
-        label="Marquer comme lu"
-        icon="pi pi-check"
-        @click="markVisitorNotificationsAsRead"
-      />
+    <div class="flex justify-end mt-4" v-if="notifications.length !== 0">
+      <Button label="Marquer comme lu" icon="pi pi-check" @click="markVisitorNotificationsAsRead" />
     </div>
   </Dialog>
 </template>
@@ -140,31 +136,35 @@ const profileName = computed(() => {
 const visible = ref(false)
 const dialogVisible = ref(false)
 const visitorDialogVisible = ref(false)
-const visitorNotifications = ref([])
+const notifications = ref([])
 
-const refreshVisitorNotifications = () => {
-  if (authStore.user?.type !== UserTypeEnum.VISITOR) {
-    visitorNotifications.value = []
+const refreshNotifications = () => {
+  if (
+    authStore.user?.type !== UserTypeEnum.VISITOR &&
+    authStore.user?.type !== UserTypeEnum.PROVIDER
+  ) {
+    notifications.value = []
     return
   }
 
-  visitorNotifications.value = getNotificationsForUser(authStore.user?.id)
+  notifications.value = getNotificationsForUser(authStore.user?.id)
 }
 
 const avatarBadgeCount = computed(() => {
-  if (authStore.user?.type === UserTypeEnum.PROVIDER) return contacts.value.length
-  if (authStore.user?.type === UserTypeEnum.VISITOR) return visitorNotifications.value.length
+  if (authStore.user?.type === UserTypeEnum.PROVIDER)
+    return contacts.value.length + notifications.value.length
+  if (authStore.user?.type === UserTypeEnum.VISITOR) return notifications.value.length
   return 0
 })
 
 const onAvatarClick = () => {
-  refreshVisitorNotifications()
+  refreshNotifications()
   visible.value = !visible.value
 }
 
 const markVisitorNotificationsAsRead = () => {
   clearNotificationsForUser(authStore.user?.id)
-  visitorNotifications.value = []
+  notifications.value = []
   visitorDialogVisible.value = false
 }
 
@@ -199,13 +199,16 @@ const items = computed(() => {
     })
   }
 
-  if (authStore.user?.type === UserTypeEnum.VISITOR) {
+  if (
+    authStore.user?.type === UserTypeEnum.VISITOR ||
+    authStore.user?.type === UserTypeEnum.PROVIDER
+  ) {
     res.push({
       label: 'Notifications',
       icon: 'pi pi-bell',
-      badge: visitorNotifications.value.length,
+      badge: notifications.value.length,
       command: () => {
-        refreshVisitorNotifications()
+        refreshNotifications()
         visitorDialogVisible.value = true
       },
     })

@@ -50,6 +50,18 @@ async function updateRequestedLocationIdLocalSource(activityId, requestedLocatio
   }
 }
 
+async function refuseRequestedLocationIdLocalSource(activityId) {
+  const activityStore = useActivityStore()
+
+  return {
+    error: 0,
+    status: 200,
+    data: activityStore.activities.map((a) =>
+      a.id === activityId ? { ...a, requestedLocationId: undefined } : a,
+    ),
+  }
+}
+
 async function addToLocalSource(providerId, name, desc) {
   const activityStore = useActivityStore()
   const lastId = activityStore.activities.map((a) => a.id).sort((a, b) => b - a)[0]
@@ -172,6 +184,7 @@ export default {
   getAllActivities,
   updateLocationIdLocalSource,
   updateRequestedLocationIdLocalSource,
+  refuseRequestedLocationIdLocalSource,
   addToLocalSource,
   addRatingLocalSource,
   addCommentLocalSource,

@@ -2,7 +2,9 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import activityService from '@/services/activity.service'
+import { useProviderStore } from '@/stores/providers'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
+import { enqueueNotificationsForUsers } from '@/utils/visitorNotifications.utils'
 
 export const useActivityStore = defineStore('activity', () => {
   // STATE
@@ -41,6 +43,36 @@ export const useActivityStore = defineStore('activity', () => {
       displaySuccessToast(`L'activité ${name} a été ajouté avec succès !`)
     } else {
       displayErrToast(`Echec de l'ajout de l'activité ${name} !`)
+      console.log(response.data)
+    }
+  }
+
+  async function refuseRequestedLocation(activityId, reason) {
+    const activity = activities.value.find((a) => a.id === activityId)
+    if (!activity) {
+      displayErrToast('Activité introuvable')
+      return
+    }
+
+    const response = await activityService.refuseRequestedLocationIdLocalSource(activityId)
+    if (response.error === 0) {
+      activities.value = response.data
+
+      const providerStore = useProviderStore()
+      const provider = providerStore.get(activity.providerId)
+      const providerUserId = provider?.userId
+
+      if (providerUserId != null) {
+        const suffix = reason ? ` Motif : ${reason}` : ''
+        enqueueNotificationsForUsers(
+          [providerUserId],
+          `Votre demande de placement pour l'activité "${activity.name}" a été refusée par un administrateur.${suffix}`,
+        )
+      }
+
+      displaySuccessToast('La demande de placement a été refusée')
+    } else {
+      displayErrToast("Echec du refus de la demande de placement")
       console.log(response.data)
     }
   }
@@ -104,6 +136,7 @@ export const useActivityStore = defineStore('activity', () => {
     add,
     updateLocationId,
     updateRequestedLocationId,
+    refuseRequestedLocation,
     addRating,
     addComment,
     addCommentReply,
