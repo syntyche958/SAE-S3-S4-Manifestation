@@ -1,83 +1,54 @@
 <template>
   <Card>
     <template #content>
-      <DataTable :value="sessions" tableStyle="min-width: 50rem">
+      <DataTable :value="sessions" dataKey="id" :rowClass="getSessionRowClass" tableStyle="min-width: 50rem">
         <Column field="reservedSlot" header="Créneau réservé">
           <template #body="slotProps">
-            <Select
-              :modelValue="getReservedSlotForSession(slotProps.data)"
-              :options="reservedSlotOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Sélectionner un créneau"
-              class="w-full"
-              :disabled="reservedSlotOptions.length === 0"
-              @update:modelValue="(value) => setSessionReservedSlot(slotProps.data, value)"
-            />
+            <div class="session-status-cell" :class="getSessionStatusClass(slotProps.data)">
+              <Select :modelValue="getReservedSlotForSession(slotProps.data)" :options="reservedSlotOptions"
+                optionLabel="label" optionValue="value" placeholder="Sélectionner un créneau" class="w-full"
+                :disabled="reservedSlotOptions.length === 0"
+                @update:modelValue="(value) => setSessionReservedSlot(slotProps.data, value)" />
+            </div>
           </template>
         </Column>
         <Column field="beginingHour" header="Heure début">
           <template #body="slotProps">
-            <Select
-              :modelValue="slotProps.data.beginingHour"
-              :options="getStartHourOptionsForSession(slotProps.data)"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Sélectionner une heure"
-              class="w-full"
+            <Select :modelValue="slotProps.data.beginingHour" :options="getStartHourOptionsForSession(slotProps.data)"
+              optionLabel="label" optionValue="value" placeholder="Sélectionner une heure" class="w-full"
               :disabled="getStartHourOptionsForSession(slotProps.data).length === 0"
-              @update:modelValue="(value) => setSessionBeginingHour(slotProps.data, value)"
-            />
+              @update:modelValue="(value) => setSessionBeginingHour(slotProps.data, value)" />
           </template>
         </Column>
         <Column field="duration" :header="$t('message.duration')">
           <template #body="slotProps">
-            <InputNumber
-              :modelValue="getSessionDuration(slotProps.data)"
-              :min="1"
-              :max="SLOT_DURATION_MINUTES"
-              fluid
-              @update:modelValue="(value) => setSessionDuration(slotProps.data, value)"
-            />
+            <InputNumber :modelValue="getSessionDuration(slotProps.data)" :min="1" :max="SLOT_DURATION_MINUTES" fluid
+              @update:modelValue="(value) => setSessionDuration(slotProps.data, value)" />
           </template>
         </Column>
         <Column field="nbPlace" :header="$t('message.places')">
           <template #body="slotProps">
-            <InputNumber v-model="slotProps.data.nbPlace" fluid />
+            <InputNumber :modelValue="slotProps.data.nbPlace" fluid
+              @update:modelValue="(value) => setSessionNbPlace(slotProps.data, value)" />
           </template>
         </Column>
         <Column :header="$t('message.actions')">
           <template #body="slotProps">
-            <Button
-              icon="pi pi-check"
-              severity="success"
-              rounded
-              outlined
-              class="mr-2"
-              :disabled="!isSessionModified(slotProps.data)"
-              @click="validateSession(slotProps.data)"
-            />
-            <Button
-              icon="pi pi-trash"
-              severity="danger"
-              rounded
-              outlined
-              @click="sessionStore.removeSession(slotProps.data.id)"
-            />
+            <Button icon="pi pi-check" severity="success" rounded outlined class="mr-2"
+              :disabled="!isSessionModifiedTracked(slotProps.data)" @click="validateSession(slotProps.data)" />
+            <Button icon="pi pi-trash" severity="danger" rounded outlined @click="removeSessionRow(slotProps.data)" />
           </template>
         </Column>
       </DataTable>
       <div class="mt-4 flex justify-end">
-        <Button
-          icon="pi pi-plus"
-          :label="$t('message.addSession')"
-          severity="secondary"
-          :disabled="reservedSlotOptions.length === 0"
-          @click="addNewSession"
-        />
+        <Button icon="pi pi-plus" :label="$t('message.addSession')" severity="secondary" :disabled="!canAddSession"
+          @click="addNewSession" />
       </div>
       <small v-if="reservedSlotOptions.length === 0" class="block mt-3 text-orange-400">
         Aucun créneau réservé pour cette activité. Réservez d'abord un emplacement horaire.
+      </small>
+      <small v-else-if="!canAddSession" class="block mt-3 text-orange-400">
+        Tous les créneaux réservés sont complets pour cette activité.
       </small>
     </template>
   </Card>
@@ -102,6 +73,7 @@ import {
   getReservedSlotFromSession,
   getSlotStartHour,
   isSessionStateModified,
+  isSessionTimeValidInSlot,
   normalizeSessionDuration,
   pickPreferredStartHour,
   splitDateHour,
@@ -112,6 +84,7 @@ const route = useRoute()
 const sessionStore = useSessionStore()
 const activityStore = useActivityStore()
 const savedSessionStates = ref({})
+const sessionStateVersion = ref(0)
 
 const activityId = computed(() => Number.parseInt(route.params.activity_id))
 const currentActivity = computed(() => activityStore.get(activityId.value))
@@ -135,30 +108,68 @@ const reservedSlotOptions = computed(() => {
   return buildReservedSlotOptions(reservedDateHours.value, formatEventDayFr)
 })
 
+const canAddSession = computed(() => {
+  const duration = defaultSessionDuration.value
+  return reservedDateHours.value.some((slot) => {
+    const startHour = getSlotStartHour(slot)
+    return Boolean(pickPreferredStartHour(slot, startHour, duration, sessions.value, undefined))
+  })
+})
+
+function findFirstAvailableSlot(duration) {
+  for (const slot of reservedDateHours.value) {
+    const startHour = getSlotStartHour(slot)
+    const beginingHour = pickPreferredStartHour(slot, startHour, duration, sessions.value, undefined)
+    if (beginingHour) {
+      return { slot, beginingHour }
+    }
+  }
+
+  return null
+}
+
+function isDraftSession(session) {
+  return Number(session?.id) < 0
+}
+
+function getNextDraftSessionId() {
+  const numericIds = sessions.value
+    .map((session) => Number(session.id))
+    .filter((id) => Number.isFinite(id))
+
+  const minId = Math.min(0, ...numericIds)
+  return minId - 1
+}
+
 async function addNewSession() {
   if (reservedDateHours.value.length === 0) {
     displayErrToast(t('message.noReservedSlotError'))
     return
   }
 
-  const firstSlot = reservedDateHours.value[0]
-  const split = splitDateHour(firstSlot)
-  if (!split) return
-
   const duration = defaultSessionDuration.value
-  const beginingHour = pickPreferredStartHour(
-    firstSlot,
-    getSlotStartHour(firstSlot),
-    duration,
-    sessions.value,
-    undefined,
-  )
-  if (!beginingHour) {
+  const availableSlot = findFirstAvailableSlot(duration)
+  if (!availableSlot) {
     displayErrToast(t('message.invalidDurationForSlot'))
     return
   }
 
-  await sessionStore.addSession(activityId.value, split.date, beginingHour, duration, 0)
+  const split = splitDateHour(availableSlot.slot)
+  if (!split) return
+
+  if (!sessionStore.sessions) {
+    sessionStore.sessions = []
+  }
+
+  sessionStore.sessions.push({
+    id: getNextDraftSessionId(),
+    activityId: activityId.value,
+    beginingDate: split.date,
+    beginingHour: availableSlot.beginingHour,
+    duration,
+    nbPlace: 0,
+    registersUsers: [],
+  })
 }
 
 function getReservedSlotForSession(session) {
@@ -172,14 +183,17 @@ function getSessionDuration(session) {
 function markSessionAsSaved(session) {
   savedSessionStates.value[session.id] = buildSessionStateSnapshot(
     session,
-    defaultSessionDuration.value,
+    SLOT_DURATION_MINUTES,
   )
+  sessionStateVersion.value += 1
 }
 
 function syncSavedSessionsWithCurrentList() {
   const currentIds = new Set(sessions.value.map((session) => session.id))
 
   for (const session of sessions.value) {
+    if (isDraftSession(session)) continue
+
     if (!savedSessionStates.value[session.id]) {
       markSessionAsSaved(session)
     }
@@ -196,12 +210,40 @@ function isSessionModified(session) {
   return isSessionStateModified(
     session,
     savedSessionStates.value[session.id],
-    defaultSessionDuration.value,
+    SLOT_DURATION_MINUTES,
   )
 }
 
+function isSessionModifiedTracked(session) {
+  const stateVersion = sessionStateVersion.value
+  return stateVersion >= 0 && isSessionModified(session)
+}
+
+function getSessionStatusClass(session) {
+  return isSessionModifiedTracked(session) ? 'session-status-cell--dirty' : 'session-status-cell--saved'
+}
+
+function getSessionRowClass(session) {
+  return isSessionModified(session) ? 'session-row--dirty' : 'session-row--saved'
+}
+
 function getStartHourOptionsForSession(session) {
-  return getStartHourOptionsForSessionUtil(session, sessions.value, defaultSessionDuration.value)
+  const options = getStartHourOptionsForSessionUtil(session, sessions.value, defaultSessionDuration.value)
+  const currentHour = String(session?.beginingHour || '')
+  if (!currentHour) return options
+
+  if (options.some((option) => option.value === currentHour)) {
+    return options
+  }
+
+  const slot = getReservedSlotForSession(session)
+  const duration = getSessionDuration(session)
+  const isCurrentHourValid = isSessionTimeValidInSlot(slot, currentHour, duration)
+  if (!isCurrentHourValid) return options
+
+  return [...options, { label: currentHour, value: currentHour }].sort((a, b) =>
+    a.value.localeCompare(b.value),
+  )
 }
 
 function setSessionReservedSlot(session, dateHour) {
@@ -224,6 +266,7 @@ function setSessionReservedSlot(session, dateHour) {
   session.beginingDate = slot.date
   session.beginingHour = beginingHour
   session.duration = duration
+  sessionStateVersion.value += 1
 }
 
 function setSessionBeginingHour(session, beginingHour) {
@@ -238,6 +281,7 @@ function setSessionBeginingHour(session, beginingHour) {
   if (!validHour) return
 
   session.beginingHour = validHour
+  sessionStateVersion.value += 1
 }
 
 function setSessionDuration(session, duration) {
@@ -253,16 +297,31 @@ function setSessionDuration(session, duration) {
 
   if (!validHour) {
     displayErrToast(t('message.sessionImpossibleDuration'))
-    session.duration = SLOT_DURATION_MINUTES
-    session.beginingHour = getSlotStartHour(slot)
     return
   }
 
   session.duration = normalizedDuration
   session.beginingHour = validHour
+  sessionStateVersion.value += 1
+}
+
+function setSessionNbPlace(session, value) {
+  session.nbPlace = Number(value) || 0
+  sessionStateVersion.value += 1
+}
+
+async function removeSessionRow(session) {
+  if (isDraftSession(session)) {
+    if (!sessionStore.sessions) return
+    sessionStore.sessions = sessionStore.sessions.filter((item) => item.id !== session.id)
+    return
+  }
+
+  await sessionStore.removeSession(session.id)
 }
 
 async function validateSession(session) {
+  const isDraft = isDraftSession(session)
   const slot = getReservedSlotForSession(session)
   const beginingHour = pickPreferredStartHour(
     slot,
@@ -280,14 +339,54 @@ async function validateSession(session) {
   session.beginingHour = beginingHour
   session.duration = getSessionDuration(session)
 
-  await sessionStore.updateSession(session.id, {
-    beginingDate: session.beginingDate,
-    beginingHour: session.beginingHour,
-    duration: session.duration,
-    nbPlace: Number(session.nbPlace) || 0,
-  })
+  let response
 
-  markSessionAsSaved(session)
+  if (isDraft) {
+    response = await sessionStore.addSession(
+      Number(session.activityId) || activityId.value,
+      session.beginingDate,
+      session.beginingHour,
+      session.duration,
+      Number(session.nbPlace) || 0,
+    )
+  } else {
+    response = await sessionStore.updateSession(session.id, {
+      activityId: Number(session.activityId) || activityId.value,
+      beginingDate: session.beginingDate,
+      beginingHour: session.beginingHour,
+      duration: session.duration,
+      nbPlace: Number(session.nbPlace) || 0,
+    })
+  }
+
+  if (!response || response.error !== 0) {
+    displayErrToast(t('message.sessionValidationFailed'))
+    return
+  }
+
+  if (isDraft) {
+    const createdSession = response.data
+    if (Array.isArray(sessionStore.sessions)) {
+      const draftIndex = sessionStore.sessions.findIndex((item) => item.id === session.id)
+      const createdIndex = sessionStore.sessions.findIndex((item) => item.id === createdSession.id)
+
+      if (createdIndex !== -1) {
+        sessionStore.sessions.splice(createdIndex, 1)
+      }
+
+      if (draftIndex !== -1) {
+        sessionStore.sessions.splice(draftIndex, 1, createdSession)
+      }
+    }
+
+    if (savedSessionStates.value[session.id]) {
+      delete savedSessionStates.value[session.id]
+    }
+
+    markSessionAsSaved(createdSession)
+  } else {
+    markSessionAsSaved(response.data || session)
+  }
 
   displaySuccessToast(t('message.sessionValidated'))
 }
@@ -327,3 +426,26 @@ watch(
   },
 )
 </script>
+
+<style scoped>
+:deep(.p-datatable .p-datatable-tbody > tr.session-row--saved > td) {
+  background-color: inherit;
+}
+
+:deep(.p-datatable .p-datatable-tbody > tr.session-row--dirty > td) {
+  background-color: inherit;
+}
+
+.session-status-cell {
+  box-shadow: inset 5px 0 0 transparent;
+  padding-left: 0.35rem;
+}
+
+.session-status-cell--saved {
+  box-shadow: inset 5px 0 0 #22c55e;
+}
+
+.session-status-cell--dirty {
+  box-shadow: inset 5px 0 0 #f59e0b;
+}
+</style>
