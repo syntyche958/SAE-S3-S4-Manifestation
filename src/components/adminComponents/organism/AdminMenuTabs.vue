@@ -16,10 +16,6 @@
               ><i class="pi pi-users mr-2"></i
               ><span>{{ $t('message.manageProviderRequests') }}</span></Tab
             >
-            <Tab value="3"
-              ><i class="pi pi-home mr-2"></i
-              ><span>{{ $t('message.providerDashboard') }}</span></Tab
-            >
             <Tab value="4"
               ><i class="pi pi-chart-bar mr-2"></i><span>{{ $t('message.statistics') }}</span></Tab
             >
@@ -54,10 +50,6 @@
 
             <TabPanel value="2">
               <ManageNewProviders />
-            </TabPanel>
-
-            <TabPanel value="3">
-              <h1>{{ $t('message.providerDashboard') }}</h1>
             </TabPanel>
 
             <TabPanel value="4">
