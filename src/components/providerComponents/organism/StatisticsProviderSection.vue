@@ -2,6 +2,7 @@
 import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import ProviderStatisticsService from '@/services/providerStatistics.service'
 import { Chart, registerables } from 'chart.js'
 import Card from 'primevue/card'
