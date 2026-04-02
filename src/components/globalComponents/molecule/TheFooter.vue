@@ -1,5 +1,4 @@
 <template>
-  <!-- <Divider type="solid" /> -->
   <div class="w-full bg-transparent flex justify-center gap-2 h-[6vh] items-center">
     <template v-if="authStore.user?.type === UserTypeEnum.VISITOR">
       <ContactForm />
@@ -8,7 +7,7 @@
     </template>
     <Button
       v-if="authStore.user?.type === UserTypeEnum.ADMIN"
-      :label="$t('Reception des avis')"
+      :label="$t('message.receiveFeedback')"
       icon="pi pi-comments"
       @click="openMessagingDialog"
       severity="secondary"
@@ -20,7 +19,7 @@
   <!--Dialog de messagerie pour l'admin-->
   <Dialog
     v-model:visible="messagingDialogVisible"
-    :header="$t('Formulaire de satisfaction')"
+    :header="$t('message.satisfactionForm')"
     :style="{ width: '90vw', maxWidth: '1200px', height: '85vh' }"
     :modal="true"
     :draggable="false"

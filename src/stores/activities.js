@@ -90,19 +90,72 @@ export const useActivityStore = defineStore('activity', () => {
     const activity = get(activityId)
     if (!activity) return
 
-    const availableDateHours = getAvailableDateHoursForLocation(activityId, locationId, dateHours)
-    if (availableDateHours.length === 0) return
+    const uniqueDateHours = [...new Set((dateHours || []).map(String))]
+    if (uniqueDateHours.length === 0) return
 
-    const response = await activityService.addSpotsBulk(activity, locationId, availableDateHours)
-    if (response.error === 0) {
-      await getAllActivities()
-      const n = new Set(availableDateHours.map(String)).size
-      displaySuccessToast(
-        n > 1 ? `${n} créneaux attribués avec succès !` : 'Emplacement attribué avec succès !',
+    const slotKeys = new Set(uniqueDateHours.map((dateHour) => `${locationId}-${dateHour}`))
+
+    // Build a full consistent state for all impacted activities, then persist activity by activity.
+    const nextActivities = (activities.value || []).map((a) => {
+      const cleanedSpots = (a.spotIds || []).filter(
+        (spot) => !slotKeys.has(`${spot.locationId}-${spot.dateHour}`),
       )
-    } else {
-      displayErrToast("Échec de l'attribution des emplacements !")
+      const cleanedRequests = (a.requestedSpotIds || []).filter(
+        (spot) => !slotKeys.has(`${spot.locationId}-${spot.dateHour}`),
+      )
+
+      if (a.id !== activityId) {
+        return {
+          activity: a,
+          overrides: {
+            spotIds: cleanedSpots,
+            requestedSpotIds: cleanedRequests,
+            requestedLocationId:
+              cleanedRequests.length === 0 && a.requestedLocationId === locationId
+                ? undefined
+                : a.requestedLocationId,
+          },
+        }
+      }
+
+      const mergedSpots = [...cleanedSpots]
+      for (const dateHour of uniqueDateHours) {
+        mergedSpots.push({ locationId, dateHour })
+      }
+
+      return {
+        activity: a,
+        overrides: {
+          locationId,
+          spotIds: mergedSpots,
+          requestedSpotIds: cleanedRequests,
+          requestedLocationId:
+            cleanedRequests.length === 0 && a.requestedLocationId === locationId
+              ? undefined
+              : a.requestedLocationId,
+        },
+      }
+    })
+
+    let hasError = false
+    for (const item of nextActivities) {
+      const response = await activityService.updateActivity(item.activity, item.overrides)
+      if (response.error !== 0) {
+        hasError = true
+        break
+      }
     }
+
+    if (hasError) {
+      displayErrToast("Échec de l'attribution des emplacements !")
+      return
+    }
+
+    await getAllActivities()
+    const n = uniqueDateHours.length
+    displaySuccessToast(
+      n > 1 ? `${n} créneaux attribués avec succès !` : 'Emplacement attribué avec succès !',
+    )
   }
 
   async function add(providerId, name, desc) {

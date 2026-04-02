@@ -72,7 +72,7 @@ const props = defineProps({
   selectedDateHours: { type: Array, required: true },
   sectionTitleKey: { type: String, default: 'message.availabilityHoursTitle' },
   hintKey: { type: String, default: 'message.capsuleSelectHint' },
-  selectableStatuses: { type: Array, default: null },
+  selectableStatuses: { type: [Array, Set], default: null },
   legendMode: {
     type: String,
     default: 'provider',
@@ -84,6 +84,9 @@ const emit = defineEmits(['toggle-slot'])
 
 function isSlotSelectable(slot) {
   if (props.selectableStatuses != null) {
+    if (props.selectableStatuses instanceof Set) {
+      return props.selectableStatuses.has(slot.status)
+    }
     return props.selectableStatuses.includes(slot.status)
   }
   return slot.status === ActivitySpotStatusEnum.PROVIDER_FREE

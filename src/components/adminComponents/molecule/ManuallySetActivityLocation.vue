@@ -81,11 +81,11 @@ const props = defineProps({
   selectedLocation: { type: Object, required: true },
 })
 
-const adminSelectableStatuses = [
+const adminSelectableStatuses = new Set([
   ActivitySpotStatusEnum.ADMIN_FREE,
   ActivitySpotStatusEnum.ADMIN_PENDING,
   ActivitySpotStatusEnum.ADMIN_RESERVED,
-]
+])
 
 const selectedDateHours = ref([])
 const selectedActivityId = ref(null)
@@ -112,7 +112,7 @@ const allAdminSlots = computed(() =>
 watch(allAdminSlots, () => {
   selectedDateHours.value = selectedDateHours.value.filter((dh) => {
     const s = allAdminSlots.value.find((x) => x.dateHour === dh)
-    return s && adminSelectableStatuses.includes(s.status)
+    return s && adminSelectableStatuses.has(s.status)
   })
 })
 
@@ -173,7 +173,7 @@ const isReassigning = computed(() => {
 })
 
 const buttonLabel = computed(() => {
-  if (isValidatingRequest.value) return t('message.validateRequest')
+  if (isValidatingRequest.value) return t('message.validate')
   if (isReassigning.value) return t('message.reassignSpot')
   return t('message.validate')
 })
