@@ -1,13 +1,13 @@
 <template>
   <!-- Loading state -->
-  <div v-if="providerStore.isLoadingProviders || !currentProvider" class="flex justify-center items-center min-h-screen">
+  <div v-if="providerStore.isLoadingProviders || !currentProvider"
+    class="flex justify-center items-center min-h-screen">
     <ProgressSpinner />
   </div>
 
   <!-- Visitor -->
   <div v-else-if="isProviderAdminPanelToHide()" class="flex justify-center">
-    <Card class="main-section-container"
-      ><template #content>
+    <Card class="main-section-container"><template #content>
         <h1 class="text-center texturina-title">
           {{ currentProvider.name }}
         </h1>
@@ -19,8 +19,8 @@
   <!-- Provider / Admin -->
   <div v-else class="flex justify-center">
     <Card class="main-section-container">
-      <template #content
-        ><h1 class="text-center texturina-title">
+      <template #content>
+        <h1 class="text-center texturina-title">
           {{ currentProvider.name }}
         </h1>
         <Tabs value="0" class="provider-tabs">
@@ -61,6 +61,7 @@ import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import PresentationProviderSection from '@/components/providerComponents/organism/PresentationProviderSection.vue'
+import ServicesProviderSection from '@/components/providerComponents/organism/ServicesProviderSection.vue'
 import StatisticsProviderSection from '@/components/providerComponents/organism/StatisticsProviderSection.vue'
 import { isProviderAdminPanelToHide } from '@/utils/user.utils'
 import { useProviderStore } from '@/stores/providers'

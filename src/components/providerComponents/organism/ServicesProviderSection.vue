@@ -26,7 +26,7 @@ const visibilityOptions = computed(() => [
 ])
 
 const activities = computed(() =>
-  activityStore.activities.filter((a) => a.providerId === providerId.value),
+  activityStore.activities.filter((a) => Number(a.providerId) === providerId.value),
 )
 
 async function onToggle(activity, field, value) {
@@ -84,63 +84,43 @@ async function onSessionRegistrationToggle(activity, value) {
 
         <Column :header="$t('message.active')">
           <template #body="slotProps">
-            <Checkbox
-              :modelValue="slotProps.data.serviceEnabled"
-              :binary="true"
-              @update:modelValue="(v) => onToggle(slotProps.data, 'serviceEnabled', v)"
-            />
+            <Checkbox :modelValue="slotProps.data.serviceEnabled" :binary="true"
+              @update:modelValue="(v) => onToggle(slotProps.data, 'serviceEnabled', v)" />
           </template>
         </Column>
 
         <Column :header="$t('message.visibility')">
           <template #body="slotProps">
-            <Select
-              :modelValue="slotProps.data.visibility"
-              :options="visibilityOptions"
-              optionLabel="label"
-              optionValue="value"
-              class="w-full"
-              @update:modelValue="(v) => onVisibilityChange(slotProps.data, v)"
-            />
+            <Select :modelValue="slotProps.data.visibility" :options="visibilityOptions" optionLabel="label"
+              optionValue="value" class="w-full" @update:modelValue="(v) => onVisibilityChange(slotProps.data, v)" />
           </template>
         </Column>
 
         <Column :header="$t('message.commentsLabel')">
           <template #body="slotProps">
-            <Checkbox
-              :modelValue="slotProps.data.commentsEnabled"
-              :binary="true"
-              @update:modelValue="(v) => onToggle(slotProps.data, 'commentsEnabled', v)"
-            />
+            <Checkbox :modelValue="slotProps.data.commentsEnabled" :binary="true"
+              @update:modelValue="(v) => onToggle(slotProps.data, 'commentsEnabled', v)" />
           </template>
         </Column>
 
         <Column :header="$t('message.sessionRegistration')">
           <template #body="slotProps">
-            <Checkbox
-              :modelValue="slotProps.data.sessionsEnabled && slotProps.data.canRegister"
-              :binary="true"
-              @update:modelValue="(v) => onSessionRegistrationToggle(slotProps.data, v)"
-            />
+            <Checkbox :modelValue="slotProps.data.sessionsEnabled && slotProps.data.canRegister" :binary="true"
+              @update:modelValue="(v) => onSessionRegistrationToggle(slotProps.data, v)" />
           </template>
         </Column>
 
         <Column :header="$t('message.statsCount')">
           <template #body="slotProps">
-            <Checkbox
-              :modelValue="slotProps.data.registrationCountEnabled"
-              :binary="true"
-              @update:modelValue="(v) => onToggle(slotProps.data, 'registrationCountEnabled', v)"
-            />
+            <Checkbox :modelValue="slotProps.data.registrationCountEnabled" :binary="true"
+              @update:modelValue="(v) => onToggle(slotProps.data, 'registrationCountEnabled', v)" />
           </template>
         </Column>
 
         <Column :header="$t('message.state')">
           <template #body="slotProps">
-            <Tag
-              :severity="slotProps.data.serviceEnabled ? 'success' : 'danger'"
-              :value="slotProps.data.serviceEnabled ? $t('message.active') : $t('message.inactive')"
-            />
+            <Tag :severity="slotProps.data.serviceEnabled ? 'success' : 'danger'"
+              :value="slotProps.data.serviceEnabled ? $t('message.active') : $t('message.inactive')" />
           </template>
         </Column>
       </DataTable>

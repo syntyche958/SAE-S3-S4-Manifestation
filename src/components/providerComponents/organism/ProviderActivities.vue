@@ -6,11 +6,8 @@
     </div>
     <div class="flex justify-center flex-wrap">
       <div v-for="(item, index) in activities" :key="index">
-        <Card
-          class="activity-card dark-presentation-card relative"
-          style="width: 400px; overflow: hidden; cursor: pointer"
-          @click="goToActivity(item.id)"
-        >
+        <Card class="activity-card dark-presentation-card relative"
+          style="width: 400px; overflow: hidden; cursor: pointer" @click="goToActivity(item.id)">
           <template #title>{{ item.name }}</template>
           <template #subtitle>
             <div class="flex align-items-center gap-2 mt-2" v-if="item.ratings">
@@ -44,14 +41,14 @@ const route = useRoute()
 const activityStore = useActivityStore()
 const authstore = useAuthStore()
 
-const isPublicUser = computed(() =>{
+const isPublicUser = computed(() => {
   const t = authstore.user?.type
   return t === UserTypeEnum.VISITOR || t === UserTypeEnum.NOTCONNECTED
 })
 
 const activities = computed(() => {
   const providerId = Number.parseInt(route.params.provider_id)
-  const list = activityStore.activities.filter((a) => a.providerId === providerId)
+  const list = activityStore.activities.filter((a) => Number(a.providerId) === providerId)
   if (!isPublicUser.value) return list
 
   return list.filter(
