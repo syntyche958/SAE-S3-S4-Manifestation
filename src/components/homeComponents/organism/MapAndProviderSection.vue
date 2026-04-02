@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col sm:flex-row sm:gap-4">
+  <div class="flex flex-col sm:flex-row sm:gap-4" id="map">
     <TheMap
       id="visitor-map"
       :display-mode="MapModeEnum.VISITOR"

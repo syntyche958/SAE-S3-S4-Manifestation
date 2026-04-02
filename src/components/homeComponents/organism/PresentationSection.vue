@@ -5,14 +5,14 @@
       >{{ $t('message.carcassonneAutrefois') }}</span
     >
     <div id="small-presentation" v-html="presentationStore.small" />
-    <div id="button-container">
+    <div id="button-container" class="pointer-events-auto">
       <a
         v-if="props.isPreview"
         class="p-button p-component !border-none !outline-none !shadow-none"
       >
         {{ $t('message.seeMap') }}
       </a>
-      <a v-else href="#map" class="p-button p-component !border-none !outline-none !shadow-none">
+      <a v-else href="#visitor-map" class="p-button p-component !border-none !outline-none !shadow-none">
         {{ $t('message.seeMap') }}
       </a>
     </div>
