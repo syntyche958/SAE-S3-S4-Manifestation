@@ -1,8 +1,5 @@
 <template>
-  <Card
-    v-if="props.withCard"
-    :class="(props?.class ? props.class : '') + ' rounded-2xl overflow-hidden shadow-xl'"
-  >
+  <Card v-if="props.withCard" :class="(props?.class ? props.class : '') + ' rounded-2xl overflow-hidden shadow-xl'">
     <template #content>
       <div :id="props.id" :class="'rounded-2xl overflow-hidden max-w-full ' + classSize"></div>
     </template>
@@ -13,7 +10,7 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, watch } from 'vue'
 import Card from 'primevue/card'
 import { displayLocations, refreshLocations, setupMap } from '@/utils/map.utils'
 import { useActivityStore } from '@/stores/activities'
@@ -23,6 +20,7 @@ import { useI18n } from 'vue-i18n'
 const activityStore = useActivityStore()
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 
 const props = defineProps({
   id: { type: String, default: 'map' },
@@ -36,43 +34,23 @@ const props = defineProps({
 
 const emit = defineEmits(['changeSelectedLocation'])
 
-onMounted(() => {
-  const route = useRoute()
-  watch(
-    () => activityStore.activities,
-    () => {
-      refreshLocations(
-        map,
-        emit,
-        props.displayMode,
-        route,
-        props.selectedLocationId,
-        props.visitorDateHour,
-        t,
-        router,
-      )
-    },
-  )
+let mapInstance = null
+let resizeObserver = null
+let stopActivitiesWatch = null
+let stopVisitorDateWatch = null
 
-  watch(
-    () => props.visitorDateHour,
-    () => {
-      refreshLocations(
-        map,
-        emit,
-        props.displayMode,
-        route,
-        props.selectedLocationId,
-        props.visitorDateHour,
-        t,
-        router,
-      )
-    },
-  )
+onMounted(async () => {
+  await nextTick()
 
-  const map = setupMap(props.id)
+  const container = document.getElementById(props.id)
+  if (!container) {
+    console.warn(`Map container not found for id "${props.id}".`)
+    return
+  }
+
+  mapInstance = setupMap(props.id)
   displayLocations(
-    map,
+    mapInstance,
     props.displayMode,
     emit,
     route,
@@ -82,9 +60,58 @@ onMounted(() => {
     router,
   )
 
-  const observer = new ResizeObserver(() => {
-    map.invalidateSize()
+  stopActivitiesWatch = watch(
+    () => activityStore.activities,
+    () => {
+      if (!mapInstance) return
+      refreshLocations(
+        mapInstance,
+        emit,
+        props.displayMode,
+        route,
+        props.selectedLocationId,
+        props.visitorDateHour,
+        t,
+        router,
+      )
+    },
+  )
+
+  stopVisitorDateWatch = watch(
+    () => props.visitorDateHour,
+    () => {
+      if (!mapInstance) return
+      refreshLocations(
+        mapInstance,
+        emit,
+        props.displayMode,
+        route,
+        props.selectedLocationId,
+        props.visitorDateHour,
+        t,
+        router,
+      )
+    },
+  )
+
+  resizeObserver = new ResizeObserver(() => {
+    if (mapInstance) mapInstance.invalidateSize()
   })
-  observer.observe(document.getElementById(props.id))
+  resizeObserver.observe(container)
+})
+
+onBeforeUnmount(() => {
+  if (stopActivitiesWatch) stopActivitiesWatch()
+  if (stopVisitorDateWatch) stopVisitorDateWatch()
+
+  if (resizeObserver) {
+    resizeObserver.disconnect()
+    resizeObserver = null
+  }
+
+  if (mapInstance) {
+    mapInstance.remove()
+    mapInstance = null
+  }
 })
 </script>

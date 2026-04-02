@@ -86,6 +86,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useSessionStore } from '@/stores/sessions.js'
 import { useActivityStore } from '@/stores/activities'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -300,10 +301,10 @@ function normalizeSessionsWithActivityReservations() {
   for (const session of sessions.value) {
     const currentSlot = getReservedSlotForSession(session)
     const isReservedSlot = reservedDateHours.value.includes(currentSlot)
-    if (!isReservedSlot) {
-      setSessionReservedSlot(session, firstReservedDateHour)
-    } else {
+    if (isReservedSlot) {
       setSessionReservedSlot(session, currentSlot)
+    } else {
+      setSessionReservedSlot(session, firstReservedDateHour)
     }
   }
 }
