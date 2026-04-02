@@ -300,9 +300,11 @@ const messages = {
       imageDeleted: 'Image deleted',
       providerNotFound: 'Provider not found',
       confirmDisableSession:
-        'This service has {count} registrant(s). Do you really want to disable session/registration?',
+        'This service has {count} registrant(s). Disabling session/registration will delete existing registrations. Continue?',
       sessionDisabledWarning:
-        'Session/registration disabled. Remember to notify the {count} registered user(s).',
+        '{count} registration(s) deleted and session/registration disabled.',
+      registrationDeleteFailed:
+        'Unable to delete all existing registrations. Session/registration has not been disabled.',
       emailPlaceholder: 'your@email.com',
     },
   },
@@ -611,9 +613,11 @@ const messages = {
       imageDeleted: 'Image supprimée',
       providerNotFound: 'Prestataire non trouvé',
       confirmDisableSession:
-        'Ce service a {count} inscrit(s). Voulez-vous vraiment désactiver session/inscription ?',
+        'Ce service a {count} inscrit(s). Désactiver session/inscription supprimera les inscriptions déjà enregistrées. Continuer ?',
       sessionDisabledWarning:
-        'Session/inscription désactivée. Pensez à prévenir les {count} utilisateur(s) inscrit(s).',
+        '{count} inscription(s) supprimée(s) et session/inscription désactivée.',
+      registrationDeleteFailed:
+        "Impossible de supprimer toutes les inscriptions existantes. La session/inscription n'a pas été désactivée.",
       emailPlaceholder: 'votre@email.fr',
     },
   },

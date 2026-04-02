@@ -3,7 +3,8 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useActivityStore } from '@/stores/activities'
 import registrationService from '@/services/registration.service'
-import { displaySuccessToast } from '@/utils/toast.utils'
+import sessionsService from '@/services/sessions.service'
+import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 import { useI18n } from 'vue-i18n'
 import { enqueueNotificationsForUsers } from '@/utils/visitorNotifications.utils'
 
@@ -12,7 +13,6 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Checkbox from 'primevue/checkbox'
 import Select from 'primevue/select'
-import Tag from 'primevue/tag'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -37,17 +37,57 @@ async function onVisibilityChange(activity, value) {
   await activityStore.updateServiceFlags(activity.id, { visibility: value })
 }
 
+async function getRegistrationsByActivity(activityId) {
+  const sessionsResponse = await sessionsService.getSessionsByActivityId(activityId)
+  if (sessionsResponse.error !== 0) {
+    return []
+  }
+
+  const sessions = Array.isArray(sessionsResponse.data) ? sessionsResponse.data : []
+  const registrationsBySession = await Promise.all(
+    sessions.map(async (session) => {
+      const response = await registrationService.getRegistrationsBySession(session.id)
+      if (response.error !== 0) return []
+      return (response.data || []).map((registration) => ({
+        sessionId: session.id,
+        userId: registration.user_id ?? registration.userId,
+      }))
+    }),
+  )
+
+  return registrationsBySession
+    .flat()
+    .filter((registration) => registration.userId !== undefined && registration.userId !== null)
+}
+
+async function deleteRegistrations(registrations) {
+  const deletions = await Promise.allSettled(
+    registrations.map((registration) =>
+      registrationService.deleteRegistration(registration.sessionId, registration.userId),
+    ),
+  )
+
+  return deletions.every(
+    (result) => result.status === 'fulfilled' && result.value?.error === 0,
+  )
+}
+
 async function onSessionRegistrationToggle(activity, value) {
-  const registrationsResponse = await registrationService.getRegistrationsByActivity(activity.id)
-  const registrations = registrationsResponse.error === 0 ? registrationsResponse.data : []
+  const registrations = await getRegistrationsByActivity(activity.id)
   const registrationCount = registrations.length
 
   if (!value && registrationCount > 0) {
-    const confirmed = window.confirm(
-      t('message.confirmDisableSession'),
+    const confirmed = globalThis.confirm(
+      t('message.confirmDisableSession', { count: registrationCount }),
     )
 
     if (!confirmed) {
+      return
+    }
+
+    const deletionOk = await deleteRegistrations(registrations)
+    if (!deletionOk) {
+      displayErrToast(t('message.registrationDeleteFailed'))
       return
     }
   }
@@ -58,9 +98,7 @@ async function onSessionRegistrationToggle(activity, value) {
   })
 
   if (!value && registrationCount > 0) {
-    const registeredUserIds = registrations
-      .map((r) => r.user_id ?? r.userId)
-      .filter((id) => id !== undefined && id !== null)
+    const registeredUserIds = registrations.map((r) => r.userId)
 
     enqueueNotificationsForUsers(
       registeredUserIds,
@@ -68,7 +106,7 @@ async function onSessionRegistrationToggle(activity, value) {
     )
 
     displaySuccessToast(
-      t('message.sessionDisabledWarning'),
+      t('message.sessionDisabledWarning', { count: registrationCount }),
     )
   }
 }
@@ -81,13 +119,6 @@ async function onSessionRegistrationToggle(activity, value) {
     <template #content>
       <DataTable :value="activities" tableStyle="min-width: 72rem">
         <Column field="name" :header="$t('message.service')" />
-
-        <Column :header="$t('message.active')">
-          <template #body="slotProps">
-            <Checkbox :modelValue="slotProps.data.serviceEnabled" :binary="true"
-              @update:modelValue="(v) => onToggle(slotProps.data, 'serviceEnabled', v)" />
-          </template>
-        </Column>
 
         <Column :header="$t('message.visibility')">
           <template #body="slotProps">
@@ -116,13 +147,6 @@ async function onSessionRegistrationToggle(activity, value) {
               @update:modelValue="(v) => onToggle(slotProps.data, 'registrationCountEnabled', v)" />
           </template>
         </Column>
-
-        <Column :header="$t('message.state')">
-          <template #body="slotProps">
-            <Tag :severity="slotProps.data.serviceEnabled ? 'success' : 'danger'"
-              :value="slotProps.data.serviceEnabled ? $t('message.active') : $t('message.inactive')" />
-          </template>
-        </Column>
       </DataTable>
     </template>
   </Card>
@@ -131,20 +155,5 @@ async function onSessionRegistrationToggle(activity, value) {
 <style scoped>
 :deep(.p-datatable .p-datatable-thead > tr > th) {
   white-space: nowrap;
-}
-
-:deep(.p-tag) {
-  padding: 0.5rem 0.75rem;
-  font-weight: 500;
-}
-
-:deep(.p-tag-success) {
-  background-color: #10b981;
-  color: white;
-}
-
-:deep(.p-tag-danger) {
-  background-color: #ef4444;
-  color: white;
 }
 </style>

@@ -51,9 +51,7 @@ const activities = computed(() => {
   const list = activityStore.activities.filter((a) => Number(a.providerId) === providerId)
   if (!isPublicUser.value) return list
 
-  return list.filter(
-    (a) => (a.serviceEnabled ?? true) && (a.visibility ?? 'public') === 'public',
-  )
+  return list.filter((a) => (a.visibility ?? 'public') === 'public')
 })
 
 function getAverageRating(item) {
