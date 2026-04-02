@@ -289,7 +289,7 @@ const messages = {
       comingSoon: 'Coming soon: Services page for providers',
       waitingRequests: 'Pending requests:',
       acceptRequest: 'Accept request',
-      carcassonneAutrefois: 'Carcassonne in the past',
+      carcassonneAutrefois: 'Carcassonne autrefois',
       tellUsEverything: 'Tell us everything...',
       activityFallback: 'Activity {id}',
       undefinedDate: 'Undefined date',
