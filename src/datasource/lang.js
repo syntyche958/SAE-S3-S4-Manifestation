@@ -317,7 +317,7 @@ const messages = {
       sessionDisabledWarning: '{count} registration(s) deleted and session/registration disabled.',
       registrationDeleteFailed:
         'Unable to delete all existing registrations. Session/registration has not been disabled.',
-      emailPlaceholder: 'your@email.com',
+      emailPlaceholder: "your{'@'}email.com",
       filters: 'Filters',
       mapLabel: 'Map',
       spotAssignedSuccess: 'Spot assigned successfully!',
@@ -651,7 +651,7 @@ const messages = {
         '{count} inscription(s) supprimée(s) et session/inscription désactivée.',
       registrationDeleteFailed:
         "Impossible de supprimer toutes les inscriptions existantes. La session/inscription n'a pas été désactivée.",
-      emailPlaceholder: 'votre@email.fr',
+      emailPlaceholder: "votre{'@'}email.fr",
       spotAssignedSuccess: 'Emplacement attribué avec succès !',
       filters: 'Filtres',
       mapLabel: 'Carte',
