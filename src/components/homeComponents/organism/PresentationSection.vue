@@ -4,7 +4,7 @@
       class="texturina-title absolute z-1 top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/4 text-white text-center [text-shadow:0_0_10px_rgba(0,0,0,0.7)] text-5xl sm:text-8xl"
       >{{ $t('message.carcassonneAutrefois') }}</span
     >
-    <div id="small-presentation" v-html="presentationStore.small" />
+    <div id="small-presentation" v-html="locale === 'en' ? (presentationStore.smallEn || presentationStore.small) : (presentationStore.smallFr || presentationStore.small)" />
     <div id="button-container" class="pointer-events-auto">
       <a
         v-if="props.isPreview"
@@ -31,7 +31,7 @@
 import { usePresentationStore } from '@/stores/presentation'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const presentationStore = usePresentationStore()
 
 const props = defineProps({

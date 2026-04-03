@@ -2,7 +2,7 @@
   <div class="my-4 flex flex-col gap-4 sm:mx-4 lg:grid lg:grid-cols-2 lg:gap-4">
     <Card class="h-[42vh] overflow-hidden lg:h-[calc(100vh-12rem)]">
       <template #content>
-        <h2 class="mb-3 text-base font-semibold text-white">Filtres</h2>
+        <h2 class="mb-3 text-base font-semibold text-white">{{ $t('message.filters') }}</h2>
 
         <MapVisitorFilters
           :selected-day="selectedDay"
@@ -11,7 +11,7 @@
           @update:selected-hour="(value) => (selectedHour = value)"
         />
 
-        <h2 class="mb-3 text-base font-semibold text-white">Carte</h2>
+        <h2 class="mb-3 text-base font-semibold text-white">{{ $t('message.mapLabel') }}</h2>
         <TheMap
           id="visitor-map"
           :display-mode="MapModeEnum.VISITOR"

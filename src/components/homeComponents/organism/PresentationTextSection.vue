@@ -8,14 +8,16 @@
   >
     <div
       class="max-w-7xl w-full text-justify quill-content-display p-8 rounded-2xl bg-surface-0/40 backdrop-blur-md border border-white/10"
-      v-html="presentationStore.big"
+      v-html="locale === 'en' ? (presentationStore.bigEn || presentationStore.big) : (presentationStore.bigFr || presentationStore.big)"
     ></div>
   </section>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { usePresentationStore } from '@/stores/presentation'
 
+const { locale } = useI18n()
 const presentationStore = usePresentationStore()
 defineProps({
   isPreview: { type: Boolean, required: false, default: false },

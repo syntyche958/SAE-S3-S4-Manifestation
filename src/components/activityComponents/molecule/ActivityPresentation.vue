@@ -1,7 +1,7 @@
 <template>
   <div v-if="currentActivity">
     <p class="m-0">
-      {{ currentActivity.description }}
+      {{ locale === 'en' ? (currentActivity.descriptionEn || currentActivity.description) : (currentActivity.descriptionFr || currentActivity.description) }}
     </p>
 
     <div v-if="isVisitor && currentActivity.ratings" class="mt-6 flex align-items-center gap-3">
@@ -147,7 +147,7 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
 import { useRegistrationStore } from '@/stores/registration'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const activityStore = useActivityStore()
 const sessionsStore = useSessionStore()

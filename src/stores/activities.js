@@ -82,9 +82,9 @@ export const useActivityStore = defineStore('activity', () => {
     let response = await activityService.addSpotsBulk(activity, locationId, [dateHour])
     if (response.error === 0) {
       await getAllActivities()
-      displaySuccessToast('Emplacement attribué avec succès !')
+      displaySuccessToast(t('message.spotAssignedSuccess'))
     } else {
-      displayErrToast("Échec de l'attribution de l'emplacement !")
+      displayErrToast(t('message.spotAssignFailed'))
     }
   }
 
@@ -149,19 +149,20 @@ export const useActivityStore = defineStore('activity', () => {
     }
 
     if (hasError) {
-      displayErrToast("Échec de l'attribution des emplacements !")
+      displayErrToast(t('message.spotsAssignFailed'))
       return
     }
 
     await getAllActivities()
     const n = uniqueDateHours.length
     displaySuccessToast(
-      n > 1 ? `${n} créneaux attribués avec succès !` : 'Emplacement attribué avec succès !',
+      n > 1 ? t('message.spotsAssignedSuccess', { n }) : t('message.spotAssignedSuccess'),
     )
   }
 
   async function add(providerId, name, desc) {
-    let response = await activityService.addToLocalSource(providerId, name, desc)
+    const locale = i18n.global.locale.value
+    let response = await activityService.addToLocalSource(providerId, name, desc, locale)
     if (response.error === 0) {
       await getAllActivities()
       displaySuccessToast(t('message.activityAddedSuccess'))

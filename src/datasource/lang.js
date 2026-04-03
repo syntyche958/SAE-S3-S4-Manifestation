@@ -314,6 +314,14 @@ const messages = {
       registrationDeleteFailed:
         'Unable to delete all existing registrations. Session/registration has not been disabled.',
       emailPlaceholder: 'your@email.com',
+      filters: 'Filters',
+      mapLabel: 'Map',
+      spotAssignedSuccess: 'Spot assigned successfully!',
+      spotAssignFailed: 'Failed to assign the spot!',
+      spotsAssignedSuccess: '{n} slots assigned successfully!',
+      spotsAssignFailed: 'Failed to assign spots!',
+      spotRefusedSuccess: 'The placement request has been refused',
+      spotRefuseFailed: 'Failed to refuse the placement request',
     },
   },
   fr: {
@@ -636,6 +644,14 @@ const messages = {
       registrationDeleteFailed:
         "Impossible de supprimer toutes les inscriptions existantes. La session/inscription n'a pas été désactivée.",
       emailPlaceholder: 'votre@email.fr',
+      spotAssignedSuccess: 'Emplacement attribué avec succès !',
+      filters: 'Filtres',
+      mapLabel: 'Carte',
+      spotAssignFailed: "Échec de l'attribution de l'emplacement !",
+      spotsAssignedSuccess: '{n} créneaux attribués avec succès !',
+      spotsAssignFailed: "Échec de l'attribution des emplacements !",
+      spotRefusedSuccess: 'La demande de placement a été refusée',
+      spotRefuseFailed: 'Échec du refus de la demande de placement',
     },
   },
 }

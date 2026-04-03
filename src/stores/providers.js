@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import ProviderService from '@/services/provider.service'
 import AuthService from '@/services/auth.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
+import i18n from '@/i18n'
 
 export const useProviderStore = defineStore('provider', () => {
   const providers = ref([])
@@ -38,17 +39,19 @@ export const useProviderStore = defineStore('provider', () => {
     }
     const descriptionText =
       typeof newDescription === 'string' ? newDescription : newDescription?.value ?? ''
+    const locale = i18n.global.locale.value
     const response = await ProviderService.updateProviderDescription({
       id: providerId,
       name: provider.name,
       description: descriptionText,
       userId: provider.userId,
+      locale,
     })
 
     if (response.error === 0) {
       providers.value = providers.value.filter((p) => p.id != providerId)
       providers.value.push(response.data)
-      providers.value = providers.value.sort((a, b) => a.id - b.id) // To have consistent order display (ex: navbar)
+      providers.value = providers.value.sort((a, b) => a.id - b.id)
       displaySuccessToast('Texte de présentation enregistré.')
     } else {
       displayErrToast("Impossible d'enregistrer le texte de présentation.")

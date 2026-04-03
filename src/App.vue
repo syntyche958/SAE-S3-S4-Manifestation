@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import NavBar from '@/components/globalComponents/molecule/NavBar.vue'
 import { useAuthStore } from '@/stores/auth'
@@ -13,7 +13,9 @@ import TheFooter from '@/components/globalComponents/molecule/TheFooter.vue'
 import { useActivityStore } from '@/stores/activities'
 import AnimatedBackground from '@/components/globalComponents/molecule/AnimatedBackground.vue'
 import { useSurveyStore } from '@/stores/surveys'
+import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
 const authStore = useAuthStore()
 const locationStore = useLocationStore()
 const providerStore = useProviderStore()
@@ -32,15 +34,18 @@ onMounted(async () => {
   await providerStore.getAllNewProviders()
   await activityStore.getAllActivities()
   await surveyStore.getAllSurveys()
-  // TODO : Appeler seulement quand necessaire, dans AdminView quand le composant concerné est affiché !
-  // TODO : Mettre un watch la dessus !!!
-  // if (authStore.user.type === UserTypeEnum.ADMIN) {
-  //   await providerStore.getAllNewProviders()
-  //   await contactStore.getAllContacts()
-  // } else if (authStore.user.type === UserTypeEnum.PROVIDER) {
-  //   await contactStore.getAllContactsById(authStore.user.id)
-  // }
 })
+
+watch(
+  () => locale.value,
+  () => {
+    Promise.all([
+      presentationStore.getPresentationContent(),
+      providerStore.getAllProviders(),
+      activityStore.getAllActivities(),
+    ])
+  },
+)
 </script>
 
 <template>

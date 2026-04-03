@@ -102,9 +102,9 @@ async function removeRequestedSpots(activity, locationId, dateHours) {
   })
 }
 
-async function addToLocalSource(providerId, name, desc) {
+async function addToLocalSource(providerId, name, desc, locale = 'fr') {
   try {
-    return await postRequest('/activities', { providerId, name, description: desc })
+    return await postRequest('/activities', { providerId, name, description: desc, locale })
   } catch {
     return networkErrResponse
   }

@@ -18,7 +18,7 @@
           </template>
           <template #content>
             <p class="m-0">
-              {{ item.description }}
+              {{ locale === 'en' ? (item.descriptionEn || item.description) : (item.descriptionFr || item.description) }}
             </p>
           </template>
         </Card>
@@ -36,6 +36,9 @@ import { useActivityStore } from '@/stores/activities'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
 import AddActivity from '@/components/activityComponents/molecule/AddActivity.vue'
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
 
 const route = useRoute()
 const activityStore = useActivityStore()

@@ -27,7 +27,7 @@
     </template>
   </Editor>
   <div style="margin-top: 12px">
-    <Button :label="$t('message.save')" icon="pi pi-save" @click="saveDescription()" />
+    <Button :label="$t('message.save')" icon="pi pi-save" @click="saveDescription()" :loading="saving" :disabled="saving" />
   </div>
 </template>
 
@@ -37,7 +37,9 @@ import Editor from 'primevue/editor'
 import { Button } from 'primevue'
 import { useRoute } from 'vue-router'
 import { useProviderStore } from '@/stores/providers'
+import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
 const providerStore = useProviderStore()
 const route = useRoute()
 
@@ -48,15 +50,24 @@ const providerId = Number.parseInt(route.params.provider_id)
 const emit = defineEmits(['hide-dialog'])
 
 watch(
-  providerStore.providers,
-  async () => {
-    description.value = await providerStore.getDescription(providerId)
+  () => [locale.value, providerStore.providers],
+  () => {
+    const provider = providerStore.providers.find((p) => p.id === providerId)
+    if (locale.value === 'en') {
+      description.value = provider?.descriptionEn || provider?.description || ''
+    } else {
+      description.value = provider?.descriptionFr || provider?.description || ''
+    }
   },
-  { immediate: true },
+  { immediate: true, deep: true },
 )
 
-const saveDescription = () => {
-  providerStore.updateProviderDescription(providerId, description.value)
+const saving = ref(false)
+
+const saveDescription = async () => {
+  saving.value = true
+  await providerStore.updateProviderDescription(providerId, description.value)
+  saving.value = false
   emit('hide-dialog')
 }
 </script>

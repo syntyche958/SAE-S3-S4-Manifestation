@@ -55,15 +55,19 @@ import Editor from 'primevue/editor'
 import { Button, Dialog } from 'primevue'
 import { usePresentationStore } from '@/stores/presentation'
 import PresentationSection from '@/components/homeComponents/organism/PresentationSection.vue'
+import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
 const smallText = ref('')
 const smallTextPreviewVisible = ref(false)
 const presentationStore = usePresentationStore()
 
 watch(
-  () => presentationStore.small,
-  (v) => {
-    smallText.value = v ?? ''
+  () => [locale.value, presentationStore.small, presentationStore.smallFr, presentationStore.smallEn],
+  () => {
+    smallText.value = locale.value === 'en'
+      ? (presentationStore.smallEn || presentationStore.small)
+      : (presentationStore.smallFr || presentationStore.small)
   },
   { immediate: true },
 )
