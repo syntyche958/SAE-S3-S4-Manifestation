@@ -9,6 +9,8 @@ export const useProviderStore = defineStore('provider', () => {
   const providers = ref([])
   const newProviders = ref([])
   const providerImages = ref([])
+  /** Incrémenté après upload/suppression d’image pour rafraîchir le carrousel */
+  const providerImageListRevision = ref(0)
   const providerDescription = ref('')
 
   async function getAllProviders() {
@@ -117,10 +119,8 @@ export const useProviderStore = defineStore('provider', () => {
 
     if (response.error === 0) {
       displaySuccessToast('Image uploadée avec succès')
-      providerImages.value = providerImages.value.map((p) => {
-        if (p.id !== providerId) return p
-        return { ...p, images: [...p.images, response.data] }
-      })
+      await getProviderImages(providerId)
+      providerImageListRevision.value += 1
     } else {
       displayErrToast("Erreur lors de l'upload")
       console.log(response.data)
@@ -134,6 +134,8 @@ export const useProviderStore = defineStore('provider', () => {
 
     if (response.error === 0) {
       displaySuccessToast('Image supprimée avec succès')
+      await getProviderImages(providerId)
+      providerImageListRevision.value += 1
     } else {
       displayErrToast('Erreur lors de la suppression')
       console.log(response.data)
@@ -146,6 +148,7 @@ export const useProviderStore = defineStore('provider', () => {
     providers,
     newProviders,
     providerImages,
+    providerImageListRevision,
     providerDescription,
     get,
     getDescription,

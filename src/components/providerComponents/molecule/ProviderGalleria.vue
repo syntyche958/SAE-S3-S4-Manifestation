@@ -1,24 +1,25 @@
 <template>
   <ConfirmDialog />
-  <Card class="relative w-full max-w-[400px]">
+  <Card class="provider-galleria-card relative w-full max-w-[400px]">
     <template #content>
       <Galleria
         v-if="images && images.length > 0"
         :value="images"
+        circular
         :responsiveOptions="responsiveOptions"
         :numVisible="5"
-        containerStyle="max-width: 640px"
+        :containerStyle="{ width: '100%', maxWidth: '400px' }"
         :key="`galleria-${providerId}-${images ? images.length : 0}-${images ? images.map((img) => img.id || img.idImage).join('-') : ''}`"
       >
         <template #header>
           <ProviderImageModifier />
         </template>
         <template #item="slotProps">
-          <div v-if="slotProps && slotProps.item" class="relative">
+          <div v-if="slotProps && slotProps.item" class="galleria-main-frame relative">
             <img
+              class="galleria-main-img"
               :src="slotProps.item.itemImageSrc"
               :alt="slotProps.item.alt"
-              style="width: 100%; border-radius: 5px"
             />
             <div
               v-if="!isProviderAdminPanelToHide()"
@@ -33,17 +34,14 @@
               />
             </div>
           </div>
-          <div
-            v-else
-            class="flex items-center justify-center"
-            style="min-height: 300px; width: 100%"
-          >
+          <div v-else class="galleria-main-frame flex items-center justify-center">
             <p class="text-gray-500">{{ $t('message.noImage') }}</p>
           </div>
         </template>
         <template #thumbnail="slotProps">
           <img
             v-if="slotProps && slotProps.item"
+            class="galleria-thumb-img"
             :src="slotProps.item.thumbnailImageSrc"
             :alt="slotProps.item.alt"
           />
@@ -86,7 +84,9 @@ const responsiveOptions = ref([
 const providerId = computed(() => Number.parseInt(route.params.provider_id))
 
 watchEffect(async () => {
-  images.value = await providerStore.getProviderImages(providerId.value)
+  const pid = providerId.value
+  providerStore.providerImageListRevision
+  images.value = await providerStore.getProviderImages(pid)
 })
 
 const handleDeleteImage = async (imageId) => {
@@ -162,5 +162,37 @@ const handleDeleteImage = async (imageId) => {
   top: 10px;
   right: 10px;
   z-index: 1000;
+}
+
+/* Zone principale : dimensions fixes, l’image est recadrée sans agrandir la carte */
+.galleria-main-frame {
+  width: 100%;
+  height: var(--provider-galleria-main-h, 280px);
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--p-surface-100, #f4f4f5);
+}
+
+.galleria-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.galleria-thumb-img {
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.provider-galleria-card :deep(.p-card-body) {
+  padding: 0.75rem;
+}
+
+.provider-galleria-card :deep(.p-galleria-item) {
+  width: 100%;
 }
 </style>
