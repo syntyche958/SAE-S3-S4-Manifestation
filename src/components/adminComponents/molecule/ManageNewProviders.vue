@@ -1,5 +1,4 @@
 <template>
-  <ConfirmDialog></ConfirmDialog>
   <Card>
     <template #content>
       <h2 class="m-0">{{ $t('message.newProviders') }}</h2>
@@ -35,7 +34,6 @@
 <script setup>
 import { useProviderStore } from '@/stores/providers'
 import { Button, DataTable, Column, Card } from 'primevue'
-import ConfirmDialog from 'primevue/confirmdialog'
 import { useConfirm } from 'primevue/useconfirm'
 import { useI18n } from 'vue-i18n'
 
@@ -46,6 +44,7 @@ const providerStore = useProviderStore()
 
 const confirmDeletion = (data) => {
   confirm.require({
+    group: 'admin',
     message: t('message.deleteConfirmMessage', { name: data?.name ?? '' }),
     header: t('message.deleteConfirmHeader'),
     icon: 'pi pi-exclamation-triangle',
@@ -66,6 +65,7 @@ const confirmDeletion = (data) => {
 
 const confirmValidation = (data) => {
   confirm.require({
+    group: 'admin',
     message: t('message.validateConfirmMessage', { name: data?.name ?? '' }),
     header: t('message.validateConfirmHeader'),
     icon: 'pi pi-info-circle',

@@ -49,6 +49,12 @@
         </Select>
       </div>
       <Button :label="buttonLabel" :disabled="!canSubmit" @click="submit" />
+      <Button
+        v-if="showRefuseButton"
+        :label="$t('message.refusePlacementRequest')"
+        severity="danger"
+        @click="refusePending"
+      />
       <span v-if="selectedDateHours.length > 0" class="text-xs text-white/70">
         {{ $t('message.selectedSlotsCount', { n: selectedDateHours.length }) }}
       </span>
@@ -59,6 +65,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { Select, Button } from 'primevue'
+import { useConfirm } from 'primevue/useconfirm'
 import { useActivityStore } from '@/stores/activities'
 import { useI18n } from 'vue-i18n'
 import { EVENT_DAYS, EVENT_END_HOUR, EVENT_START_HOUR } from '@/constants/event.constants'
@@ -74,6 +81,7 @@ import { displayErrToast } from '@/utils/toast.utils'
 
 const activityStore = useActivityStore()
 const { t } = useI18n()
+const confirm = useConfirm()
 
 const emit = defineEmits(['assign-spots-bulk'])
 
@@ -172,6 +180,36 @@ const isReassigning = computed(() => {
   return slot && slot.status === ActivitySpotStatusEnum.ADMIN_RESERVED
 })
 
+/** Refus possible uniquement si tous les créneaux sélectionnés sont des demandes en cours pour la même activité. */
+const refuseSelectionState = computed(() => {
+  const dhs = selectedDateHours.value
+  if (dhs.length === 0) return { canRefuse: false, activityId: null }
+  let activityId = null
+  for (const dh of dhs) {
+    const slot = allAdminSlots.value.find((s) => s.dateHour === dh)
+    if (!slot || slot.status !== ActivitySpotStatusEnum.ADMIN_PENDING) {
+      return { canRefuse: false, activityId: null }
+    }
+    const act = getActivityRequestingSlot(
+      activityStore.activities,
+      props.selectedLocation.id,
+      dh,
+    )
+    if (!act) return { canRefuse: false, activityId: null }
+    if (activityId === null) activityId = act.id
+    else if (act.id !== activityId) return { canRefuse: false, activityId: null }
+  }
+  return { canRefuse: true, activityId }
+})
+
+/** Refuser uniquement si l’activité choisie est bien celle de la demande (sinon masqué, ex. réassignation). */
+const showRefuseButton = computed(
+  () =>
+    refuseSelectionState.value.canRefuse &&
+    refuseSelectionState.value.activityId != null &&
+    selectedActivityId.value === refuseSelectionState.value.activityId,
+)
+
 const buttonLabel = computed(() => {
   if (isValidatingRequest.value) return t('message.validate')
   if (isReassigning.value) return t('message.reassignSpot')
@@ -232,5 +270,33 @@ function submit() {
   })
   selectedDateHours.value = []
   selectedActivityId.value = null
+}
+
+function refusePending() {
+  const { activityId } = refuseSelectionState.value
+  const locationId = props.selectedLocation.id
+  const dateHours = [...selectedDateHours.value]
+  if (activityId == null) return
+  confirm.require({
+    group: 'admin',
+    message: t('message.refusePlacementConfirm'),
+    header: t('message.refusePlacementConfirmHeader'),
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: t('message.cancel'),
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: t('message.refusePlacementRequest'),
+      severity: 'danger',
+    },
+    accept: async () => {
+      await activityStore.refuseRequestedLocation(activityId, locationId, dateHours, undefined)
+      selectedDateHours.value = []
+      selectedActivityId.value = null
+      validatingRequestActivityId.value = null
+    },
+  })
 }
 </script>

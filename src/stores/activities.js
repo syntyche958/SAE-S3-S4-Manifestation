@@ -169,14 +169,24 @@ export const useActivityStore = defineStore('activity', () => {
     }
   }
 
-  async function refuseRequestedLocation(activityId, reason) {
+  async function refuseRequestedLocation(activityId, locationId, dateHours, reason) {
     const activity = activities.value.find((a) => a.id === activityId)
     if (!activity) {
-      displayErrToast('Activité introuvable')
+      displayErrToast(t('message.activityNotFound'))
       return
     }
 
-    const response = await activityService.refuseRequestedLocationId(activity)
+    const unique = [...new Set((dateHours || []).map(String))]
+    const removeKeys = new Set(unique.map((dh) => `${String(locationId)}-${dh}`))
+    const wouldRemove = (activity.requestedSpotIds || []).filter((r) =>
+      removeKeys.has(`${String(r.locationId)}-${String(r.dateHour)}`),
+    )
+    if (wouldRemove.length === 0) {
+      displayErrToast(t('message.refusePlacementNothingToRemove'))
+      return
+    }
+
+    const response = await activityService.removeRequestedSpots(activity, locationId, unique)
     if (response.error === 0) {
       await getAllActivities()
 
@@ -185,16 +195,22 @@ export const useActivityStore = defineStore('activity', () => {
       const providerUserId = provider?.userId
 
       if (providerUserId != null) {
-        const suffix = reason ? ` Motif : ${reason}` : ''
-        await enqueueNotificationsForUsers(
-          [providerUserId],
-          `Votre demande de placement pour l'activité "${activity.name}" a été refusée par un administrateur.${suffix}`,
-        )
+        const reasonPart = reason ? ` Motif : ${reason}` : ''
+        const n = wouldRemove.length
+        const body =
+          n === 1
+            ? t('message.refusePlacementNotifyOne', { name: activity.name, reasonPart })
+            : t('message.refusePlacementNotifyMany', { name: activity.name, n, reasonPart })
+        await enqueueNotificationsForUsers([providerUserId], body)
       }
 
-      displaySuccessToast('La demande de placement a été refusée')
+      displaySuccessToast(
+        wouldRemove.length === 1
+          ? t('message.refusePlacementSuccessOne')
+          : t('message.refusePlacementSuccessMany', { n: wouldRemove.length }),
+      )
     } else {
-      displayErrToast('Echec du refus de la demande de placement')
+      displayErrToast(t('message.refusePlacementFailed'))
       console.log(response.data)
     }
   }

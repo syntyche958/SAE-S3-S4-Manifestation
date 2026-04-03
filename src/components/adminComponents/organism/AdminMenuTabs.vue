@@ -1,5 +1,6 @@
 <template>
   <div class="flex justify-center">
+    <ConfirmDialog group="admin" />
     <Card class="main-section-container">
       <template #content>
         <h1 class="text-center">{{ $t('message.adminPage') }}</h1>
@@ -67,6 +68,7 @@ import TheMap from '@/components/globalComponents/molecule/TheMap.vue'
 import { MapModeEnum } from '@/enums/Map.enums'
 import AdminStats from '@/components/adminComponents/organism/AdminStats.vue'
 import ManageNewProviders from '@/components/adminComponents/molecule/ManageNewProviders.vue'
+import ConfirmDialog from 'primevue/confirmdialog'
 import { Tabs, TabList, Tab, TabPanel, TabPanels, Card } from 'primevue'
 import { ref } from 'vue'
 import AdminMapChoosing from '@/components/adminComponents/molecule/AdminMapChoosing.vue'

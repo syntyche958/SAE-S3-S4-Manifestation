@@ -39,17 +39,6 @@ const selectedLocation = computed(() =>
 function acceptSpotsBulk({ activityId, dateHours }) {
   activityStore.addSpotsBulk(activityId, props.selectedLocationId, dateHours)
 }
-
-async function refuseActivityLocation(activityId) {
-  const confirmed = window.confirm('Refuser cette demande de placement ?')
-  if (!confirmed) {
-    return
-  }
-
-  const reason = window.prompt('Motif du refus (facultatif)')?.trim()
-  await activityStore.refuseRequestedLocation(activityId, reason || undefined)
-  emit('update-selected-location-id', undefined)
-}
 </script>
 
 <style scoped>

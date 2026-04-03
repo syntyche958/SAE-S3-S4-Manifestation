@@ -73,10 +73,31 @@ async function addRequestedSpots(activity, locationId, dateHours) {
   })
 }
 
-async function refuseRequestedLocationId(activity) {
+/** Retire uniquement les créneaux demandés indiqués pour cet emplacement. */
+async function removeRequestedSpots(activity, locationId, dateHours) {
+  const unique = [...new Set((dateHours || []).map(String))]
+  if (unique.length === 0) {
+    return { error: 0, status: 200, data: activity }
+  }
+
+  const removeKeys = new Set(unique.map((dh) => `${String(locationId)}-${dh}`))
+  const existing = activity.requestedSpotIds || []
+  const updated = existing.filter(
+    (r) => !removeKeys.has(`${String(r.locationId)}-${String(r.dateHour)}`),
+  )
+
+  let requestedLocationId = activity.requestedLocationId
+  if (updated.length === 0) {
+    requestedLocationId = undefined
+  } else {
+    const prevLoc = activity.requestedLocationId
+    const stillOnPrev = updated.some((r) => String(r.locationId) === String(prevLoc))
+    requestedLocationId = stillOnPrev ? prevLoc : updated[0].locationId
+  }
+
   return updateActivity(activity, {
-    requestedLocationId: undefined,
-    requestedSpotIds: [],
+    requestedSpotIds: updated,
+    requestedLocationId,
   })
 }
 
@@ -145,7 +166,7 @@ export default {
   updateActivity,
   updateLocationId,
   addRequestedSpots,
-  refuseRequestedLocationId,
+  removeRequestedSpots,
   addSpotsBulk,
   addToLocalSource,
   addActivityRating,

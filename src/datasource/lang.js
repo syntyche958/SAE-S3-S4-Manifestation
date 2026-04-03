@@ -81,6 +81,19 @@ const messages = {
       validate: 'Confirm',
       validateRequest: 'Validate request',
       reassignSpot: 'Reassign spot',
+      refusePlacementRequest: 'Refuse request',
+      refusePlacementConfirmHeader: 'Refuse placement request',
+      refusePlacementConfirm:
+        'Refuse the selected time slot request(s)? Only those slots will be removed from the pending request.',
+      refusePlacementSuccessOne: 'Selected slot removed from the request.',
+      refusePlacementSuccessMany: '{n} selected slots removed from the request.',
+      refusePlacementFailed: 'Could not refuse the placement request.',
+      refusePlacementNothingToRemove: 'No matching pending request to remove.',
+      refusePlacementNotifyOne:
+        'Your time slot request for activity "{name}" was refused by an administrator.{reasonPart}',
+      refusePlacementNotifyMany:
+        '{n} requested time slot(s) for activity "{name}" were refused by an administrator.{reasonPart}',
+      activityNotFound: 'Activity not found',
       activityNotAssignableAllSlots:
         'This activity cannot be assigned to all selected time slots (conflict or eligibility).',
       appearanceOfThePage: 'Appearance of the page',
@@ -389,6 +402,19 @@ const messages = {
       validate: 'Valider',
       validateRequest: 'Valider la demande',
       reassignSpot: "Réassigner l'emplacement",
+      refusePlacementRequest: 'Refuser',
+      refusePlacementConfirmHeader: 'Refus de la demande de placement',
+      refusePlacementConfirm:
+        'Refuser la ou les demandes pour les créneaux sélectionnés ? Seuls ces créneaux seront retirés de la demande.',
+      refusePlacementSuccessOne: 'Créneau retiré de la demande.',
+      refusePlacementSuccessMany: '{n} créneaux retirés de la demande.',
+      refusePlacementFailed: 'Échec du refus de la demande de placement.',
+      refusePlacementNothingToRemove: 'Aucune demande correspondante à retirer.',
+      refusePlacementNotifyOne:
+        'Votre demande de créneau pour l\'activité « {name} » a été refusée par un administrateur.{reasonPart}',
+      refusePlacementNotifyMany:
+        '{n} demandes de créneaux pour l\'activité « {name} » ont été refusées par un administrateur.{reasonPart}',
+      activityNotFound: 'Activité introuvable',
       activityNotAssignableAllSlots:
         'Cette activité ne peut pas être attribuée à tous les créneaux sélectionnés (conflit ou éligibilité).',
       appearanceOfThePage: 'Apparence de la page',
