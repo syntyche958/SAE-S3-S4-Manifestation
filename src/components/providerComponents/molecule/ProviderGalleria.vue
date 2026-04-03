@@ -47,6 +47,15 @@
           />
         </template>
       </Galleria>
+      <div
+        v-else
+        class="provider-galleria-empty relative w-full max-w-[400px]"
+      >
+        <ProviderImageModifier />
+        <div class="galleria-main-frame flex items-center justify-center">
+          <p class="text-gray-500 m-0">{{ $t('message.noImage') }}</p>
+        </div>
+      </div>
     </template>
   </Card>
 </template>
