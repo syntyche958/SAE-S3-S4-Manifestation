@@ -141,10 +141,10 @@ async function validateNewProviders(data) {
 //   return response
 // }
 
-async function updateProviderDescription(providerId, newDescription) {
+async function updateProviderDescription(payload) {
   let response = null
   try {
-    response = await putRequest('/providers', { providerId, newDescription })
+    response = await putRequest('/providers', payload)
   } catch {
     return networkErrResponse
   }

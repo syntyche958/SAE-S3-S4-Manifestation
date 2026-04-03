@@ -56,7 +56,7 @@ watch(
 )
 
 const saveDescription = () => {
-  providerStore.updateProviderDescription(providerId, description)
+  providerStore.updateProviderDescription(providerId, description.value)
   emit('hide-dialog')
 }
 </script>

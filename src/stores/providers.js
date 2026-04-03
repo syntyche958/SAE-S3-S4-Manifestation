@@ -31,13 +31,27 @@ export const useProviderStore = defineStore('provider', () => {
   }
 
   async function updateProviderDescription(providerId, newDescription) {
-    let response = await ProviderService.updateProviderDescription(providerId, newDescription)
+    const provider = get(providerId)
+    if (!provider) {
+      displayErrToast('Prestataire introuvable.')
+      return
+    }
+    const descriptionText =
+      typeof newDescription === 'string' ? newDescription : newDescription?.value ?? ''
+    const response = await ProviderService.updateProviderDescription({
+      id: providerId,
+      name: provider.name,
+      description: descriptionText,
+      userId: provider.userId,
+    })
 
     if (response.error === 0) {
       providers.value = providers.value.filter((p) => p.id != providerId)
       providers.value.push(response.data)
       providers.value = providers.value.sort((a, b) => a.id - b.id) // To have consistent order display (ex: navbar)
+      displaySuccessToast('Texte de présentation enregistré.')
     } else {
+      displayErrToast("Impossible d'enregistrer le texte de présentation.")
       console.log(response.data)
     }
   }
