@@ -64,9 +64,13 @@ import { Form } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 
 import { useProviderStore } from '@/stores/providers'
+import { useAuthStore } from '@/stores/auth'
+import { UserTypeEnum } from '@/enums/User.enum'
+import { displayErrToast } from '@/utils/toast.utils'
 
 const { t } = useI18n()
 const providerStore = useProviderStore()
+const authStore = useAuthStore()
 
 const visible = ref(false)
 const initialValues = ref({
@@ -80,6 +84,16 @@ const openModal = () => {
 
 const onFormSubmit = ({ valid, values }) => {
   if (!valid) return
+
+  const uid = authStore.user?.id
+  if (
+    !uid ||
+    authStore.user?.type === UserTypeEnum.NOTCONNECTED ||
+    authStore.user?.type === UserTypeEnum.ADMIN
+  ) {
+    displayErrToast(t('message.providerRequestRequiresLogin'))
+    return
+  }
 
   visible.value = false
   providerStore.addNewProvider(values.name, values.description)

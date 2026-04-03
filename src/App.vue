@@ -27,6 +27,7 @@ setToast(useToast())
 
 onMounted(async () => {
   await authStore.getUser()
+  await authStore.syncProfileFromApi()
 
   await locationStore.getAllLocations()
   await presentationStore.getPresentationContent()

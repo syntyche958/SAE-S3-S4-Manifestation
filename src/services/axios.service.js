@@ -10,6 +10,14 @@ const instance = axios.create({
   },
 })
 
+instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('accessToken')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 const headers = { 'Content-Type': 'application/json' }
 const noCacheHeaders = { 'Cache-Control': 'no-cache', Pragma: 'no-cache' }
 

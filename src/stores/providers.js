@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import ProviderService from '@/services/provider.service'
-import AuthService from '@/services/auth.service'
 import { displayErrToast, displaySuccessToast } from '@/utils/toast.utils'
 import i18n from '@/i18n'
 
@@ -91,6 +90,8 @@ export const useProviderStore = defineStore('provider', () => {
     if (response.error === 0) {
       displaySuccessToast('Votre demande a été enregistrée avec succès')
       await getAllNewProviders()
+    } else if (response.error === 401) {
+      displayErrToast(i18n.global.t('message.providerRequestRequiresLogin'))
     } else {
       displayErrToast("Échec de l'envoi de la demande, veuillez réessayer")
       console.log(response.data)
@@ -118,17 +119,7 @@ export const useProviderStore = defineStore('provider', () => {
 
     await getAllNewProviders()
     await getAllProviders()
-
-    const response2 =
-      data.userId != null ? await AuthService.updateUserTypeToProvider(data.userId) : { error: 0 }
-    if (response2.error === 0) {
-      displaySuccessToast(`La demande de ${data.name} a été validée avec succès`)
-    } else {
-      displayErrToast(
-        `Le prestataire a été créé, mais le compte utilisateur n'a pas pu être mis à jour.`,
-      )
-      console.log(response2.data)
-    }
+    displaySuccessToast(`La demande de ${data.name} a été validée avec succès`)
   }
 
   async function uploadProviderImage(providerId, imageData) {

@@ -65,6 +65,15 @@ export const useAuthStore = defineStore('auth', () => {
     return user.value
   }
 
+  /** Met à jour le type (ex. VISITOR → PROVIDER) après validation admin, sans nouveau login. */
+  async function syncProfileFromApi() {
+    if (!accessToken.value) return
+    const rawUser = await AuthService.getProfileFromApi(accessToken.value)
+    if (rawUser) {
+      persistSession(rawUser, null)
+    }
+  }
+
   async function login(mail, password) {
     let response = await AuthService.login(mail, password)
     if (response.error === 0) {
@@ -128,6 +137,7 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     accessToken,
     getUser,
+    syncProfileFromApi,
     login,
     logout,
     signin,

@@ -17,6 +17,7 @@ const messages = {
       clear: 'Clear',
       keywordSearch: 'Keyword Search',
       registerAsProvider: 'Register as provider',
+      providerRequestRequiresLogin: 'You must be logged in as a visitor to submit a provider request.',
       providerName: 'Name of provider',
       cancel: 'Cancel',
       send: 'Send',
@@ -346,6 +347,8 @@ const messages = {
       clear: 'Effacer',
       keywordSearch: 'Recherche par mot-clé',
       registerAsProvider: "S'enregistrer en tant que prestataire",
+      providerRequestRequiresLogin:
+        'Vous devez être connecté en tant que visiteur pour envoyer une demande de prestataire.',
       providerName: 'Nom du prestataire',
       cancel: 'Annuler',
       send: 'Envoyer',
