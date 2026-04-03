@@ -7,7 +7,7 @@
     "
   >
     <div
-      class="max-w-7xl w-full text-justify quill-content-display p-8 rounded-2xl bg-surface-0/40 backdrop-blur-md border border-white/10"
+      class="max-w-7xl w-[75%] text-justify quill-content-display p-8 rounded-2xl bg-surface-0/40 backdrop-blur-md border border-white/10"
       v-html="locale === 'en' ? (presentationStore.bigEn || presentationStore.big) : (presentationStore.bigFr || presentationStore.big)"
     ></div>
   </section>
