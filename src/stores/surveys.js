@@ -41,17 +41,6 @@ export const useSurveyStore = defineStore('survey', () => {
     }
   }
 
-  async function addAdminResponse(surveyId, responseText) {
-    let response = await SurveyService.addAdminResponse(surveyId, responseText)
-    if (response.error === 0) {
-      await getAllSurveys()
-      displaySuccessToast(t('message.responseSent'))
-    } else {
-      console.log(response.data)
-      displayErrToast(t('message.responseSendFailed'))
-    }
-  }
-
   async function deleteSurvey(surveyId) {
     let response = await SurveyService.deleteSurvey(surveyId)
     if (response.error === 0) {
@@ -79,7 +68,6 @@ export const useSurveyStore = defineStore('survey', () => {
     getAllSurveys,
     addSurvey,
     addReaction,
-    addAdminResponse,
     deleteSurvey,
     clearSurveys,
   }

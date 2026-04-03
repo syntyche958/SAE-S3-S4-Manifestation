@@ -1,5 +1,5 @@
 import { networkErrResponse } from '@/utils/network.utils'
-import { deleteRequest, getRequest, postRequest, putRequest } from './axios.service'
+import { deleteRequest, getRequest, postRequest } from './axios.service'
 
 function mapSurvey(row) {
   if (!row || typeof row !== 'object') return row
@@ -61,18 +61,6 @@ async function addReaction(surveyId, emoji) {
   }
 }
 
-async function addAdminResponse(surveyId, responseText) {
-  try {
-    const response = await putRequest(`/surveys/${surveyId}/admin-response`, { responseText })
-    if (response.error === 0 && response.data) {
-      return { ...response, data: mapSurvey(response.data) }
-    }
-    return response
-  } catch {
-    return networkErrResponse
-  }
-}
-
 async function deleteSurvey(surveyId) {
   try {
     return await deleteRequest(`/surveys/${surveyId}`)
@@ -93,7 +81,6 @@ export default {
   getAllSurveys,
   addSurvey,
   addReaction,
-  addAdminResponse,
   deleteSurvey,
   clearSurveys,
 }

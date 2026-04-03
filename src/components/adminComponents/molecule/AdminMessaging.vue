@@ -20,14 +20,6 @@
               <Avatar :label="getInitials(survey.name)" shape="circle" size="large" />
               <div>
                 <p class="font-semibold text-lg">{{ survey.name || $t('Anonyme') }}</p>
-
-                <!--Pour voir si il a repondu: essaie -->
-                <Badge
-                  v-if="survey.adminResponse"
-                  :value="$t('message.responded')"
-                  severity="warning"
-                  icon="pi pi-exclamation-circle"
-                />
               </div>
               <p class="text-sm text-gray-500">{{ formatDate(survey.createdAt) }}</p>
             </div>
@@ -93,77 +85,24 @@
               <i class="pi pi-envelope mr-2"></i>{{ survey.email }}
             </p>
           </div>
-
-          <!-- Réponse de l'admin -->
-          <div
-            v-if="survey.adminResponse"
-            class="mt-3 p-3 bg-blue-500/10 border-l-4 border-blue-500"
-          >
-            <p class="text-sm font-semibold mb-1">
-              <i class="pi pi-reply mr-2"></i>{{ $t('message.yourReply') }}
-            </p>
-            <p class="whitespace-pre-wrap">{{ survey.adminResponse }}</p>
-          </div>
-
-          <div class="flex gap-2 mt-4 pt-4 border-t">
-            <Button
-              :label="$t('message.reply')"
-              icon="pi pi-reply"
-              @click="openResponseDialog(survey)"
-              severity="primary"
-              text
-            />
-          </div>
         </template>
       </Card>
     </div>
-
-    <!-- Dialog pour répondre -->
-    <Dialog
-      v-model:visible="responseDialogVisible"
-      :header="$t('message.replyToFeedback')"
-      :style="{ width: '600px' }"
-      :modal="true"
-    >
-      <div class="flex flex-col gap-4">
-        <Textarea
-          v-model="responseText"
-          :placeholder="$t('message.yourReply')"
-          rows="5"
-          class="w-full"
-        />
-        <div class="flex justify-end gap-2">
-          <Button
-            :label="$t('message.cancel')"
-            severity="secondary"
-            @click="responseDialogVisible = false"
-          />
-          <Button :label="$t('message.send')" @click="submitResponse" />
-        </div>
-      </div>
-    </Dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useSurveyStore } from '@/stores/surveys'
 import Card from 'primevue/card'
 import Rating from 'primevue/rating'
 import Badge from 'primevue/badge'
 import Avatar from 'primevue/avatar'
 import Chip from 'primevue/chip'
-import Button from 'primevue/button'
-import Dialog from 'primevue/dialog'
-import Textarea from 'primevue/textarea'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const surveyStore = useSurveyStore()
-
-const responseDialogVisible = ref(false)
-const responseText = ref('')
-const selectedSurvey = ref(null)
 
 const sortedSurveys = computed(() => {
   return [...surveyStore.surveys].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -213,20 +152,5 @@ function getRecommendSeverity(recommend) {
     default:
       return 'secondary'
   }
-}
-
-function openResponseDialog(survey) {
-  selectedSurvey.value = survey
-  responseText.value = survey.adminResponse || ''
-  responseDialogVisible.value = true
-}
-
-async function submitResponse() {
-  if (!responseText.value.trim()) return
-
-  await surveyStore.addAdminResponse(selectedSurvey.value.id, responseText.value)
-  responseDialogVisible.value = false
-  responseText.value = ''
-  selectedSurvey.value = null
 }
 </script>
