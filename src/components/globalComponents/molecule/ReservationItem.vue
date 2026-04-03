@@ -3,15 +3,14 @@
     class="session-container flex flex-col sm:flex-row sm:items-center p-4 gap-3 rounded-border border"
   >
     <div class="flex-1">
-      <div class="flex items-center justify-between mb-2">
+      <div class="mb-2">
         <span class="font-bold text-lg">{{ activityName }}</span>
-        <Tag :value="'Session #' + item.id" class="dark-tag"></Tag>
       </div>
 
       <div class="flex flex-col gap-1 text-sm text-secondary-info">
         <div class="flex items-center gap-2">
           <i class="pi pi-calendar"></i>
-          <span>{{ item.beginingDate }}</span>
+          <span>{{ formattedDate }}</span>
         </div>
         <div class="flex items-center gap-2">
           <i class="pi pi-clock"></i>
@@ -57,21 +56,36 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import Button from 'primevue/button'
-import Tag from 'primevue/tag'
 import Dialog from 'primevue/dialog'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
-defineProps({
+const props = defineProps({
   item: Object,
   activityName: String,
   qrCode: String,
 })
 
 const showQrCode = ref(false)
+
+const formattedDate = computed(() => {
+  if (!props.item?.beginingDate) return ''
+
+  const date = new Date(`${props.item.beginingDate}T00:00:00`)
+  if (Number.isNaN(date.getTime())) return props.item.beginingDate
+
+  const localizedDate = new Intl.DateTimeFormat(locale.value === 'fr' ? 'fr-FR' : 'en-US', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date)
+
+  return localizedDate.charAt(0).toUpperCase() + localizedDate.slice(1)
+})
 
 defineEmits(['go-to-activity'])
 </script>
@@ -81,12 +95,6 @@ defineEmits(['go-to-activity'])
   background-color: rgba(0, 0, 0, 0.4) !important;
   backdrop-filter: blur(12px);
   border: 1px solid rgba(250, 250, 250, 0.1) !important;
-}
-
-:deep(.dark-tag) {
-  background-color: rgba(59, 130, 246, 0.2) !important;
-  color: #60a5fa !important;
-  border: 1px solid rgba(96, 165, 250, 0.5) !important;
 }
 
 .text-secondary-info {
