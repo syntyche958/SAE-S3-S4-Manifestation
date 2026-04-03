@@ -1,7 +1,8 @@
 <template>
   <div v-if="currentActivity">
-    <div v-html="currentActivity.name"></div>
-    <div v-html="currentActivity.presentationContent"></div>
+    <p class="m-0">
+      {{ currentActivity.description }}
+    </p>
 
     <div v-if="isVisitor && currentActivity.ratings" class="mt-6 flex align-items-center gap-3">
       <span class="font-bold text-xl">{{ $t('message.rateActivity') }}</span>
