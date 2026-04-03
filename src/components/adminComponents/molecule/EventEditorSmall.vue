@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 import Editor from 'primevue/editor'
 import { Button, Dialog } from 'primevue'
 import { usePresentationStore } from '@/stores/presentation'
@@ -60,9 +60,13 @@ const smallText = ref('')
 const smallTextPreviewVisible = ref(false)
 const presentationStore = usePresentationStore()
 
-onMounted(() => {
-  smallText.value = presentationStore.small
-})
+watch(
+  () => presentationStore.small,
+  (v) => {
+    smallText.value = v ?? ''
+  },
+  { immediate: true },
+)
 
 async function onSave() {
   await presentationStore.persistPresentation({ small: smallText.value })

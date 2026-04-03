@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 import Editor from 'primevue/editor'
 import { Button, Dialog } from 'primevue'
 import { usePresentationStore } from '@/stores/presentation'
@@ -64,9 +64,13 @@ const bigText = ref('')
 const bigTextPreviewVisible = ref(false)
 const presentationStore = usePresentationStore()
 
-onMounted(() => {
-  bigText.value = presentationStore.big
-})
+watch(
+  () => presentationStore.big,
+  (v) => {
+    bigText.value = v ?? ''
+  },
+  { immediate: true },
+)
 
 async function onSave() {
   await presentationStore.persistPresentation({ big: bigText.value })
