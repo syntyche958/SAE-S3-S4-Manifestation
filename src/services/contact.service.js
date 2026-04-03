@@ -19,8 +19,7 @@ async function getAllContactsById(userId) {
 
 async function addContact(mail, providerId, activityId, message) {
   try {
-    const body = { mail, providerId, message }
-    if (activityId != null) body.activityId = activityId
+    const body = { mail, providerId, activityId, message }
     return await postRequest('/contacts', body)
   } catch {
     return networkErrResponse

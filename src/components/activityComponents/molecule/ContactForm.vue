@@ -41,9 +41,9 @@
           :options="providerStore.providers"
           optionLabel="name"
           name="provider"
-          placeholder="Select the provider"
-          @update:modelValue="onProviderChange"
+          :placeholder="$t('message.selectProviderPlaceholder')"
           fluid
+          @update:modelValue="onProviderChange"
         />
         <Message v-if="$form.provider?.invalid" severity="error" size="small" variant="simple">{{
           $form.provider.error?.message
@@ -52,16 +52,21 @@
 
       <!-- Activity input -->
       <div class="flex flex-col gap-1">
-        <label class="font-semibold w-24">{{ $t('message.activity') }} (opt)</label>
+        <label class="font-semibold w-24">{{ $t('message.activity') }}</label>
         <Select
           :key="selectedProviderId ?? 'no-provider'"
           name="activity"
-          :options="filteredActivities"
-          optionLabel="name"
-          placeholder="Select the activity"
-          emptyMessage="No activity available"
+          :options="activitySelectOptions"
+          optionLabel="label"
+          :placeholder="$t('message.selectActivityPlaceholder')"
+          :emptyMessage="$t('message.noActivityFound')"
+          :filter="true"
+          :filterPlaceholder="$t('message.search')"
           fluid
         />
+        <Message v-if="$form.activity?.invalid" severity="error" size="small" variant="simple">{{
+          $form.activity.error?.message
+        }}</Message>
       </div>
 
       <!-- Message input -->
@@ -117,19 +122,27 @@ const selectedProviderId = computed(() => {
   return id == null ? null : Number(id)
 })
 
-const filteredActivities = computed(() => {
+/** Activités du prestataire sélectionné uniquement. */
+const activitySelectOptions = computed(() => {
   if (selectedProviderId.value == null) return []
-  return activityStore.activities.filter((a) => Number(a.providerId) === selectedProviderId.value)
+  return (activityStore.activities || [])
+    .filter((a) => Number(a.providerId) === selectedProviderId.value)
+    .map((a) => ({ id: a.id, label: a.name }))
+    .sort((x, y) => x.label.localeCompare(y.label, 'fr', { sensitivity: 'base' }))
 })
 
-const onProviderChange = (provider) => {
+function onProviderChange(provider) {
   selectedProvider.value = provider
 }
 
+function contactActivityId(activityField) {
+  if (activityField == null) return null
+  if (typeof activityField === 'object' && activityField.id != null) return activityField.id
+  return activityField
+}
+
 const openModal = async () => {
-  if (!activityStore.activities.length) {
-    await activityStore.getAllActivities()
-  }
+  await Promise.all([activityStore.getAllActivities(), providerStore.getAllProviders()])
   selectedProvider.value = null
   visible.value = true
 }
@@ -138,7 +151,12 @@ const onFormSubmit = ({ valid, values }) => {
   if (!valid) return
 
   visible.value = false
-  contactStore.addContact(values.email, values.provider.id, values.activity?.id ?? null, values.message)
+  contactStore.addContact(
+    values.email,
+    values.provider.id,
+    contactActivityId(values.activity),
+    values.message,
+  )
 }
 
 const resolver = ref(
@@ -155,6 +173,9 @@ const resolver = ref(
         .refine((p) => p !== undefined && p !== null, {
           message: 'Provider selection is required',
         }),
+      activity: z.any().refine((a) => contactActivityId(a) != null, {
+        message: t('message.activityRequired'),
+      }),
     }),
   ),
 )

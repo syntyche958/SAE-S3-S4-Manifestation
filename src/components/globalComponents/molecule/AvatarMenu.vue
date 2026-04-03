@@ -35,7 +35,9 @@
       $t('message.noNewMessage')
     }}</span>
     <DataTable v-if="contacts.length !== 0" :value="contacts" tableStyle="min-width: 50rem">
-      <Column field="activityId" :header="$t('message.activity')"></Column>
+      <Column field="activityId" :header="$t('message.activity')">
+        <template #body="{ data }">{{ activityDisplayName(data.activityId) }}</template>
+      </Column>
       <Column field="message" header="Message"></Column>
       <Column field="id" :header="$t('message.actions')">
         <template #body="{ data }"
@@ -84,7 +86,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
@@ -99,6 +101,7 @@ import { useContactStore } from '@/stores/contact'
 import { useAuthStore } from '@/stores/auth'
 import { UserTypeEnum } from '@/enums/User.enum'
 import { useProviderStore } from '@/stores/providers'
+import { useActivityStore } from '@/stores/activities'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
@@ -112,6 +115,13 @@ const router = useRouter()
 const contactStore = useContactStore()
 const authStore = useAuthStore()
 const providerStore = useProviderStore()
+const activityStore = useActivityStore()
+
+function activityDisplayName(activityId) {
+  if (activityId == null) return '—'
+  const a = activityStore.get(activityId)
+  return a?.name ?? String(activityId)
+}
 
 const contacts = computed(() => {
   if (authStore.user.type !== UserTypeEnum.PROVIDER) return []
@@ -137,6 +147,12 @@ const visible = ref(false)
 const dialogVisible = ref(false)
 const visitorDialogVisible = ref(false)
 const notifications = ref([])
+
+watch(dialogVisible, async (open) => {
+  if (open && authStore.user?.type === UserTypeEnum.PROVIDER) {
+    await activityStore.getAllActivities()
+  }
+})
 
 const refreshNotifications = async () => {
   if (
