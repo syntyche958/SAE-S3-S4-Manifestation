@@ -70,3 +70,10 @@ const uploadAllFiles = async (event) => {
 }
 </script>
 
+<style scoped>
+/* Badge orange « Pending » du FileUpload PrimeVue — masqué pour cette modale */
+:deep(.p-fileupload-file-badge) {
+  display: none;
+}
+</style>
+
