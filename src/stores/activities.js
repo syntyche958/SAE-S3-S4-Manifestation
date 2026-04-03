@@ -21,13 +21,15 @@ export const useActivityStore = defineStore('activity', () => {
   }
 
   function get(activityId) {
-    return activities.value.find((a) => a.id === activityId)
+    const id = Number(activityId)
+    return activities.value.find((a) => Number(a.id) === id)
   }
 
   function getAvailableDateHoursForLocation(activityId, locationId, dateHours = []) {
+    const selfId = Number(activityId)
     const occupiedKeys = new Set()
     for (const activity of activities.value || []) {
-      if (activity.id === activityId) continue
+      if (Number(activity.id) === selfId) continue
 
       for (const spot of activity.spotIds || []) {
         occupiedKeys.add(`${spot.locationId}-${spot.dateHour}`)

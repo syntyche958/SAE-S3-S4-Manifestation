@@ -50,6 +50,21 @@ export function splitDateHour(dateHour) {
   return { date, hour }
 }
 
+/** Clé stable pour comparer un créneau réservé (ignore secondes / fuseau / suffixes). */
+export function normalizeDateHourKey(dateHour) {
+  const s = String(dateHour || '').trim()
+  const idx = s.indexOf('T')
+  if (idx === -1) return ''
+  const datePart = s.slice(0, idx)
+  let timePart = s.slice(idx + 1).split('.')[0]
+  if (timePart.endsWith('Z')) timePart = timePart.slice(0, -1)
+  const parts = timePart.split(':')
+  const h = toSafeInteger(parts[0], -1)
+  const m = toSafeInteger(parts[1] ?? '0', 0)
+  if (h < 0 || h > 23 || m < 0 || m > 59) return ''
+  return `${datePart}T${pad2(h)}:${pad2(m)}`
+}
+
 export function formatEventDayFr(day) {
   const [year, month, date] = String(day).split('-').map(Number)
   const dt = new Date(year, month - 1, date)
@@ -57,9 +72,12 @@ export function formatEventDayFr(day) {
 }
 
 export function buildReservedDateHours(spotIds = []) {
-  return [...new Set((spotIds || []).map((spot) => String(spot.dateHour)))]
-    .filter((dateHour) => dateHour.includes('T'))
-    .sort((a, b) => a.localeCompare(b))
+  const keys = new Set()
+  for (const spot of spotIds || []) {
+    const k = normalizeDateHourKey(spot?.dateHour)
+    if (k.includes('T')) keys.add(k)
+  }
+  return [...keys].sort((a, b) => a.localeCompare(b))
 }
 
 export function buildReservedSlotOptions(reservedDateHours = [], formatDay = (day) => day) {
@@ -85,7 +103,8 @@ export function getReservedSlotFromSession(beginingDate, beginingHour) {
   if (total == null) return ''
 
   const slotStartHour = Math.floor(total / 60)
-  return `${beginingDate}T${pad2(slotStartHour)}:00`
+  const raw = `${beginingDate}T${pad2(slotStartHour)}:00`
+  return normalizeDateHourKey(raw)
 }
 
 export function buildStartHourOptions(dateHour, duration, stepMinutes) {

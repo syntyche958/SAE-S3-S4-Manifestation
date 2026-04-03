@@ -13,9 +13,10 @@ async function getAllActivities() {
 }
 
 function pickActivityUpdatePayload(activity, overrides = {}) {
+  const rawPid = activity.providerId
   return {
-    id: activity.id,
-    providerId: activity.providerId,
+    id: Number(activity.id),
+    providerId: rawPid != null ? Number(rawPid) : rawPid,
     name: activity.name,
     description: activity.description || '',
     locationId: overrides.locationId ?? activity.locationId,

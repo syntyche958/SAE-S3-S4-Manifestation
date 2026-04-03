@@ -86,12 +86,13 @@ const activityStore = useActivityStore()
 const savedSessionStates = ref({})
 const sessionStateVersion = ref(0)
 
-const activityId = computed(() => Number.parseInt(route.params.activity_id))
+const activityId = computed(() => Number.parseInt(route.params.activity_id, 10))
 const currentActivity = computed(() => activityStore.get(activityId.value))
 
 const sessions = computed(() => {
   if (!sessionStore.sessions) return []
-  return sessionStore.sessions.filter((s) => s.activityId === activityId.value)
+  const aid = activityId.value
+  return sessionStore.sessions.filter((s) => Number(s.activityId) === aid)
 })
 
 const defaultSessionDuration = computed(() => {
@@ -425,6 +426,11 @@ watch(
     syncSavedSessionsWithCurrentList()
   },
 )
+
+watch(reservedDateHours, () => {
+  normalizeSessionsWithActivityReservations()
+  syncSavedSessionsWithCurrentList()
+})
 </script>
 
 <style scoped>

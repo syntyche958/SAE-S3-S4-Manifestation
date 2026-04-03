@@ -167,9 +167,9 @@ function isRegistered(session) {
 }
 
 const sessions = computed(() => {
-  const activityId = Number.parseInt(route.params.activity_id)
-  if (!sessionsStore.sessions) return []
-  return sessionsStore.sessions.filter((s) => s.activityId === activityId)
+  const activityId = Number.parseInt(route.params.activity_id, 10)
+  if (!Number.isFinite(activityId) || !sessionsStore.sessions) return []
+  return sessionsStore.sessions.filter((s) => Number(s.activityId) === activityId)
 })
 
 const triKey = ref()
@@ -183,8 +183,9 @@ const triOptions = ref([
 ])
 
 const currentActivity = computed(() => {
-  const activityId = Number.parseInt(route.params.activity_id)
-  return activityStore.activities.find((activite) => activite.id === activityId)
+  const activityId = Number.parseInt(route.params.activity_id, 10)
+  if (!Number.isFinite(activityId)) return undefined
+  return activityStore.activities.find((activite) => Number(activite.id) === activityId)
 })
 
 const isVisitor = computed(() => {
