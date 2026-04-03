@@ -154,6 +154,23 @@ ul {
   color: #fafafa !important;
 }
 
+.p-menubar .p-menubar-item-link,
+.p-menubar .p-menubar-item-label {
+  color: #fafafa !important;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.p-menubar .p-menubar-item-link:hover,
+.p-menubar .p-menubar-item-link:hover .p-menubar-item-label,
+.p-menubar .p-menubar-item-link:focus,
+.p-menubar .p-menubar-item-link:focus .p-menubar-item-label,
+.p-menubar .p-menubar-item.p-focus > .p-menubar-item-content > .p-menubar-item-link,
+.p-menubar .p-menubar-item.p-focus > .p-menubar-item-content > .p-menubar-item-link .p-menubar-item-label {
+  color: #059669 !important;
+}
+
 .p-toast-message {
   background-color: rgba(26, 26, 26, 0.9) !important;
   backdrop-filter: blur(8px);
@@ -194,6 +211,11 @@ footer *,
   transition: all 0.3s ease;
   border-radius: 999px !important;
   padding: 0.75rem 1rem !important;
+}
+
+.p-tab i,
+.p-tab span {
+  color: #fafafa !important;
 }
 
 .p-tab-active {

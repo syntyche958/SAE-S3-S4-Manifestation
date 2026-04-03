@@ -2,6 +2,20 @@
   <div>
     <div class="fixed flex justify-center z-1001 mt-3 sm:mt-6 w-full">
       <Menubar :model="items" class="z-1001 w-fit sm:w-[95%]">
+        <template #item="{ item, props, hasSubmenu }">
+          <a
+            v-ripple
+            v-bind="props.action"
+            class="flex items-center gap-2 rounded-xl px-3 py-2 !text-white transition-colors duration-200 hover:!text-emerald-600 focus:!text-emerald-600"
+          >
+            <span v-if="item.icon" :class="[item.icon, '!text-inherit']" />
+            <span class="!text-inherit">{{ item.label }}</span>
+            <span
+              v-if="hasSubmenu"
+              class="pi pi-angle-down !text-inherit"
+            />
+          </a>
+        </template>
         <template #end>
           <div style="display: flex">
             <LocaleChanger />
