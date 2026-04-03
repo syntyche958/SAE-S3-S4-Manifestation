@@ -192,8 +192,7 @@ const messages = {
       mustBeConnected: 'You must be logged in to register',
       alreadyRegisteredSession: 'You are already registered for this session',
       registrationFailed: 'Registration failed, please try again',
-      registrationSuccess:
-        'You are registered for session #{id}. Remaining places: {remaining}/{total}',
+      registrationSuccess: 'You are now registered for this session.',
       messageSentSuccess: 'Message sent successfully!',
       sendFailed: 'Sending failed, please try again!',
       taskDone: 'Task marked as done!',
@@ -516,8 +515,7 @@ const messages = {
       mustBeConnected: 'Vous devez être connecté pour vous inscrire',
       alreadyRegisteredSession: 'Vous êtes déjà inscrit à cette session',
       registrationFailed: "Echec de l'inscription, veuillez réessayer",
-      registrationSuccess:
-        'Vous êtes inscrit à la session #{id}. Places restantes : {remaining}/{total}',
+      registrationSuccess: 'Vous êtes désormais inscrit à cette session.',
       messageSentSuccess: 'Message envoyé avec succès !',
       sendFailed: "Echec de l'envoi, veuillez réessayer !",
       taskDone: 'Tâche marquée comme traitée !',

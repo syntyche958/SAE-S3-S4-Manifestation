@@ -4,9 +4,8 @@
       <div class="flex flex-row md:flex-col justify-between items-start gap-2">
         <div>
           <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">
-            {{ item.beginingDate }} {{ item.beginingHour }}
+            {{ formatSessionDate(item.beginingDate) }} {{ item.beginingHour }}
           </span>
-          <div class="text-lg font-medium mt-2">Session #{{ item.id }}</div>
           <div class="text-sm text-surface-600 mt-1">{{ $t('message.duration') }}: {{ item.duration }} {{ $t('message.minutes') }}</div>
           <div class="text-sm text-surface-600 mt-1">
             {{ $t('message.places') }}: {{ item.nbPlace - item.registersUsers.length }} / {{ item.nbPlace }}
@@ -44,7 +43,7 @@
 import Button from 'primevue/button'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+const { locale } = useI18n()
 
 const props = defineProps({
   item: Object,
@@ -56,4 +55,20 @@ const props = defineProps({
 })
 
 defineEmits(['inscription', 'show-registrants'])
+
+function formatSessionDate(dateStr) {
+  const [year, month, day] = String(dateStr || '').split('-').map(Number)
+  if (!year || !month || !day) return dateStr
+
+  const date = new Date(year, month - 1, day)
+  const dateLocale = locale.value === 'fr' ? 'fr-FR' : 'en-US'
+  const formattedDate = date.toLocaleDateString(dateLocale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+
+  return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+}
 </script>

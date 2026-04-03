@@ -338,12 +338,6 @@ async function inscription(session) {
   }
 
   await sessionsStore.getAllSessions()
-
-  // Get the updated session data
-  const updatedSession = sessionsStore.sessions.find(s => s.id === session.id)
-  const remaining = updatedSession.nbPlace - updatedSession.registersUsers.length
-  const total = updatedSession.nbPlace
-
-  displaySuccessToast(t('message.registrationSuccess', { id: session.id, remaining, total }))
+  displaySuccessToast(t('message.registrationSuccess'))
 }
 </script>
