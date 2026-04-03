@@ -3,3 +3,34 @@
   margin-bottom: 1em !important;
   margin-top: 0 !important;
 }
+
+.p-editor-container,
+.p-editor-content,
+.ql-container,
+.ql-editor,
+.quill-content-display,
+.description-content,
+#small-presentation {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.ql-editor,
+.quill-content-display,
+.description-content,
+#small-presentation {
+  overflow-x: hidden;
+}
+
+.ql-editor img,
+.ql-editor video,
+.quill-content-display img,
+.quill-content-display video,
+.description-content img,
+.description-content video,
+#small-presentation img,
+#small-presentation video {
+  max-width: 100%;
+  height: auto;
+}

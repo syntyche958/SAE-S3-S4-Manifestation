@@ -1,5 +1,5 @@
 <template>
-  <Editor v-model="description" style="width: 220%">
+  <Editor v-model="description" editorStyle="min-height: 18rem" class="provider-editor">
     <template v-slot:toolbar>
       <span class="ql-formats">
         <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
@@ -60,3 +60,10 @@ const saveDescription = () => {
   emit('hide-dialog')
 }
 </script>
+
+<style scoped>
+.provider-editor {
+  width: 100%;
+  max-width: 100%;
+}
+</style>
