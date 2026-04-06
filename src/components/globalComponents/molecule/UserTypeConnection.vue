@@ -3,8 +3,7 @@
     <div
       class="flex flex-col md:flex-row min-h-[600px] w-full bg-surface-0/90 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-surface-200/20"
     >
-      <!-- Side Image -->
-      <div class="hidden md:block md:w-1/2 relative overflow-hidden group">
+            <div class="hidden md:block md:w-1/2 relative overflow-hidden group">
         <img
           src="/uploads/login_picture.jpg"
           alt="Login illustration"
@@ -21,8 +20,7 @@
         </div>
       </div>
 
-      <!-- Form Side -->
-      <div class="flex-1 flex flex-col justify-center p-8 sm:p-16 bg-transparent relative">
+            <div class="flex-1 flex flex-col justify-center p-8 sm:p-16 bg-transparent relative">
         <Transition name="slide-fade" mode="out-in">
           <div :key="isLogin" class="w-full">
             <div v-if="isLogin" class="animate-in fade-in slide-in-from-right-4 duration-500">

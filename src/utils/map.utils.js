@@ -66,14 +66,12 @@ function getLocationSlotSummaryForAdmin(activities, locationId) {
 }
 
 export function setupMap(mapId) {
-  // Map setup
   const southWestBoundsCoords = L.latLng(43.203642, 2.36)
   const northEastBoundsCoords = L.latLng(43.209367, 2.37)
   const bounds = new L.LatLngBounds(southWestBoundsCoords, northEastBoundsCoords)
   const options = { maxBounds: bounds, minZoom: 17 }
   const map = L.map(mapId, options).setView([43.206496, 2.364834], 17)
 
-  // Define tile layer
   const geoportailFranceTileLayer = L.tileLayer(
     'https://data.geopf.fr/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}',
     {
@@ -94,36 +92,21 @@ export function setupMap(mapId) {
   return map
 }
 
-export function displayLocations(
-  map,
-  mapMode,
-  emit,
-  route,
-  selectedLocationId,
-  visitorDateHour,
-  t,
-  router,
-) {
+export function displayLocations(map, options) {
+  const { mapMode, emit, route, selectedLocationId, visitorDateHour, t, router } = options
+
   if (mapMode === MapModeEnum.VISITOR) {
     displayPinPoints(map, visitorDateHour, t, router)
   } else {
-    // ADMIN + PROVIDER
     displayAreas(map, emit, mapMode, route, selectedLocationId)
     displayLegends(map, mapMode, t)
     displayUnselectPanel(map, emit, mapMode, route, t, router)
   }
 }
 
-export function refreshLocations(
-  map,
-  emit,
-  mapMode,
-  route,
-  selectedLocationId,
-  visitorDateHour,
-  t,
-  router,
-) {
+export function refreshLocations(map, options) {
+  const { emit, mapMode, route, selectedLocationId, visitorDateHour, t, router } = options
+
   if (mapMode === MapModeEnum.VISITOR) {
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
@@ -134,7 +117,6 @@ export function refreshLocations(
     return
   }
 
-  // Remove all previous polygons on map
   map.eachLayer((layer) => {
     if (layer instanceof L.Polygon) {
       map.removeLayer(layer)
@@ -181,7 +163,6 @@ function bindPopupVisitor(map, marker, activitiesAtLocation, t, router) {
 
   marker.bindPopup(popupContent)
 
-  // Open on hover and close only when mouse leaves both marker and popup.
   marker.on('mouseover', () => {
     clearCloseTimer()
     map.closePopup()
@@ -210,8 +191,8 @@ function bindPopupVisitor(map, marker, activitiesAtLocation, t, router) {
     const clickables = popupElement.querySelectorAll('.visitor-popup-line')
     clickables.forEach((line) => {
       line.onclick = () => {
-        const providerId = line.getAttribute('data-provider-id')
-        const activityId = line.getAttribute('data-activity-id')
+        const providerId = line.dataset.providerId
+        const activityId = line.dataset.activityId
         if (!providerId || !activityId || !router) return
         router.push(`/provider/${providerId}/activity/${activityId}`)
       }
@@ -228,24 +209,36 @@ function getVisitorActivitiesForLocation(locationId, visitorDateHour) {
   const activityStore = useActivityStore()
   const providerStore = useProviderStore()
 
-  return (activityStore.activities || [])
-    .filter((activity) => {
-      return (activity.spotIds || []).some((spot) => {
-        if (String(spot.locationId) !== String(locationId)) return false
-        if (!visitorDateHour) return true
-        return String(spot.dateHour) === String(visitorDateHour)
-      })
-    })
-    .map((activity) => ({
-      activity,
-      provider: providerStore.get(activity.providerId),
-    }))
-    .filter((entry) => entry.provider != null)
-    .sort((a, b) => {
-      const providerCompare = a.provider.name.localeCompare(b.provider.name)
-      if (providerCompare !== 0) return providerCompare
-      return a.activity.name.localeCompare(b.activity.name)
-    })
+  const entries = []
+
+  for (const activity of activityStore.activities || []) {
+    let hasMatchingSpot = false
+
+    for (const spot of activity.spotIds || []) {
+      const sameLocation = String(spot.locationId) === String(locationId)
+      if (!sameLocation) continue
+
+      if (!visitorDateHour || String(spot.dateHour) === String(visitorDateHour)) {
+        hasMatchingSpot = true
+        break
+      }
+    }
+
+    if (!hasMatchingSpot) continue
+
+    const provider = providerStore.get(activity.providerId)
+    if (provider == null) continue
+
+    entries.push({ activity, provider })
+  }
+
+  entries.sort((a, b) => {
+    const providerCompare = a.provider.name.localeCompare(b.provider.name)
+    if (providerCompare !== 0) return providerCompare
+    return a.activity.name.localeCompare(b.activity.name)
+  })
+
+  return entries
 }
 
 function getLocationCoord(location) {
@@ -443,7 +436,15 @@ function displayUnselectPanel(map, emit, mapMode, route, t, router) {
     container.style.cursor = 'pointer'
     container.onclick = function () {
       emit('changeSelectedLocation', undefined)
-      refreshLocations(map, emit, mapMode, route, undefined, undefined, t, router)
+      refreshLocations(map, {
+        emit,
+        mapMode,
+        route,
+        selectedLocationId: undefined,
+        visitorDateHour: undefined,
+        t,
+        router,
+      })
     }
 
     const label = L.DomUtil.create('b', 'custom-button', container)

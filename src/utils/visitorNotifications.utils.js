@@ -8,13 +8,24 @@ export async function getNotificationsForUser(userId) {
   if (res?.error === 0 && Array.isArray(res.data)) {
     return res.data
   }
+
   return []
 }
 
 export async function enqueueNotificationsForUsers(userIds, message) {
   if (!Array.isArray(userIds) || userIds.length === 0 || !message) return
 
-  const normalizedIds = [...new Set(userIds.map((id) => Number(id)).filter((id) => Number.isInteger(id)))]
+  const normalizedIds = []
+  for (const id of userIds) {
+    const normalizedId = Number(id)
+    if (!Number.isInteger(normalizedId)) {
+      continue
+    }
+    if (!normalizedIds.includes(normalizedId)) {
+      normalizedIds.push(normalizedId)
+    }
+  }
+
   if (!normalizedIds.length) return
 
   await NotificationsService.notifyUsers(normalizedIds, message)

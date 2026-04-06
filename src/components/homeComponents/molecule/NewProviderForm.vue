@@ -1,6 +1,5 @@
 <template>
-  <!-- Button -->
-  <Button
+    <Button
     :label="$t('message.registerAsProvider')"
     icon="pi pi-user-plus"
     @click="openModal()"
@@ -9,8 +8,7 @@
     size="small"
   />
 
-  <!-- Modal -->
-  <Dialog
+    <Dialog
     v-model:visible="visible"
     :header="$t('message.registerAsProvider')"
     class="w-auto sm:w-[25vw] mx-10 sm:mx-0"
@@ -24,8 +22,7 @@
       @submit="onFormSubmit"
       class="flex flex-col gap-4 w-full"
     >
-      <!-- New provider name input -->
-      <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1">
         <label for="name" class="font-semibold w-24">{{ $t('message.providerName') }}</label>
         <InputText id="name" class="flex-auto" name="name" fluid />
         <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">{{
@@ -33,8 +30,7 @@
         }}</Message>
       </div>
 
-      <!-- Description input -->
-      <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1">
         <label for="description" class="font-semibold w-24">{{ $t('message.description') }}</label>
         <Textarea id="description" name="description" fluid />
         <Message v-if="$form.description?.invalid" severity="error" size="small" variant="simple">{{
@@ -42,8 +38,7 @@
         }}</Message>
       </div>
 
-      <!-- Buttons -->
-      <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2">
         <Button
           type="button"
           :label="$t('message.cancel')"

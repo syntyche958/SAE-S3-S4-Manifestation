@@ -27,8 +27,6 @@ const props = defineProps({
   selectedLocationId: { type: Number },
 })
 
-//const emit = defineEmits(['update-selected-location-id'])
-
 const activityStore = useActivityStore()
 const locationStore = useLocationStore()
 

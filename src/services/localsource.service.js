@@ -15,99 +15,48 @@ import { UserTypeEnum } from '@/enums/User.enum'
 import i18n from '@/i18n'
 const { t } = i18n.global
 
-/**
- * Get all providers
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id:number, name:string}}}
- */
 function getAllProviders() {
   return { error: 0, status: 200, data: providers }
 }
 
-/**
- * Get all activities
- * @returns {{error:number, status:number, data:{id:number, providerId:number, name:string, description: string, presentationContent: string, locationId: integer}}}
- */
 function getAllActivities() {
-  const normalizedActivities = activities.map((a) =>({
-    serviceEnabled:a.serviceEnabled ?? true,
-    visibility: a.visibility ?? 'public',
-    commentsEnabled: a.commentsEnabled ?? true,
-    sessionsEnabled: a.sessionsEnabled ?? true,
-    registrationCountEnabled: a.registrationCountEnabled ?? true,
-  }))
   return { error: 0, status: 200, data: activities }
 }
 
-/**
- * Get all sessions
- * @return {{error: number, status: number, data: [{id: number, activitiesId: number, beginingDate: string, beginingHour: string, duration: number, nbPlace: number}]}}
- */
 function getAllSessions() {
   return { error: 0, status: 200, data: session }
 }
 
-/**
- * Get all contacts
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{mail:string, providerId:number, activityId:number, message:string}}}
- */
 function getAllContacts() {
   return { error: 0, status: 200, data: contacts }
 }
 
-/**
- * Get all contacts
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{mail:string, providerId:number, activityId:number, message:string}}}
- */
 function getAllContactsById(userId) {
   const providerId = providers.find((p) => p.userId === userId).id
   const data = contacts.filter((c) => c.providerId == providerId)
   return { error: 0, status: 200, data }
 }
 
-/**
- * Get all locations
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id:number, coord:array, area: array}}}
- */
 function getAllLocations() {
   return { error: 0, status: 200, data: locations }
 }
 
-/**
- * Get user informations
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id:string, type:string}}}
- */
 function getUsers() {
   return { error: 0, status: 200, data: users }
 }
 
-/**
- * Get all new providers
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data:{id: number, name:string}}}
- */
 function getAllNewProviders() {
   return { error: 0, status: 200, data: newProviders }
 }
 
-/**
- * Get provider images
- * @returns {{error:number, status: number, data:string}}
- */
 function getProviderImages(id) {
   return { error: 0, status: 200, data: providerImages.find((pi) => pi.id === id) }
 }
 
-/**
- * Get presentation html content
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data: {small:string}}}
- */
 function getPresentationContent() {
   return { error: 0, status: 200, data: presentation }
 }
 
-/**
- * Update provider description
- * @returns {{error:number, status: number, data:string} | {error:number, status:number, data: {id: number, name:string, description: String}}}
- */
 async function updateProviderDescription(providerId, providerDesc) {
   return {
     error: 0,
@@ -116,10 +65,6 @@ async function updateProviderDescription(providerId, providerDesc) {
   }
 }
 
-/**
- * Get all surveys
- * @returns {{error:number,status:number,data:array}}
- */
 function getAllSurveys() {
   return { error: 0, status: 200, data: surveys }
 }
@@ -147,19 +92,11 @@ function signin(mail, password) {
   return { error: 0, status: 200, data: newUser }
 }
 
-/**
- * Get provider images
- * @returns {{error:number, status: number, data: [{id: number, activitiesId: number, beginingDate: string, beginingHour: string, duration: number, nbPlace: number}]}}
- */
 function getSessionsByActivityId(activityId) {
   const data = session.filter((s) => s.activitiesId === activityId)
   return { error: 0, status: 200, data }
 }
 
-/**
- * Upload provider image
- * @returns {{error:number, status: number, data:object}}
- */
 function uploadProviderImage(providerId, imageData) {
   const providerImagesEntry = providerImages.find((pi) => pi.id === providerId)
 
@@ -183,10 +120,6 @@ function uploadProviderImage(providerId, imageData) {
   return { error: 0, status: 200, data: newImage }
 }
 
-/**
- * Delete provider image
- * @returns {{error:number, status: number, data:string}}
- */
 function deleteProviderImage(providerId, imageIndex) {
   const providerImagesEntry = providerImages.find((pi) => pi.id === providerId)
 
@@ -205,15 +138,7 @@ function updateUserTypeToProvider(userId) {
   return { error: 0, status: 200, data: user }
 }
 
-/**
- * Add a new registration
- * @param {number} activityId
- * @param {number} sessionId
- * @param {number} userId
- * @returns {{error:number, status:number, data:object}}
- */
 function addRegistration(activityId, sessionId, userId) {
-  // Générer un nouvel ID
   let newId = 1
   if (registrations.length > 0) {
     newId = Math.max(...registrations.map((r) => r.id)) + 1
@@ -224,7 +149,7 @@ function addRegistration(activityId, sessionId, userId) {
     activity_id: activityId,
     session_id: sessionId,
     user_id: userId,
-    registration_date: new Date().toISOString().split('T')[0], // Format YYYY-MM-DD
+    registration_date: new Date().toISOString().split('T')[0],
   }
 
   registrations.push(newRegistration)
@@ -232,29 +157,15 @@ function addRegistration(activityId, sessionId, userId) {
   return { error: 0, status: 200, data: newRegistration }
 }
 
-/**
- * Get all registrations
- * @returns {{error:number, status:number, data:array}}
- */
 function getAllRegistrations() {
   return { error: 0, status: 200, data: registrations }
 }
 
-/**
- * Get registrations by activity
- * @param {number} activityId
- * @returns {{error:number, status:number, data:array}}
- */
 function getRegistrationsByActivity(activityId) {
   const data = registrations.filter((r) => r.activity_id === activityId)
   return { error: 0, status: 200, data }
 }
 
-/**
- * Get registrations by user
- * @param {number} userId
- * @returns {{error:number, status:number, data:array}}
- */
 function getRegistrationsByUser(userId) {
   const data = registrations.filter((r) => r.user_id === userId)
   return { error: 0, status: 200, data }

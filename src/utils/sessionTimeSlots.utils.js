@@ -11,7 +11,9 @@ function pad2(value) {
 }
 
 function parseTimeToMinutes(time) {
-  const [hourRaw, minuteRaw] = String(time || '').split(':')
+  const parts = String(time || '').split(':')
+  const hourRaw = parts[0]
+  const minuteRaw = parts[1]
   const hour = toSafeInteger(hourRaw, -1)
   const minute = toSafeInteger(minuteRaw, -1)
 
@@ -50,14 +52,15 @@ export function splitDateHour(dateHour) {
   return { date, hour }
 }
 
-/** Clé stable pour comparer un créneau réservé (ignore secondes / fuseau / suffixes). */
 export function normalizeDateHourKey(dateHour) {
-  const s = String(dateHour || '').trim()
-  const idx = s.indexOf('T')
-  if (idx === -1) return ''
-  const datePart = s.slice(0, idx)
-  let timePart = s.slice(idx + 1).split('.')[0]
+  const raw = String(dateHour || '').trim()
+  const splitByT = raw.split('T')
+  if (splitByT.length < 2) return ''
+
+  const datePart = splitByT[0]
+  let timePart = splitByT[1].split('.')[0]
   if (timePart.endsWith('Z')) timePart = timePart.slice(0, -1)
+
   const parts = timePart.split(':')
   const h = toSafeInteger(parts[0], -1)
   const m = toSafeInteger(parts[1] ?? '0', 0)
@@ -72,22 +75,27 @@ export function formatEventDayFr(day) {
 }
 
 export function buildReservedDateHours(spotIds = []) {
-  const keys = new Set()
+  const keys = []
   for (const spot of spotIds || []) {
     const k = normalizeDateHourKey(spot?.dateHour)
-    if (k.includes('T')) keys.add(k)
+    if (k.includes('T') && !keys.includes(k)) {
+      keys.push(k)
+    }
   }
-  return [...keys].sort((a, b) => a.localeCompare(b))
+  keys.sort((a, b) => a.localeCompare(b))
+  return keys
 }
 
 export function buildReservedSlotOptions(reservedDateHours = [], formatDay = (day) => day) {
-  return (reservedDateHours || []).map((dateHour) => {
+  const options = []
+  for (const dateHour of reservedDateHours || []) {
     const [date, hour] = String(dateHour).split('T')
-    return {
+    options.push({
       label: `${formatDay(date)} - ${hour}`,
       value: dateHour,
-    }
-  })
+    })
+  }
+  return options
 }
 
 export function getSlotStartHour(dateHour) {
@@ -150,6 +158,62 @@ function getSessionInterval(session) {
   }
 }
 
+function collectIntervalsForSlot(sessions, currentSessionId, dateHour, slotStart, slotEnd) {
+  const intervals = []
+
+  for (const session of sessions || []) {
+    if (session?.id === currentSessionId) {
+      continue
+    }
+
+    const interval = getSessionInterval(session)
+    if (!interval) {
+      continue
+    }
+
+    if (interval.slot !== dateHour) {
+      continue
+    }
+
+    if (interval.start < slotStart || interval.end > slotEnd) {
+      continue
+    }
+
+    intervals.push(interval)
+  }
+
+  intervals.sort((a, b) => a.start - b.start)
+  return intervals
+}
+
+function buildCandidateStarts(slotStart, intervals) {
+  const candidates = [slotStart]
+
+  for (const interval of intervals) {
+    if (!candidates.includes(interval.end)) {
+      candidates.push(interval.end)
+    }
+  }
+
+  candidates.sort((a, b) => a - b)
+  return candidates
+}
+
+function canStartAt(start, slotStart, maxStart, normalizedDuration, intervals) {
+  if (start < slotStart || start > maxStart) {
+    return false
+  }
+
+  const end = start + normalizedDuration
+  for (const interval of intervals) {
+    if (overlapsInterval(start, end, interval.start, interval.end)) {
+      return false
+    }
+  }
+
+  return true
+}
+
 export function buildChainedStartHourOptions(dateHour, duration, sessions, currentSessionId) {
   const slot = splitDateHour(dateHour)
   if (!slot) return []
@@ -162,29 +226,29 @@ export function buildChainedStartHourOptions(dateHour, duration, sessions, curre
   const maxStart = slotEnd - normalizedDuration
   if (maxStart < slotStart) return []
 
-  const intervals = (sessions || [])
-    .filter((session) => session?.id !== currentSessionId)
-    .map((session) => getSessionInterval(session))
-    .filter((interval) => interval && interval.slot === dateHour)
-    .filter((interval) => interval.start >= slotStart && interval.end <= slotEnd)
-    .sort((a, b) => a.start - b.start)
+  const intervals = collectIntervalsForSlot(
+    sessions,
+    currentSessionId,
+    dateHour,
+    slotStart,
+    slotEnd,
+  )
+  const candidates = buildCandidateStarts(slotStart, intervals)
 
-  const candidates = new Set([slotStart])
-  for (const interval of intervals) {
-    candidates.add(interval.end)
+  const validStarts = []
+  for (const start of candidates) {
+    if (canStartAt(start, slotStart, maxStart, normalizedDuration, intervals)) {
+      validStarts.push(start)
+    }
   }
 
-  const sortedCandidates = [...candidates].sort((a, b) => a - b)
-  const validStarts = sortedCandidates.filter((start) => {
-    if (start < slotStart || start > maxStart) return false
-    const end = start + normalizedDuration
-    return !intervals.some((interval) => overlapsInterval(start, end, interval.start, interval.end))
-  })
-
-  return validStarts.map((start) => {
+  const options = []
+  for (const start of validStarts) {
     const hhmm = minutesToTime(start)
-    return { label: hhmm, value: hhmm }
-  })
+    options.push({ label: hhmm, value: hhmm })
+  }
+
+  return options
 }
 
 export function pickPreferredStartHour(
@@ -198,7 +262,12 @@ export function pickPreferredStartHour(
   if (!options.length) return ''
 
   const preferred = String(preferredHour || '')
-  if (options.some((opt) => opt.value === preferred)) return preferred
+  for (const opt of options) {
+    if (opt.value === preferred) {
+      return preferred
+    }
+  }
+
   return options[0].value
 }
 
@@ -253,7 +322,12 @@ export function pickValidStartHour(dateHour, beginingHour, duration) {
   if (!options.length) return ''
 
   const current = String(beginingHour || '')
-  if (options.some((opt) => opt.value === current)) return current
+  for (const opt of options) {
+    if (opt.value === current) {
+      return current
+    }
+  }
+
   return options[0].value
 }
 

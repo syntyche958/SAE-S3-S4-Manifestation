@@ -7,12 +7,9 @@ import i18n from '@/i18n'
 
 const { t } = i18n.global
 
-// TODO : Mettre en place l'affichage des messages côté prestataire !
 export const useContactStore = defineStore('contact', () => {
-  // STATE
   const contacts = ref([])
 
-  // ACTIONS
   async function getAllContacts() {
     let response = await ContactService.getAllContacts()
     if (response.error === 0) {
@@ -22,7 +19,6 @@ export const useContactStore = defineStore('contact', () => {
     }
   }
 
-  // TODO : Add async function getAllContacts(provider_id)
   async function getAllContactsById(userId) {
     let response = await ContactService.getAllContactsById(userId)
     if (response.error === 0) {

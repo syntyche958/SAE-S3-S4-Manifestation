@@ -9,11 +9,126 @@ import i18n from '@/i18n'
 
 const { t } = i18n.global
 
+function toUniqueStringList(values = []) {
+  const unique = []
+  for (const value of values) {
+    const normalized = String(value)
+    if (!unique.includes(normalized)) {
+      unique.push(normalized)
+    }
+  }
+  return unique
+}
+
+function buildSlotKeys(locationId, dateHours) {
+  const keys = new Set()
+  for (const dateHour of dateHours) {
+    keys.add(`${locationId}-${dateHour}`)
+  }
+  return keys
+}
+
+function removeSpotsFromList(list, slotKeys) {
+  const cleaned = []
+  for (const spot of list || []) {
+    if (!slotKeys.has(`${spot.locationId}-${spot.dateHour}`)) {
+      cleaned.push(spot)
+    }
+  }
+  return cleaned
+}
+
+function resolveRequestedLocationId(requestedSpots, currentRequestedLocationId, locationId) {
+  if (requestedSpots.length === 0 && currentRequestedLocationId === locationId) {
+    return undefined
+  }
+  return currentRequestedLocationId
+}
+
+function buildBulkUpdatePlan(allActivities, activityId, locationId, uniqueDateHours, slotKeys) {
+  const plan = []
+
+  for (const activity of allActivities || []) {
+    const cleanedSpots = removeSpotsFromList(activity.spotIds || [], slotKeys)
+    const cleanedRequests = removeSpotsFromList(activity.requestedSpotIds || [], slotKeys)
+
+    if (activity.id !== activityId) {
+      plan.push({
+        activity,
+        overrides: {
+          spotIds: cleanedSpots,
+          requestedSpotIds: cleanedRequests,
+          requestedLocationId: resolveRequestedLocationId(
+            cleanedRequests,
+            activity.requestedLocationId,
+            locationId,
+          ),
+        },
+      })
+      continue
+    }
+
+    const mergedSpots = [...cleanedSpots]
+    for (const dateHour of uniqueDateHours) {
+      mergedSpots.push({ locationId, dateHour })
+    }
+
+    plan.push({
+      activity,
+      overrides: {
+        locationId,
+        spotIds: mergedSpots,
+        requestedSpotIds: cleanedRequests,
+        requestedLocationId: resolveRequestedLocationId(
+          cleanedRequests,
+          activity.requestedLocationId,
+          locationId,
+        ),
+      },
+    })
+  }
+
+  return plan
+}
+
+function buildRequestedSpotsToRemove(activity, locationId, dateHours) {
+  const uniqueDateHours = toUniqueStringList(dateHours)
+  const removeKeys = buildSlotKeys(String(locationId), uniqueDateHours)
+
+  const requestedSpotsToRemove = []
+  for (const request of activity.requestedSpotIds || []) {
+    const key = `${String(request.locationId)}-${String(request.dateHour)}`
+    if (removeKeys.has(key)) {
+      requestedSpotsToRemove.push(request)
+    }
+  }
+
+  return {
+    uniqueDateHours,
+    requestedSpotsToRemove,
+  }
+}
+
+async function notifyProviderRefusedSpots(activity, requestedSpotsToRemove, reason) {
+  const providerStore = useProviderStore()
+  const provider = providerStore.get(activity.providerId)
+  const providerUserId = provider?.userId
+
+  if (providerUserId == null) return
+
+  const reasonPart = reason ? ` Motif : ${reason}` : ''
+  const n = requestedSpotsToRemove.length
+  const body =
+    n === 1
+      ? t('message.refusePlacementNotifyOne', { name: activity.name, reasonPart })
+      : t('message.refusePlacementNotifyMany', { name: activity.name, n, reasonPart })
+
+  await enqueueNotificationsForUsers([providerUserId], body)
+}
+
 export const useActivityStore = defineStore('activity', () => {
-  // STATE
   const activities = ref([])
 
-  // ACTIONS
   async function getAllActivities() {
     let response = await activityService.getAllActivities()
     if (response.error === 0) activities.value = response.data
@@ -28,6 +143,7 @@ export const useActivityStore = defineStore('activity', () => {
   function getAvailableDateHoursForLocation(activityId, locationId, dateHours = []) {
     const selfId = Number(activityId)
     const occupiedKeys = new Set()
+
     for (const activity of activities.value || []) {
       if (Number(activity.id) === selfId) continue
 
@@ -39,9 +155,22 @@ export const useActivityStore = defineStore('activity', () => {
       }
     }
 
-    return [...new Set(dateHours.map(String))].filter(
-      (dateHour) => !occupiedKeys.has(`${locationId}-${dateHour}`),
-    )
+    const uniqueDateHours = []
+    for (const dateHour of dateHours || []) {
+      const value = String(dateHour)
+      if (!uniqueDateHours.includes(value)) {
+        uniqueDateHours.push(value)
+      }
+    }
+
+    const available = []
+    for (const dateHour of uniqueDateHours) {
+      if (!occupiedKeys.has(`${locationId}-${dateHour}`)) {
+        available.push(dateHour)
+      }
+    }
+
+    return available
   }
 
   async function updateLocationId(activity_id, locationId) {
@@ -92,52 +221,17 @@ export const useActivityStore = defineStore('activity', () => {
     const activity = get(activityId)
     if (!activity) return
 
-    const uniqueDateHours = [...new Set((dateHours || []).map(String))]
+    const uniqueDateHours = toUniqueStringList(dateHours || [])
     if (uniqueDateHours.length === 0) return
 
-    const slotKeys = new Set(uniqueDateHours.map((dateHour) => `${locationId}-${dateHour}`))
-
-    // Build a full consistent state for all impacted activities, then persist activity by activity.
-    const nextActivities = (activities.value || []).map((a) => {
-      const cleanedSpots = (a.spotIds || []).filter(
-        (spot) => !slotKeys.has(`${spot.locationId}-${spot.dateHour}`),
-      )
-      const cleanedRequests = (a.requestedSpotIds || []).filter(
-        (spot) => !slotKeys.has(`${spot.locationId}-${spot.dateHour}`),
-      )
-
-      if (a.id !== activityId) {
-        return {
-          activity: a,
-          overrides: {
-            spotIds: cleanedSpots,
-            requestedSpotIds: cleanedRequests,
-            requestedLocationId:
-              cleanedRequests.length === 0 && a.requestedLocationId === locationId
-                ? undefined
-                : a.requestedLocationId,
-          },
-        }
-      }
-
-      const mergedSpots = [...cleanedSpots]
-      for (const dateHour of uniqueDateHours) {
-        mergedSpots.push({ locationId, dateHour })
-      }
-
-      return {
-        activity: a,
-        overrides: {
-          locationId,
-          spotIds: mergedSpots,
-          requestedSpotIds: cleanedRequests,
-          requestedLocationId:
-            cleanedRequests.length === 0 && a.requestedLocationId === locationId
-              ? undefined
-              : a.requestedLocationId,
-        },
-      }
-    })
+    const slotKeys = buildSlotKeys(locationId, uniqueDateHours)
+    const nextActivities = buildBulkUpdatePlan(
+      activities.value,
+      activityId,
+      locationId,
+      uniqueDateHours,
+      slotKeys,
+    )
 
     let hasError = false
     for (const item of nextActivities) {
@@ -179,38 +273,32 @@ export const useActivityStore = defineStore('activity', () => {
       return
     }
 
-    const unique = [...new Set((dateHours || []).map(String))]
-    const removeKeys = new Set(unique.map((dh) => `${String(locationId)}-${dh}`))
-    const wouldRemove = (activity.requestedSpotIds || []).filter((r) =>
-      removeKeys.has(`${String(r.locationId)}-${String(r.dateHour)}`),
+    const { uniqueDateHours, requestedSpotsToRemove } = buildRequestedSpotsToRemove(
+      activity,
+      locationId,
+      dateHours,
     )
-    if (wouldRemove.length === 0) {
+
+    if (requestedSpotsToRemove.length === 0) {
       displayErrToast(t('message.refusePlacementNothingToRemove'))
       return
     }
 
-    const response = await activityService.removeRequestedSpots(activity, locationId, unique)
+    const response = await activityService.removeRequestedSpots(
+      activity,
+      locationId,
+      uniqueDateHours,
+    )
+
     if (response.error === 0) {
       await getAllActivities()
 
-      const providerStore = useProviderStore()
-      const provider = providerStore.get(activity.providerId)
-      const providerUserId = provider?.userId
-
-      if (providerUserId != null) {
-        const reasonPart = reason ? ` Motif : ${reason}` : ''
-        const n = wouldRemove.length
-        const body =
-          n === 1
-            ? t('message.refusePlacementNotifyOne', { name: activity.name, reasonPart })
-            : t('message.refusePlacementNotifyMany', { name: activity.name, n, reasonPart })
-        await enqueueNotificationsForUsers([providerUserId], body)
-      }
+      await notifyProviderRefusedSpots(activity, requestedSpotsToRemove, reason)
 
       displaySuccessToast(
-        wouldRemove.length === 1
+        requestedSpotsToRemove.length === 1
           ? t('message.refusePlacementSuccessOne')
-          : t('message.refusePlacementSuccessMany', { n: wouldRemove.length }),
+          : t('message.refusePlacementSuccessMany', { n: requestedSpotsToRemove.length }),
       )
     } else {
       displayErrToast(t('message.refusePlacementFailed'))

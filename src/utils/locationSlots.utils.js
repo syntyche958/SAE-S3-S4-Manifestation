@@ -42,13 +42,11 @@ export function getAssignableActivitiesForAdminSlot(activities, locationId, date
         const blockedElsewhere = (a.spotIds || []).some(
           (s) => String(s.dateHour) === dh && String(s.locationId) !== locStr,
         )
-        if (blockedElsewhere) return false
-        return true
+        return !blockedElsewhere
       })
       .sort((a, b) => a.name.localeCompare(b.name))
   }
 
-  // Si non occupé, utiliser la logique standard
   const hasConfirmed = activities.some((a) =>
     (a.spotIds || []).some(
       (s) => String(s.locationId) === locStr && String(s.dateHour) === dh,
@@ -61,25 +59,37 @@ export function getAssignableActivitiesForAdminSlot(activities, locationId, date
       const blockedElsewhere = (a.spotIds || []).some(
         (s) => String(s.dateHour) === dh && String(s.locationId) !== locStr,
       )
-      if (blockedElsewhere) return false
-      return true
+      return !blockedElsewhere
     })
     .sort((a, b) => a.name.localeCompare(b.name))
 }
 
-/** Intersection des activités assignables sur chaque créneau. */
 export function getActivitiesAssignableToAllSlots(activities, locationId, dateHours) {
   if (!dateHours.length) return []
-  let ids = new Set(
-    getAssignableActivitiesForAdminSlot(activities, locationId, dateHours[0]).map((a) => a.id),
-  )
-  for (let i = 1; i < dateHours.length; i++) {
-    const next = new Set(
-      getAssignableActivitiesForAdminSlot(activities, locationId, dateHours[i]).map((a) => a.id),
-    )
-    ids = new Set([...ids].filter((id) => next.has(id)))
+
+  const firstList = getAssignableActivitiesForAdminSlot(activities, locationId, dateHours[0])
+  let ids = []
+  for (const activity of firstList) {
+    ids.push(activity.id)
   }
-  return activities.filter((a) => ids.has(a.id)).sort((x, y) => x.name.localeCompare(y.name))
+
+  for (let i = 1; i < dateHours.length; i++) {
+    const nextList = getAssignableActivitiesForAdminSlot(activities, locationId, dateHours[i])
+    const nextIds = []
+    for (const activity of nextList) {
+      nextIds.push(activity.id)
+    }
+
+    const commonIds = []
+    for (const id of ids) {
+      if (nextIds.includes(id)) {
+        commonIds.push(id)
+      }
+    }
+    ids = commonIds
+  }
+
+  return activities.filter((a) => ids.includes(a.id)).sort((x, y) => x.name.localeCompare(y.name))
 }
 
 export function buildAdminSlotsForLocation(activities, locationId, days, startHour, endHour) {
@@ -108,9 +118,6 @@ export function buildAdminSlotsForLocation(activities, locationId, days, startHo
   return slots
 }
 
-/**
- * Créneaux pour la vue prestataire (une activité courante, un emplacement).
- */
 export function buildProviderSlots(
   availableDates,
   selectedLocationId,

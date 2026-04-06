@@ -180,7 +180,6 @@ const isReassigning = computed(() => {
   return slot && slot.status === ActivitySpotStatusEnum.ADMIN_RESERVED
 })
 
-/** Refus possible uniquement si tous les créneaux sélectionnés sont des demandes en cours pour la même activité. */
 const refuseSelectionState = computed(() => {
   const dhs = selectedDateHours.value
   if (dhs.length === 0) return { canRefuse: false, activityId: null }
@@ -202,7 +201,6 @@ const refuseSelectionState = computed(() => {
   return { canRefuse: true, activityId }
 })
 
-/** Refuser uniquement si l’activité choisie est bien celle de la demande (sinon masqué, ex. réassignation). */
 const showRefuseButton = computed(
   () =>
     refuseSelectionState.value.canRefuse &&

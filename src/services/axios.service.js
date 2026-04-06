@@ -82,7 +82,6 @@ function handleErrors(route, typeReq, err) {
     console.log(`(${typeReq} - ${route}) error : `, err.message)
     return { error: err.response.status, data: err.response.data }
   } else if (err.request) {
-    // Cas pas de réponse retourné
     console.log(`(${typeReq} - ${route}) error : no response`)
     return { error: 500, data: 'no response' }
   } else {

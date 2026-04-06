@@ -1,7 +1,6 @@
 <template>
   <div v-if="!isProviderAdminPanelToHide()">
-    <!-- Button -->
-    <Button
+        <Button
       icon="pi pi-plus"
       rounded
       severity="contrast"
@@ -9,8 +8,7 @@
       variant="outlined"
       @click="visible = true"
     />
-    <!-- Modal -->
-    <Dialog
+        <Dialog
       v-model:visible="visible"
       modal
       :header="$t('message.addActivity')"
@@ -23,24 +21,21 @@
         @submit="onFormSubmit"
         class="flex flex-col gap-4 w-full"
       >
-        <!-- Name input -->
-        <div class="flex flex-col gap-1">
+                <div class="flex flex-col gap-1">
           <label for="name" class="font-semibold w-24">{{ $t('message.name') }}</label>
           <InputText id="name" name="name" />
           <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">{{
             $form.name.error?.message
           }}</Message>
         </div>
-        <!-- Desc input -->
-        <div class="flex flex-col gap-1 mb-8">
+                <div class="flex flex-col gap-1 mb-8">
           <label for="desc" class="font-semibold w-24">{{ $t('message.description') }}</label>
           <InputText id="desc" name="desc" class="flex-auto" />
           <Message v-if="$form.desc?.invalid" severity="error" size="small" variant="simple">{{
             $form.desc.error?.message
           }}</Message>
         </div>
-        <!-- Buttons -->
-        <div class="flex justify-end gap-2">
+                <div class="flex justify-end gap-2">
           <Button
             type="button"
             :label="$t('message.cancel')"

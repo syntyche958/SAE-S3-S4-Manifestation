@@ -1,11 +1,9 @@
 <template>
-  <!-- Loading state -->
   <div v-if="providerStore.isLoadingProviders || !currentProvider"
     class="flex justify-center items-center min-h-screen">
     <ProgressSpinner />
   </div>
 
-  <!-- Visitor -->
   <div v-else-if="isProviderAdminPanelToHide()" class="flex justify-center">
     <Card class="main-section-container"><template #content>
         <h1 class="text-center texturina-title">
@@ -16,7 +14,6 @@
     </Card>
   </div>
 
-  <!-- Provider / Admin -->
   <div v-else class="flex justify-center">
     <Card class="main-section-container">
       <template #content>
@@ -74,7 +71,6 @@ const currentProvider = computed(() => {
 })
 
 onMounted(async () => {
-  // Ensure providers are loaded
   if (providerStore.providers.length === 0) {
     await providerStore.getAllProviders()
   }

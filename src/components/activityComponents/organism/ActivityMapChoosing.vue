@@ -74,7 +74,6 @@ const onChangeSelectedLocation = (locationId) => {
 const currentActivityId = computed(() => Number(route.params.activity_id))
 const currentActivity = computed(() => activityStore.get(currentActivityId.value))
 
-/** Créneaux sélectionnés pour demande (clés `YYYY-MM-DDTHH:00`) */
 const selectedDateHours = ref([])
 
 watch(selectedLocationId, () => {
@@ -83,18 +82,37 @@ watch(selectedLocationId, () => {
 
 const availableDates = computed(() => {
   const activity = activityStore.get(currentActivityId.value)
-  const dates = new Set(EVENT_DAYS)
+  const dates = []
 
-  ;(activity?.spotIds || []).forEach((s) => dates.add(String(s.dateHour).split('T')[0]))
-  ;(activity?.requestedSpotIds || []).forEach((s) => dates.add(String(s.dateHour).split('T')[0]))
+  for (const day of EVENT_DAYS) {
+    if (!dates.includes(day)) {
+      dates.push(day)
+    }
+  }
 
-  ;(
-    (sessionStore.sessions || [])
-      .filter((s) => s.activitiesId === currentActivityId.value)
-      .map((s) => s.beginingDate)
-  ).forEach((d) => dates.add(d))
+  for (const spot of activity?.spotIds || []) {
+    const day = String(spot.dateHour).split('T')[0]
+    if (!dates.includes(day)) {
+      dates.push(day)
+    }
+  }
 
-  return Array.from(dates).sort()
+  for (const spot of activity?.requestedSpotIds || []) {
+    const day = String(spot.dateHour).split('T')[0]
+    if (!dates.includes(day)) {
+      dates.push(day)
+    }
+  }
+
+  for (const session of sessionStore.sessions || []) {
+    if (session.activitiesId !== currentActivityId.value) continue
+    if (!dates.includes(session.beginingDate)) {
+      dates.push(session.beginingDate)
+    }
+  }
+
+  dates.sort()
+  return dates
 })
 
 const allSlots = computed(() =>
@@ -110,10 +128,16 @@ const allSlots = computed(() =>
 )
 
 watch(allSlots, () => {
-  selectedDateHours.value = selectedDateHours.value.filter((dh) => {
-    const s = allSlots.value.find((x) => x.dateHour === dh)
-    return s?.status === ActivitySpotStatusEnum.PROVIDER_FREE
-  })
+  const nextSelected = []
+
+  for (const dateHour of selectedDateHours.value) {
+    const slot = allSlots.value.find((x) => x.dateHour === dateHour)
+    if (slot && slot.status === ActivitySpotStatusEnum.PROVIDER_FREE) {
+      nextSelected.push(dateHour)
+    }
+  }
+
+  selectedDateHours.value = nextSelected
 })
 
 const slotsByDay = computed(() => {
@@ -133,10 +157,13 @@ function toggleSlotSelection(dateHour) {
 async function submitSelectedRequests() {
   if (!selectedLocationId.value || selectedDateHours.value.length === 0) return
 
-  const dateHours = selectedDateHours.value.filter((dh) => {
-    const s = allSlots.value.find((x) => x.dateHour === dh)
-    return s?.status === ActivitySpotStatusEnum.PROVIDER_FREE
-  })
+  const dateHours = []
+  for (const dateHour of selectedDateHours.value) {
+    const slot = allSlots.value.find((x) => x.dateHour === dateHour)
+    if (slot && slot.status === ActivitySpotStatusEnum.PROVIDER_FREE) {
+      dateHours.push(dateHour)
+    }
+  }
   if (dateHours.length === 0) {
     displayErrToast(t('message.noValidSlotsInSelection'))
     return

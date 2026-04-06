@@ -9,7 +9,6 @@ export const useProviderStore = defineStore('provider', () => {
   const providers = ref([])
   const newProviders = ref([])
   const providerImages = ref([])
-  /** Incrémenté après upload/suppression d’image pour rafraîchir le carrousel */
   const providerImageListRevision = ref(0)
   const providerDescription = ref('')
 
@@ -26,8 +25,10 @@ export const useProviderStore = defineStore('provider', () => {
     return providers.value.find((p) => p.id === providerId)
   }
 
-  async function getDescription(providerId) {
-    return providers.value.find((p) => p.id == providerId).description
+  function getDescription(providerId) {
+    const provider = providers.value.find((p) => p.id == providerId)
+    if (!provider) return ''
+    return provider.description
   }
 
   async function updateProviderDescription(providerId, newDescription) {
@@ -50,7 +51,8 @@ export const useProviderStore = defineStore('provider', () => {
     if (response.error === 0) {
       providers.value = providers.value.filter((p) => p.id != providerId)
       providers.value.push(response.data)
-      providers.value = providers.value.sort((a, b) => a.id - b.id)
+      const sortedProviders = providers.value.slice().sort((a, b) => a.id - b.id)
+      providers.value = sortedProviders
       displaySuccessToast('Texte de présentation enregistré.')
     } else {
       displayErrToast("Impossible d'enregistrer le texte de présentation.")
@@ -62,11 +64,9 @@ export const useProviderStore = defineStore('provider', () => {
     let response = await ProviderService.getProviderImages(idProvider)
 
     if (
-      response &&
-      response.error === 0 &&
-      response.data &&
-      response.data.id === idProvider &&
-      Array.isArray(response.data.images)
+      response?.error === 0 &&
+      response?.data?.id === idProvider &&
+      Array.isArray(response?.data?.images)
     ) {
       providerImages.value = response.data.images
       return response.data.images
@@ -78,7 +78,7 @@ export const useProviderStore = defineStore('provider', () => {
 
   async function getAllNewProviders() {
     let response = await ProviderService.getAllNewProviders()
-    if (response && response.error === 0 && Array.isArray(response.data)) {
+    if (response?.error === 0 && Array.isArray(response?.data)) {
       newProviders.value = response.data
     } else {
       console.log(response?.data ?? response)

@@ -257,7 +257,6 @@ async function submit() {
   try {
     await surveyStore.addSurvey(payload)
     visible.value = false
-    // reset form
     form.rating = 0
     form.recommend = ''
     form.ratings.organisation = 0

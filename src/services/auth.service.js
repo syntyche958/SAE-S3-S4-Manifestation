@@ -6,18 +6,6 @@ function buildApiUrl(path) {
   return `${API_URL}${path}`
 }
 
-// async function loginFromLocalSource(mail, password) {
-//   return LocalSource.login(mail, password)
-// }
-
-// async function signinFromLocalSource(mail, password) {
-//   return LocalSource.signin(mail, password)
-// }
-
-// async function updateUserTypeToProviderFromLocalSource(userId) {
-//   return LocalSource.updateUserTypeToProvider(userId)
-// }
-
 async function login(mail, password) {
   let response = null
   try {
@@ -59,10 +47,10 @@ async function getUsers() {
 }
 
 function startGoogleOAuth() {
-  window.location.href = buildApiUrl('/auth/google')
+  globalThis.location.href = buildApiUrl('/auth/google')
 }
 
-function parseOAuthCallback(search = window.location.search) {
+function parseOAuthCallback(search = globalThis.location.search) {
   const params = new URLSearchParams(search)
   const token = params.get('token')
   const error = params.get('error')

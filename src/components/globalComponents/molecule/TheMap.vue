@@ -49,31 +49,29 @@ onMounted(async () => {
   }
 
   mapInstance = setupMap(props.id)
-  displayLocations(
-    mapInstance,
-    props.displayMode,
+  displayLocations(mapInstance, {
+    mapMode: props.displayMode,
     emit,
     route,
-    props.selectedLocationId,
-    props.visitorDateHour,
+    selectedLocationId: props.selectedLocationId,
+    visitorDateHour: props.visitorDateHour,
     t,
     router,
-  )
+  })
 
   stopActivitiesWatch = watch(
     () => activityStore.activities,
     () => {
       if (!mapInstance) return
-      refreshLocations(
-        mapInstance,
+      refreshLocations(mapInstance, {
         emit,
-        props.displayMode,
+        mapMode: props.displayMode,
         route,
-        props.selectedLocationId,
-        props.visitorDateHour,
+        selectedLocationId: props.selectedLocationId,
+        visitorDateHour: props.visitorDateHour,
         t,
         router,
-      )
+      })
     },
   )
 
@@ -81,16 +79,15 @@ onMounted(async () => {
     () => props.visitorDateHour,
     () => {
       if (!mapInstance) return
-      refreshLocations(
-        mapInstance,
+      refreshLocations(mapInstance, {
         emit,
-        props.displayMode,
+        mapMode: props.displayMode,
         route,
-        props.selectedLocationId,
-        props.visitorDateHour,
+        selectedLocationId: props.selectedLocationId,
+        visitorDateHour: props.visitorDateHour,
         t,
         router,
-      )
+      })
     },
   )
 

@@ -12,7 +12,6 @@ export const useAuthStore = defineStore('auth', () => {
   const STORAGE_TOKEN_KEY = 'accessToken'
   const STORAGE_USER_KEY = 'user'
 
-  // STATE
   const user = ref({ type: UserTypeEnum.NOTCONNECTED })
   const accessToken = ref(localStorage.getItem(STORAGE_TOKEN_KEY))
 
@@ -65,7 +64,6 @@ export const useAuthStore = defineStore('auth', () => {
     return user.value
   }
 
-  /** Met à jour le type (ex. VISITOR → PROVIDER) après validation admin, sans nouveau login. */
   async function syncProfileFromApi() {
     if (!accessToken.value) return
     const rawUser = await AuthService.getProfileFromApi(accessToken.value)
@@ -89,7 +87,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function signin(mail, password) {
     let response = await AuthService.signin(mail, password)
-    console.log(response)
     if (response.error === 0) {
       persistSession(response.data.user, response.data.token)
       displaySuccessToast(t('message.loginSuccess'))
@@ -109,7 +106,7 @@ export const useAuthStore = defineStore('auth', () => {
     AuthService.startGoogleOAuth()
   }
 
-  async function handleOAuthCallback(search = window.location.search) {
+  async function handleOAuthCallback(search = globalThis.location.search) {
     const { token, error, user: callbackUser } = AuthService.parseOAuthCallback(search)
     if (error || !token) {
       clearSession()

@@ -1,6 +1,5 @@
 <template>
-  <!-- Button -->
-  <Button
+    <Button
     :label="$t('message.contactProvider')"
     icon="pi pi-envelope"
     @click="openModal()"
@@ -9,8 +8,7 @@
     size="small"
   />
 
-  <!-- Modal -->
-  <Dialog
+    <Dialog
     v-model:visible="visible"
     :header="$t('message.contactProvider')"
     class="w-auto sm:w-[25vw]"
@@ -24,8 +22,7 @@
       @submit="onFormSubmit"
       class="flex flex-col gap-4 w-full"
     >
-      <!-- Email input -->
-      <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1">
         <label for="email" class="font-semibold w-24">Email</label>
         <InputText id="email" name="email" type="text" fluid />
         <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
@@ -33,10 +30,8 @@
         }}</Message>
       </div>
 
-      <!-- Provider input -->
-      <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1">
         <label class="font-semibold w-24">{{ $t('message.provider') }}</label>
-        <!-- TODO : Default value if on a provider page ! -->
         <Select
           :options="providerStore.providers"
           optionLabel="name"
@@ -50,8 +45,7 @@
         }}</Message>
       </div>
 
-      <!-- Activity input -->
-      <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1">
         <label class="font-semibold w-24">{{ $t('message.activity') }}</label>
         <Select
           :key="selectedProviderId ?? 'no-provider'"
@@ -69,8 +63,7 @@
         }}</Message>
       </div>
 
-      <!-- Message input -->
-      <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1">
         <label for="message" class="font-semibold w-24">Message</label>
         <Textarea id="message" name="message" fluid />
         <Message v-if="$form.message?.invalid" severity="error" size="small" variant="simple">{{
@@ -78,8 +71,7 @@
         }}</Message>
       </div>
 
-      <!-- Buttons -->
-      <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2">
         <Button
           type="button"
           :label="$t('message.cancel')"
@@ -122,7 +114,6 @@ const selectedProviderId = computed(() => {
   return id == null ? null : Number(id)
 })
 
-/** Activités du prestataire sélectionné uniquement. */
 const activitySelectOptions = computed(() => {
   if (selectedProviderId.value == null) return []
   return (activityStore.activities || [])

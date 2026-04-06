@@ -13,27 +13,88 @@ async function getAllActivities() {
 }
 
 function pickActivityUpdatePayload(activity, overrides = {}) {
-  const rawPid = activity.providerId
+  const rawProviderId = activity.providerId
+  const providerId = rawProviderId == null ? rawProviderId : Number(rawProviderId)
+  const id = Number(activity.id)
+
+  const locationId =
+    overrides.locationId === undefined ? activity.locationId : overrides.locationId
+  const requestedLocationId =
+    overrides.requestedLocationId === undefined
+      ? activity.requestedLocationId
+      : overrides.requestedLocationId
+
+  const spotIds = overrides.spotIds === undefined ? (activity.spotIds ?? []) : overrides.spotIds
+  const requestedSpotIds =
+    overrides.requestedSpotIds === undefined
+      ? (activity.requestedSpotIds ?? [])
+      : overrides.requestedSpotIds
+
+  const visibility =
+    overrides.visibility === undefined ? (activity.visibility ?? 'public') : overrides.visibility
+  const commentsEnabled =
+    overrides.commentsEnabled === undefined
+      ? (activity.commentsEnabled ?? true)
+      : overrides.commentsEnabled
+  const sessionsEnabled =
+    overrides.sessionsEnabled === undefined
+      ? (activity.sessionsEnabled ?? true)
+      : overrides.sessionsEnabled
+  const registrationCountEnabled =
+    overrides.registrationCountEnabled === undefined
+      ? (activity.registrationCountEnabled ?? true)
+      : overrides.registrationCountEnabled
+
+  const canRegister = overrides.canRegister === undefined ? activity.canRegister : overrides.canRegister
+  const presentationContent =
+    overrides.presentationContent === undefined
+      ? (activity.presentationContent ?? '')
+      : overrides.presentationContent
+  const ratings = overrides.ratings === undefined ? (activity.ratings ?? []) : overrides.ratings
+  const comments = overrides.comments === undefined ? (activity.comments ?? []) : overrides.comments
+
   return {
-    id: Number(activity.id),
-    providerId: rawPid != null ? Number(rawPid) : rawPid,
+    id,
+    providerId,
     name: activity.name,
     description: activity.description || '',
-    locationId: overrides.locationId ?? activity.locationId,
-    requestedLocationId: overrides.requestedLocationId ?? activity.requestedLocationId,
-    spotIds: overrides.spotIds ?? activity.spotIds ?? [],
-    requestedSpotIds: overrides.requestedSpotIds ?? activity.requestedSpotIds ?? [],
-    visibility: overrides.visibility ?? activity.visibility ?? 'public',
-    commentsEnabled: overrides.commentsEnabled ?? activity.commentsEnabled ?? true,
-    sessionsEnabled: overrides.sessionsEnabled ?? activity.sessionsEnabled ?? true,
-    registrationCountEnabled:
-      overrides.registrationCountEnabled ?? activity.registrationCountEnabled ?? true,
-    canRegister: overrides.canRegister ?? activity.canRegister,
-    presentationContent:
-      overrides.presentationContent ?? activity.presentationContent ?? '',
-    ratings: overrides.ratings ?? activity.ratings ?? [],
-    comments: overrides.comments ?? activity.comments ?? [],
+    locationId,
+    requestedLocationId,
+    spotIds,
+    requestedSpotIds,
+    visibility,
+    commentsEnabled,
+    sessionsEnabled,
+    registrationCountEnabled,
+    canRegister,
+    presentationContent,
+    ratings,
+    comments,
   }
+}
+
+function toUniqueDateHours(dateHours) {
+  const unique = []
+  for (const dateHour of dateHours || []) {
+    const value = String(dateHour)
+    if (!unique.includes(value)) {
+      unique.push(value)
+    }
+  }
+  return unique
+}
+
+function hasSpotForDateHour(spots, locationId, dateHour) {
+  return spots.some(
+    (spot) => String(spot.locationId) === String(locationId) && String(spot.dateHour) === dateHour,
+  )
+}
+
+function hasRequestForDateHour(requests, locationId, dateHour) {
+  return requests.some(
+    (request) =>
+      String(request.locationId) === String(locationId) && String(request.dateHour) === dateHour,
+  )
 }
 
 async function updateActivity(activity, overrides = {}) {
@@ -51,16 +112,19 @@ async function updateLocationId(activity, locationId) {
 async function addRequestedSpots(activity, locationId, dateHours) {
   const existingSpots = activity.spotIds || []
   const existingRequests = activity.requestedSpotIds || []
+  const unique = toUniqueDateHours(dateHours)
 
-  const spotKeys = new Set(existingSpots.map((s) => `${s.locationId}-${s.dateHour}`))
-  const requestKeys = new Set(existingRequests.map((s) => `${s.locationId}-${s.dateHour}`))
-
-  const unique = [...new Set((dateHours || []).map(String))]
   const newRequests = []
+
   for (const dateHour of unique) {
-    const key = `${locationId}-${dateHour}`
-    if (spotKeys.has(key) || requestKeys.has(key)) continue
-    requestKeys.add(key)
+    if (hasSpotForDateHour(existingSpots, locationId, dateHour)) {
+      continue
+    }
+
+    if (hasRequestForDateHour(existingRequests, locationId, dateHour)) {
+      continue
+    }
+
     newRequests.push({ locationId, dateHour })
   }
 
@@ -69,30 +133,31 @@ async function addRequestedSpots(activity, locationId, dateHours) {
   }
 
   return updateActivity(activity, {
-    requestedSpotIds: [...existingRequests, ...newRequests],
+    requestedSpotIds: existingRequests.concat(newRequests),
     requestedLocationId: locationId,
   })
 }
 
-/** Retire uniquement les créneaux demandés indiqués pour cet emplacement. */
 async function removeRequestedSpots(activity, locationId, dateHours) {
-  const unique = [...new Set((dateHours || []).map(String))]
+  const unique = toUniqueDateHours(dateHours)
+
   if (unique.length === 0) {
     return { error: 0, status: 200, data: activity }
   }
 
-  const removeKeys = new Set(unique.map((dh) => `${String(locationId)}-${dh}`))
   const existing = activity.requestedSpotIds || []
-  const updated = existing.filter(
-    (r) => !removeKeys.has(`${String(r.locationId)}-${String(r.dateHour)}`),
-  )
+  const updated = existing.filter((request) => {
+    const sameLocation = String(request.locationId) === String(locationId)
+    const sameDate = unique.includes(String(request.dateHour))
+    return !(sameLocation && sameDate)
+  })
 
-  let requestedLocationId = activity.requestedLocationId
+  let requestedLocationId
   if (updated.length === 0) {
     requestedLocationId = undefined
   } else {
     const prevLoc = activity.requestedLocationId
-    const stillOnPrev = updated.some((r) => String(r.locationId) === String(prevLoc))
+    const stillOnPrev = updated.some((request) => String(request.locationId) === String(prevLoc))
     requestedLocationId = stillOnPrev ? prevLoc : updated[0].locationId
   }
 
@@ -111,22 +176,22 @@ async function addToLocalSource(providerId, name, desc, locale = 'fr') {
 }
 
 async function addSpotsBulk(activity, locationId, dateHours) {
-  const unique = [...new Set((dateHours || []).map(String))]
-  let updatedSpots = [...(activity.spotIds || [])]
-  let updatedRequests = [...(activity.requestedSpotIds || [])]
+  const unique = toUniqueDateHours(dateHours)
+
+  const updatedSpots = (activity.spotIds || []).slice()
+  let updatedRequests = (activity.requestedSpotIds || []).slice()
 
   for (const dateHour of unique) {
-    if (
-      updatedSpots.some(
-        (s) => String(s.locationId) === String(locationId) && String(s.dateHour) === dateHour,
-      )
-    ) {
+    if (hasSpotForDateHour(updatedSpots, locationId, dateHour)) {
       continue
     }
+
     updatedSpots.push({ locationId, dateHour })
-    updatedRequests = updatedRequests.filter(
-      (r) => !(String(r.locationId) === String(locationId) && String(r.dateHour) === dateHour),
-    )
+    updatedRequests = updatedRequests.filter((request) => {
+      const sameLocation = String(request.locationId) === String(locationId)
+      const sameDateHour = String(request.dateHour) === dateHour
+      return !(sameLocation && sameDateHour)
+    })
   }
 
   return updateActivity(activity, {

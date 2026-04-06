@@ -1,20 +1,17 @@
 <template>
   <div class="statistics-container">
-    <!-- Header centré -->
-    <div class="text-center mb-10">
+        <div class="text-center mb-10">
       <h2 class="text-3xl font-bold mb-3">{{ $t('message.statistics') }}</h2>
       <p class="text-surface-400 text-lg">
         {{ $t('message.statsDescription') }}
       </p>
     </div>
 
-    <!-- Loading state -->
-    <div v-if="statsStore.loading" class="flex justify-center items-center h-64">
+        <div v-if="statsStore.loading" class="flex justify-center items-center h-64">
       <ProgressSpinner />
     </div>
 
-    <!-- No data -->
-    <div
+        <div
       v-else-if="statsStore.totalSurveys === 0 && statsStore.totalRegistrations === 0"
       class="text-center py-12"
     >
@@ -23,10 +20,8 @@
       <p class="text-surface-500 text-sm mt-2">{{ $t('message.dataAppearanceInfo') }}</p>
     </div>
 
-    <!-- Stats content -->
-    <div v-else>
-      <!-- Stats cards -->
-      <div class="flex justify-center mb-12">
+        <div v-else>
+            <div class="flex justify-center mb-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
           <Card
             class="text-center shadow-lg hover:shadow-xl transition-shadow !bg-[#1A1A1A] !border-surface-700/50"
@@ -52,8 +47,7 @@
                 <div class="text-surface-300 text-lg">{{ $t('message.totalRegistrations') }}</div>
               </div>
 
-              <!-- Bande déroulante (Marquee) -->
-              <div
+                            <div
                 v-if="statsStore.generalStats?.registrationsPerActivity?.length"
                 class="absolute bottom-0 left-0 w-full bg-purple-950/40 py-1 border-t border-purple-800/20 overflow-hidden"
               >
@@ -91,10 +85,8 @@
         </div>
       </div>
 
-      <!-- Main Chats Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        <!-- Satisfaction Chart -->
-        <Card class="shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <Card class="shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
           <template #title>
             <div class="text-center text-xl">{{ $t('message.satisfactionDistribution') }}</div>
           </template>
@@ -112,8 +104,7 @@
           </template>
         </Card>
 
-        <!-- User Distribution Chart -->
-        <Card class="shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
+                <Card class="shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
           <template #title>
             <div class="text-center text-xl">{{ $t('message.registeredUsersEmail') }}</div>
           </template>
@@ -125,8 +116,7 @@
         </Card>
       </div>
 
-      <!-- Activities Per Day Chart -->
-      <div class="flex justify-center">
+            <div class="flex justify-center">
         <div class="w-full max-w-3xl">
           <Card class="shadow-lg !bg-[#1A1A1A] !border-surface-700/50">
             <template #title>
@@ -150,7 +140,6 @@ import { useStatisticsStore } from '@/stores/statistics'
 import { Card, ProgressSpinner } from 'primevue'
 import { Chart, registerables } from 'chart.js'
 
-// Enregistrer tous les composants Chart.js
 Chart.register(...registerables)
 
 const statsStore = useStatisticsStore()
@@ -160,16 +149,13 @@ let usersChart = null
 let activitiesChart = null
 
 onMounted(async () => {
-  // Charger les statistiques
   await Promise.all([statsStore.loadSurveyStatistics(), statsStore.loadGeneralStatistics()])
 
-  // Dessiner les graphiques
   setTimeout(() => {
     drawCharts()
   }, 100)
 })
 
-// Redessiner les graphiques quand les statistiques changent
 watch(
   () => [statsStore.surveyStats, statsStore.generalStats],
   () => {
@@ -179,12 +165,10 @@ watch(
 )
 
 function drawCharts() {
-  // Détruire les anciens graphiques s'ils existent
   if (satisfactionChart) satisfactionChart.destroy()
   if (usersChart) usersChart.destroy()
   if (activitiesChart) activitiesChart.destroy()
 
-  // 1. Graphique: Distribution de satisfaction
   if (statsStore.surveyStats) {
     const distribution = statsStore.surveyStats.ratingsDistribution || {
       5: 0,
@@ -237,7 +221,6 @@ function drawCharts() {
     }
   }
 
-  // 2. Graphique: Répartition des inscrits (Prestataires vs Visiteurs)
   if (statsStore.generalStats) {
     const userCounts = statsStore.generalStats.userCounts || { provider: 0, visitor: 0 }
     const usersCtx = document.getElementById('usersChart')
@@ -267,7 +250,6 @@ function drawCharts() {
       })
     }
 
-    // 3. Graphique: Activités par jour
     const activitiesPerDay = statsStore.generalStats.activitiesPerDay || {
       Samedi: 0,
       Dimanche: 0,

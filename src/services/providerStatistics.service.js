@@ -1,9 +1,10 @@
 import activityService from './activity.service'
 import sessionsService from './sessions.service'
 import i18n from '@/i18n'
+
 const { t } = i18n.global
 
-class ProviderStatisticsService {
+const providerStatisticsService = {
   async getProviderStatistics(providerId) {
     try {
       const activitiesResponse = await activityService.getAllActivities()
@@ -11,33 +12,42 @@ class ProviderStatisticsService {
         throw new Error('Erreur lors de la récupération des activités')
       }
 
-      const activities = activitiesResponse.data.filter(
-        (activity) =>
-          activity.providerId === parseInt(providerId) &&
-          (activity.registrationCountEnabled ?? true),
-      )
+      const providerIdNumber = Number.parseInt(providerId)
+      const activities = []
+      const activityIds = []
+
+      for (const activity of activitiesResponse.data) {
+        const countEnabled = activity.registrationCountEnabled ?? true
+        if (activity.providerId === providerIdNumber && countEnabled) {
+          activities.push(activity)
+          activityIds.push(activity.id)
+        }
+      }
 
       const sessionsResponse = await sessionsService.getAllSessions()
       if (sessionsResponse.error !== 0) {
         throw new Error('Erreur lors de la récupération des sessions')
       }
 
-      const activityIds = activities.map((a) => a.id)
-      const sessions = sessionsResponse.data.filter((s) => activityIds.includes(s.activityId))
-
       const registrations = []
-      sessions.forEach((s) => {
-        if (s.registersUsers) {
-          s.registersUsers.forEach((userId) => {
-            registrations.push({
-              activity_id: s.activityId,
-              session_id: s.id,
-              user_id: userId,
-              registration_date: s.beginingDate,
-            })
+      for (const session of sessionsResponse.data) {
+        if (!activityIds.includes(session.activityId)) {
+          continue
+        }
+
+        if (!session.registersUsers) {
+          continue
+        }
+
+        for (const userId of session.registersUsers) {
+          registrations.push({
+            activity_id: session.activityId,
+            session_id: session.id,
+            user_id: userId,
+            registration_date: session.beginingDate,
           })
         }
-      })
+      }
 
       return {
         success: true,
@@ -53,77 +63,102 @@ class ProviderStatisticsService {
         error: error.message,
       }
     }
-  }
+  },
 
   calculateRegistrationsByActivity(activities, registrations) {
     const stats = {}
-    registrations.forEach((reg) => {
-      const activity = activities.find((a) => a.id === reg.activity_id)
-      if (activity) {
-        if (!stats[reg.activity_id]) {
-          stats[reg.activity_id] = {
-            id: activity.id,
-            name: activity.name,
-            count: 0,
-            activity: activity,
-          }
+
+    for (const reg of registrations) {
+      let activity = null
+
+      for (const currentActivity of activities) {
+        if (currentActivity.id === reg.activity_id) {
+          activity = currentActivity
+          break
         }
-        stats[reg.activity_id].count++
       }
-    })
+
+      if (!activity) {
+        continue
+      }
+
+      if (!stats[reg.activity_id]) {
+        stats[reg.activity_id] = {
+          id: activity.id,
+          name: activity.name,
+          count: 0,
+          activity,
+        }
+      }
+
+      stats[reg.activity_id].count++
+    }
+
     return Object.values(stats)
-  }
+  },
 
   calculateRegistrationsByDay(activities, registrations) {
     const stats = {}
 
-    registrations.forEach((reg) => {
-      const date = new Date(reg.registration_date).toLocaleDateString('fr-FR')
+    for (const reg of registrations) {
+      const rawDate = new Date(reg.registration_date)
+      const date = rawDate.toLocaleDateString('fr-FR')
 
       if (!stats[date]) {
         stats[date] = {
-          date: date,
+          date,
           count: 0,
-          rawDate: new Date(reg.registration_date),
+          rawDate,
         }
       }
+
       stats[date].count++
-    })
+    }
 
     return Object.values(stats).sort((a, b) => a.rawDate - b.rawDate)
-  }
+  },
 
   calculateRegistrationsByActivityAndDay(activities, registrations) {
     const stats = {}
 
-    registrations.forEach((reg) => {
-      const activity = activities.find((a) => a.id === reg.activity_id)
+    for (const reg of registrations) {
 
-      if (activity) {
-        const activityName = activity.name
-        const date = reg.registration_date
-          ? new Date(reg.registration_date).toLocaleDateString('fr-FR')
-          : t('message.undefinedDate')
-
-        const key = `${activity.id}|${date}`
-        if (!stats[key]) {
-          stats[key] = {
-            activityId: activity.id,
-            activityName: activityName,
-            date: date,
-            count: 0,
-            rawDate: reg.registration_date ? new Date(reg.registration_date) : null,
-          }
+      let activity = null
+      for (const currentActivity of activities) {
+        if (currentActivity.id === reg.activity_id) {
+          activity = currentActivity
+          break
         }
-        stats[key].count++
       }
-    })
+
+      if (!activity) {
+        continue
+      }
+
+      const date = reg.registration_date
+        ? new Date(reg.registration_date).toLocaleDateString('fr-FR')
+        : t('message.undefinedDate')
+
+      const key = activity.id + '|' + date
+      if (!stats[key]) {
+        stats[key] = {
+          activityId: activity.id,
+          activityName: activity.name,
+          date,
+          count: 0,
+          rawDate: reg.registration_date ? new Date(reg.registration_date) : null,
+        }
+      }
+
+      stats[key].count++
+    }
+
     return Object.values(stats).sort((a, b) => {
       if (!a.rawDate) return 1
       if (!b.rawDate) return -1
       return a.rawDate - b.rawDate
     })
-  }
+  },
 }
 
-export default new ProviderStatisticsService()
+export default providerStatisticsService

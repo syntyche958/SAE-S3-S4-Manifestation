@@ -16,8 +16,7 @@
     />
   </div>
 
-  <!--Dialog de messagerie pour l'admin-->
-  <Dialog
+    <Dialog
     v-model:visible="messagingDialogVisible"
     :header="$t('message.satisfactionForm')"
     :style="{ width: '90vw', maxWidth: '1200px', height: '85vh' }"

@@ -34,8 +34,7 @@
         </template>
 
         <template #content>
-          <!-- Ratings détaillés -->
-          <div class="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
+                    <div class="grid grid-cols-3 gap-4 mb-4 pb-4 border-b">
             <div class="flex flex-col items-center">
               <span class="text-sm text-surface-400 mb-1">{{ $t('message.organisation') }}</span>
               <Rating
@@ -65,22 +64,19 @@
             </div>
           </div>
 
-          <!-- Activités suivies -->
-          <div v-if="survey.activities && survey.activities.length > 0" class="mb-4">
+                    <div v-if="survey.activities && survey.activities.length > 0" class="mb-4">
             <p class="text-sm font-semibold mb-2">{{ $t('message.followedActivities') }} :</p>
             <div class="flex gap-2 flex-wrap">
               <Chip v-for="act in survey.activities" :key="act" :label="act" />
             </div>
           </div>
 
-          <!-- Commentaire -->
-          <div v-if="survey.comment" class="mb-4 p-3 bg-surface-100/10 rounded">
+                    <div v-if="survey.comment" class="mb-4 p-3 bg-surface-100/10 rounded">
             <p class="text-sm font-semibold mb-1">{{ $t('message.comment') }} :</p>
             <p class="whitespace-pre-wrap">{{ survey.comment }}</p>
           </div>
 
-          <!-- Email si fourni -->
-          <div v-if="survey.email" class="mb-4">
+                    <div v-if="survey.email" class="mb-4">
             <p class="text-sm text-surface-400">
               <i class="pi pi-envelope mr-2"></i>{{ survey.email }}
             </p>

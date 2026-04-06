@@ -778,24 +778,19 @@ const session = [
 ]
 
 const registrations = [
-  // 01/03 - 2 inscriptions pour activité 1
   { id: 1, activity_id: 1, session_id: 1, user_id: 3, registration_date: '2026-03-01' },
   { id: 2, activity_id: 1, session_id: 1, user_id: 8, registration_date: '2026-03-01' },
 
-  // 05/03 - 4 inscriptions pour activité 1
   { id: 3, activity_id: 1, session_id: 2, user_id: 3, registration_date: '2026-03-05' },
   { id: 4, activity_id: 1, session_id: 2, user_id: 8, registration_date: '2026-03-05' },
   { id: 5, activity_id: 1, session_id: 2, user_id: 3, registration_date: '2026-03-05' },
   { id: 6, activity_id: 1, session_id: 2, user_id: 8, registration_date: '2026-03-05' },
 
-  // 10/03 - 1 inscription pour activité 1
   { id: 7, activity_id: 1, session_id: 3, user_id: 3, registration_date: '2026-03-10' },
 
-  // 08/03 - 1 inscription pour activité 5 (autre prestataire)
   { id: 8, activity_id: 5, session_id: 4, user_id: 8, registration_date: '2026-03-08' },
 ]
 
-// const user = [{ type: UserTypeEnum.VISITOR }]
 const users = [
   { id: 1, type: UserTypeEnum.ADMIN, mail: 'admin@gmail.com', passwword: 'admin' },
   { id: 2, type: UserTypeEnum.PROVIDER, mail: 'provider1@gmail.com', passwword: 'provider' },
@@ -806,8 +801,6 @@ const users = [
   { id: 3, type: UserTypeEnum.VISITOR, mail: 'visitor1@gmail.com', passwword: 'visitor' },
   { id: 8, type: UserTypeEnum.VISITOR, mail: 'claire@gmail.com', passwword: 'claire' },
 ]
-// const user = [{ id: 1, type: UserTypeEnum.PROVIDER }]
-//const user = [{ id: 3, type: UserTypeEnum.VISITOR }]
 
 export {
   contacts,

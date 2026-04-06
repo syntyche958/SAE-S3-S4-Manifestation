@@ -1,70 +1,9 @@
-// import LocalSource from '@/services/localsource.service.js'
-// import { useProviderStore } from '@/stores/providers'
 import { networkErrResponse } from '@/utils/network.utils'
 import { deleteRequest, getRequest, postRequest, putRequest } from './axios.service'
-
-// async function getAllProvidersFromLocalSource() {
-//   return LocalSource.getAllProviders()
-// }
-
-// async function getProviderImagesFromLocalSource(id) {
-//   return LocalSource.getProviderImages(id)
-// }
-
-// async function getAllNewProvidersFromLocalSource() {
-//   return LocalSource.getAllNewProviders()
-// }
-
-// async function getProvidersDescriptionFromLocalSource(id) {
-//   return LocalSource.getProviderDescription(id)
-// }
-
-// async function removeNewProviderFromLocalSource(id) {
-//   const providerStore = useProviderStore()
-//   providerStore.newProviders = providerStore.newProviders.filter((p) => p.id != id)
-//   return { error: 0, status: 200, data: 'done' }
-// }
-
-// async function updateProviderDescriptionFromLocalSource(providerId, providerDesc) {
-//   return LocalSource.updateProviderDescription(providerId, providerDesc)
-// }
-
-// async function uploadProviderImageFromLocalSource(providerId, imageData) {
-//   return LocalSource.uploadProviderImage(providerId, imageData)
-// }
-//
-// async function deleteProviderImageFromLocalSource(providerId, imageId) {
-//   return LocalSource.deleteProviderImage(providerId, imageId)
-// }
-//
-// async function addNewProvidersToLocalSource(providerName, providerDesc, userId) {
-//   const providerStore = useProviderStore()
-//   let lastId = 0
-//   providerStore.newProviders.forEach((p) => {
-//     lastId = Math.max(lastId, p.id)
-//   })
-//   return {
-//     error: 0,
-//     status: 200,
-//     data: { id: lastId + 1, name: providerName, description: providerDesc, userId: userId },
-//   }
-// }
-
-// async function validateNewProvidersFromLocalSource(data) {
-//   const providerStore = useProviderStore()
-//   // Return new provider
-//   let lastId = 0
-//   providerStore.providers.forEach((p) => {
-//     lastId = Math.max(lastId, p.id)
-//   })
-//   data.id = lastId + 1
-//   return { error: 0, status: 200, data }
-// }
 
 async function getAllProviders() {
   let response = null
   try {
-    //response = await getAllProvidersFromLocalSource()
     response = await getRequest('/providers')
   } catch {
     return networkErrResponse
@@ -76,7 +15,6 @@ async function getAllProviders() {
 async function getAllNewProviders() {
   let response = null
   try {
-    // response = await getAllNewProvidersFromLocalSource()
     response = await getRequest('/providers/new')
   } catch {
     return networkErrResponse
@@ -106,11 +44,9 @@ async function addNewProvider(providerName, providerDesc) {
   return response
 }
 
-// TODO : Soit le back retourne de nouveau la liste des providers soit le store suppr celui correspondant !
 async function removeNewProvider(id) {
   let response = null
   try {
-    // response = await removeNewProviderFromLocalSource(id)
     response = await deleteRequest('/providers/new', { id })
   } catch {
     return networkErrResponse
@@ -129,17 +65,6 @@ async function validateNewProviders(data) {
 
   return response
 }
-// TODO : Suppr def si ca faisait rien
-
-// async function getProviderDescription(id) {
-//   let response = null
-//   try {
-//     response = await getProvidersDescriptionFromLocalSource(id)
-//   } catch {
-//     return networkErrResponse
-//   }
-//   return response
-// }
 
 async function updateProviderDescription(payload) {
   let response = null
@@ -189,7 +114,6 @@ export default {
   addNewProvider,
   removeNewProvider,
   validateNewProviders,
-  // getProviderDescription,
   uploadProviderImage,
   deleteProviderImage,
   updateProviderImage,
