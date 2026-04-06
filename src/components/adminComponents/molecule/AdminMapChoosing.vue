@@ -6,10 +6,7 @@
       <div v-else>
         <h1>{{ $t('message.selectedLocation', { id: selectedLocationId }) }}</h1>
         <LocationCharacteristics :selectedLocation="selectedLocation" :displayTitle="true" />
-        <ManuallySetActivityLocation
-          :selectedLocation="selectedLocation"
-          @assign-spots-bulk="acceptSpotsBulk"
-        />
+        <ManuallySetActivityLocation :selectedLocation="selectedLocation" @assign-spots-bulk="acceptSpotsBulk" />
       </div>
     </template>
   </Card>

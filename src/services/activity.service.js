@@ -17,8 +17,7 @@ function pickActivityUpdatePayload(activity, overrides = {}) {
   const providerId = rawProviderId == null ? rawProviderId : Number(rawProviderId)
   const id = Number(activity.id)
 
-  const locationId =
-    overrides.locationId === undefined ? activity.locationId : overrides.locationId
+  const locationId = overrides.locationId === undefined ? activity.locationId : overrides.locationId
   const requestedLocationId =
     overrides.requestedLocationId === undefined
       ? activity.requestedLocationId
@@ -45,7 +44,8 @@ function pickActivityUpdatePayload(activity, overrides = {}) {
       ? (activity.registrationCountEnabled ?? true)
       : overrides.registrationCountEnabled
 
-  const canRegister = overrides.canRegister === undefined ? activity.canRegister : overrides.canRegister
+  const canRegister =
+    overrides.canRegister === undefined ? activity.canRegister : overrides.canRegister
   const presentationContent =
     overrides.presentationContent === undefined
       ? (activity.presentationContent ?? '')

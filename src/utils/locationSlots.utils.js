@@ -33,6 +33,7 @@ export function getAssignableActivitiesForAdminSlot(activities, locationId, date
   const dh = String(dateHour)
 
   const currentActivity = getActivityWithConfirmedSlot(activities, locationId, dateHour)
+  const requestingActivity = getActivityRequestingSlot(activities, locationId, dateHour)
 
   if (currentActivity) {
     return activities
@@ -48,20 +49,29 @@ export function getAssignableActivitiesForAdminSlot(activities, locationId, date
   }
 
   const hasConfirmed = activities.some((a) =>
-    (a.spotIds || []).some(
-      (s) => String(s.locationId) === locStr && String(s.dateHour) === dh,
-    ),
+    (a.spotIds || []).some((s) => String(s.locationId) === locStr && String(s.dateHour) === dh),
   )
   if (hasConfirmed) return []
 
-  return activities
-    .filter((a) => {
-      const blockedElsewhere = (a.spotIds || []).some(
-        (s) => String(s.dateHour) === dh && String(s.locationId) !== locStr,
-      )
-      return !blockedElsewhere
-    })
-    .sort((a, b) => a.name.localeCompare(b.name))
+  const result = []
+
+  for (const activity of activities) {
+    const isRequester = requestingActivity && requestingActivity.id === activity.id
+    if (isRequester) {
+      result.push(activity)
+      continue
+    }
+
+    const blockedElsewhere = (activity.spotIds || []).some(
+      (s) => String(s.dateHour) === dh && String(s.locationId) !== locStr,
+    )
+    if (!blockedElsewhere) {
+      result.push(activity)
+    }
+  }
+
+  result.sort((a, b) => a.name.localeCompare(b.name))
+  return result
 }
 
 export function getActivitiesAssignableToAllSlots(activities, locationId, dateHours) {

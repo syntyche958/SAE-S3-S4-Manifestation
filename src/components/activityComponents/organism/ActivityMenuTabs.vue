@@ -1,12 +1,8 @@
 <template>
   <Tabs value="0">
     <TabList>
-      <Tab value="0"
-        ><i class="pi pi-file-edit"></i><span>{{ $t('message.appearanceOfThePage') }}</span></Tab
-      >
-      <Tab value="1"
-        ><i class="pi pi-file-edit"></i><span>{{ $t('message.choiceOfLocation') }}</span></Tab
-      >
+      <Tab value="0"><i class="pi pi-file-edit"></i><span>{{ $t('message.appearanceOfThePage') }}</span></Tab>
+      <Tab value="1"><i class="pi pi-file-edit"></i><span>{{ $t('message.choiceOfLocation') }}</span></Tab>
       <Tab value="2"><i class="pi pi-cog"></i><span> {{ $t('message.configuration') }}</span></Tab>
     </TabList>
     <TabPanels>

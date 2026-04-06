@@ -1,29 +1,18 @@
 <template>
   <div class="mt-6 flex flex-col gap-4">
-    <AvailabilityHoursContainer
-      legend-mode="admin"
-      :available-dates="EVENT_DAYS"
-      :slots-by-day="slotsByDay"
-      :selected-date-hours="selectedDateHours"
-      :hint-key="'message.capsuleSelectHintAdmin'"
-      :selectable-statuses="adminSelectableStatuses"
-      @toggle-slot="toggleSlot"
-    />
+    <AvailabilityHoursContainer legend-mode="admin" :available-dates="EVENT_DAYS" :slots-by-day="slotsByDay"
+      :selected-date-hours="selectedDateHours" :hint-key="'message.capsuleSelectHintAdmin'"
+      :selectable-statuses="adminSelectableStatuses" @toggle-slot="toggleSlot" />
 
     <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
       <div class="min-w-56 flex-1">
         <label class="mb-1 block text-xs font-medium text-white/70" for="manual-assign-activity">{{
           $t('message.activity')
-        }}</label>
-        <Select
-          id="manual-assign-activity"
-          v-model="selectedActivityId"
-          :options="enrichedActivitiesForAllSelectedSlots"
-          optionValue="id"
-          :placeholder="$t('message.manualAssignSelectActivity')"
-          class="w-full md:max-w-md"
-          :disabled="selectedDateHours.length === 0"
-        >
+          }}</label>
+        <Select id="manual-assign-activity" v-model="selectedActivityId"
+          :options="enrichedActivitiesForAllSelectedSlots" optionValue="id"
+          :placeholder="$t('message.manualAssignSelectActivity')" class="w-full md:max-w-md"
+          :disabled="selectedDateHours.length === 0">
           <template #option="slotProps">
             <span>
               {{ slotProps.option.name }}
@@ -35,13 +24,10 @@
               {{
                 enrichedActivitiesForAllSelectedSlots.find((a) => a.id === slotProps.value)?.name
               }}
-              <span
-                v-if="
-                  enrichedActivitiesForAllSelectedSlots.find((a) => a.id === slotProps.value)
-                    ?.isRequester
-                "
-                class="ml-1 text-amber-300"
-              >
+              <span v-if="
+                enrichedActivitiesForAllSelectedSlots.find((a) => a.id === slotProps.value)
+                  ?.isRequester
+              " class="ml-1 text-amber-300">
                 (demande)
               </span>
             </span>
@@ -49,12 +35,8 @@
         </Select>
       </div>
       <Button :label="buttonLabel" :disabled="!canSubmit" @click="submit" />
-      <Button
-        v-if="showRefuseButton"
-        :label="$t('message.refusePlacementRequest')"
-        severity="danger"
-        @click="refusePending"
-      />
+      <Button v-if="showRefuseButton" :label="$t('message.refusePlacementRequest')" severity="danger"
+        @click="refusePending" />
       <span v-if="selectedDateHours.length > 0" class="text-xs text-white/70">
         {{ $t('message.selectedSlotsCount', { n: selectedDateHours.length }) }}
       </span>
@@ -155,10 +137,36 @@ const enrichedActivitiesForAllSelectedSlots = computed(() => {
   return activitiesForAllSelectedSlots.value.map((a) => ({ ...a, isRequester: false }))
 })
 
+function hasActivityInList(list, activityId) {
+  if (activityId == null) return false
+  const selectedId = Number(activityId)
+  return list.some((a) => Number(a.id) === selectedId)
+}
+
 watch(activitiesForAllSelectedSlots, (list) => {
-  if (selectedActivityId.value != null && !list.some((a) => a.id === selectedActivityId.value)) {
+  if (selectedActivityId.value != null && !hasActivityInList(list, selectedActivityId.value)) {
     selectedActivityId.value = null
   }
+})
+
+watch(selectedDateHours, (dateHours) => {
+  if (dateHours.length !== 1) return
+
+  const dateHour = dateHours[0]
+  const slot = allAdminSlots.value.find((s) => s.dateHour === dateHour)
+  if (!slot || slot.status !== ActivitySpotStatusEnum.ADMIN_PENDING) return
+
+  const requestingActivity = getActivityRequestingSlot(
+    activityStore.activities,
+    props.selectedLocation.id,
+    dateHour,
+  )
+
+  if (!requestingActivity) return
+  if (!hasActivityInList(activitiesForAllSelectedSlots.value, requestingActivity.id)) return
+
+  selectedActivityId.value = Number(requestingActivity.id)
+  validatingRequestActivityId.value = Number(requestingActivity.id)
 })
 
 const canSubmit = computed(
@@ -234,8 +242,8 @@ function toggleSlot(dateHour) {
         dateHour,
       )
       if (requestingActivity) {
-        selectedActivityId.value = requestingActivity.id
-        validatingRequestActivityId.value = requestingActivity.id
+        selectedActivityId.value = Number(requestingActivity.id)
+        validatingRequestActivityId.value = Number(requestingActivity.id)
       }
     } else if (slot && slot.status === ActivitySpotStatusEnum.ADMIN_RESERVED) {
       const currentActivity = getActivityWithConfirmedSlot(
@@ -244,7 +252,7 @@ function toggleSlot(dateHour) {
         dateHour,
       )
       if (currentActivity) {
-        selectedActivityId.value = currentActivity.id
+        selectedActivityId.value = Number(currentActivity.id)
         validatingRequestActivityId.value = null
       }
     }

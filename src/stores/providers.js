@@ -38,7 +38,7 @@ export const useProviderStore = defineStore('provider', () => {
       return
     }
     const descriptionText =
-      typeof newDescription === 'string' ? newDescription : newDescription?.value ?? ''
+      typeof newDescription === 'string' ? newDescription : (newDescription?.value ?? '')
     const locale = i18n.global.locale.value
     const response = await ProviderService.updateProviderDescription({
       id: providerId,

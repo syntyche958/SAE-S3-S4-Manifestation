@@ -1,12 +1,7 @@
 <template>
   <div class="flex gap-6">
-    <TheMap
-      id="activity-map"
-      :display-mode="MapModeEnum.PROVIDER"
-      @change-selected-location="onChangeSelectedLocation"
-      class="w-fit"
-      classSize="sm:h-[60vh] sm:w-[60vw]"
-    />
+    <TheMap id="activity-map" :display-mode="MapModeEnum.PROVIDER" @change-selected-location="onChangeSelectedLocation"
+      class="w-fit" classSize="sm:h-[60vh] sm:w-[60vw]" />
 
     <Card v-if="selectedLocation != null">
       <template #title>{{ $t('message.characteristicsOfTheSelectedLocation') }}</template>
@@ -14,18 +9,11 @@
         <LocationCharacteristics :selected-location="selectedLocation" :display-title="false" />
 
         <div class="mt-4 flex flex-col gap-4">
-          <AvailabilityHoursContainer
-            :available-dates="availableDates"
-            :slots-by-day="slotsByDay"
-            :selected-date-hours="selectedDateHours"
-            @toggle-slot="toggleSlotSelection"
-          />
+          <AvailabilityHoursContainer :available-dates="availableDates" :slots-by-day="slotsByDay"
+            :selected-date-hours="selectedDateHours" @toggle-slot="toggleSlotSelection" />
           <div class="flex flex-wrap items-center gap-3">
-            <Button
-              :label="$t('message.demandSpotButton')"
-              :disabled="selectedDateHours.length === 0"
-              @click="submitSelectedRequests"
-            />
+            <Button :label="$t('message.demandSpotButton')" :disabled="selectedDateHours.length === 0"
+              @click="submitSelectedRequests" />
             <span v-if="selectedDateHours.length > 0" class="text-xs text-white/70">
               {{ $t('message.selectedSlotsCount', { n: selectedDateHours.length }) }}
             </span>
@@ -33,10 +21,8 @@
         </div>
       </template>
     </Card>
-    <Card v-else
-      ><template #title>{{ $t('message.noLocationSelected') }}</template
-      ><template #content>{{ $t('message.clickOnLocation') }}</template></Card
-    >
+    <Card v-else><template #title>{{ $t('message.noLocationSelected') }}</template><template #content>{{
+      $t('message.clickOnLocation') }}</template></Card>
   </div>
 </template>
 

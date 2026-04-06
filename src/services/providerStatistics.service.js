@@ -122,7 +122,6 @@ const providerStatisticsService = {
     const stats = {}
 
     for (const reg of registrations) {
-
       let activity = null
       for (const currentActivity of activities) {
         if (currentActivity.id === reg.activity_id) {

@@ -36,7 +36,10 @@ async function getProviderImages(id) {
 async function addNewProvider(providerName, providerDesc) {
   let response = null
   try {
-    response = await postRequest('/providers/new', { name: providerName, description: providerDesc })
+    response = await postRequest('/providers/new', {
+      name: providerName,
+      description: providerDesc,
+    })
   } catch {
     return networkErrResponse
   }

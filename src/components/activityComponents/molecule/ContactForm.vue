@@ -1,86 +1,53 @@
 <template>
-    <Button
-    :label="$t('message.contactProvider')"
-    icon="pi pi-envelope"
-    @click="openModal()"
-    severity="secondary"
-    style="min-width: 10rem"
-    size="small"
-  />
+  <Button :label="$t('message.contactProvider')" icon="pi pi-envelope" @click="openModal()" severity="secondary"
+    style="min-width: 10rem" size="small" />
 
-    <Dialog
-    v-model:visible="visible"
-    :header="$t('message.contactProvider')"
-    class="w-auto sm:w-[25vw]"
-    :modal="true"
-    :draggable="false"
-  >
-    <Form
-      v-slot="$form"
-      :resolver="resolver"
-      :initialValues="initialValues"
-      @submit="onFormSubmit"
-      class="flex flex-col gap-4 w-full"
-    >
-            <div class="flex flex-col gap-1">
+  <Dialog v-model:visible="visible" :header="$t('message.contactProvider')" class="w-auto sm:w-[25vw]" :modal="true"
+    :draggable="false">
+    <Form v-slot="$form" :resolver="resolver" :initialValues="initialValues" @submit="onFormSubmit"
+      class="flex flex-col gap-4 w-full">
+      <div class="flex flex-col gap-1">
         <label for="email" class="font-semibold w-24">Email</label>
         <InputText id="email" name="email" type="text" fluid />
         <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
           $form.email.error?.message
-        }}</Message>
+          }}</Message>
       </div>
 
-            <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1">
         <label class="font-semibold w-24">{{ $t('message.provider') }}</label>
-        <Select
-          :options="providerStore.providers"
-          optionLabel="name"
-          name="provider"
-          :placeholder="$t('message.selectProviderPlaceholder')"
-          fluid
-          @update:modelValue="onProviderChange"
-        />
+        <Select :options="providerStore.providers" optionLabel="name" name="provider"
+          :placeholder="$t('message.selectProviderPlaceholder')" fluid @update:modelValue="onProviderChange" />
         <Message v-if="$form.provider?.invalid" severity="error" size="small" variant="simple">{{
           $form.provider.error?.message
-        }}</Message>
+          }}</Message>
       </div>
 
-            <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1">
         <label class="font-semibold w-24">{{ $t('message.activity') }}</label>
-        <Select
-          :key="selectedProviderId ?? 'no-provider'"
-          name="activity"
-          :options="activitySelectOptions"
-          optionLabel="label"
-          :placeholder="$t('message.selectActivityPlaceholder')"
-          :emptyMessage="$t('message.noActivityFound')"
-          :filter="true"
-          :filterPlaceholder="$t('message.search')"
-          fluid
-        />
+        <Select :key="selectedProviderId ?? 'no-provider'" name="activity" :options="activitySelectOptions"
+          optionLabel="label" :placeholder="$t('message.selectActivityPlaceholder')"
+          :emptyMessage="$t('message.noActivityFound')" :filter="true" :filterPlaceholder="$t('message.search')"
+          fluid />
         <Message v-if="$form.activity?.invalid" severity="error" size="small" variant="simple">{{
           $form.activity.error?.message
-        }}</Message>
+          }}</Message>
       </div>
 
-            <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-1">
         <label for="message" class="font-semibold w-24">Message</label>
         <Textarea id="message" name="message" fluid />
         <Message v-if="$form.message?.invalid" severity="error" size="small" variant="simple">{{
           $form.message.error?.message
-        }}</Message>
+          }}</Message>
       </div>
 
-            <div class="flex justify-end gap-2">
-        <Button
-          type="button"
-          :label="$t('message.cancel')"
-          severity="secondary"
-          @click="visible = false"
-        ></Button>
+      <div class="flex justify-end gap-2">
+        <Button type="button" :label="$t('message.cancel')" severity="secondary" @click="visible = false"></Button>
         <Button type="submit" :label="$t('message.send')"></Button>
-      </div> </Form
-  ></Dialog>
+      </div>
+    </Form>
+  </Dialog>
 </template>
 
 <script setup>

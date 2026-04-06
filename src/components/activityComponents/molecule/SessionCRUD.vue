@@ -96,8 +96,18 @@ const sessions = computed(() => {
 })
 
 const defaultSessionDuration = computed(() => {
-  const firstSessionWithDuration = sessions.value.find((s) => Number(s.duration) > 0)
-  const fallback = firstSessionWithDuration ? Number(firstSessionWithDuration.duration) : 30
+  let shortestDuration = null
+
+  for (const session of sessions.value) {
+    const duration = Number(session.duration)
+    if (duration <= 0) continue
+
+    if (shortestDuration == null || duration < shortestDuration) {
+      shortestDuration = duration
+    }
+  }
+
+  const fallback = shortestDuration == null ? 30 : shortestDuration
   return normalizeSessionDuration(fallback)
 })
 

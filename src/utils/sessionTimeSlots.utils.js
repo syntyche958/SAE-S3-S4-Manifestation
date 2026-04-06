@@ -186,19 +186,6 @@ function collectIntervalsForSlot(sessions, currentSessionId, dateHour, slotStart
   return intervals
 }
 
-function buildCandidateStarts(slotStart, intervals) {
-  const candidates = [slotStart]
-
-  for (const interval of intervals) {
-    if (!candidates.includes(interval.end)) {
-      candidates.push(interval.end)
-    }
-  }
-
-  candidates.sort((a, b) => a - b)
-  return candidates
-}
-
 function canStartAt(start, slotStart, maxStart, normalizedDuration, intervals) {
   if (start < slotStart || start > maxStart) {
     return false
@@ -233,10 +220,10 @@ export function buildChainedStartHourOptions(dateHour, duration, sessions, curre
     slotStart,
     slotEnd,
   )
-  const candidates = buildCandidateStarts(slotStart, intervals)
+  const step = Math.max(1, gcd(normalizedDuration, SLOT_DURATION_MINUTES))
 
   const validStarts = []
-  for (const start of candidates) {
+  for (let start = slotStart; start <= maxStart; start += step) {
     if (canStartAt(start, slotStart, maxStart, normalizedDuration, intervals)) {
       validStarts.push(start)
     }
